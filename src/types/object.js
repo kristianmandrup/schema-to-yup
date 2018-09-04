@@ -2,7 +2,9 @@ const {
   YupMixed
 } = require('./mixed')
 
-const json2yup = require('../')
+const {
+  buildYup
+} = require('../')
 
 function toYupObject(obj) {
   return isObject(obj.type) && YupObject.create(obj).yupped()
@@ -20,7 +22,7 @@ class YupObject extends YupMixed {
   convert() {
     if (!this.properties) return
     // recursive definition
-    const schema = json2yup(this.value)
+    const schema = buildYup(this.value)
     this.base.shape(schema)
   }
 }

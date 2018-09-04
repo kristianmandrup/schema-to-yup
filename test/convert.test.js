@@ -1,4 +1,6 @@
-const json2yup = require('../');
+const {
+  buildYup
+} = require('../');
 
 var yup = require('yup');
 
@@ -10,12 +12,6 @@ test('yup validates values via Yup schema', async () => {
       .number()
       .required()
       .positive()
-    //   .integer(),
-    // email: yup.string().email(),
-    // website: yup.string().url(),
-    // createdOn: yup.date().default(function () {
-    //   return new Date();
-    // }),
   });
   const valid = await schema
     .isValid({
@@ -47,7 +43,7 @@ test('converts JSON schema to Yup Schema and validates', async () => {
     "required": ["name"]
   }
 
-  const schema = json2yup(json)
+  const schema = buildYup(json)
   // console.dir(schema)
   const valid = await schema
     .isValid({

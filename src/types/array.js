@@ -3,6 +3,9 @@
 const {
   YupMixed
 } = require('./mixed')
+const {
+  createYupSchemaEntry
+} = require('../')
 
 function isBoolean(type) {
   return type === 'array'
@@ -20,16 +23,24 @@ class YupArray extends YupMixed {
   }
 
   convert() {
-    this.items().maxItems().minItems().uniqueItems().contains().additionalItems()
+    this.maxItems().minItems().itemsOf()
+    this.$uniqueItems().$contains().$additionalItems().$items()
     super.convert()
     return this
   }
 
-  items() {
-    return this
-  }
-
-  additionalItems() {
+  itemsOf() {
+    const {
+      items,
+    } = this.value
+    const $itemsOfSchema = items || this.value.of
+    const schema = createYupSchemaEntry({
+      key: this.key,
+      value: $itemsOfSchema,
+      type: this.type,
+      config: this.config
+    })
+    $of && this.base.of($max)
     return this
   }
 
@@ -48,16 +59,24 @@ class YupArray extends YupMixed {
       minItems,
       min
     } = this.value
-    const $min = maxItems || min
+    const $min = minItems || min
     $min && this.base.min($min)
     return this
   }
 
-  uniqueItems() {
+  $items() {
     return this
   }
 
-  contains() {
+  $additionalItems() {
+    return this
+  }
+
+  $uniqueItems() {
+    return this
+  }
+
+  $contains() {
     return this
   }
 }

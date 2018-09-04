@@ -35,9 +35,18 @@ const schema = {
   required: ["name"]
 };
 
-const json2yup = require("json-schema-to-yup");
+const config = {
+  // for error messages...
+  messages: {
+    age: {
+      required: "a person must have an age"
+      // ...
+    }
+  }
+};
 
-const yupSchema = json2yup(json);
+const { buildYup } = require("json-schema-to-yup");
+const yupSchema = buildYup(json, config);
 // console.dir(schema)
 const valid = await yupSchema.isValid({
   name: "jimmy",
@@ -110,6 +119,42 @@ Here a more complete example of the variations currently possible
     }
   }
 }
+```
+
+Note: Currently we don't have much support for Array and Object validation.
+
+## Customization
+
+You can supply a `createYupSchemaEntry` function as an entry in the `config` object.
+This function will then be used to build each Yup Schema entry in the Yup Schema being built.
+Use the Type classes such as `types.YupArray` to act as building blocks or create your own custom logic as you see fit.
+
+```js
+const { YupSchemaEntry, buildYup, types } = require("json-schema-to-yup");
+
+class CustomYupArray extends types.YupArray {
+  // ...
+}
+
+class CustomYupSchemaEntry extends YupSchemaEntry {
+  // ...
+
+  toYupArray() {
+    // create CustomYupArray
+  }
+}
+
+function createYupSchemaEntry(key, value, config) {
+  return new CustomYupSchemaEntry(key, value, config).toEntry();
+}
+
+// use some localized error messages
+const messages = i18n.locale(LOCALE);
+
+const yupSchema = buildYup(json, {
+  createYupSchemaEntry,
+  messages
+});
 ```
 
 ## Author

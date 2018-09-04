@@ -9,7 +9,7 @@ const {
   toYupDate
 } = require('./types')
 
-module.exports = (schema, config = {}) => {
+function buildYup(schema, config = {}) {
   let {
     type,
     properties
@@ -51,6 +51,11 @@ function propsToShape(properties, config = {}) {
 }
 
 function propToYupSchemaEntry(key, value, config = {}) {
+  const entryBuilder = createYupSchemaEntry || config.createYupSchemaEntry
+  return entryBuilder(key, value, config)
+}
+
+function createYupSchemaEntry(key, value, config) {
   return new YupSchemaEntry(key, value, config).toEntry()
 }
 
@@ -116,4 +121,13 @@ class YupSchemaEntry {
   get mixed() {
     return toYupMixed(this.obj)
   }
+}
+
+const types = require('./types')
+
+module.exports = {
+  buildYup,
+  createYupSchemaEntry,
+  YupSchemaEntry,
+  types
 }

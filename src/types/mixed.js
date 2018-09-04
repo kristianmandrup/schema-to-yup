@@ -20,7 +20,7 @@ class YupMixed {
   }
 
   convert() {
-    this.required().enum().oneOf()
+    this.required().oneOf().notOneOf()
   }
 
   required() {
@@ -33,16 +33,17 @@ class YupMixed {
       oneOf
     } = this.value
     const $oneOf = this.value.enum || oneOf
-    return $oneOf && this.base.oneOf($oneOf, this.errMessages['oneOf'] || this.errMessages['enum'])
+    $oneOf && this.base.oneOf($oneOf, this.errMessages['oneOf'] || this.errMessages['enum'])
     return this
   }
 
   notOneOf() {
     const {
-      not
+      not,
+      notOneOf
     } = this.value
-    const $oneOf = not.enum || not.oneOf
-    return $oneOf && this.base.notOneOf($oneOf, this.errMessages['notOneOf'])
+    const $oneOf = notOneOf || (not && (not.enum || not.oneOf))
+    $oneOf && this.base.notOneOf($oneOf, this.errMessages['notOneOf'])
     return this
   }
 
