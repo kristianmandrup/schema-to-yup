@@ -1,0 +1,12 @@
+{
+  "name": "json-schema-to-yup",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "yup": "^0.26.3"
+  },
+  "devDependencies": {
+    "jest": "^23.5.0"
+  }
+}

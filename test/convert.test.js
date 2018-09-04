@@ -1,0 +1,59 @@
+const json2yup = require('../');
+
+var yup = require('yup');
+
+//check validity
+test('yup validates values via Yup schema', async () => {
+  const schema = yup.object().shape({
+    name: yup.string().required(),
+    age: yup
+      .number()
+      .required()
+      .positive()
+    //   .integer(),
+    // email: yup.string().email(),
+    // website: yup.string().url(),
+    // createdOn: yup.date().default(function () {
+    //   return new Date();
+    // }),
+  });
+  const valid = await schema
+    .isValid({
+      name: 'jimmy',
+      age: 24,
+    })
+  expect(valid).toBe(true)
+})
+
+test('converts JSON schema to Yup Schema and validates', async () => {
+  const json = {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/person.schema.json",
+    "title": "Person",
+    "description": "A person",
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "Name of the person",
+        "type": "string"
+      },
+      "age": {
+        "description": "Age of person",
+        "type": "number",
+        "exclusiveMinimum": 0,
+        required: true
+      }
+    },
+    "required": ["name"]
+  }
+
+  const schema = json2yup(json)
+  // console.dir(schema)
+  const valid = await schema
+    .isValid({
+      name: 'jimmy',
+      age: 24,
+    })
+  expect(valid).toBe(true)
+
+});
