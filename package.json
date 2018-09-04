@@ -2,7 +2,9 @@
   "name": "json-schema-to-yup",
   "version": "1.0.0",
   "main": "src/index.js",
+  "description": "Simple JSON Schema to Yup validation Schema conversion",
   "license": "MIT",
+  "author": "Kristian Mandrup",
   "dependencies": {
     "yup": "^0.26.3"
   },

@@ -1,6 +1,6 @@
 # JSON Schema to Yup schema
 
-Simple JSON Schema to Yup Schema conversion
+Simple JSON Schema to Yup validation Schema conversion
 
 [JSON Schema primer](https://support.riverbed.com/apis/steelscript/reschema/jsonschema.html)
 
