@@ -2,14 +2,16 @@
 
 Simple JSON Schema to Yup validation Schema conversion
 
-[JSON Schema primer](https://support.riverbed.com/apis/steelscript/reschema/jsonschema.html)
+- [AJV: JSON Schema keywords](https://ajv.js.org/keywords.html)
+- [Learn JsonSchema](https://cswr.github.io/JsonSchema/)
 
-Supports the most commonly used JSON Schema layout.
-Also supports some extra convenience schema properties that make it more "smooth" to define validation requirements declaratively (see below).
+The builder currently supports the most commonly used JSON Schema layout.
 
-Note that is you use these extra properties, the JSON Schema is no longer valid if used in a context where JSON Schema validation is performed.
+It also supports some extra convenience schema properties that make it more "smooth" to define validation requirements declaratively (see below).
 
-We will likely later support normalization and de-normalization.
+Note that if you use these extra properties, the JSON Schema is no longer valid if used in a context where JSON Schema validation is performed.
+
+We will likely later support normalization and de-normalization of a JSON Schema as well if requested by the community.
 
 ```js
 const schema = {
@@ -109,6 +111,10 @@ Here a more complete example of the variations currently possible
   }
 }
 ```
+
+## Author
+
+2018 Kristian Mandrup (CTO@Tecla5)
 
 ## License
 
