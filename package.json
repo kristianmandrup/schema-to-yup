@@ -2,7 +2,7 @@
   "name": "json-schema-to-yup",
   "version": "1.0.0",
   "main": "src/index.js",
-  "description": "Simple JSON Schema to Yup validation Schema conversion",
+  "description": "Simple JSON Schema to Yup validation schema conversion",
   "license": "MIT",
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "homepage": "https://github.com/kristianmandrup/json-schema-to-yup#readme",
