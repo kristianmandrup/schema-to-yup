@@ -34,6 +34,11 @@ class YupArray extends YupMixed {
       items,
     } = this.value
     const $itemsOfSchema = items || this.value.of
+
+    if (Array.isArray($itemsOfSchema)) {
+      this.error('itemsOf', 'does not (yet) support an Array of schemas')
+    }
+
     const schema = createYupSchemaEntry({
       key: this.key,
       value: $itemsOfSchema,

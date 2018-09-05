@@ -21,9 +21,20 @@ class YupObject extends YupMixed {
 
   convert() {
     if (!this.properties) return
+    this.noUnknown()
     // recursive definition
     const schema = buildYup(this.value)
     this.base.shape(schema)
+  }
+
+  noUnknown() {
+    const {
+      noUnknown,
+      propertyNames
+    } = this.value
+    const $names = noUnknown || propertyNames
+    $names && this.base.noUnknown($names, this.errMessages['propertyNames'] || this.errMessages['noUnknown'])
+    return this
   }
 }
 

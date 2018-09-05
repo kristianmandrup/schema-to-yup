@@ -11,7 +11,15 @@ It also supports some extra convenience schema properties that make it more "smo
 
 Note that if you use these extra properties, the JSON Schema is no longer valid if used in a context where JSON Schema validation is performed.
 
-We will likely later support normalization and de-normalization of a JSON Schema as well if requested by the community.
+We could later support normalization and de-normalization of a JSON Schema (if requested by the community).
+
+## Quick start
+
+Install
+
+`npm install json-schema-to-yup -S` or `yarn add json-schema-to-yup`
+
+Use
 
 ```js
 const schema = {
@@ -89,45 +97,78 @@ Here a more complete example of the variations currently possible
       "required": true,
       "matches": "[a-zA-Z- ]+",
       "mix": 3,
-      "maxLength": 40
+      "maxLength": 40,
     },
     "age": {
       "description": "Age of person",
       "type": "integer",
-      "min": 0,
+      "moreThan": 0,
       "max": 130,
-      "required": false
+      "default": 32,
+      "required": false,
+      "nullable": true
     },
     "birthday": {
       "type": "date",
       "min": "1-1-1900",
       "maxDate": "1-1-2015"
     },
-    "smoker": {
+    "married": {
       "type": "boolean"
     },
-    "mother": {
+    "boss": {
       "type": "object",
-      "properties": {}
+      "noUnknown": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "notOneOf": ["Dr. evil", "bad ass"]
+        }
+      }
     },
-    "siblings": {
+    "colleagues": {
       "type": "array",
       "items": {
         "type": "object",
-        "properties": {}
+        "propertyNames": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "programming": {
+        "type": "object",
+        "properties": {
+          "languages": {
+            "type": "array",
+            "of": {
+              "type": "string",
+              "enum": ["javascript", "java", "C#"]
+            },
+            "min": 1,
+            "max": 3
+          }
+        }
       }
     }
   }
 }
 ```
 
-Note: Currently we don't have much support for Array and Object validation.
-
 ## Customization
 
 You can supply a `createYupSchemaEntry` function as an entry in the `config` object.
 This function will then be used to build each Yup Schema entry in the Yup Schema being built.
-Use the Type classes such as `types.YupArray` to act as building blocks or create your own custom logic as you see fit.
+
+Use the Yup Type classes such as `types.YupArray` to act as building blocks or create your own custom logic as you see fit.
+
+### Customization example
 
 ```js
 const { YupSchemaEntry, buildYup, types } = require("json-schema-to-yup");
@@ -138,14 +179,12 @@ class CustomYupArray extends types.YupArray {
 
 class CustomYupSchemaEntry extends YupSchemaEntry {
   // ...
-
-  toYupArray() {
-    // create CustomYupArray
-  }
 }
 
 function createYupSchemaEntry(key, value, config) {
-  return new CustomYupSchemaEntry(key, value, config).toEntry();
+  const builder = new CustomYupSchemaEntryBuilder(key, value, config);
+  builder.types.array = config => createYupArray(config);
+  return builder.toEntry();
 }
 
 // use some localized error messages
@@ -156,6 +195,14 @@ const yupSchema = buildYup(json, {
   messages
 });
 ```
+
+## Testing
+
+Uses [jest](jestjs.io/) for unit testing.
+
+Currently not well tested.
+
+Please help add more test coverage :)
 
 ## Author
 

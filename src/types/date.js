@@ -36,15 +36,19 @@ class YupDate extends YupBaseType {
     return this
   }
 
+  toDate(date) {
+    return new Date(date)
+  }
+
   min() {
     const minDate = this.value.min || this.value.minDate
-    minDate && this.base.min(minDate, this.errMessage['minDate'] || this.errMessage['min'])
+    minDate && this.base.min(this.toDate(minDate), this.errMessage['minDate'] || this.errMessage['min'])
     return this
   }
 
   max() {
     const maxDate = this.value.max || this.value.maxDate
-    maxDate && this.base.max(maxDate, this.errMessage['maxDate'] || this.errMessage['max'])
+    maxDate && this.base.max(this.toDate(maxDate), this.errMessage['maxDate'] || this.errMessage['max'])
     return this
   }
 }

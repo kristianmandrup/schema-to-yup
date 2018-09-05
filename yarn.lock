@@ -1823,7 +1823,7 @@ jest-worker@^23.2.0:
   dependencies:
     merge-stream "^1.0.1"
 
-jest@^23.5.0:
+jest@^23.0.0:
   version "23.5.0"
   resolved "https://registry.yarnpkg.com/jest/-/jest-23.5.0.tgz#80de353d156ea5ea4a7332f7962ac79135fbc62e"
   dependencies:
@@ -3274,7 +3274,7 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-yup@^0.26.3:
+yup@^0.26.0:
   version "0.26.3"
   resolved "https://registry.yarnpkg.com/yup/-/yup-0.26.3.tgz#66f2d4a474068e63f44a575d8341a24bb82de5bc"
   dependencies:

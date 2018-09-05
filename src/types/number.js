@@ -41,15 +41,19 @@ class YupNumber extends YupMixed {
     return isInteger(this.type)
   }
 
+  toNumber(num) {
+    return Number(num)
+  }
+
   moreThan() {
     const min = this.$moreThan
-    min && this.base.moreThan(min)
+    min && this.base.moreThan(this.toNumber(min))
     return this
   }
 
   lessThan() {
     const max = this.$lessThan
-    max && this.base.lessThan(max)
+    max && this.base.lessThan(this.toNumber(max))
     return this
   }
 
@@ -104,12 +108,12 @@ class YupNumber extends YupMixed {
   }
 
   minimum() {
-    this.value.minimum && this.base.min(this.value.minimum, this.errMessages['minimum'])
+    this.value.minimum && this.base.min(this.toNumber(this.value.minimum), this.errMessages['minimum'])
     return this
   }
 
   maximum() {
-    this.value.maximum && this.base.max(this.value.maximum, this.errMessages['maximum'])
+    this.value.maximum && this.base.max(this.toNumber(this.value.maximum), this.errMessages['maximum'])
     return this
   }
 

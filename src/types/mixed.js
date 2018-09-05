@@ -1,5 +1,9 @@
 const yup = require('yup')
 
+class ConvertYupSchemaError extends Error {
+
+}
+
 class YupMixed {
   constructor({
     key,
@@ -20,11 +24,26 @@ class YupMixed {
   }
 
   convert() {
-    this.required().oneOf().notOneOf()
+    this.nullable().required().notRequired().oneOf().notOneOf().ensureDefault()
+  }
+
+  ensureDefault() {
+    this.value.default && this.base.default(this.value.default)
+    return this
   }
 
   required() {
     this.value.required && this.base.required(this.errMessage['required'])
+    return this
+  }
+
+  notRequired() {
+    this.value.notRequired && this.base.notRequired(this.errMessage['notRequired'])
+    return this
+  }
+
+  nullable() {
+    this.value.nullable && this.base.nullable(this.errMessage['nullable'])
     return this
   }
 
@@ -95,9 +114,19 @@ class YupMixed {
     return this.message[errKey] || 'error'
   }
 
+  toValidJSONSchema() {}
+
   normalize() {}
+
+  deNormalize() {}
+
+  error(name, msg) {
+    const label = `[${name}] ${msg}`
+    throw new ConvertYupSchemaError(msg)
+  }
 }
 
 module.exports = {
-  YupMixed
+  YupMixed,
+  ConvertYupSchemaError
 }

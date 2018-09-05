@@ -1,4 +1,9 @@
 const {
+  YupMixed,
+  toYupMixed,
+  ConvertYupSchemaError
+} = require('./mixed')
+const {
   YupArray,
   toYupArray
 } = require('./array')
@@ -18,6 +23,7 @@ const {
   YupString,
   toYupString
 } = require('./string')
+
 module.exports = {
   YupArray,
   toYupArray,
@@ -28,5 +34,8 @@ module.exports = {
   YupObject,
   toYupObject,
   YupString,
-  toYupString
+  toYupString,
+  YupMixed,
+  toYupMixed,
+  ConvertYupSchemaError
 }
