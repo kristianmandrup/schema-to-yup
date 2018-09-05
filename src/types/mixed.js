@@ -24,11 +24,17 @@ class YupMixed {
   }
 
   convert() {
-    this.nullable().required().notRequired().oneOf().notOneOf().ensureDefault()
+    this.nullable().required().notRequired().oneOf().notOneOf().ensureDefault().strict()
+    return this
   }
 
   ensureDefault() {
     this.value.default && this.base.default(this.value.default)
+    return this
+  }
+
+  strict() {
+    this.value.strict && this.base.strict(this.value.strict)
     return this
   }
 
@@ -67,7 +73,6 @@ class YupMixed {
   }
 
   $const() {
-    this.value.const
     return this
   }
 

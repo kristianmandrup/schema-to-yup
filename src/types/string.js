@@ -23,16 +23,40 @@ class YupString extends YupMixed {
 
   convert() {
     this.minLength().maxLength().pattern()
+    this.lowercase().uppercase()
     super.convert()
     return this
   }
 
+  trim() {
+    this.value.trim && this.base.trim(this.errMessages['trim'])
+    return this
+  }
+
+  lowercase() {
+    this.value.lowercase && this.base.lowercase(this.errMessages['lowercase'])
+    return this
+  }
+
+  uppercase() {
+    this.value.uppercase && this.base.uppercase(this.errMessages['uppercase'])
+    return this
+  }
+
   email() {
-    this.format === 'email' && this.base.email(this.errMessages['email'])
+    this.isEmail && this.base.email(this.errMessages['email'])
+  }
+
+  get isEmail() {
+    return this.value.email || this.format === 'email'
   }
 
   url() {
-    this.format === 'url' && this.base.url(this.errMessages['url'])
+    this.isUrl && this.base.url(this.errMessages['url'])
+  }
+
+  get isUrl() {
+    return this.value.url || this.format === 'url'
   }
 
   minLength() {

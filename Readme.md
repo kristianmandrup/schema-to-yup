@@ -1,6 +1,6 @@
 # JSON Schema to Yup schema
 
-Simple JSON Schema to Yup validation Schema conversion
+Build a Yup schema from a JSON Schema :)
 
 - [AJV: JSON Schema keywords](https://ajv.js.org/keywords.html)
 - [Learn JsonSchema](https://cswr.github.io/JsonSchema/)
@@ -80,6 +80,64 @@ const schema = yup.object().shape({
 ```
 
 Note the `"required": true` for the `age` property (not natively supported by JSON schema).
+
+## Types and keys
+
+### Mixed (any type)
+
+- `strict`
+- `default`
+- `nullable`
+- `required`
+- `notRequired`
+- `oneOf` (`enum`)
+- `notOneOf`
+
+### Array
+
+- `ensure`
+- `compact`
+- `items` (`of`)
+- `maxItems` (`max`)
+- `minItems` (`min`)
+
+### Boolean
+
+No keys
+
+### Date
+
+- `maxDate` (`max`)
+- `minDate` (`min`)
+
+### Number
+
+- `integer`
+- `moreThan` (`exclusiveMinimum`)
+- `lessThan` (`exclusiveMaximum`)
+- `positive`
+- `negative`
+- `min` (`minimum`)
+- `max` (`maximum`)
+- `truncate`
+- `round`
+
+### Object
+
+- `camelCase`
+- `constantCase`
+- `noUnknown` (`propertyNames`)
+
+### String
+
+- `minLength` (`min`)
+- `maxLength` (`max`)
+- `pattern` (`matches` or `regex`)
+- `email` (`format: 'email'`)
+- `url` (`format: 'url'`)
+- `lowercase`
+- `uppercase`
+- `trim`
 
 ## Complex example
 
@@ -200,9 +258,7 @@ const yupSchema = buildYup(json, {
 
 Uses [jest](jestjs.io/) for unit testing.
 
-Currently not well tested.
-
-Please help add more test coverage :)
+Currently not well tested. Please help add more test coverage :)
 
 ## Author
 

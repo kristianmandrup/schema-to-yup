@@ -22,9 +22,23 @@ class YupObject extends YupMixed {
   convert() {
     if (!this.properties) return
     this.noUnknown()
+    this.camelCase().constantCase()
+
     // recursive definition
-    const schema = buildYup(this.value)
-    this.base.shape(schema)
+    if (this.value) {
+      const schema = buildYup(this.value)
+      this.base.shape(schema)
+    }
+  }
+
+  camelCase() {
+    this.value.camelCase && this.base.camelCase()
+    return this
+  }
+
+  constantCase() {
+    this.value.constantCase && this.base.constantCase()
+    return this
   }
 
   noUnknown() {

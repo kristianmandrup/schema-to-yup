@@ -32,6 +32,20 @@ class YupNumber extends YupMixed {
     return this
   }
 
+  truncate() {
+    this.value.truncate && this.base.truncate()
+    return this
+  }
+
+  round() {
+    const {
+      round
+    } = this.value
+    const $round = typeof round === 'string' ? round : 'round'
+    round && this.base.round($round)
+    return this
+  }
+
   integer() {
     this.isInteger && this.base.integer(this.errMessage['integer'])
     return this

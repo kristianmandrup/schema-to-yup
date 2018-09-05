@@ -23,9 +23,19 @@ class YupArray extends YupMixed {
   }
 
   convert() {
-    this.maxItems().minItems().itemsOf()
+    this.maxItems().minItems().itemsOf().ensure().compact()
     this.$uniqueItems().$contains().$additionalItems().$items()
     super.convert()
+    return this
+  }
+
+  ensure() {
+    this.value.ensure && this.base.ensure()
+    return this
+  }
+
+  compact() {
+    this.value.compact && this.base.compact()
     return this
   }
 
@@ -55,7 +65,7 @@ class YupArray extends YupMixed {
       max
     } = this.value
     const $max = maxItems || max
-    $max && this.base.min($max)
+    $max && this.base.max($max)
     return this
   }
 
