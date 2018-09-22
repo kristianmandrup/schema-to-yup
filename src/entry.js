@@ -8,15 +8,14 @@ const {
   toYupDate
 } = require('./types')
 
-class YupSchemaEntryError extends Error {
-
-}
+class YupSchemaEntryError extends Error {}
 
 class YupSchemaEntry {
-  constructor(key, value, config) {
+  constructor({name, key, value, config}) {
     this.key = key
     this.value = value
     this.config = config
+    this.name = name
     this.type = value.type
     this.types = {
       string: toYupString,
@@ -25,7 +24,7 @@ class YupSchemaEntry {
       array: toYupArray,
       object: toYupObject,
       date: toYupDate,
-      mixed: toYupMixed,
+      mixed: toYupMixed
     }
   }
 
@@ -38,24 +37,14 @@ class YupSchemaEntry {
   }
 
   toEntry() {
-    if (!this.isValidSchema()) this.error('Not a valid schema')
+    if (!this.isValidSchema()) 
+      this.error('Not a valid schema')
     const config = this.obj
-    return this.string(config) ||
-      this.number(config) ||
-      this.boolean(config) ||
-      this.array(config) ||
-      this.object(config) ||
-      this.date(config) ||
-      this.mixed(config)
+    return this.string(config) || this.number(config) || this.boolean(config) || this.array(config) || this.object(config) || this.date(config) || this.mixed(config)
   }
 
   get obj() {
-    return {
-      key: this.key,
-      value: this.value,
-      type: this.type,
-      config: this.config
-    }
+    return {key: this.key, value: this.value, type: this.type, config: this.config}
   }
 
   string(config) {
@@ -70,11 +59,11 @@ class YupSchemaEntry {
     return toYupBoolean(config || this.obj)
   }
 
-  array() {
+  array(config) {
     return toYupArray(config || this.obj)
   }
 
-  object() {
+  object(config) {
     return toYupObject(config || this.obj)
   }
 

@@ -1,6 +1,4 @@
-const {
-  YupMixed
-} = require('./mixed')
+const {YupMixed} = require('./mixed')
 
 // TODO: check if has any date format
 function hasDateContraint(obj) {
@@ -16,10 +14,12 @@ function isDate(obj) {
 }
 
 function toYupDate(obj) {
-  return isDate(obj) && YupDate.create(obj).yupped()
+  return isDate(obj) && YupDate
+    .create(obj)
+    .yupped()
 }
 
-class YupDate extends YupBaseType {
+class YupDate extends YupMixed {
   constructor(obj) {
     super(obj)
     this.type = 'date'
@@ -31,7 +31,9 @@ class YupDate extends YupBaseType {
   }
 
   convert() {
-    this.min().max()
+    this
+      .min()
+      .max()
     super.convert()
     return this
   }
@@ -42,13 +44,17 @@ class YupDate extends YupBaseType {
 
   min() {
     const minDate = this.value.min || this.value.minDate
-    minDate && this.base.min(this.toDate(minDate), this.errMessage['minDate'] || this.errMessage['min'])
+    minDate && this
+      .base
+      .min(this.toDate(minDate), this.errMessage['minDate'] || this.errMessage['min'])
     return this
   }
 
   max() {
     const maxDate = this.value.max || this.value.maxDate
-    maxDate && this.base.max(this.toDate(maxDate), this.errMessage['maxDate'] || this.errMessage['max'])
+    maxDate && this
+      .base
+      .max(this.toDate(maxDate), this.errMessage['maxDate'] || this.errMessage['max'])
     return this
   }
 }
