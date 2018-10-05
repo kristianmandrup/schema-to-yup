@@ -1,15 +1,13 @@
 const yup = require('yup')
 
-class ConvertYupSchemaError extends Error {
+class ConvertYupSchemaError extends Error {}
 
+const defaults = {
+  errMessages: {}
 }
 
 class YupMixed {
-  constructor({
-    key,
-    value,
-    config
-  }) {
+  constructor({key, value, config}) {
     this.yup = yup
     this.key = key
     this.value = value
@@ -17,58 +15,77 @@ class YupMixed {
     this.config = config || {}
     this.type = 'mixed'
     this.base = yup[this.type]()
+    this.errMessages = config.errMessages || defaults.errMessages || {}
   }
 
   yupped() {
-    return this.convert().base
+    return this
+      .convert()
+      .base
   }
 
   convert() {
-    this.nullable().required().notRequired().oneOf().notOneOf().ensureDefault().strict()
+    this
+      .nullable()
+      .required()
+      .notRequired()
+      .oneOf()
+      .notOneOf()
+      .ensureDefault()
+      .strict()
     return this
   }
 
   ensureDefault() {
-    this.value.default && this.base.default(this.value.default)
+    this.value.default && this
+      .base
+      .default(this.value.default)
     return this
   }
 
   strict() {
-    this.value.strict && this.base.strict(this.value.strict)
+    this.value.strict && this
+      .base
+      .strict(this.value.strict)
     return this
   }
 
   required() {
-    this.value.required && this.base.required(this.errMessage['required'])
+    this.value.required && this
+      .base
+      .required(this.errMessage['required'])
     return this
   }
 
   notRequired() {
-    this.value.notRequired && this.base.notRequired(this.errMessage['notRequired'])
+    this.value.notRequired && this
+      .base
+      .notRequired(this.errMessage['notRequired'])
     return this
   }
 
   nullable() {
-    this.value.nullable && this.base.nullable(this.errMessage['nullable'])
+    this.value.nullable && this
+      .base
+      .nullable(this.errMessage['nullable'])
     return this
   }
 
   oneOf() {
-    const {
-      oneOf
-    } = this.value
+    const {oneOf} = this.value
     const $oneOf = this.value.enum || oneOf
-    $oneOf && this.base.oneOf($oneOf, this.errMessages['oneOf'] || this.errMessages['enum'])
+    $oneOf && this
+      .base
+      .oneOf($oneOf, this.errMessages['oneOf'] || this.errMessages['enum'])
     return this
   }
 
   notOneOf() {
-    const {
-      not,
-      notOneOf
-    } = this.value
+    const {not, notOneOf} = this.value
     const $oneOf = notOneOf || (not && (not.enum || not.oneOf))
-    $oneOf && this.base.notOneOf($oneOf, this.errMessages['notOneOf'])
+    $oneOf && this
+      .base
+      .notOneOf($oneOf, this.errMessages['notOneOf'])
     return this
   }
 
@@ -76,8 +93,7 @@ class YupMixed {
     return this
   }
 
-  // boolean
-  // https: //ajv.js.org/keywords.html#allof
+  // boolean https: //ajv.js.org/keywords.html#allof
   $allOf() {
     return this
   }
@@ -92,9 +108,7 @@ class YupMixed {
     return this
   }
 
-  // conditions
-
-  // https://ajv.js.org/keywords.html#not
+  // conditions https://ajv.js.org/keywords.html#not
   $not() {
     return this
   }

@@ -254,6 +254,23 @@ const yupSchema = buildYup(json, {
 });
 ```
 
+## Error messages
+
+Some code needs to be updated to use `this.errMessage(key)` instead of `this.errMessages['notOneOf']`. Mostly an issue in `mixed.js`, see [issues/1](https://github.com/kristianmandrup/json-schema-to-yup/issues/1)
+
+For now works, and allows passing `errMessages` object in config. Please help fix ASAP.
+
+```js
+  notOneOf() {
+    const {not, notOneOf} = this.value
+    const $oneOf = notOneOf || (not && (not.enum || not.oneOf))
+    $oneOf && this
+      .base
+      .notOneOf($oneOf, this.errMessages['notOneOf'])
+    return this
+  }
+```
+
 ## Testing
 
 Uses [jest](jestjs.io/) for unit testing.

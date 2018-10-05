@@ -1,6 +1,6 @@
 {
   "name": "json-schema-to-yup",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "main": "src/index.js",
   "description": "Build a Yup schema from a JSON Schema",
   "license": "MIT",
