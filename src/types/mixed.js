@@ -2,8 +2,35 @@ const yup = require('yup')
 
 class ConvertYupSchemaError extends Error {}
 
+const errValKeys = [
+  'oneOf',
+  'enum',
+  'required',
+  'notRequired',
+  'minDate',
+  'min',
+  'maxDate',
+  'max',
+  'trim',
+  'lowercase',
+  'uppercase',
+  'email',
+  'url',
+  'minLength',
+  'maxLength',
+  'pattern',
+  'matches',
+  'regex',
+  'integer',
+  'positive',
+  'minimum',
+  'maximum'
+]
+
 const defaults = {
-  errMessages: {}
+  errMessages: errValKeys.map(key => {
+    return ({key, value}) => `${key}: invalid for ${value}`
+  })
 }
 
 class YupMixed {
@@ -53,21 +80,21 @@ class YupMixed {
   required() {
     this.value.required && this
       .base
-      .required(this.errMessage['required'])
+      .required(this.valErrMessage('required'))
     return this
   }
 
   notRequired() {
     this.value.notRequired && this
       .base
-      .notRequired(this.errMessage['notRequired'])
+      .notRequired(this.valErrMessage('notRequired'))
     return this
   }
 
   nullable() {
     this.value.nullable && this
       .base
-      .nullable(this.errMessage['nullable'])
+      .nullable(this.valErrMessage('nullable'))
     return this
   }
 
@@ -76,7 +103,7 @@ class YupMixed {
     const $oneOf = this.value.enum || oneOf
     $oneOf && this
       .base
-      .oneOf($oneOf, this.errMessages['oneOf'] || this.errMessages['enum'])
+      .oneOf($oneOf, this.valErrMessage('oneOf') || this.valErrMessage('enum'))
     return this
   }
 
@@ -85,8 +112,15 @@ class YupMixed {
     const $oneOf = notOneOf || (not && (not.enum || not.oneOf))
     $oneOf && this
       .base
-      .notOneOf($oneOf, this.errMessages['notOneOf'])
+      .notOneOf($oneOf, this.valErrMessage('notOneOf'))
     return this
+  }
+
+  valErrMessage(key) {
+    const errMsg = this.errMessages[key]
+    return typeof errMsg === 'function'
+      ? errMsg(this.value)
+      : errMsg
   }
 
   $const() {

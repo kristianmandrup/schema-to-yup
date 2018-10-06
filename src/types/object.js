@@ -61,7 +61,7 @@ class YupObject extends YupMixed {
     const $names = noUnknown || propertyNames
     $names && this
       .base
-      .noUnknown($names, this.errMessages['propertyNames'] || this.errMessages['noUnknown'])
+      .noUnknown($names, this.valErrMessage('propertyNames') || this.valErrMessage('noUnknown'))
     return this
   }
 }

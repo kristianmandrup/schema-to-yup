@@ -46,7 +46,7 @@ class YupDate extends YupMixed {
     const minDate = this.value.min || this.value.minDate
     minDate && this
       .base
-      .min(this.toDate(minDate), this.errMessage['minDate'] || this.errMessage['min'])
+      .min(this.toDate(minDate), this.valErrMessage('minDate') || this.valErrMessage('min'))
     return this
   }
 
@@ -54,7 +54,7 @@ class YupDate extends YupMixed {
     const maxDate = this.value.max || this.value.maxDate
     maxDate && this
       .base
-      .max(this.toDate(maxDate), this.errMessage['maxDate'] || this.errMessage['max'])
+      .max(this.toDate(maxDate), this.valErrMessage('maxDate') || this.valErrMessage('max'))
     return this
   }
 }

@@ -38,6 +38,13 @@ const schema = {
       type: "number",
       exclusiveMinimum: 0,
       required: true
+    },
+    characterType: {
+      enum: ["good", "bad"],
+      enum_titles: ["Good", "Bad"],
+      type: "string",
+      title: "Type of people",
+      propertyOrder: 3
     }
   },
   required: ["name"]
@@ -256,9 +263,9 @@ const yupSchema = buildYup(json, {
 
 ## Error messages
 
-Some code needs to be updated to use `this.errMessage(key)` instead of `this.errMessages['notOneOf']`. Mostly an issue in `mixed.js`, see [issues/1](https://github.com/kristianmandrup/json-schema-to-yup/issues/1)
+You can pass an `errMessages` object in the optional `config` object argument with key mappings for your custom validation error messages.
 
-For now works, and allows passing `errMessages` object in config. Please help fix ASAP.
+Internally the validator error messages are resolved with the instance method `valErrMessage` (from `Mixed` class)
 
 ```js
   notOneOf() {
@@ -266,9 +273,45 @@ For now works, and allows passing `errMessages` object in config. Please help fi
     const $oneOf = notOneOf || (not && (not.enum || not.oneOf))
     $oneOf && this
       .base
-      .notOneOf($oneOf, this.errMessages['notOneOf'])
+      .notOneOf($oneOf, this.valErrMessage('notOneOf'))
     return this
   }
+```
+
+The key entries can be either a function, taking a `value` argument or a static string.
+Here are some of the defaults that you can override as needed.
+
+```js
+const errValKeys = [
+  "oneOf",
+  "enum",
+  "required",
+  "notRequired",
+  "minDate",
+  "min",
+  "maxDate",
+  "max",
+  "trim",
+  "lowercase",
+  "uppercase",
+  "email",
+  "url",
+  "minLength",
+  "maxLength",
+  "pattern",
+  "matches",
+  "regex",
+  "integer",
+  "positive",
+  "minimum",
+  "maximum"
+];
+
+const defaults = {
+  errMessages: errValKeys.map(key => {
+    return ({ key, value }) => `${key}: invalid for ${value}`;
+  })
+};
 ```
 
 ## Testing

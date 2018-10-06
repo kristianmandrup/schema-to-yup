@@ -1,6 +1,4 @@
-const {
-  YupMixed
-} = require('./mixed')
+const {YupMixed} = require('./mixed')
 
 function isInteger(type) {
   return type === 'integer'
@@ -11,9 +9,10 @@ function isNumber(type) {
 }
 
 function toYupNumber(obj) {
-  return isNumber(obj.type) && YupNumber.create(obj).yupped()
+  return isNumber(obj.type) && YupNumber
+    .create(obj)
+    .yupped()
 }
-
 
 class YupNumber extends YupMixed {
   constructor(obj) {
@@ -27,27 +26,40 @@ class YupNumber extends YupMixed {
   }
 
   convert() {
-    this.minimum().maximum().positive().negative().integer().moreThan().lessThan()
+    this
+      .minimum()
+      .maximum()
+      .positive()
+      .negative()
+      .integer()
+      .moreThan()
+      .lessThan()
     super.convert()
     return this
   }
 
   truncate() {
-    this.value.truncate && this.base.truncate()
+    this.value.truncate && this
+      .base
+      .truncate()
     return this
   }
 
   round() {
-    const {
-      round
-    } = this.value
-    const $round = typeof round === 'string' ? round : 'round'
-    round && this.base.round($round)
+    const {round} = this.value
+    const $round = typeof round === 'string'
+      ? round
+      : 'round'
+    round && this
+      .base
+      .round($round)
     return this
   }
 
   integer() {
-    this.isInteger && this.base.integer(this.errMessage['integer'])
+    this.isInteger && this
+      .base
+      .integer(this.valErrMessage('integer'))
     return this
   }
 
@@ -61,73 +73,81 @@ class YupNumber extends YupMixed {
 
   moreThan() {
     const min = this.$moreThan
-    min && this.base.moreThan(this.toNumber(min))
+    min && this
+      .base
+      .moreThan(this.toNumber(min))
     return this
   }
 
   lessThan() {
     const max = this.$lessThan
-    max && this.base.lessThan(this.toNumber(max))
+    max && this
+      .base
+      .lessThan(this.toNumber(max))
     return this
   }
 
   get $moreThan() {
-    const {
-      exclusiveMinimum,
-      moreThan
-    } = this.value
-    if (moreThan) return moreThan
-    if (exclusiveMinimum === undefined) return false
+    const {exclusiveMinimum, moreThan} = this.value
+    if (moreThan) 
+      return moreThan
+    if (exclusiveMinimum === undefined) 
+      return false
     return exclusiveMinimum
   }
 
   get $lessThan() {
-    const {
-      exclusiveMaximum,
-      lessThan
-    } = this.value
-    if (lessThan) return lessThan
-    if (exclusiveMaximum === undefined) return false
+    const {exclusiveMaximum, lessThan} = this.value
+    if (lessThan) 
+      return lessThan
+    if (exclusiveMaximum === undefined) 
+      return false
     return exclusiveMaximum
   }
 
   positive() {
-    this.isPositive && this.base.positive(this.errMessage['positive'])
+    this.isPositive && this
+      .base
+      .positive(this.valErrMessage('positive'))
     return this
   }
 
   negative() {
-    this.isNegative && this.base.negative(this.errMessage['negative'])
+    this.isNegative && this
+      .base
+      .negative(this.valErrMessage('negative'))
     return this
   }
 
   get isNegative() {
-    const {
-      exclusiveMaximum,
-      negative
-    } = this.value
-    if (negative) return true
-    if (exclusiveMaximum === undefined) return false
+    const {exclusiveMaximum, negative} = this.value
+    if (negative) 
+      return true
+    if (exclusiveMaximum === undefined) 
+      return false
     return exclusiveMaximum === 0
   }
 
   get isPositive() {
-    const {
-      exclusiveMinimum,
-      positive
-    } = this.value
-    if (positive) return true
-    if (exclusiveMinimum === undefined) return false
+    const {exclusiveMinimum, positive} = this.value
+    if (positive) 
+      return true
+    if (exclusiveMinimum === undefined) 
+      return false
     return exclusiveMinimum === 0
   }
 
   minimum() {
-    this.value.minimum && this.base.min(this.toNumber(this.value.minimum), this.errMessages['minimum'])
+    this.value.minimum && this
+      .base
+      .min(this.toNumber(this.value.minimum), this.valErrMessage('minimum'))
     return this
   }
 
   maximum() {
-    this.value.maximum && this.base.max(this.toNumber(this.value.maximum), this.errMessages['maximum'])
+    this.value.maximum && this
+      .base
+      .max(this.toNumber(this.value.maximum), this.valErrMessage('maximum'))
     return this
   }
 
