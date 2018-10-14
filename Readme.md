@@ -282,7 +282,7 @@ The key entries can be either a function, taking a `value` argument or a static 
 Here are some of the defaults that you can override as needed.
 
 ```js
-const errValKeys = [
+export const errValKeys = [
   "oneOf",
   "enum",
   "required",
@@ -307,11 +307,35 @@ const errValKeys = [
   "maximum"
 ];
 
-const defaults = {
-  errMessages: errValKeys.map(key => {
-    return ({ key, value }) => `${key}: invalid for ${value}`;
-  })
+export const defaults = {
+  errMessages: (keys = errValKeys) =>
+    keys.reduce((acc, key) => {
+      const fn = ({ key, value }) =>
+        `${key}: invalid for ${value.name || value.title}`;
+      acc[key] = fn;
+      return acc;
+    }, {})
 };
+```
+
+### Custom validation messages using select defaults
+
+```js
+const { buildYup, types } = require("json-schema-to-yup");
+const { defaults } = types;
+
+const myErrMessages = require("./err-messages");
+const valKeys = ["lowercase", "integer"];
+
+// by default Yup built-in validation error messages will be used if not overridden here
+const errMessages = {
+  ...defaults.errMessages(valKeys),
+  myErrMessages
+};
+
+const yupSchema = buildYup(json, {
+  errMessages
+});
 ```
 
 ## Testing

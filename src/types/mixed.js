@@ -28,9 +28,11 @@ const errValKeys = [
 ]
 
 const defaults = {
-  errMessages: errValKeys.map(key => {
-    return ({key, value}) => `${key}: invalid for ${value}`
-  })
+  errMessages: (keys = errValKeys) => keys.reduce((acc, key) => {
+    const fn = ({key, value}) => `${key}: invalid for ${value.name || value.title}`
+    acc[key] = fn
+    return acc
+  }, {})
 }
 
 class YupMixed {
@@ -42,7 +44,7 @@ class YupMixed {
     this.config = config || {}
     this.type = 'mixed'
     this.base = yup[this.type]()
-    this.errMessages = config.errMessages || defaults.errMessages || {}
+    this.errMessages = config.errMessages || {}
   }
 
   yupped() {
@@ -180,6 +182,8 @@ class YupMixed {
 }
 
 module.exports = {
+  defaults,
+  errValKeys,
   YupMixed,
   ConvertYupSchemaError
 }
