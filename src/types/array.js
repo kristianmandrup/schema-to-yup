@@ -1,107 +1,97 @@
 // See:
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
 
-const {YupMixed} = require('./mixed')
-const {createYupSchemaEntry} = require('../')
+const { YupMixed } = require("./mixed");
+const { createYupSchemaEntry } = require("../");
 
 function isArray(type) {
-  return type === 'array'
+  return type === "array";
 }
 
 function toYupArray(obj) {
-  return isArray(obj.type) && YupArray
-    .create(obj)
-    .yupped()
+  return isArray(obj.type) && YupArray.create(obj).yupped();
 }
 
 class YupArray extends YupMixed {
   constructor(obj) {
-    super(obj)
-    this.type = 'array'
-    this.base = this.yup[this.type]()
+    super(obj);
+    this.type = "array";
+    this.base = this.yup[this.type]();
   }
 
   convert() {
-    this
-      .maxItems()
+    this.maxItems()
       .minItems()
       .itemsOf()
       .ensure()
-      .compact()
-    this
-      .$uniqueItems()
+      .compact();
+    this.$uniqueItems()
       .$contains()
       .$additionalItems()
-      .$items()
-    super.convert()
-    return this
+      .$items();
+    super.convert();
+    return this;
   }
 
   ensure() {
-    this.value.ensure && this
-      .base
-      .ensure()
-    return this
+    return this.addContraint("ensure");
   }
 
   compact() {
-    this.value.compact && this
-      .base
-      .compact()
-    return this
+    return this.addContraint("compact");
   }
 
   itemsOf() {
-    const {items} = this.value
-    const $itemsOfSchema = items || this.value.of
+    const { items } = this.value;
+    const $itemsOfSchema = items || this.value.of;
 
     if (Array.isArray($itemsOfSchema)) {
-      this.error('itemsOf', 'does not (yet) support an Array of schemas')
+      this.error("itemsOf", "does not (yet) support an Array of schemas");
     }
 
-    const schema = createYupSchemaEntry({key: this.key, value: $itemsOfSchema, type: this.type, config: this.config})
-    $of && this
-      .base
-      .of($max)
-    return this
+    const schema = createYupSchemaEntry({
+      key: this.key,
+      value: $itemsOfSchema,
+      type: this.type,
+      config: this.config
+    });
+    $of && this.base.of($max);
+    return this;
   }
 
   maxItems() {
-    const {maxItems, max} = this.value
-    const $max = maxItems || max
-    $max && this
-      .base
-      .max($max)
-    return this
+    const { maxItems, max } = this.value;
+    const $max = maxItems || max;
+    const newBase = $max && this.base.max($max);
+    this.base = newBase || this.base;
+    return this;
   }
 
   minItems() {
-    const {minItems, min} = this.value
-    const $min = minItems || min
-    $min && this
-      .base
-      .min($min)
-    return this
+    const { minItems, min } = this.value;
+    const $min = minItems || min;
+    $min && this.base.min($min);
+    return this;
   }
 
   $items() {
-    return this
+    return this;
   }
 
   $additionalItems() {
-    return this
+    return this;
   }
 
   $uniqueItems() {
-    return this
+    return this;
   }
 
   $contains() {
-    return this
+    return this;
   }
 }
 
 module.exports = {
   toYupArray,
   YupArray
-}
+};

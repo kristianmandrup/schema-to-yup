@@ -1,172 +1,175 @@
-const yup = require('yup')
+const yup = require("yup");
 
 class ConvertYupSchemaError extends Error {}
 
 const errValKeys = [
-  'oneOf',
-  'enum',
-  'required',
-  'notRequired',
-  'minDate',
-  'min',
-  'maxDate',
-  'max',
-  'trim',
-  'lowercase',
-  'uppercase',
-  'email',
-  'url',
-  'minLength',
-  'maxLength',
-  'pattern',
-  'matches',
-  'regex',
-  'integer',
-  'positive',
-  'minimum',
-  'maximum'
-]
+  "oneOf",
+  "enum",
+  "required",
+  "notRequired",
+  "minDate",
+  "min",
+  "maxDate",
+  "max",
+  "trim",
+  "lowercase",
+  "uppercase",
+  "email",
+  "url",
+  "minLength",
+  "maxLength",
+  "pattern",
+  "matches",
+  "regex",
+  "integer",
+  "positive",
+  "minimum",
+  "maximum"
+];
 
 const defaults = {
-  errMessages: (keys = errValKeys) => keys.reduce((acc, key) => {
-    const fn = ({key, value}) => `${key}: invalid for ${value.name || value.title}`
-    acc[key] = fn
-    return acc
-  }, {})
-}
+  errMessages: (keys = errValKeys) =>
+    keys.reduce((acc, key) => {
+      const fn = ({ key, value }) =>
+        `${key}: invalid for ${value.name || value.title}`;
+      acc[key] = fn;
+      return acc;
+    }, {})
+};
 
-class YupMixed {
-  constructor({key, value, config}) {
-    this.yup = yup
-    this.key = key
-    this.value = value
-    this.format = value.format
-    this.config = config || {}
-    this.type = 'mixed'
-    this.base = yup[this.type]()
-    this.errMessages = config.errMessages || {}
+const { Base } = require("./base");
+
+class YupMixed extends Base {
+  constructor({ key, value, config }) {
+    super(config);
+    this.yup = yup;
+    this.key = key;
+    this.value = value;
+    this.format = value.format;
+    this.config = config || {};
+    this.type = "mixed";
+    this.base = yup[this.type]();
+    this.errMessages = config.errMessages || {};
   }
 
   yupped() {
-    return this
-      .convert()
-      .base
+    return this.convert().base;
   }
 
   convert() {
-    this
-      .nullable()
+    this.nullable()
       .required()
       .notRequired()
       .oneOf()
       .notOneOf()
       .ensureDefault()
-      .strict()
-    return this
+      .strict();
+    return this;
+  }
+
+  addValueConstraint(propName, { constraintName, errName } = {}) {
+    return this.addConstraint(propName, {
+      constraintName,
+      value: true,
+      errName
+    });
+  }
+
+  addConstraint(propName, { constraintName, value, errName } = {}) {
+    const propValue = this.value[propName];
+    if (propValue) {
+      constraintName = constraintName || propName;
+      const constraintFn = this.base[constraintName].bind(this.base);
+      const errFn =
+        this.valErrMessage(constraintName) ||
+        (errName && this.valErrMessage(errName));
+      const constraintValue = value === true ? propValue : value;
+      const newBase = constraintValue
+        ? constraintFn(constraintValue, errFn)
+        : constraintFn(errFn);
+      this.base = newBase || this.base;
+    }
+    return this;
   }
 
   ensureDefault() {
-    this.value.default && this
-      .base
-      .default(this.value.default)
-    return this
+    return this.addValueConstraint("default");
   }
 
   strict() {
-    this.value.strict && this
-      .base
-      .strict(this.value.strict)
-    return this
+    return this.addValueConstraint("strict");
   }
 
   required() {
-    this.value.required && this
-      .base
-      .required(this.valErrMessage('required'))
-    return this
+    return this.addConstraint("required");
   }
 
   notRequired() {
-    this.value.notRequired && this
-      .base
-      .notRequired(this.valErrMessage('notRequired'))
-    return this
+    return this.addConstraint("notRequired");
   }
 
   nullable() {
-    this.value.nullable && this
-      .base
-      .nullable(this.valErrMessage('nullable'))
-    return this
+    return this.addConstraint("nullable");
   }
 
   oneOf() {
-    const {oneOf} = this.value
-    const $oneOf = this.value.enum || oneOf
-    $oneOf && this
-      .base
-      .oneOf($oneOf, this.valErrMessage('oneOf') || this.valErrMessage('enum'))
-    return this
+    const value = this.value.enum || this.value.oneOf;
+    return this.addConstraint("oneOf", { value, errName: "enum" });
   }
 
   notOneOf() {
-    const {not, notOneOf} = this.value
-    const $oneOf = notOneOf || (not && (not.enum || not.oneOf))
-    $oneOf && this
-      .base
-      .notOneOf($oneOf, this.valErrMessage('notOneOf'))
-    return this
+    const { not, notOneOf } = this.value;
+    const value = notOneOf || (not && (not.enum || not.oneOf));
+    return this.addConstraint("notOneOf", { value });
   }
 
   valErrMessage(key) {
-    const errMsg = this.errMessages[key]
-    return typeof errMsg === 'function'
-      ? errMsg(this.value)
-      : errMsg
+    const errMsg = this.errMessages[key];
+    return typeof errMsg === "function" ? errMsg(this.value) : errMsg;
   }
 
   $const() {
-    return this
+    return this;
   }
 
   // boolean https: //ajv.js.org/keywords.html#allof
   $allOf() {
-    return this
+    return this;
   }
 
   // https://ajv.js.org/keywords.html#anyof
   $anyOf() {
-    return this
+    return this;
   }
 
   // https: //ajv.js.org/keywords.html#oneof
   $oneOf() {
-    return this
+    return this;
   }
 
   // conditions https://ajv.js.org/keywords.html#not
   $not() {
-    return this
+    return this;
   }
 
   $if() {
-    return this
+    return this;
   }
 
   $then() {
-    return this
+    return this;
   }
 
   $else() {
-    return this
+    return this;
   }
 
   message() {
-    return config.messages[this.key] || config.messages[this.type] || {}
+    return config.messages[this.key] || config.messages[this.type] || {};
   }
 
-  errMessage(errKey = 'default') {
-    return this.message[errKey] || 'error'
+  errMessage(errKey = "default") {
+    return this.message[errKey] || "error";
   }
 
   toValidJSONSchema() {}
@@ -176,8 +179,8 @@ class YupMixed {
   deNormalize() {}
 
   error(name, msg) {
-    const label = `[${name}] ${msg}`
-    throw new ConvertYupSchemaError(msg)
+    const label = `[${name}] ${msg}`;
+    throw new ConvertYupSchemaError(msg);
   }
 }
 
@@ -186,4 +189,4 @@ module.exports = {
   errValKeys,
   YupMixed,
   ConvertYupSchemaError
-}
+};

@@ -5,18 +5,20 @@ const {
   toYupArray,
   toYupObject,
   toYupMixed,
-  toYupDate
-} = require('./types')
+  toYupDate,
+  Base
+} = require("./types");
 
 class YupSchemaEntryError extends Error {}
 
-class YupSchemaEntry {
-  constructor({name, key, value, config}) {
-    this.key = key
-    this.value = value
-    this.config = config
-    this.name = name
-    this.type = value.type
+class YupSchemaEntry extends Base {
+  constructor({ name, key, value, config }) {
+    super(config);
+    this.key = key;
+    this.value = value;
+    this.config = config;
+    this.name = name;
+    this.type = value.type;
     this.types = {
       string: toYupString,
       number: toYupNumber,
@@ -25,58 +27,71 @@ class YupSchemaEntry {
       object: toYupObject,
       date: toYupDate,
       mixed: toYupMixed
-    }
+    };
   }
 
   isValidSchema() {
-    return typeof this.type === 'string'
+    return typeof this.type === "string";
   }
 
   error(msg) {
-    throw new YupSchemaEntryError(msg)
+    throw new YupSchemaEntryError(msg);
   }
 
   toEntry() {
-    if (!this.isValidSchema()) 
-      this.error('Not a valid schema')
-    const config = this.obj
-    return this.string(config) || this.number(config) || this.boolean(config) || this.array(config) || this.object(config) || this.date(config) || this.mixed(config)
+    if (!this.isValidSchema()) this.error("Not a valid schema");
+    const config = this.obj;
+    return (
+      this.string(config) ||
+      this.number(config) ||
+      this.boolean(config) ||
+      this.array(config) ||
+      this.object(config) ||
+      this.date(config) ||
+      this.mixed(config)
+    );
   }
 
   get obj() {
-    return {key: this.key, value: this.value, type: this.type, config: this.config}
+    return {
+      key: this.key,
+      value: this.value,
+      type: this.type,
+      config: this.config
+    };
   }
 
   string(config) {
-    return toYupString(config || this.obj)
+    return toYupString(config || this.obj);
   }
 
   number(config) {
-    return toYupNumber(config || this.obj)
+    return toYupNumber(config || this.obj);
   }
 
   boolean(config) {
-    return toYupBoolean(config || this.obj)
+    return toYupBoolean(config || this.obj);
   }
 
   array(config) {
-    return toYupArray(config || this.obj)
+    return toYupArray(config || this.obj);
   }
 
   object(config) {
-    return toYupObject(config || this.obj)
+    return toYupObject(config || this.obj);
   }
 
   date(config) {
-    return toYupDate(config || this.obj)
+    return toYupDate(config || this.obj);
   }
 
   mixed(config) {
-    return toYupMixed(config || this.obj)
+    return toYupMixed(config || this.obj);
   }
 }
 
 module.exports = {
   YupSchemaEntryError,
-  YupSchemaEntry
-}
+  YupSchemaEntry,
+  Base
+};
