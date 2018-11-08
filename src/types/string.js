@@ -25,6 +25,7 @@ class YupString extends YupMixed {
       .maxLength()
       .pattern();
     this.lowercase().uppercase();
+    this.email();
     return this;
   }
 
