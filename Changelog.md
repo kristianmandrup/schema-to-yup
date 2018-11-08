@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.1
+
+- [Email fix](https://github.com/kristianmandrup/json-schema-to-yup/pull/3) by [@matthewfaircliff](https://github.com/matthewfaircliff)
+
+Cheers :)
+
 ## 1.6.0
 
 Fixed core bug: Now updates this.base with every constraint
