@@ -226,6 +226,22 @@ Here a more complete example of the variations currently possible
 }
 ```
 
+### Logging
+
+You can enable logging py passing a `log` option in the `config` argument. If set to true, it will by default assign the internal log function to `console.log`
+
+```js
+const schema = buildYup(nameJsonSchema, { log: true });
+```
+
+You can also pass a log function in the `log` option to log messages to that function
+
+```js
+const schema = buildYup(nameJsonSchema, {
+  log: msg => console.log(`LOG: ${msg}`)
+});
+```
+
 ## Customization
 
 You can supply a `createYupSchemaEntry` function as an entry in the `config` object.
@@ -261,7 +277,23 @@ const yupSchema = buildYup(json, {
 });
 ```
 
-## Error messages
+### Subclassing
+
+You can sublass `YupBuilder` or any of the internal classes to create your own custom infrastructure to suit your particular needs, expand with support for extra features etc.
+
+```js
+const { YupBuilder } = require("json-schema-to-yup");
+
+class MyYupBuilder extends YupBuilder {
+  // ... custom overrides etc
+}
+
+const builder = new MyYupBuilder(schema, config);
+const { yupSchema } = builder;
+// ...
+```
+
+### Error messages
 
 You can pass an `errMessages` object in the optional `config` object argument with key mappings for your custom validation error messages.
 
