@@ -39,6 +39,10 @@ const defaults = {
 
 const { Base } = require("./base");
 
+function toYupMixed(obj) {
+  YupMixed.create(obj).yupped();
+}
+
 class YupMixed extends Base {
   constructor({ key, value, config }) {
     super(config);
