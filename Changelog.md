@@ -1,6 +1,10 @@
 # Changelog
 
-## 1.6.2
+## 1.6.4
+
+List similar JSON schema -> model projects
+
+## 1.6.3
 
 - [Fix pattern matching](https://github.com/kristianmandrup/json-schema-to-yup/pull/4)
 

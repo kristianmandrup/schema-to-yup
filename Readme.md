@@ -226,7 +226,7 @@ Here a more complete example of the variations currently possible
 }
 ```
 
-### Logging
+### Custom logs and error handling
 
 You can enable logging py passing a `log` option in the `config` argument. If set to true, it will by default assign the internal log function to `console.log`
 
@@ -234,11 +234,19 @@ You can enable logging py passing a `log` option in the `config` argument. If se
 const schema = buildYup(nameJsonSchema, { log: true });
 ```
 
-You can also pass a log function in the `log` option to log messages to that function
+You can also pass a log function in the `log` option to handle log messages and an `err` option with a custom error handler function.
+
+See [Custom errors in Node](https://rclayton.silvrback.com/custom-errors-in-node-js) for how to design custom errors
 
 ```js
+class ValidationError extends Error {}
+
 const schema = buildYup(nameJsonSchema, {
-  log: msg => console.log(`LOG: ${msg}`)
+  log: (name, msg) => console.log(`[${name}] ${msg}`)
+  err: (msg) => {
+    console.error(`[${name}] ERROR: ${msg}`
+    throw new ValidationError(msg)
+  })
 });
 ```
 
@@ -369,6 +377,18 @@ const yupSchema = buildYup(json, {
   errMessages
 });
 ```
+
+## Similar projects
+
+- [JSON schema to Elastic Search mapping](https://github.com/kristianmandrup/json-schema-to-es-mapping)
+- [JSON Schema to GraphQL types with decorators/directives](https://github.com/kristianmandrup/json-schema-to-graphql-types-decorated)
+- [JSON Schema to Mongoose schema](https://github.com/kristianmandrup/convert-json-schema-to-mongoose)
+- [JSON Schema to MobX State Tree types](https://github.com/ralusek/jsonschema-to-mobx-state-tree)
+- [Convert JSON schema to mongoose 5 schema](https://github.com/kristianmandrup/convert-json-schema-to-mongoose)
+
+The library [JSON Schema model builder](https://github.com/kristianmandrup/json-schema-model-builder#readme) is a powerful toolset to build a framework to create any kind of output model from a JSON schema.
+
+If you enjoy this declarative/generator approach, try it out!
 
 ## Testing
 
