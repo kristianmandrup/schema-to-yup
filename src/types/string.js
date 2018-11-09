@@ -87,7 +87,7 @@ class YupString extends YupMixed {
     const newBase =
       this.value.pattern &&
       this.base.matches(
-        this.value.pattern,
+        this.regex,
         this.valErrMessage("pattern") ||
           this.valErrMessage("matches") ||
           this.valErrMessage("regex")
