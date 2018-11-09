@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.2
+
+- [Fix pattern matching](https://github.com/kristianmandrup/json-schema-to-yup/pull/4)
+
 ## 1.6.1
 
 - [Email fix](https://github.com/kristianmandrup/json-schema-to-yup/pull/3) by [@matthewfaircliff](https://github.com/matthewfaircliff)
