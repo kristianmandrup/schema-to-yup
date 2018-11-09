@@ -21,6 +21,7 @@ class YupString extends YupMixed {
 
   convert() {
     super.convert();
+    this.normalize();
     this.minLength()
       .maxLength()
       .pattern();
@@ -82,6 +83,7 @@ class YupString extends YupMixed {
   }
 
   pattern() {
+    if (this.value.pattern) { this.regex = new RegExp(this.value.pattern); }
     const newBase =
       this.value.pattern &&
       this.base.matches(
