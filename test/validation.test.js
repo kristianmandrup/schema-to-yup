@@ -45,3 +45,56 @@ test("yup validates invalid email to return false", () => {
   expect(valid).toBe(false);
 });
 
+const regex = {
+  title: "users",
+  type: "object",
+  required: ["amazon"],
+  properties: {
+    amazon: { type: "string", "pattern": /(foo|bar)/ }
+  }
+}
+test("yup validates pattern to return true", () => {
+  const yupSchema = buildYup(regex);
+  const valid = yupSchema.isValidSync({
+    amazon: "foo"
+  });
+  expect(valid).toBe(true);
+});
+test("yup validates invalid pattern to return false", () => {
+  const yupSchema = buildYup(regex);
+  const valid = yupSchema.isValidSync({
+    amazon: "foz"
+  });
+  expect(valid).toBe(false);
+});
+const misnamed_regex = {
+  title: "users",
+  type: "object",
+  required: ["amazon"],
+  properties: {
+    amazon: { type: "string", "matches": /(foo|bar)/ }
+  }
+}
+test("yup validates normalised pattern name to return false", () => {
+  const yupSchema = buildYup(misnamed_regex);
+  const valid = yupSchema.isValidSync({
+    amazon: "foz"
+  });
+  expect(valid).toBe(false);
+});
+const misnamed_regex2 = {
+  title: "users",
+  type: "object",
+  required: ["amazon"],
+  properties: {
+    amazon: { type: "string", "regex": /(foo|bar)/ }
+  }
+}
+test("yup validates normalised pattern name to return false", () => {
+  const yupSchema = buildYup(misnamed_regex2);
+  const valid = yupSchema.isValidSync({
+    amazon: "foz"
+  });
+  expect(valid).toBe(false);
+});
+
