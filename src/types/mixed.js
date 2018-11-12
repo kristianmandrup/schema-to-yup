@@ -85,7 +85,7 @@ class YupMixed extends Base {
       constraintName = constraintName || propName;
       const constraintFn = this.base[constraintName].bind(this.base);
       const errFn =
-        this.valErrMessage(constraintName) ||
+        this.valErrMessage(this.key, constraintName) ||
         (errName && this.valErrMessage(errName));
       const constraintValue = value === true ? propValue : value;
       const newBase = constraintValue
@@ -127,8 +127,8 @@ class YupMixed extends Base {
     return this.addConstraint("notOneOf", { value });
   }
 
-  valErrMessage(key) {
-    const errMsg = this.errMessages[key];
+  valErrMessage(prop,constraint) {
+    const errMsg = this.errMessages[prop] ? this.errMessages[prop][constraint] : undefined;
     return typeof errMsg === "function" ? errMsg(this.value) : errMsg;
   }
 
