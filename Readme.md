@@ -66,7 +66,7 @@ const config = {
     },
     email: {
       required: "You must enter an email address",
-      matches: "Not a valid email address"
+      format: "Not a valid email address"
     }
   }
 };
