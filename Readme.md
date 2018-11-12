@@ -33,6 +33,14 @@ const schema = {
       description: "Name of the person",
       type: "string"
     },
+    email: {
+      type: "string",
+      format: "email"
+    },
+    fooorbar: {
+      type: "string",
+      matches: "(foo|bar)"
+    },
     age: {
       description: "Age of person",
       type: "number",
@@ -47,15 +55,18 @@ const schema = {
       propertyOrder: 3
     }
   },
-  required: ["name"]
+  required: ["name","email"]
 };
 
 const config = {
   // for error messages...
-  messages: {
+  errMessages: {
     age: {
-      required: "a person must have an age"
-      // ...
+      required: "A person must have an age"
+    },
+    email: {
+      required: "You must enter an email address",
+      matches: "Not a valid email address"
     }
   }
 };
