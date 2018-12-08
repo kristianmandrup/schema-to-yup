@@ -1,11 +1,21 @@
 const { YupMixed } = require("./mixed");
 
-function isString(type) {
-  return type === "string";
+class StringHandler {
+  constructor(config) {
+    this.config = config;
+  }
+
+  isString(obj) {
+    return this.config.isString(obj);
+  }
+
+  handle(obj) {
+    return this.isString(obj) && YupString.create(obj).yupped();
+  }
 }
 
-function toYupString(obj) {
-  return isString(obj.type) && YupString.create(obj).yupped();
+function toYupString(obj, config = {}) {
+  return new StringHandler(config).handle(obj);
 }
 
 class YupString extends YupMixed {
@@ -83,7 +93,9 @@ class YupString extends YupMixed {
   }
 
   pattern() {
-    if (this.value.pattern) { this.regex = new RegExp(this.value.pattern); }
+    if (this.value.pattern) {
+      this.regex = new RegExp(this.value.pattern);
+    }
     const newBase =
       this.value.pattern &&
       this.base.matches(
@@ -106,5 +118,6 @@ class YupString extends YupMixed {
 
 module.exports = {
   toYupString,
-  YupString
+  YupString,
+  StringHandler
 };

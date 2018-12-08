@@ -17,17 +17,17 @@ class YupBuilder extends Base {
   constructor(schema, config = {}) {
     super(config);
     this.schema = schema;
-    this.config = config;
-    let { type, properties } = schema;
     const { log } = config;
     this.log = typeof log === "boolean" ? console.log : log;
+    const type = this.getType(schema);
+    const props = this.getProps(schema);
     this.type = type;
-    this.properties = properties;
+    this.properties = props;
     this.required = schema.required || [];
     if (isObject(type)) {
-      if (isObjectType(properties)) {
-        const name = schema.title || schema.name;
-        properties = this.normalizeRequired(schema);
+      if (isObjectType(props)) {
+        const name = this.getName(schema);
+        const properties = this.normalizeRequired(schema);
         const shapeConfig = this.propsToShape({ properties, name, config });
         log && log({ shapeConfig });
         this.shapeConfig = shapeConfig;
@@ -43,6 +43,18 @@ class YupBuilder extends Base {
     } else {
       this.error(`invalid schema: must be an object type, was: ${type}`);
     }
+  }
+
+  getProps(obj) {
+    return this.config.getProps(obj);
+  }
+
+  getType(obj) {
+    return this.config.getType(obj);
+  }
+
+  getName(obj) {
+    return this.config.getName(obj);
   }
 
   get yupSchema() {

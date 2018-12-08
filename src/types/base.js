@@ -1,5 +1,10 @@
+const defaults = require("./defaults");
+
 class Base {
   constructor(config = {}) {
+    const schemaType = config.schemaType || "json-schema";
+    const $defaults = defaults[schemaType];
+    this.config = { ...$defaults, ...config };
     const { log, error } = config;
     this.log = typeof log === "boolean" ? console.log : log;
     this.err = typeof error === "boolean" ? console.error : error;

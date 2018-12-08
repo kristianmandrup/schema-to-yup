@@ -61,32 +61,32 @@ class YupSchemaEntry extends Base {
     };
   }
 
-  string(config) {
-    return toYupString(config || this.obj);
+  string(obj) {
+    return toYupString(obj || this.obj, this.config);
   }
 
-  number(config) {
-    return toYupNumber(config || this.obj);
+  number(obj) {
+    return toYupNumber(obj || this.obj, this.config);
   }
 
-  boolean(config) {
-    return toYupBoolean(config || this.obj);
+  boolean(obj) {
+    return toYupBoolean(obj || this.obj, this.config);
   }
 
-  array(config) {
-    return toYupArray(config || this.obj);
+  array(obj) {
+    return toYupArray(obj || this.obj, this.config);
   }
 
-  object(config) {
-    return toYupObject(config || this.obj);
+  object(obj) {
+    return toYupObject(obj || this.obj, this.config);
   }
 
-  date(config) {
-    return toYupDate(config || this.obj);
+  date(obj) {
+    return toYupDate(obj || this.obj, this.config);
   }
 
-  mixed(config) {
-    return toYupMixed(config || this.obj);
+  mixed(obj) {
+    return toYupMixed(obj || this.obj, this.config);
   }
 }
 

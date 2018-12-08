@@ -1,15 +1,21 @@
 const { YupMixed } = require("./mixed");
 
-function isInteger(type) {
-  return type === "integer";
+class NumberHandler {
+  constructor(config) {
+    this.config = config;
+  }
+
+  isString(obj) {
+    return this.config.isNumber(obj);
+  }
+
+  handle(obj) {
+    return this.isNumber(obj) && YupString.create(obj).yupped();
+  }
 }
 
-function isNumber(type) {
-  return type === "number" || isInteger(type);
-}
-
-function toYupNumber(obj) {
-  return isNumber(obj.type) && YupNumber.create(obj).yupped();
+function toYupNumber(obj, config = {}) {
+  return new NumberHandler(config).handle(obj);
 }
 
 class YupNumber extends YupMixed {
@@ -139,5 +145,6 @@ class YupNumber extends YupMixed {
 
 module.exports = {
   toYupNumber,
-  YupNumber
+  YupNumber,
+  NumberHandler
 };

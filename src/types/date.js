@@ -1,22 +1,21 @@
 const { YupMixed } = require("./mixed");
 
-// TODO: check if has any date format
-function hasDateContraint(obj) {
-  return false;
+class DateHandler {
+  constructor(config) {
+    this.config = config;
+  }
+
+  isString(obj) {
+    return this.config.isDate(obj);
+  }
+
+  handle(obj) {
+    return this.isBoolean(obj) && YupString.create(obj).yupped();
+  }
 }
 
-function hasDateType(type) {
-  return ["date", "date-time"].find(t => t === type);
-}
-
-function isDate(obj) {
-  return (
-    (obj.type === "string" && hasDateContraint(obj)) || hasDateType(obj.type)
-  );
-}
-
-function toYupDate(obj) {
-  return isDate(obj) && YupDate.create(obj).yupped();
+function toYupDate(obj, config = {}) {
+  return new DateHandler(config).handle(obj);
 }
 
 class YupDate extends YupMixed {
@@ -67,5 +66,6 @@ class YupDate extends YupMixed {
 
 module.exports = {
   toYupDate,
-  YupDate
+  YupDate,
+  DateHandler
 };

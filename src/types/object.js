@@ -2,16 +2,22 @@ const { YupMixed } = require("./mixed");
 
 const { buildYup } = require("../");
 
-function isObjectType(obj) {
-  return obj === Object(obj);
+class ObjectHandler {
+  constructor(config) {
+    this.config = config;
+  }
+
+  isString(obj) {
+    return this.config.isObject(obj);
+  }
+
+  handle(obj) {
+    return this.isObject(obj) && YupString.create(obj).yupped();
+  }
 }
 
-function isObject(obj) {
-  return obj.type === "object"; // && isObjectType(obj.properties)
-}
-
-function toYupObject(obj) {
-  return isObject(obj) && YupObject.create(obj).yupped();
+function toYupObject(obj, config = {}) {
+  return new ObjectHandler(config).handle(obj);
 }
 
 // Allow recursive schema
@@ -59,5 +65,6 @@ class YupObject extends YupMixed {
 
 module.exports = {
   toYupObject,
-  YupObject
+  YupObject,
+  ObjectHandler
 };

@@ -1,28 +1,36 @@
-const {
-  YupMixed
-} = require('./mixed')
+const { YupMixed } = require("./mixed");
 
-function isBoolean(type) {
-  return type === 'boolean'
+class NumberHandler {
+  constructor(config) {
+    this.config = config;
+  }
+
+  isString(obj) {
+    return this.config.isBoolean(obj);
+  }
+
+  handle(obj) {
+    return this.isBoolean(obj) && YupString.create(obj).yupped();
+  }
 }
 
-function toYupBoolean(obj) {
-  return isBoolean(obj.type) && YupBoolean.create(obj).yupped()
+function toYupBoolean(obj, config = {}) {
+  return new NumberHandler(config).handle(obj);
 }
 
 class YupBoolean extends YupMixed {
   constructor(obj) {
-    super(obj)
-    this.type = 'boolean'
-    this.base = this.yup[this.type]()
+    super(obj);
+    this.type = "boolean";
+    this.base = this.yup[this.type]();
   }
 
   static create(obj) {
-    return new YupBoolean(obj)
+    return new YupBoolean(obj);
   }
 }
 
 module.exports = {
   toYupBoolean,
   YupBoolean
-}
+};

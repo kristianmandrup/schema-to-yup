@@ -4,12 +4,22 @@
 const { YupMixed } = require("./mixed");
 const { createYupSchemaEntry } = require("../");
 
-function isArray(type) {
-  return type === "array";
+class ArrayHandler {
+  constructor(config) {
+    this.config = config;
+  }
+
+  isString(obj) {
+    return this.config.isArray(obj);
+  }
+
+  handle(obj) {
+    return this.isArray(obj) && YupString.create(obj).yupped();
+  }
 }
 
-function toYupArray(obj) {
-  return isArray(obj.type) && YupArray.create(obj).yupped();
+function toYupArray(obj, config = {}) {
+  return new ArrayHandler(config).handle(obj);
 }
 
 class YupArray extends YupMixed {
@@ -93,5 +103,6 @@ class YupArray extends YupMixed {
 
 module.exports = {
   toYupArray,
-  YupArray
+  YupArray,
+  ArrayHandler
 };
