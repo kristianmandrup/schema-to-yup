@@ -23,7 +23,7 @@ class YupBuilder extends Base {
     const props = this.getProps(schema);
     this.type = type;
     this.properties = props;
-    this.required = schema.required || [];
+    this.required = this.getRequired(schema);
     if (isObject(type)) {
       if (isObjectType(props)) {
         const name = this.getName(schema);
@@ -43,6 +43,11 @@ class YupBuilder extends Base {
     } else {
       this.error(`invalid schema: must be an object type, was: ${type}`);
     }
+  }
+
+  getRequired(obj) {
+    const { getRequired } = this.config;
+    return getRequired ? getRequired(obj) : obj.required || [];
   }
 
   getProps(obj) {
@@ -77,10 +82,14 @@ class YupBuilder extends Base {
       // });
       const value = properties[key];
       const isRequired = required.indexOf(key) >= 0;
-      value.required = value.required || isRequired;
+      value.required = this.isRequired(value) || isRequired;
       acc[key] = value;
       return acc;
     }, {});
+  }
+
+  isRequired(value) {
+    return this.config.isRequired(value);
   }
 
   propsToShape({ name }) {

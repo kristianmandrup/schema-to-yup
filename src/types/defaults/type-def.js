@@ -8,5 +8,6 @@ module.exports = {
   isBoolean: obj => obj.type === "Boolean",
   isDate: obj => obj.type === "Date" || obj.directives.date,
   isNumber: obj => obj.type === "Int" || obj.type === "Float",
-  isObject: obj => obj.type === "Object"
+  isObject: obj => obj.type === "Object",
+  isRequired: obj => !obj.isNullable
 };

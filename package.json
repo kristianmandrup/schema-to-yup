@@ -1,6 +1,6 @@
 {
   "name": "json-schema-to-yup",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "main": "src/index.js",
   "description": "Build a Yup schema from a JSON Schema. Also supports custom/alternative schema models such as GraphQL type defs",
   "license": "MIT",

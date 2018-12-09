@@ -9,5 +9,6 @@ module.exports = {
   hasDateFormat: obj => ["date", "date-time"].find(t => t === obj.format),
   isDate: obj => obj.type === "string" && defaults.hasDateFormat(obj.format),
   isNumber: obj => obj.type === "number" || defaults.isInteger(obj.type),
-  isObject: obj => obj.type === "object"
+  isObject: obj => obj.type === "object",
+  isRequired: obj => obj.required
 };
