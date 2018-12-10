@@ -49,11 +49,16 @@ class YupMixed extends Base {
     this.yup = yup;
     this.key = key;
     this.value = value;
-    this.format = value.format;
+    this.constraints = this.getConstraints();
+    this.format = value.format || this.constraints.format;
     this.config = config || {};
     this.type = "mixed";
     this.base = yup[this.type]();
     this.errMessages = config.errMessages || {};
+  }
+
+  getConstraints() {
+    return this.config.getConstraints(this.value);
   }
 
   yupped() {
@@ -80,7 +85,7 @@ class YupMixed extends Base {
   }
 
   addConstraint(propName, { constraintName, value, errName } = {}) {
-    const propValue = this.value[propName];
+    const propValue = this.constraints[propName];
     if (propValue) {
       constraintName = constraintName || propName;
       const constraintFn = this.base[constraintName].bind(this.base);
@@ -117,19 +122,21 @@ class YupMixed extends Base {
   }
 
   oneOf() {
-    const value = this.value.enum || this.value.oneOf;
+    const value = this.constraints.enum || this.constraints.oneOf;
     return this.addConstraint("oneOf", { value, errName: "enum" });
   }
 
   notOneOf() {
-    const { not, notOneOf } = this.value;
+    const { not, notOneOf } = this.constraints;
     const value = notOneOf || (not && (not.enum || not.oneOf));
     return this.addConstraint("notOneOf", { value });
   }
 
   valErrMessage(constraint) {
-    const errMsg = this.errMessages[this.key] ? this.errMessages[this.key][constraint] : undefined;
-    return typeof errMsg === "function" ? errMsg(this.value) : errMsg;
+    const errMsg = this.errMessages[this.key]
+      ? this.errMessages[this.key][constraint]
+      : undefined;
+    return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
   }
 
   $const() {

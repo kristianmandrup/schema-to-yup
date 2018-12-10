@@ -30,7 +30,7 @@ class YupDate extends YupMixed {
   }
 
   convert() {
-    this.min().max();
+    this.minDate().maxDate();
     super.convert();
     return this;
   }
@@ -39,8 +39,8 @@ class YupDate extends YupMixed {
     return new Date(date);
   }
 
-  min() {
-    const minDate = this.value.min || this.value.minDate;
+  minDate() {
+    const minDate = this.constraints.minDate;
     const newBase =
       minDate &&
       this.base.min(
@@ -51,8 +51,8 @@ class YupDate extends YupMixed {
     return this;
   }
 
-  max() {
-    const maxDate = this.value.max || this.value.maxDate;
+  maxDate() {
+    const maxDate = this.constraints.maxDate;
     const newBase =
       maxDate &&
       this.base.max(

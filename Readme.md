@@ -248,6 +248,7 @@ module.exports {
   getProps: obj => obj.properties,
   getType: obj => obj.type,
   getName: obj => obj.name || obj.title,
+  getConstraints: obj => obj,
   isString: obj => obj.type === "string",
   isArray: obj => obj.type === "array",
   isInteger: obj => obj.type === "integer",
@@ -271,7 +272,11 @@ _Person_
     fields: {
       name: {
         type: 'String',
-        directives: {},
+        directives: {
+          constraints: {
+            minLength: 2
+          }
+        },
         isNullable: false,
         isList: false
       }
@@ -290,6 +295,7 @@ const typeDefConf = {
   getProps: obj => obj.fields,
   getType: obj => obj.type,
   getName: obj => obj.name,
+  getConstraints: obj => (obj.directives || {}).constraints,
   isString: obj => obj.type === "String",
   isArray: obj => obj.isList,
   isInteger: obj => obj.type === "Int",
@@ -300,6 +306,8 @@ const typeDefConf = {
   isRequired: obj => !obj.isNullable
 };
 ```
+
+Please note that `getConstraints` can be used to control where the constraints of the field will be taken from (depending on the type of model/schema or your preference).
 
 Pass overrides to match your model in `config` as follows:
 

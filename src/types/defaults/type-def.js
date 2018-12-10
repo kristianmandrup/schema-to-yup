@@ -2,6 +2,7 @@ module.exports = {
   getProps: obj => obj.fields,
   getType: obj => obj.type,
   getName: obj => obj.name,
+  getConstraints: obj => (obj.directives || {}).constraints,
   isString: obj => obj.type === "String",
   isArray: obj => obj.isList,
   isInteger: obj => obj.type === "Int",

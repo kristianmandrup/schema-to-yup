@@ -46,7 +46,7 @@ class YupNumber extends YupMixed {
   }
 
   round() {
-    const { round } = this.value;
+    const { round } = this.constraints;
     const $round = typeof round === "string" ? round : "round";
     round && this.base.round($round);
     return this;
@@ -80,14 +80,14 @@ class YupNumber extends YupMixed {
   }
 
   get $moreThan() {
-    const { exclusiveMinimum, moreThan } = this.value;
+    const { exclusiveMinimum, moreThan } = this.constraints;
     if (moreThan) return moreThan;
     if (exclusiveMinimum === undefined) return false;
     return exclusiveMinimum;
   }
 
   get $lessThan() {
-    const { exclusiveMaximum, lessThan } = this.value;
+    const { exclusiveMaximum, lessThan } = this.constraints;
     if (lessThan) return lessThan;
     if (exclusiveMaximum === undefined) return false;
     return exclusiveMaximum;
@@ -102,14 +102,14 @@ class YupNumber extends YupMixed {
   }
 
   get isNegative() {
-    const { exclusiveMaximum, negative } = this.value;
+    const { exclusiveMaximum, negative } = this.constraints;
     if (negative) return true;
     if (exclusiveMaximum === undefined) return false;
     return exclusiveMaximum === 0;
   }
 
   get isPositive() {
-    const { exclusiveMinimum, positive } = this.value;
+    const { exclusiveMinimum, positive } = this.constraints;
     if (positive) return true;
     if (exclusiveMinimum === undefined) return false;
     return exclusiveMinimum === 0;
@@ -117,9 +117,9 @@ class YupNumber extends YupMixed {
 
   minimum() {
     const newBase =
-      this.value.minimum &&
+      this.constraints.minimum &&
       this.base.min(
-        this.toNumber(this.value.minimum),
+        this.toNumber(this.constraints.minimum),
         this.valErrMessage("minimum")
       );
     this.base = newBase || this.base;
@@ -128,9 +128,9 @@ class YupNumber extends YupMixed {
 
   maximum() {
     const newBase =
-      this.value.maximum &&
+      this.constraints.maximum &&
       this.base.max(
-        this.toNumber(this.value.maximum),
+        this.toNumber(this.constraints.maximum),
         this.valErrMessage("maximum")
       );
     this.base = newBase || this.base;
@@ -138,8 +138,8 @@ class YupNumber extends YupMixed {
   }
 
   normalize() {
-    this.value.maximum = this.value.maximum || this.value.max;
-    this.value.minimum = this.value.minimum || this.value.min;
+    this.constraints.maximum = this.constraints.maximum || this.constraints.max;
+    this.constraints.minimum = this.constraints.minimum || this.constraints.min;
   }
 }
 

@@ -1,6 +1,6 @@
 const { YupMixed } = require("./mixed");
 
-class NumberHandler {
+class BooleanHandler {
   constructor(config) {
     this.config = config;
   }
@@ -15,7 +15,7 @@ class NumberHandler {
 }
 
 function toYupBoolean(obj, config = {}) {
-  return new NumberHandler(config).handle(obj);
+  return new BooleanHandler(config).handle(obj);
 }
 
 class YupBoolean extends YupMixed {

@@ -58,7 +58,7 @@ class YupString extends YupMixed {
   }
 
   get isEmail() {
-    return this.value.email || this.format === "email";
+    return this.constraints.email || this.format === "email";
   }
 
   url() {
@@ -67,14 +67,14 @@ class YupString extends YupMixed {
   }
 
   get isUrl() {
-    return this.value.url || this.format === "url";
+    return this.constraints.url || this.format === "url";
   }
 
   minLength() {
     const newBase =
-      this.value.minLength &&
+      this.constraints.minLength &&
       this.base.min(
-        this.value.minLength,
+        this.constraints.minLength,
         this.valErrMessage("minLength") || this.valErrMessage("min")
       );
     this.base = newBase || this.base;
@@ -83,9 +83,9 @@ class YupString extends YupMixed {
 
   maxLength() {
     const newBase =
-      this.value.maxLength &&
+      this.constraints.maxLength &&
       this.base.min(
-        this.value.maxLength,
+        this.constraints.maxLength,
         this.valErrMessage("maxLength") || this.valErrMessage("max")
       );
     this.base = newBase || this.base;
@@ -93,11 +93,11 @@ class YupString extends YupMixed {
   }
 
   pattern() {
-    if (this.value.pattern) {
-      this.regex = new RegExp(this.value.pattern);
+    if (this.constraints.pattern) {
+      this.regex = new RegExp(this.constraints.pattern);
     }
     const newBase =
-      this.value.pattern &&
+      this.constraints.pattern &&
       this.base.matches(
         this.regex,
         this.valErrMessage("pattern") ||
@@ -109,10 +109,14 @@ class YupString extends YupMixed {
   }
 
   normalize() {
-    this.value.pattern =
-      this.value.pattern || this.value.matches || this.value.regex;
-    this.value.maxLength = this.value.maxLength || this.value.max;
-    this.value.minLength = this.value.minLength || this.value.min;
+    this.constraints.pattern =
+      this.constraints.pattern ||
+      this.constraints.matches ||
+      this.constraints.regex;
+    this.constraints.maxLength =
+      this.constraints.maxLength || this.constraints.max;
+    this.constraints.minLength =
+      this.constraints.minLength || this.constraints.min;
   }
 }
 

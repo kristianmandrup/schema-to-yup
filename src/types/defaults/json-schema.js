@@ -2,6 +2,7 @@ module.exports = {
   getProps: obj => obj.properties,
   getType: obj => obj.type,
   getName: obj => obj.name || obj.title,
+  getConstraints: obj => obj,
   isString: obj => obj.type === "string",
   isArray: obj => obj.type === "array",
   isInteger: obj => obj.type === "integer",

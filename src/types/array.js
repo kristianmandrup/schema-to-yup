@@ -52,14 +52,14 @@ class YupArray extends YupMixed {
   }
 
   itemsOf() {
-    const { items } = this.value;
-    const $itemsOfSchema = items || this.value.of;
+    const { items, itemsOf } = this.constraints;
+    const $itemsOfSchema = items || itemsOf || this.constraints.of;
 
     if (Array.isArray($itemsOfSchema)) {
       this.error("itemsOf", "does not (yet) support an Array of schemas");
     }
 
-    const schema = createYupSchemaEntry({
+    createYupSchemaEntry({
       key: this.key,
       value: $itemsOfSchema,
       type: this.type,
@@ -70,7 +70,7 @@ class YupArray extends YupMixed {
   }
 
   maxItems() {
-    const { maxItems, max } = this.value;
+    const { maxItems, max } = this.constraints;
     const $max = maxItems || max;
     const newBase = $max && this.base.max($max);
     this.base = newBase || this.base;
@@ -78,7 +78,7 @@ class YupArray extends YupMixed {
   }
 
   minItems() {
-    const { minItems, min } = this.value;
+    const { minItems, min } = this.constraints;
     const $min = minItems || min;
     $min && this.base.min($min);
     return this;
