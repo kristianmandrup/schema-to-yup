@@ -37,6 +37,7 @@ class YupString extends YupMixed {
       .pattern();
     this.lowercase().uppercase();
     this.email();
+    this.genericFormat();
     return this;
   }
 
@@ -50,6 +51,14 @@ class YupString extends YupMixed {
 
   uppercase() {
     return this.addConstraint("uppercase");
+  }
+
+  genericFormat() {
+    if (!this.config.format === true) return;
+    const format = this.format;
+    if (this.yup.prototype[format]) {
+      this.addConstraint(this.format);
+    }
   }
 
   email() {

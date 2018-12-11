@@ -24,8 +24,9 @@
 
 // const validator = require("validator");
 const dashify = require("dashify");
-const camelCase = require("camelcase");
-const Yup = require("yup");
+//const camelCase = require("camelcase");
+const camelCase = require("uppercamelcase");
+const { addMethod, string } = require("yup");
 
 const toConstraintsMap = (values, opts = {}) => {
   return values.reduce((acc, value) => {
@@ -109,7 +110,8 @@ const defaultConstraints = {
 
 const defaults = {
   createValidatorName: (validatorName, key) => {
-    validatorName = camelCase(validatorName || key, { pascalCase: true });
+    const name = validatorName || key;
+    validatorName = camelCase(name);
     validatorName = validatorName.replace(/Uri$/, "URI");
     validatorName = validatorName.replace(/Id$/, "ID");
     return `is${validatorName}`;
@@ -150,15 +152,17 @@ function extendYupApi({
   createValidatorName = createValidatorName || defaults.createValidatorName;
   createTestName = createTestName || defaults.createTestName;
 
-  Object.keys(formatConstraints).map(key => {
-    let { testName, optsKey, validatorName } = constraints[key];
+  Object.keys(constraints).map(key => {
+    let { testName, optsKey, validatorName, logging } = constraints[key];
     const fullValidatorName = createValidatorName(validatorName, key);
     testName = createTestName(testName, key);
 
-    Yup.addMethod(Yup.string, key, args => {
+    // See https://github.com/jquense/yup#yupaddmethodschematype-schema-name-string-method--schema-void
+    addMethod(string, key, (args = {}) => {
       const { message } = args;
       const opts = args[optsKey];
-      return this.test(testName, message, value => {
+      return string().test(testName, message, value => {
+        // return this.transform(value => {
         const { path, createError } = this;
         // [value] - value of the property being tested
         // [path]  - property name,
@@ -169,7 +173,17 @@ function extendYupApi({
         if (typeof validatorFn !== "function") {
           throw Error("No method named ${validatorName} on validator");
         }
-        return validatorFn(value, opts) || createError({ path, message });
+        const valid = validatorFn(value, opts);
+        if (logging === true) {
+          console.log("Yup validator bridge", {
+            key,
+            fullValidatorName,
+            testName,
+            value,
+            valid
+          });
+        }
+        return valid || createError({ path, message });
       });
     });
   });
