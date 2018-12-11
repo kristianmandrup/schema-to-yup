@@ -15,14 +15,18 @@ class NumberHandler {
 }
 
 function toYupNumber(obj, config = {}) {
-  return new NumberHandler(config).handle(obj);
+  return obj && new NumberHandler(config).handle(obj);
 }
 
 class YupNumber extends YupMixed {
   constructor(obj) {
     super(obj);
-    this.type = obj.type || "number";
-    this.base = this.yup[this.type]();
+    this.type = this.normalizeNumType(obj.type);
+    this.base = this.yup.number();
+  }
+
+  normalizeNumType(type) {
+    return type === "int" ? "integer" : type;
   }
 
   static create(obj) {

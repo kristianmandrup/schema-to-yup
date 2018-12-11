@@ -18,14 +18,14 @@ class ArrayHandler {
 }
 
 function toYupArray(value, config = {}) {
-  return new ArrayHandler(config).handle(value);
+  return value && new ArrayHandler(config).handle(value);
 }
 
 class YupArray extends YupMixed {
   constructor(value) {
     super(value);
     this.type = "array";
-    this.base = this.yup[this.type]();
+    this.base = this.yup.array();
     this.createYupSchemaEntry = this.config.createYupSchemaEntry;
   }
 

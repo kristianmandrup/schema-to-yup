@@ -5,24 +5,24 @@ class DateHandler {
     this.config = config;
   }
 
-  isString(obj) {
+  isDate(obj) {
     return this.config.isDate(obj);
   }
 
   handle(obj) {
-    return this.isBoolean(obj) && YupString.create(obj).yupped();
+    return this.isDate(obj) && YupDate.create(obj).yupped();
   }
 }
 
 function toYupDate(obj, config = {}) {
-  return new DateHandler(config).handle(obj);
+  return obj && new DateHandler(config).handle(obj);
 }
 
 class YupDate extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "date";
-    this.base = this.yup[this.type]();
+    this.base = this.yup.date();
   }
 
   static create(obj) {

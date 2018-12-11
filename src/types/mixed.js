@@ -50,7 +50,7 @@ class YupMixed extends Base {
     this.format = value.format || this.constraints.format;
     this.config = config || {};
     this.type = "mixed";
-    this.base = yup[this.type]();
+    this.base = yup.mixed();
     this.errMessages = config.errMessages || {};
   }
 
@@ -196,8 +196,10 @@ class YupMixed extends Base {
   deNormalize() {}
 
   error(name, msg) {
-    const label = `[${name}] ${msg}`;
-    throw new ConvertYupSchemaError(msg);
+    const label = `[${name}]`;
+    const fullMsg = [label, msg].join(" ");
+    console.error(fullMsg);
+    throw new ConvertYupSchemaError(fullMsg);
   }
 }
 

@@ -1,4 +1,4 @@
-const { types } = require("../src");
+const { types } = require("../../src");
 const { toYupString } = types;
 
 const isString = fieldDef => fieldDef && fieldDef.type === "string";
@@ -8,12 +8,19 @@ const create = fieldDef => {
   return toYupString(obj, config);
 };
 
+const createStr = value => {
+  const obj = { value, config, key: "x", type: "string" };
+  return toYupString(obj, config);
+};
+
+const createStrNoKey = value => {
+  const obj = { value, config, type: "string" };
+  return toYupString(obj, config);
+};
+
 describe("toYupString", () => {
   test("null - %", () => {
     expect(create(null)).toBeFalsy();
-  });
-  test("string - %", () => {
-    expect(create("x")).toBeFalsy();
   });
 
   test("number - %", () => {
@@ -29,10 +36,18 @@ describe("toYupString", () => {
   });
 
   test("int object - %", () => {
-    expect(create({ type: "number" })).toBeFalsy();
+    expect(create({ type: "int" })).toBeFalsy();
   });
 
   test("string object - ok", () => {
-    expect(create({ type: "string", key: "name", value: {} })).toBeTruthy();
+    expect(createStr({})).toBeTruthy();
+  });
+
+  test("string - throws missing key", () => {
+    expect(() => createStrNoKey("x")).toThrow();
+  });
+
+  test("null - throws missing value", () => {
+    expect(() => createStr(null)).toThrow();
   });
 });

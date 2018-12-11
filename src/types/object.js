@@ -17,7 +17,7 @@ class ObjectHandler {
 }
 
 function toYupObject(obj, config = {}) {
-  return new ObjectHandler(config).handle(obj);
+  return obj && new ObjectHandler(config).handle(obj);
 }
 
 // Allow recursive schema

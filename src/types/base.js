@@ -1,7 +1,12 @@
 const defaults = require("./defaults");
+const { createYupSchemaEntry } = require("../create-entry");
 
 class Base {
   constructor(config = {}) {
+    config = {
+      createYupSchemaEntry,
+      ...config
+    };
     const schemaType = config.schemaType || "json-schema";
     const $defaults = defaults[schemaType];
     this.config = { ...$defaults, ...config };

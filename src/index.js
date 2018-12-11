@@ -132,7 +132,7 @@ class YupBuilder extends Base {
 }
 
 const types = require("./types");
-// const { createYupSchemaEntry } = require("./create-entry");
+const { createYupSchemaEntry } = require("./create-entry");
 
 module.exports = {
   buildYup,
@@ -140,6 +140,6 @@ module.exports = {
   YupSchemaEntry,
   YupSchemaEntryError,
   types,
-  // createYupSchemaEntry,
+  createYupSchemaEntry,
   extendYupApi
 };

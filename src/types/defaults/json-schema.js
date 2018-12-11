@@ -5,7 +5,7 @@ module.exports = {
   getConstraints: obj => obj,
   isString: obj => obj && obj.type === "string",
   isArray: obj => obj && obj.type === "array",
-  isInteger: obj => obj && obj.type === "integer",
+  isInteger: obj => (obj && obj.type === "integer") || obj.type === "int",
   isBoolean: obj => obj && obj.type === "boolean",
   hasDateFormat: obj =>
     obj && ["date", "date-time"].find(t => t === obj.format),

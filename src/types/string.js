@@ -10,19 +10,22 @@ class StringHandler {
   }
 
   handle(obj) {
-    return this.isString(obj) && YupString.create(obj).yupped();
+    return (
+      this.isString(obj) &&
+      YupString.create({ config: this.config, ...obj }).yupped()
+    );
   }
 }
 
 function toYupString(obj, config = {}) {
-  return new StringHandler(config).handle(obj);
+  return obj && new StringHandler(config).handle(obj);
 }
 
 class YupString extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "string";
-    this.base = this.yup[this.type]();
+    this.base = this.yup.string();
   }
 
   static create(obj) {
