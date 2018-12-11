@@ -521,6 +521,81 @@ const yupSchema = buildYup(json, {
 });
 ```
 
+## Adding custom constraints
+
+The currently recommended best practice to add constraints goes something like this.
+Ideally we should extract this into a separate class to offload responsibility and keep the core type classes concise and to the point.
+
+```js
+class YupNumber extends YupMixed {
+  constructor(obj) {
+    super(obj);
+    this.type = this.normalizeNumType(obj.type); // integer or number
+    // the base yup schema entry api to use
+    this.base = this.yup.number();
+  }
+  // ...
+  // ie. convert schema entries
+  // to yup schema via yup API calls
+  convert() {
+    this.inRange();
+    // ...
+    return this;
+  }
+
+  get constraintMap() {
+    return {
+      moreThan: ["exclusiveMinimum", "moreThan"],
+      lessThan: ["exclusiveMaximum", "lessThan"],
+      max: ["maximum", "max"],
+      min: ["minimum", "min"]
+    };
+  }
+
+  inRange() {
+    const $map = this.constraintMap;
+    Object.keys($map).map(yupMethod => {
+      const names = $map[yupMethod];
+      this.checkConstraints(yupMethod, names);
+    });
+  }
+
+  checkConstraints(method, names = []) {
+    names.map(name => {
+      const value = this.validateAndTransform(name);
+      this.addConstraint(name, { method, value });
+    });
+    return this;
+  }
+
+  validateAndTransform(name) {
+    const { constraints } = this;
+    const cv = constraints[name];
+    this.validateNumber(cv);
+    return this.toNumber(cv);
+  }
+
+  validateNumber(cv) {
+    if (this.isNothing(cv)) {
+      return this;
+    }
+    if (!this.isNumberLike(cv)) {
+      return this.handleNotANumber(name, cv);
+    }
+  }
+
+  handleNotANumber(name, value) {
+    const msg = `invalid constraint for ${name}, was ${value}. Must be a number or convertible to a number`;
+    if (this.config.warnOnInvalid) {
+      this.warn(msg);
+      return this;
+    }
+    this.error(msg, value);
+    return this;
+  }
+}
+```
+
 ## Similar projects
 
 - [JSON schema to Elastic Search mapping](https://github.com/kristianmandrup/json-schema-to-es-mapping)
@@ -548,3 +623,7 @@ Uses [jest](jestjs.io/) for unit testing.
 ## License
 
 MIT
+
+```
+
+```

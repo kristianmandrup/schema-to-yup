@@ -103,18 +103,26 @@ class YupNumber extends YupMixed {
 
   checkConstraints(method, names = []) {
     names.map(name => {
-      const { constraints } = this;
-      const cv = constraints[name];
-      if (this.isNothing(cv)) {
-        return this;
-      }
-      if (!this.isNumberLike(cv)) {
-        return this.handleNotANumber(name, cv);
-      }
-      const value = this.toNumber(cv);
+      const value = this.validateAndTransform(name);
       this.addConstraint(name, { method, value });
     });
     return this;
+  }
+
+  validateAndTransform(name) {
+    const { constraints } = this;
+    const cv = constraints[name];
+    this.validateNumber(cv);
+    return this.toNumber(cv);
+  }
+
+  validateNumber(cv) {
+    if (this.isNothing(cv)) {
+      return this;
+    }
+    if (!this.isNumberLike(cv)) {
+      return this.handleNotANumber(name, cv);
+    }
   }
 
   handleNotANumber(name, value) {
