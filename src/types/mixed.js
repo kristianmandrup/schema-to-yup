@@ -195,11 +195,20 @@ class YupMixed extends Base {
 
   deNormalize() {}
 
+  errorMsg(msg) {
+    console.error(msg);
+    this.throwError(msg);
+  }
+
   error(name, msg) {
     const label = `[${name}]`;
     const fullMsg = [label, msg].join(" ");
-    console.error(fullMsg);
-    throw new ConvertYupSchemaError(fullMsg);
+    this.errorMsg(fullMsg);
+  }
+
+  // throw ConvertYupSchemaError(fullMsg);
+  throwError(msg) {
+    throw msg;
   }
 }
 

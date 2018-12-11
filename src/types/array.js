@@ -8,36 +8,36 @@ class ArrayHandler {
     this.config = config;
   }
 
-  isArray(value) {
-    return this.config.isArray(value);
+  isArray(obj) {
+    return this.config.isArray(obj);
   }
 
-  handle(value) {
-    return this.isArray(value) && YupArray.create(value).yupped();
+  handle(obj) {
+    return this.isArray(obj) && YupArray.create(obj).yupped();
   }
 }
 
-function toYupArray(value, config = {}) {
-  return value && new ArrayHandler(config).handle(value);
+function toYupArray(obj, config = {}) {
+  return obj && new ArrayHandler(config).handle(obj);
 }
 
 class YupArray extends YupMixed {
-  constructor(value) {
-    super(value);
+  constructor(obj) {
+    super(obj);
     this.type = "array";
     this.base = this.yup.array();
     this.createYupSchemaEntry = this.config.createYupSchemaEntry;
   }
 
-  static create(value) {
-    return new YupArray(value);
+  static create(obj) {
+    return new YupArray(obj);
   }
 
   convert() {
     this.maxItems();
     this.minItems();
-    // this.ensureItems()
-    // this.compact();
+    this.ensureItems();
+    this.compact();
     // this.$uniqueItems()
     //   .$contains()
     //   .$additionalItems()
@@ -50,11 +50,11 @@ class YupArray extends YupMixed {
   }
 
   ensureItems() {
-    return this.addContraint("ensure");
+    return this.addConstraint("ensure");
   }
 
   compact() {
-    return this.addContraint("compact");
+    return this.addConstraint("compact");
   }
 
   // TODO: not yet implemented
@@ -86,14 +86,33 @@ class YupArray extends YupMixed {
   maxItems() {
     const { maxItems, max } = this.constraints;
     const $max = maxItems || max;
+    if (!this.isValidSize($max)) {
+      return this.handleInvalidSize("maxItems", $max);
+    }
     const newBase = $max && this.base.max($max);
     this.base = newBase || this.base;
     return this;
   }
 
+  handleInvalidSize(name, value) {
+    const msg = `invalid array size constraint for ${name}, was ${value}. Must be a number >= 0`;
+    if (this.config.warnOnInvalid) {
+      this.warn(msg);
+      return this;
+    }
+    this.errorMsg(msg);
+  }
+
+  isValidSize(num) {
+    return !isNaN(num) && num >= 0;
+  }
+
   minItems() {
     const { minItems, min } = this.constraints;
     const $min = minItems || min;
+    if (!this.isValidSize($min)) {
+      return this.handleInvalidSize("minItems", $min);
+    }
     const newBase = $min && this.base.min($min);
     this.base = newBase || this.base;
     return this;

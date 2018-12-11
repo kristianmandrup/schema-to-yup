@@ -1,5 +1,6 @@
 const { types } = require("../../src");
 const { toYupArray } = types;
+const yup = require("yup");
 
 const isArray = fieldDef => fieldDef && fieldDef.type === "array";
 const config = { isArray };
@@ -9,7 +10,7 @@ const create = fieldDef => {
 };
 
 const createArr = value => {
-  const obj = { value, config, key: "x", type: "array" };
+  const obj = { value, config, key: "list", type: "array" };
   return toYupArray(obj, config);
 };
 
@@ -18,6 +19,11 @@ const createArrNoKey = value => {
   return toYupArray(obj, config);
 };
 
+const createSchema = list => {
+  return yup.object().shape({
+    list
+  });
+};
 describe("toYupArray", () => {
   test("null - %", () => {
     expect(create(null)).toBeFalsy();
@@ -48,5 +54,66 @@ describe("toYupArray", () => {
 
   test("array object - ok", () => {
     expect(() => createArrNoKey({})).toThrow();
+  });
+
+  describe("maxItems", () => {
+    describe("schema opts", () => {
+      test("string - throws", () => {
+        expect(() => createArr({ maxItems: "2" })).toThrow();
+      });
+
+      test("negative - throws", () => {
+        expect(() => createArr({ maxItems: -1 })).toThrow();
+      });
+    });
+
+    describe.skip("validate", () => {
+      const arr = createArr({ maxItems: 3 });
+      const schema = createSchema(arr);
+      test("less count", () => {
+        const valid = schema.isValidSync({ list: [1, 2] });
+        expect(valid).toBeTruthy();
+      });
+
+      test("equal count", () => {
+        expect(schema.isValidSync({ list: [1, 2, 3] })).toBeTruthy();
+      });
+
+      test("more count", () => {
+        const valid = schema.isValidSync({ list: [1, 2, 3, 4] });
+        console.log({ valid });
+        expect(valid).toBeFalsy();
+      });
+    });
+  });
+
+  describe.skip("minItems", () => {
+    describe("schema opts", () => {
+      test("string - throws", () => {
+        expect(() => createArr({ minItems: "2" })).toThrow();
+      });
+
+      test("negative - throws", () => {
+        expect(() => createArr({ minItems: -1 })).toThrow();
+      });
+    });
+
+    describe("validate", () => {
+      const arr = createArr({ minItems: 3 });
+      const schema = createSchema(arr);
+      test("less count", () => {
+        const valid = schema.isValidSync({ list: [1, 2] });
+        console.log({ valid });
+        expect(schema.isValidSync({ list: [1, 2] })).toBeFalsy();
+      });
+
+      test("equal count", () => {
+        expect(schema.isValidSync({ list: [1, 2, 3] })).toBeTruthy();
+      });
+
+      test("more count", () => {
+        expect(schema.isValidSync({ list: [1, 2, 3, 4] })).toBeTruthy();
+      });
+    });
   });
 });
