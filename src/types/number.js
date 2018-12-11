@@ -5,12 +5,12 @@ class NumberHandler {
     this.config = config;
   }
 
-  isString(obj) {
+  isNumber(obj) {
     return this.config.isNumber(obj);
   }
 
   handle(obj) {
-    return this.isNumber(obj) && YupString.create(obj).yupped();
+    return this.isNumber(obj) && YupNumber.create(obj).yupped();
   }
 }
 
@@ -58,7 +58,7 @@ class YupNumber extends YupMixed {
   }
 
   get isInteger() {
-    return isInteger(this.type);
+    return this.config.isInteger(this.type);
   }
 
   toNumber(num) {

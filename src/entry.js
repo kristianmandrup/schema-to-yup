@@ -74,6 +74,7 @@ class YupSchemaEntry extends Base {
   }
 
   array(obj) {
+    console.log("array", this.config);
     return toYupArray(obj || this.obj, this.config);
   }
 

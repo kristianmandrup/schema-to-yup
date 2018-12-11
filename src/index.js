@@ -1,6 +1,6 @@
 const yup = require("yup");
 const { Base, YupSchemaEntry, YupSchemaEntryError } = require("./entry");
-// const { extendYupApi } = require("./validator-bridge");
+const { extendYupApi } = require("./validator-bridge");
 
 function isObject(type) {
   return type && type === "object";
@@ -121,6 +121,7 @@ class YupBuilder extends Base {
   }
 
   createYupSchemaEntry({ name, key, value, config }) {
+    // return createYupSchemaEntry({ name, key, value, config });
     return new YupSchemaEntry({
       name,
       key,
@@ -131,12 +132,14 @@ class YupBuilder extends Base {
 }
 
 const types = require("./types");
+// const { createYupSchemaEntry } = require("./create-entry");
 
 module.exports = {
   buildYup,
   YupBuilder,
   YupSchemaEntry,
   YupSchemaEntryError,
-  types
-  // extendYupApi
+  types,
+  // createYupSchemaEntry,
+  extendYupApi
 };

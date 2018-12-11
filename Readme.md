@@ -537,7 +537,9 @@ If you enjoy this declarative/generator approach, try it out!
 
 Uses [jest](jestjs.io/) for unit testing.
 
-Currently not well tested. Please help add more test coverage :)
+- Currently not well tested.
+- Need to add unit tests for all types (see `test/types` for current WIP)
+- Please help add more test coverage :)
 
 ## Author
 

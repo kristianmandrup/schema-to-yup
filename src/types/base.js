@@ -15,6 +15,10 @@ class Base {
     throw new Error(errMsg);
   }
 
+  warn(warnMsg) {
+    this.logInfo && this.logInfo("WARNING: " + warnMsg);
+  }
+
   logInfo(name, value) {
     this.log && this.log(name, value);
   }

@@ -39,13 +39,10 @@ const defaults = {
 
 const { Base } = require("./base");
 
-function toYupMixed(obj) {
-  YupMixed.create(obj).yupped();
-}
-
 class YupMixed extends Base {
-  constructor({ key, value, config }) {
+  constructor({ key, value, config } = {}) {
     super(config);
+    this.validateOnCreate(key, value);
     this.yup = yup;
     this.key = key;
     this.value = value;
@@ -55,6 +52,15 @@ class YupMixed extends Base {
     this.type = "mixed";
     this.base = yup[this.type]();
     this.errMessages = config.errMessages || {};
+  }
+
+  validateOnCreate(key, value) {
+    if (!key) {
+      this.error("create: missing key");
+    }
+    if (!value) {
+      this.error("create: missing value");
+    }
   }
 
   getConstraints() {
