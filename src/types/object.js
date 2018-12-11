@@ -7,12 +7,12 @@ class ObjectHandler {
     this.config = config;
   }
 
-  isString(obj) {
+  isObject(obj) {
     return this.config.isObject(obj);
   }
 
   handle(obj) {
-    return this.isObject(obj) && YupString.create(obj).yupped();
+    return this.isObject(obj) && YupObject.create(obj).yupped();
   }
 }
 
@@ -25,12 +25,16 @@ class YupObject extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "object";
-    this.base = this.yup[this.type]();
+    this.base = this.yup.object();
     this.properties = this.value.properties;
   }
 
+  static create(obj) {
+    return new YupObject(obj);
+  }
+
   convert() {
-    if (!this.properties) return;
+    if (!this.properties) return this;
     this.noUnknown();
     this.camelCase().constantCase();
 
@@ -39,6 +43,7 @@ class YupObject extends YupMixed {
       const schema = buildYup(this.value);
       this.base.shape(schema);
     }
+    return this;
   }
 
   camelCase() {
