@@ -143,7 +143,7 @@ describe("toYupNumber", () => {
         const valid = schema.isValidSync({
           value: 0
         });
-        expect(valid).toBeTruthy();
+        expect(valid).toBeFalsy();
       });
 
       test("equal - not valid?", () => {
@@ -154,7 +154,7 @@ describe("toYupNumber", () => {
         const valid = schema.isValidSync({
           value: 5
         });
-        expect(valid).toBeFalsy();
+        expect(valid).toBeTruthy();
       });
     });
   });

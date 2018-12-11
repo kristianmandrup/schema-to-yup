@@ -34,13 +34,10 @@ class YupNumber extends YupMixed {
   }
 
   convert() {
-    this.minimum()
-      .maximum()
-      .positive()
+    this.inRange();
+    this.positive()
       .negative()
-      .integer()
-      .moreThan()
-      .lessThan();
+      .integer();
     super.convert();
     return this;
   }
@@ -65,34 +62,6 @@ class YupNumber extends YupMixed {
     return this.config.isInteger(this.type);
   }
 
-  moreThan() {
-    const min = this.$moreThan;
-    const newBase = min && this.base.moreThan(this.toNumber(min));
-    this.base = newBase || this.base;
-    return this;
-  }
-
-  lessThan() {
-    const max = this.$lessThan;
-    const newBase = max && this.base.lessThan(this.toNumber(max));
-    this.base = newBase || this.base;
-    return this;
-  }
-
-  get $moreThan() {
-    const { exclusiveMinimum, moreThan } = this.constraints;
-    if (moreThan) return moreThan;
-    if (exclusiveMinimum === undefined) return false;
-    return exclusiveMinimum;
-  }
-
-  get $lessThan() {
-    const { exclusiveMaximum, lessThan } = this.constraints;
-    if (lessThan) return lessThan;
-    if (exclusiveMaximum === undefined) return false;
-    return exclusiveMaximum;
-  }
-
   positive() {
     return this.addConstraint("positive");
   }
@@ -115,33 +84,36 @@ class YupNumber extends YupMixed {
     return exclusiveMinimum === 0;
   }
 
-  minimum() {
-    const { constraints } = this;
-    const min = constraints.minimum || constraints.min;
-    if (this.isNothing(min)) {
-      return this;
-    }
-    if (!this.isNumberLike(min)) {
-      return this.handleNotANumber("minimum", min);
-    }
-    const $min = this.toNumber(min);
-    const newBase = this.base.max($min, this.valErrMessage("minimum"));
-    this.base = newBase || this.base;
-    return this;
+  inRange() {
+    const $map = this.constraintMap;
+    Object.keys($map).map(yupMethod => {
+      const names = $map[yupMethod];
+      this.checkConstraints(yupMethod, names);
+    });
   }
 
-  maximum() {
-    const { constraints } = this;
-    const max = constraints.maximum || constraints.max;
-    if (this.isNothing(max)) {
-      return this;
-    }
-    if (!this.isNumberLike(max)) {
-      return this.handleNotANumber("maximum", max);
-    }
-    const $max = this.toNumber(max);
-    const newBase = this.base.max($max, this.valErrMessage("maximum"));
-    this.base = newBase || this.base;
+  get constraintMap() {
+    return {
+      moreThan: ["exclusiveMinimum", "moreThan"],
+      lessThan: ["exclusiveMaximum", "lessThan"],
+      max: ["maximum", "max"],
+      min: ["minimum", "min"]
+    };
+  }
+
+  checkConstraints(yupMethod, names = []) {
+    names.map(name => {
+      const { constraints } = this;
+      const cv = constraints[name];
+      if (this.isNothing(cv)) {
+        return this;
+      }
+      if (!this.isNumberLike(cv)) {
+        return this.handleNotANumber(name, cv);
+      }
+      const $cv = this.toNumber(cv);
+      this.addConstraint(name, { value: $cv });
+    });
     return this;
   }
 
