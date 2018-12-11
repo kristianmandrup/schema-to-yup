@@ -1,5 +1,6 @@
 const yup = require("yup");
 const { Base, YupSchemaEntry, YupSchemaEntryError } = require("./entry");
+// const { extendYupApi } = require("./validator-bridge");
 
 function isObject(type) {
   return type && type === "object";
@@ -137,4 +138,5 @@ module.exports = {
   YupSchemaEntry,
   YupSchemaEntryError,
   types
+  // extendYupApi
 };

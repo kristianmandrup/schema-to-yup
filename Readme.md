@@ -383,6 +383,30 @@ const yupSchema = buildYup(json, {
 });
 ```
 
+### Extend Yup API to bridge other validators
+
+You can use `extendYupApi` to extend the Yup API with extra validation methods:
+
+```js
+const validator = require("validator");
+const { extendYupApi } = require("json-schema-to-yup/validator-bridge");
+
+// by default extends with string format validation methods of validator
+// See https://www.npmjs.com/package/validator
+extendYupApi({ validator });
+```
+
+You can optionally pass in a custom `validator` and a constraints map of your choice.
+You can either extend the default constraints or override them with your own map.
+
+PS: Check out `src/validator-bridge` for more many options for fine control
+
+```js
+const myValidator = new MyValidator();
+const constraints = ["creditCard", "currency", { name: "hash", opts: "algo" }];
+extendYupApi({ validator: myValidator, override: true, constraints });
+```
+
 ### Subclassing
 
 You can sublass `YupBuilder` or any of the internal classes to create your own custom infrastructure to suit your particular needs, expand with support for extra features etc.
