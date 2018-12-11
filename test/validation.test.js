@@ -98,3 +98,26 @@ test("yup validates normalised pattern name to return false", () => {
   expect(valid).toBe(false);
 });
 
+const url = {
+  title: "users",
+  type: "object",
+  required: ["email"],
+  properties: {
+    linkedin: { type: "string", "url": true }
+  }
+}
+test("yup validates valid url to return true", () => {
+  const yupSchema = buildYup(url);
+  const valid = yupSchema.isValidSync({
+    linkedin: "https://www.linkedin.com"
+  });
+  expect(valid).toBe(true);
+});
+test("yup validates invalid url to return false", () => {
+  const yupSchema = buildYup(url);
+  const valid = yupSchema.isValidSync({
+    linkedin: "fooobaaaar"
+  });
+  expect(valid).toBe(false);
+});
+

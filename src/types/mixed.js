@@ -196,7 +196,7 @@ class YupMixed extends Base {
   deNormalize() {}
 
   errorMsg(msg) {
-    console.error(msg);
+    //console.error(msg);
     this.throwError(msg);
   }
 
