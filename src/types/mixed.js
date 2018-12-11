@@ -90,11 +90,16 @@ class YupMixed extends Base {
     });
   }
 
-  addConstraint(propName, { constraintName, value, errName } = {}) {
+  addConstraint(propName, { constraintName, method, value, errName } = {}) {
     const propValue = this.constraints[propName];
     if (propValue) {
       constraintName = constraintName || propName;
-      const constraintFn = this.base[constraintName].bind(this.base);
+      method = method || constraintName;
+      if (!this.base[method]) {
+        this.warn(`Yup has no such API method: ${method}`);
+        return this;
+      }
+      const constraintFn = this.base[method].bind(this.base);
       const errFn =
         this.valErrMessage(constraintName) ||
         (errName && this.valErrMessage(errName));

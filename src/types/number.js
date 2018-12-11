@@ -101,7 +101,7 @@ class YupNumber extends YupMixed {
     };
   }
 
-  checkConstraints(yupMethod, names = []) {
+  checkConstraints(method, names = []) {
     names.map(name => {
       const { constraints } = this;
       const cv = constraints[name];
@@ -111,8 +111,8 @@ class YupNumber extends YupMixed {
       if (!this.isNumberLike(cv)) {
         return this.handleNotANumber(name, cv);
       }
-      const $cv = this.toNumber(cv);
-      this.addConstraint(name, { value: $cv });
+      const value = this.toNumber(cv);
+      this.addConstraint(name, { method, value });
     });
     return this;
   }
