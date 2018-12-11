@@ -1,5 +1,6 @@
 const { types } = require("../../src");
 const { toYupObject } = types;
+const yup = require("yup");
 
 const isObject = fieldDef => fieldDef && fieldDef.type === "object";
 const config = { isObject };

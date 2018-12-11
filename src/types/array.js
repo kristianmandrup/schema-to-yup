@@ -90,7 +90,7 @@ class YupArray extends YupMixed {
   maxItems() {
     const { maxItems, max } = this.constraints;
     const $max = maxItems || max;
-    if (!this.isNumber($max)) {
+    if (!this.isNumberType($max)) {
       return this;
     }
     if (!this.isValidSize($max)) {
@@ -104,7 +104,7 @@ class YupArray extends YupMixed {
   minItems() {
     const { minItems, min } = this.constraints;
     const $min = minItems || min;
-    if (!this.isNumber($min)) {
+    if (!this.isNumberType($min)) {
       return this;
     }
     if (!this.isValidSize($min)) {
@@ -144,11 +144,7 @@ class YupArray extends YupMixed {
   }
 
   isValidSize(num) {
-    return this.isNumber(num) && num >= 0;
-  }
-
-  isNumber(num) {
-    return !isNaN(num);
+    return this.isNumberType(num) && num >= 0;
   }
 }
 

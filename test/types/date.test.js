@@ -1,5 +1,6 @@
 const { types } = require("../../src");
 const { toYupDate } = types;
+const yup = require("yup");
 
 const isDate = fieldDef => fieldDef && fieldDef.type === "date";
 const config = { isDate };
@@ -8,14 +9,22 @@ const create = fieldDef => {
   return toYupDate(obj, config);
 };
 
+const oneDay = 86400000;
+
 const createDate = value => {
-  const obj = { value, config, key: "x", type: "date" };
+  const obj = { value, config, key: "createdAt", type: "date" };
   return toYupDate(obj, config);
 };
 
 const createDateNoKey = value => {
   const obj = { value, config, type: "date" };
   return toYupDate(obj, config);
+};
+
+const createSchema = createdAt => {
+  return yup.object().shape({
+    createdAt
+  });
 };
 
 describe("toYupDate", () => {
@@ -29,5 +38,75 @@ describe("toYupDate", () => {
 
   test("no key - throws missing key", () => {
     expect(() => createDateNoKey({})).toThrow();
+  });
+
+  describe("maxDate", () => {
+    describe("schema opts", () => {
+      test("bad string - ignored?", () => {
+        expect(() => createDate({ maxDate: "2" })).not.toThrow();
+      });
+
+      test("negative number - ok", () => {
+        expect(() => createDate({ maxDate: -1 })).not.toThrow();
+      });
+    });
+
+    describe("validate", () => {
+      const arr = createDate({ maxDate: new Date() });
+      const schema = createSchema(arr);
+
+      test("less date", () => {
+        const valid = schema.isValidSync({
+          createdAt: new Date(Date.now() - oneDay)
+        });
+        expect(valid).toBeTruthy();
+      });
+
+      test("equal date - not valid?", () => {
+        expect(schema.isValidSync({ createdAt: new Date() })).toBeFalsy();
+      });
+
+      test("more date", () => {
+        const valid = schema.isValidSync({
+          createdAt: new Date(Date.now() + oneDay)
+        });
+        expect(valid).toBeFalsy();
+      });
+    });
+  });
+
+  describe("minDate", () => {
+    describe("schema opts", () => {
+      test("bad string - ignored?", () => {
+        expect(() => createDate({ minDate: "2" })).not.toThrow();
+      });
+
+      test("negative number - ok", () => {
+        expect(() => createDate({ minDate: -1 })).not.toThrow();
+      });
+    });
+
+    describe("validate", () => {
+      const arr = createDate({ minDate: new Date() });
+      const schema = createSchema(arr);
+
+      test("less date", () => {
+        const valid = schema.isValidSync({
+          createdAt: new Date(Date.now() - oneDay)
+        });
+        expect(valid).toBeFalsy();
+      });
+
+      test("equal date - valid?", () => {
+        expect(schema.isValidSync({ createdAt: new Date() })).toBeTruthy();
+      });
+
+      test("more date", () => {
+        const valid = schema.isValidSync({
+          createdAt: new Date(Date.now() + oneDay)
+        });
+        expect(valid).toBeTruthy();
+      });
+    });
   });
 });

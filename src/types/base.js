@@ -34,6 +34,22 @@ class Base {
     if (!this.enable.log) return;
     this.log && this.log(name, value);
   }
+
+  isNothing(val) {
+    return val === undefined || val === null;
+  }
+
+  isNumberType(num) {
+    return !isNaN(num);
+  }
+
+  isStringType(val) {
+    return typeof val === "string";
+  }
+
+  isDateType(val) {
+    return val instanceof Date;
+  }
 }
 
 module.exports = {

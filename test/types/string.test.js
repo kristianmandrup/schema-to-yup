@@ -1,5 +1,6 @@
 const { types } = require("../../src");
 const { toYupString } = types;
+const yup = require("yup");
 
 const isString = fieldDef => fieldDef && fieldDef.type === "string";
 const config = { isString };

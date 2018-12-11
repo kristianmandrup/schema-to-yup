@@ -1,5 +1,6 @@
 const yup = require("../../src");
 const { toYupNumber } = yup.types;
+const yup = require("yup");
 
 const isInteger = fieldDef =>
   fieldDef && (fieldDef.type === "int" || fieldDef.type === "integer");

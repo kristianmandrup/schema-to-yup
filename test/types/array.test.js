@@ -69,7 +69,7 @@ describe("toYupArray", () => {
     });
 
     describe("validate", () => {
-      const arr = createArr({ maxItems: 3 }, { enable: { log: true } });
+      const arr = createArr({ maxItems: 3 });
       const schema = createSchema(arr);
 
       test("less count", () => {
