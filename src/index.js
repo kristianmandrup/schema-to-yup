@@ -18,8 +18,6 @@ class YupBuilder extends Base {
   constructor(schema, config = {}) {
     super(config);
     this.schema = schema;
-    const { log } = config;
-    this.log = typeof log === "boolean" ? console.log : log;
     const type = this.getType(schema);
     const props = this.getProps(schema);
     this.type = type;

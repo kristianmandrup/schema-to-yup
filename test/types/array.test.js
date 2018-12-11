@@ -3,18 +3,18 @@ const { toYupArray } = types;
 const yup = require("yup");
 
 const isArray = fieldDef => fieldDef && fieldDef.type === "array";
-const config = { isArray };
-const create = fieldDef => {
+const defaultConfig = { isArray };
+const create = (fieldDef, config = defaultConfig) => {
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
   return toYupArray(obj, config);
 };
 
-const createArr = value => {
+const createArr = (value, config = defaultConfig) => {
   const obj = { value, config, key: "list", type: "array" };
   return toYupArray(obj, config);
 };
 
-const createArrNoKey = value => {
+const createArrNoKey = (value, config = defaultConfig) => {
   const obj = { value, config, type: "array" };
   return toYupArray(obj, config);
 };
@@ -24,6 +24,7 @@ const createSchema = list => {
     list
   });
 };
+
 describe("toYupArray", () => {
   test("null - %", () => {
     expect(create(null)).toBeFalsy();
@@ -58,8 +59,8 @@ describe("toYupArray", () => {
 
   describe("maxItems", () => {
     describe("schema opts", () => {
-      test("string - throws", () => {
-        expect(() => createArr({ maxItems: "2" })).toThrow();
+      test("string - ignored", () => {
+        expect(() => createArr({ maxItems: "2" })).not.toThrow();
       });
 
       test("negative - throws", () => {
@@ -67,9 +68,10 @@ describe("toYupArray", () => {
       });
     });
 
-    describe.skip("validate", () => {
-      const arr = createArr({ maxItems: 3 });
+    describe("validate", () => {
+      const arr = createArr({ maxItems: 3 }, { enable: { log: true } });
       const schema = createSchema(arr);
+
       test("less count", () => {
         const valid = schema.isValidSync({ list: [1, 2] });
         expect(valid).toBeTruthy();
@@ -81,16 +83,15 @@ describe("toYupArray", () => {
 
       test("more count", () => {
         const valid = schema.isValidSync({ list: [1, 2, 3, 4] });
-        console.log({ valid });
         expect(valid).toBeFalsy();
       });
     });
   });
 
-  describe.skip("minItems", () => {
+  describe("minItems", () => {
     describe("schema opts", () => {
-      test("string - throws", () => {
-        expect(() => createArr({ minItems: "2" })).toThrow();
+      test("string - ignored", () => {
+        expect(() => createArr({ minItems: "2" })).not.toThrow();
       });
 
       test("negative - throws", () => {
@@ -103,7 +104,6 @@ describe("toYupArray", () => {
       const schema = createSchema(arr);
       test("less count", () => {
         const valid = schema.isValidSync({ list: [1, 2] });
-        console.log({ valid });
         expect(schema.isValidSync({ list: [1, 2] })).toBeFalsy();
       });
 

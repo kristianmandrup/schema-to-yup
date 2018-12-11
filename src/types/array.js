@@ -2,13 +2,17 @@
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
 
 const { YupMixed } = require("./mixed");
+const { Base } = require("./base");
 
-class ArrayHandler {
+class ArrayHandler extends Base {
   constructor(config) {
-    this.config = config;
+    super(config);
   }
 
   isArray(obj) {
+    if (!this.config.isArray) {
+      this.error("ArrayHandler: mising isArray in config", this.config);
+    }
     return this.config.isArray(obj);
   }
 
@@ -86,6 +90,9 @@ class YupArray extends YupMixed {
   maxItems() {
     const { maxItems, max } = this.constraints;
     const $max = maxItems || max;
+    if (!this.isNumber($max)) {
+      return this;
+    }
     if (!this.isValidSize($max)) {
       return this.handleInvalidSize("maxItems", $max);
     }
@@ -94,22 +101,12 @@ class YupArray extends YupMixed {
     return this;
   }
 
-  handleInvalidSize(name, value) {
-    const msg = `invalid array size constraint for ${name}, was ${value}. Must be a number >= 0`;
-    if (this.config.warnOnInvalid) {
-      this.warn(msg);
-      return this;
-    }
-    this.errorMsg(msg);
-  }
-
-  isValidSize(num) {
-    return !isNaN(num) && num >= 0;
-  }
-
   minItems() {
     const { minItems, min } = this.constraints;
     const $min = minItems || min;
+    if (!this.isNumber($min)) {
+      return this;
+    }
     if (!this.isValidSize($min)) {
       return this.handleInvalidSize("minItems", $min);
     }
@@ -132,6 +129,26 @@ class YupArray extends YupMixed {
 
   $contains() {
     return this;
+  }
+
+  // utility
+
+  handleInvalidSize(name, value) {
+    const msg = `invalid array size constraint for ${name}, was ${value}. Must be a number >= 0`;
+    if (this.config.warnOnInvalid) {
+      this.warn(msg);
+      return this;
+    }
+    this.error(msg, value);
+    return this;
+  }
+
+  isValidSize(num) {
+    return this.isNumber(num) && num >= 0;
+  }
+
+  isNumber(num) {
+    return !isNaN(num);
   }
 }
 

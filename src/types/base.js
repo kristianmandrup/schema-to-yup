@@ -11,20 +11,27 @@ class Base {
     const $defaults = defaults[schemaType];
     this.config = { ...$defaults, ...config };
     const { log, error } = config;
-    this.log = typeof log === "boolean" ? console.log : log;
-    this.err = typeof error === "boolean" ? console.error : error;
+    const enable = config.enable || {};
+    this.enable = enable;
+    // what type of logger to use
+    this.log = typeof log === "function" ? log : console.log;
+    this.err = typeof error === "function" ? error : console.error;
   }
 
   error(errMsg) {
+    // only disable if directly disabled
+    if (this.enable.error === false) return;
     this.err && this.err(errMsg);
-    throw new Error(errMsg);
+    throw errMsg;
   }
 
   warn(warnMsg) {
-    this.logInfo && this.logInfo("WARNING: " + warnMsg);
+    if (!this.enable.warn) return;
+    this.logInfo("WARNING: " + warnMsg);
   }
 
   logInfo(name, value) {
+    if (!this.enable.log) return;
     this.log && this.log(name, value);
   }
 }
