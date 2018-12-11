@@ -3,7 +3,7 @@ const { buildYup } = require("../");
 var yup = require("yup");
 
 //check validity
-describe.only("yup schema validation", () => {
+describe("yup schema validation", () => {
   const name = yup.string().required();
   // console.log("yup entry", { name });
   const shapeConfig = {
@@ -27,7 +27,7 @@ describe.only("yup schema validation", () => {
   });
 });
 
-describe.only("name schema", () => {
+describe("name schema", () => {
   const nameJsonSchema = {
     title: "users",
     type: "object",
