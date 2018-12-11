@@ -83,9 +83,9 @@ describe("toYupNumber", () => {
   });
   describe("max", () => {
     describe("schema opts", () => {
-      //test("bad string - ignored?", () => {
-      //  expect(() => createNum({ max: "b" })).toThrow();
-      //});
+      test("bad string - ignored?", () => {
+        expect(() => createNum({ max: "b" })).toThrow();
+      });
 
       test("number string - transformed?", () => {
         expect(() => createNum({ max: "1" })).not.toThrow();
@@ -111,22 +111,22 @@ describe("toYupNumber", () => {
         expect(schema.isValidSync({ value: 2 })).toBeTruthy();
       });
 
-      /*test("more", () => {
+      test("more", () => {
         const valid = schema.isValidSync({
           value: 5
         });
         expect(valid).toBeFalsy();
-      });*/
+      });
     });
   });
 
   describe("min", () => {
     describe("schema opts", () => {
-      /*test("bad string - ignored?", () => {
+      test("bad string - throws", () => {
         expect(() => createNum({ min: "b" })).toThrow();
-      });*/
+      });
 
-      test("number string - transformed?", () => {
+      test("number string - transformed", () => {
         expect(() => createNum({ min: "1" })).not.toThrow();
       });
 
@@ -139,12 +139,12 @@ describe("toYupNumber", () => {
       const arr = createNum({ min: 2 });
       const schema = createSchema(arr);
 
-      /*test("less", () => {
+      test("less", () => {
         const valid = schema.isValidSync({
           value: 0
         });
-        expect(valid).toBeFalsy();
-      });*/
+        expect(valid).toBeTruthy();
+      });
 
       test("equal - not valid?", () => {
         expect(schema.isValidSync({ value: 2 })).toBeTruthy();
@@ -154,7 +154,7 @@ describe("toYupNumber", () => {
         const valid = schema.isValidSync({
           value: 5
         });
-        expect(valid).toBeTruthy();
+        expect(valid).toBeFalsy();
       });
     });
   });

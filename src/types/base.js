@@ -39,6 +39,14 @@ class Base {
     return val === undefined || val === null;
   }
 
+  toNumber(num) {
+    return Number(num);
+  }
+
+  isNumberLike(num) {
+    return !isNaN(this.toNumber(num));
+  }
+
   isNumberType(num) {
     return !isNaN(num);
   }

@@ -65,10 +65,6 @@ class YupNumber extends YupMixed {
     return this.config.isInteger(this.type);
   }
 
-  toNumber(num) {
-    return Number(num);
-  }
-
   moreThan() {
     const min = this.$moreThan;
     const newBase = min && this.base.moreThan(this.toNumber(min));
@@ -120,24 +116,42 @@ class YupNumber extends YupMixed {
   }
 
   minimum() {
-    const newBase =
-      this.constraints.minimum &&
-      this.base.min(
-        this.toNumber(this.constraints.minimum),
-        this.valErrMessage("minimum")
-      );
+    const { constraints } = this;
+    const min = constraints.minimum || constraints.min;
+    if (this.isNothing(min)) {
+      return this;
+    }
+    if (!this.isNumberLike(min)) {
+      return this.handleNotANumber("minimum", min);
+    }
+    const $min = this.toNumber(min);
+    const newBase = this.base.max($min, this.valErrMessage("minimum"));
     this.base = newBase || this.base;
     return this;
   }
 
   maximum() {
-    const newBase =
-      this.constraints.maximum &&
-      this.base.max(
-        this.toNumber(this.constraints.maximum),
-        this.valErrMessage("maximum")
-      );
+    const { constraints } = this;
+    const max = constraints.maximum || constraints.max;
+    if (this.isNothing(max)) {
+      return this;
+    }
+    if (!this.isNumberLike(max)) {
+      return this.handleNotANumber("maximum", max);
+    }
+    const $max = this.toNumber(max);
+    const newBase = this.base.max($max, this.valErrMessage("maximum"));
     this.base = newBase || this.base;
+    return this;
+  }
+
+  handleNotANumber(name, value) {
+    const msg = `invalid constraint for ${name}, was ${value}. Must be a number or convertible to a number`;
+    if (this.config.warnOnInvalid) {
+      this.warn(msg);
+      return this;
+    }
+    this.error(msg, value);
     return this;
   }
 
