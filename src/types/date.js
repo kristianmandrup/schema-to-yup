@@ -56,7 +56,7 @@ class YupDate extends YupMixed {
   }
 
   minDate() {
-    const minDate = this.constraints.minDate;
+    const minDate = this.constraints.minDate || this.constraints.min;
     if (this.isNothing(minDate)) {
       return this;
     }
@@ -75,7 +75,7 @@ class YupDate extends YupMixed {
   }
 
   maxDate() {
-    const maxDate = this.constraints.maxDate;
+    const maxDate = this.constraints.maxDate || this.constraints.max;
     if (this.isNothing(maxDate)) {
       return this;
     }
