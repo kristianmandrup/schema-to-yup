@@ -28,7 +28,6 @@ class YupBuilder extends Base {
         const name = this.getName(schema);
         const properties = this.normalizeRequired(schema);
         const shapeConfig = this.propsToShape({ properties, name, config });
-        log && log({ shapeConfig });
         this.shapeConfig = shapeConfig;
         this.validSchema = true;
         return;

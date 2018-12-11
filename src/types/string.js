@@ -40,6 +40,7 @@ class YupString extends YupMixed {
       .pattern();
     this.lowercase().uppercase();
     this.email();
+    this.url();
     this.genericFormat();
     return this;
   }
