@@ -1,4 +1,4 @@
-const { TypeMatcher } = require("./_type-matcher");
+const { TypeMatcher } = require("../_type-matcher");
 
 class Constraint extends TypeMatcher {
   constructor(typer) {

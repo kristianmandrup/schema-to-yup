@@ -574,36 +574,22 @@ For more complex contraints that:
 - require validation
 - optional transformation
 
-You can create a separate `Constraint` subclass, (see `Range` for number) to offload and handle
-it all separately.
+You can create a separate `Constraint` subclass, to offload and handle it all separately.
+Here is a sample `RangeConstraint` used by number.
 
 ```js
-class Range extends Constraint {
+class Range extends NumericConstraint {
   constructor(typer) {
     super(typer);
   }
 
   get map() {
     return {
-      // multiple alternative names (aliases) can be used a
-      // as constraint value for each yup method
       moreThan: ["exclusiveMinimum", "moreThan"],
       lessThan: ["exclusiveMaximum", "lessThan"],
       max: ["maximum", "max"],
       min: ["minimum", "min"]
     };
-  }
-
-  transform(value) {
-    return this.typer.toNumber(value);
-  }
-
-  isValidConstraint(value) {
-    return this.typer.isNumberLike(value);
-  }
-
-  get explainConstraintValidMsg() {
-    return `Must be a number or convertible to a number`;
   }
 }
 ```

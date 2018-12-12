@@ -1,5 +1,5 @@
 const { YupMixed } = require("../mixed");
-const { createRange, Range } = require("./range");
+const { createRange, Range } = require("./range-constraint");
 const { createNumberGuard, NumberGuard } = require("./guard");
 
 const proceed = (obj, config = {}) => {
