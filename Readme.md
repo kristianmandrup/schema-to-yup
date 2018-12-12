@@ -1,17 +1,15 @@
-# JSON Schema to Yup schema
+# Schema to Yup schema
 
-Build a Yup schema from a JSON Schema :)
+Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
 - [AJV: JSON Schema keywords](https://ajv.js.org/keywords.html)
 - [Learn JsonSchema](https://cswr.github.io/JsonSchema/)
 
-The builder currently supports the most commonly used JSON Schema layout.
+The builder currently supports the most commonly used [JSON Schema layout](https://json-schema.org/) and GraphQL type definition exports using [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson) (see [GraphQL schema](#graphql-schema)).
 
 It also supports some extra convenience schema properties that make it more "smooth" to define validation requirements declaratively (see below).
 
-Note that if you use these extra properties, the JSON Schema is no longer valid if used in a context where JSON Schema validation is performed.
-
-We could later support normalization and de-normalization of a JSON Schema (if requested by the community).
+According to the JSON schema specs, you are free to add extra metadata to the field schema definitions beyond those supported "natively".
 
 ## Quick start
 
@@ -261,7 +259,9 @@ module.exports {
 };
 ```
 
-To support another model, such as GraphQL typedefs via [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson)
+### GraphQL schema
+
+To support another model, such as GraphQL schema (type definitions) via [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson)
 
 _Person_
 
@@ -628,9 +628,13 @@ If you enjoy this declarative/generator approach, try it out!
 
 Uses [jest](jestjs.io/) for unit testing.
 
-- Currently not well tested.
-- Need to add unit tests for all types (see `test/types` for current WIP)
-- Please help add more test coverage :)
+- Have unit tests that cover most of the constraints supported.
+- Could use some refactoring using the latest infrastructure (see `NumericConstraint`)
+- Please help add more test coverage and help refactor to make this lib even more awesome :)
+
+## Ideas and suggestions
+
+Please feel free to come with ideas and suggestions on how to further improve this library.
 
 ## Author
 
