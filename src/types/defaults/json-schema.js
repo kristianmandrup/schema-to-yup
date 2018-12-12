@@ -1,4 +1,4 @@
-module.exports = {
+const defaults = {
   getProps: obj => obj && obj.properties,
   getType: obj => obj && obj.type,
   getName: obj => (obj && obj.name) || obj.title,
@@ -11,8 +11,9 @@ module.exports = {
     obj && ["date", "date-time"].find(t => t === obj.format),
   isDate: obj =>
     obj && obj.type === "string" && defaults.hasDateFormat(obj.format),
-  isNumber: obj =>
-    (obj && obj.type === "number") || defaults.isInteger(obj.type),
+  isNumber: obj => obj && (obj.type === "number" || defaults.isInteger(obj)),
   isObject: obj => obj && obj.type === "object",
   isRequired: obj => obj && obj.required
 };
+
+module.exports = defaults;

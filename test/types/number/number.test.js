@@ -1,39 +1,11 @@
-const { types } = require("../../src");
-const { toYupNumber } = types;
-const yup = require("yup");
-
-const isInteger = fieldDef =>
-  fieldDef && (fieldDef.type === "int" || fieldDef.type === "integer");
-
-const isNumber = fieldDef =>
-  fieldDef && (fieldDef.type === "number" || isInteger(fieldDef));
-const config = { isNumber, isInteger };
-
-const create = fieldDef => {
-  const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
-  return toYupNumber(obj, config);
-};
-
-const createNum = value => {
-  const obj = { value, config, key: "value", type: "number" };
-  return toYupNumber(obj, config);
-};
-
-const createInt = value => {
-  const obj = { value, config, key: "value", type: "int" };
-  return toYupNumber(obj, config);
-};
-
-const createNumNoKey = value => {
-  const obj = { value, config, type: "number" };
-  return toYupString(obj, config);
-};
-
-const createSchema = value => {
-  return yup.object().shape({
-    value
-  });
-};
+const {
+  createEntry,
+  createNumEntry,
+  createIntEntry,
+  createNumNoKey,
+  createSchema,
+  isNumber
+} = require("./_helpers");
 
 describe("isNumber", () => {
   test("int", () => {
@@ -51,53 +23,54 @@ describe("isNumber", () => {
 
 describe("toYupNumber", () => {
   test("null - %", () => {
-    expect(create(null)).toBeFalsy();
+    expect(createEntry(null)).toBeFalsy();
   });
 
   test("string - %", () => {
-    expect(create("x")).toBeFalsy();
+    expect(createEntry("x")).toBeFalsy();
   });
 
   test("number - %", () => {
-    expect(create(1)).toBeFalsy();
+    expect(createEntry(1)).toBeFalsy();
   });
 
   test("array - %", () => {
-    expect(create([1])).toBeFalsy();
+    expect(createEntry([1])).toBeFalsy();
   });
 
   test("object - %", () => {
-    expect(create({ x: 2 })).toBeFalsy();
+    expect(createEntry({ x: 2 })).toBeFalsy();
   });
 
   test("int object - ok", () => {
-    expect(createInt({})).toBeTruthy();
+    expect(createIntEntry({})).toBeTruthy();
   });
 
   test("number object - ok", () => {
-    expect(createNum({})).toBeTruthy();
+    expect(createNumEntry({})).toBeTruthy();
   });
 
   test("no key - throws missing key", () => {
     expect(() => createNumNoKey({})).toThrow();
   });
+
   describe("max", () => {
     describe("schema opts", () => {
       test("bad string - ignored?", () => {
-        expect(() => createNum({ max: "b" })).toThrow();
+        expect(() => createNumEntry({ max: "b" })).toThrow();
       });
 
       test("number string - transformed?", () => {
-        expect(() => createNum({ max: "1" })).not.toThrow();
+        expect(() => createNumEntry({ max: "1" })).not.toThrow();
       });
 
       test("negative number - ok", () => {
-        expect(() => createNum({ max: -1 })).not.toThrow();
+        expect(() => createNumEntry({ max: -1 })).not.toThrow();
       });
     });
 
     describe("validate", () => {
-      const arr = createNum({ max: 2 });
+      const arr = createNumEntry({ max: 2 });
       const schema = createSchema(arr);
 
       test("less", () => {
@@ -123,20 +96,20 @@ describe("toYupNumber", () => {
   describe("min", () => {
     describe("schema opts", () => {
       test("bad string - throws", () => {
-        expect(() => createNum({ min: "b" })).toThrow();
+        expect(() => createNumEntry({ min: "b" })).toThrow();
       });
 
       test("number string - transformed", () => {
-        expect(() => createNum({ min: "1" })).not.toThrow();
+        expect(() => createNumEntry({ min: "1" })).not.toThrow();
       });
 
       test("negative number - ok", () => {
-        expect(() => createNum({ min: -1 })).not.toThrow();
+        expect(() => createNumEntry({ min: -1 })).not.toThrow();
       });
     });
 
     describe("validate", () => {
-      const arr = createNum({ min: 2 });
+      const arr = createNumEntry({ min: 2 });
       const schema = createSchema(arr);
 
       test("less", () => {

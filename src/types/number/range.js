@@ -9,14 +9,6 @@ class Range extends Constraint {
     super(typer);
   }
 
-  add() {
-    const $map = this.map;
-    Object.keys($map).map(yupMethod => {
-      const names = $map[yupMethod];
-      this.addConstraints(yupMethod, names);
-    });
-  }
-
   get map() {
     return {
       moreThan: ["exclusiveMinimum", "moreThan"],
@@ -27,14 +19,19 @@ class Range extends Constraint {
   }
 
   transform(value) {
-    return this.toNumber(value);
+    return this.typer.toNumber(value);
   }
 
   isValidConstraint(value) {
-    return this.isNumberLike(value);
+    return this.typer.isNumberLike(value);
   }
 
   get explainConstraintValidMsg() {
     return `Must be a number or convertible to a number`;
   }
 }
+
+module.exports = {
+  createRange,
+  Range
+};

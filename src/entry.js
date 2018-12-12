@@ -1,13 +1,15 @@
+const { Base } = require("./types");
+const types = require("./types");
+
 const {
   toYupString,
-  toYupNumber,
+  toYupNumberSchemaEntry,
   toYupBoolean,
   toYupArray,
   toYupObject,
   toYupMixed,
-  toYupDate,
-  Base
-} = require("./types");
+  toYupDate
+} = types;
 
 class YupSchemaEntryError extends Error {}
 
@@ -21,7 +23,7 @@ class YupSchemaEntry extends Base {
     this.type = value.type;
     this.types = {
       string: toYupString,
-      number: toYupNumber,
+      number: toYupNumberSchemaEntry,
       boolean: toYupBoolean,
       array: toYupArray,
       object: toYupObject,
@@ -66,7 +68,7 @@ class YupSchemaEntry extends Base {
   }
 
   number(obj) {
-    return toYupNumber(obj || this.obj, this.config);
+    return toYupNumberSchemaEntry(obj || this.obj, this.config);
   }
 
   boolean(obj) {
@@ -74,7 +76,6 @@ class YupSchemaEntry extends Base {
   }
 
   array(obj) {
-    console.log("array", this.config);
     return toYupArray(obj || this.obj, this.config);
   }
 

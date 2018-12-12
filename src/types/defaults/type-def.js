@@ -1,4 +1,4 @@
-module.exports = {
+const defaults = {
   getProps: obj => obj && obj.fields,
   getType: obj => obj && obj.type,
   getName: obj => obj && obj.name,
@@ -12,3 +12,5 @@ module.exports = {
   isObject: obj => obj && obj.type === "Object",
   isRequired: obj => obj && !obj.isNullable
 };
+
+module.exports = defaults;

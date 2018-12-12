@@ -36,7 +36,6 @@ describe("name schema", () => {
     }
   };
 
-  // { log: console.log }
   const schema = buildYup(nameJsonSchema);
 
   test("invalid json is invalid", async () => {

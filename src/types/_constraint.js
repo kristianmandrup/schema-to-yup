@@ -1,20 +1,40 @@
-class Constraint {
+const { TypeMatcher } = require("./_type-matcher");
+
+class Constraint extends TypeMatcher {
   constructor(typer) {
+    super(typer.config);
     this.typer = typer;
     this.delegates.map(name => {
-      this[name] = typer[name];
+      const delegate = typer[name];
+      if (!delegate) {
+        this.error(`missing delegate: ${name}`, {
+          typer
+        });
+      }
+      this[name] = this.isFunctionType(delegate)
+        ? delegate.bind(typer)
+        : delegate;
     });
   }
 
   get delegates() {
-    return [
-      "constraints",
-      "addConstraint",
-      "warm",
-      "error",
-      "config",
-      "isNothing"
-    ];
+    return ["constraints", "addConstraint", "constraintsAdded"];
+  }
+
+  add() {
+    const $map = this.map;
+    Object.keys($map).map(yupMethod => {
+      const names = this.entryNames($map[yupMethod]);
+      this.addConstraints(yupMethod, names);
+    });
+  }
+
+  get map() {
+    return {};
+  }
+
+  entryNames(entry) {
+    return Array.isArray(entry) ? entry : [entry];
   }
 
   addConstraints(method, names = []) {

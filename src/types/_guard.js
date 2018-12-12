@@ -11,7 +11,7 @@ class Guard extends Base {
   }
 
   verify() {
-    return !this.isNothing() && this.isValid(this.obj);
+    return this.isPresent(this.obj) && this.isValid(this.obj);
   }
 }
 

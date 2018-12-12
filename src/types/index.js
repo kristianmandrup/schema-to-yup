@@ -7,7 +7,7 @@ const {
 } = require("./mixed");
 const { YupArray, toYupArray } = require("./array");
 const { YupBoolean, toYupBoolean } = require("./boolean");
-const { YupNumber, toYupNumber } = require("./number");
+const { YupNumber, toYupNumber, toYupNumberSchemaEntry } = require("./number");
 const { YupObject, toYupObject } = require("./object");
 const { YupString, toYupString } = require("./string");
 const { YupDate, toYupDate } = require("./date");
@@ -21,6 +21,7 @@ module.exports = {
   YupBoolean,
   toYupBoolean,
   YupNumber,
+  toYupNumberSchemaEntry,
   toYupNumber,
   YupObject,
   toYupObject,

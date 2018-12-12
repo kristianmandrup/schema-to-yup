@@ -523,28 +523,70 @@ const yupSchema = buildYup(json, {
 
 ## Adding custom constraints
 
-The currently recommended best practice to add constraints goes something like this.
-Ideally we should extract this into a separate class to offload responsibility and keep the core type classes concise and to the point.
+See the `number` type for the current best practice to add type constraints.
+
+For simple cases: use `addConstraint` from the superclass `YupMixed`
 
 ```js
-class YupNumber extends YupMixed {
-  constructor(obj) {
-    super(obj);
-    this.type = this.normalizeNumType(obj.type); // integer or number
-    // the base yup schema entry api to use
-    this.base = this.yup.number();
+  required() {
+    return this.addConstraint("required");
   }
-  // ...
-  // ie. convert schema entries
-  // to yup schema via yup API calls
-  convert() {
-    this.inRange();
-    // ...
-    return this;
+```
+
+For types with several of these, we should map through a list or map to add them all.
+
+```js
+  strict() {
+    return this.addValueConstraint("strict");
   }
 
-  get constraintMap() {
+  required() {
+    return this.addConstraint("required");
+  }
+
+  notRequired() {
+    return this.addConstraint("notRequired");
+  }
+```
+
+Can be rewritten to use conventions, iterating a map:
+
+```js
+  addMappedConstraints() {
+    Object.keys(this.constraintsMap).map(key => {
+      const list = constraintsMap[key];
+      const fnName = key === 'value' ? 'addValueConstraint' : 'addConstraint'
+      list.map(this.[fnName]);
+    });
+  }
+
+  get constraintsMap() {
     return {
+      simple: ["required", "notRequired", "nullable"],
+      value: ["default", "strict"]
+    };
+  }
+```
+
+For more complex contraints that:
+
+- have multiple valid constraint names
+- require validation
+- optional transformation
+
+You can create a separate `Constraint` subclass, (see `Range` for number) to offload and handle
+it all separately.
+
+```js
+class Range extends Constraint {
+  constructor(typer) {
+    super(typer);
+  }
+
+  get map() {
+    return {
+      // multiple alternative names (aliases) can be used a
+      // as constraint value for each yup method
       moreThan: ["exclusiveMinimum", "moreThan"],
       lessThan: ["exclusiveMaximum", "lessThan"],
       max: ["maximum", "max"],
@@ -552,49 +594,37 @@ class YupNumber extends YupMixed {
     };
   }
 
-  inRange() {
-    const $map = this.constraintMap;
-    Object.keys($map).map(yupMethod => {
-      const names = $map[yupMethod];
-      this.addConstraints(yupMethod, names);
-    });
+  transform(value) {
+    return this.typer.toNumber(value);
   }
 
-  addConstraints(method, names = []) {
-    names.map(name => {
-      const value = this.validateAndTransform(name);
-      this.addConstraint(name, { method, value });
-    });
-    return this;
+  isValidConstraint(value) {
+    return this.typer.isNumberLike(value);
   }
 
-  validateAndTransform(name) {
-    const { constraints } = this;
-    const cv = constraints[name];
-    this.validateNumber(cv);
-    return this.toNumber(cv);
-  }
-
-  validateNumber(cv) {
-    if (this.isNothing(cv)) {
-      return this;
-    }
-    if (!this.isNumberLike(cv)) {
-      return this.handleNotANumber(name, cv);
-    }
-  }
-
-  handleNotANumber(name, value) {
-    const msg = `invalid constraint for ${name}, was ${value}. Must be a number or convertible to a number`;
-    if (this.config.warnOnInvalid) {
-      this.warn(msg);
-      return this;
-    }
-    this.error(msg, value);
-    return this;
+  get explainConstraintValidMsg() {
+    return `Must be a number or convertible to a number`;
   }
 }
 ```
+
+For the core type constraint class (such as `YupNumber`) you should now be able to simplify it to:
+
+```js
+  get enabled() {
+    return ["range", "posNeg", "integer"];
+  }
+
+  convert() {
+    this.enabled.map(name => this.processConstraint(name));
+    super.convert();
+    return this;
+  }
+```
+
+Currently only `YupNumber` has been (mostly) refactored to take advantage of this new infrastructure. Please help refactor the rest!
+
+`YupNumber` also has the most unit test coverage, used to test the current infra!
 
 ## Similar projects
 

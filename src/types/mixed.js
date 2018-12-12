@@ -52,6 +52,17 @@ class YupMixed extends Base {
     this.type = "mixed";
     this.base = yup.mixed();
     this.errMessages = config.errMessages || {};
+    this.constraintsAdded = {};
+
+    // rebind: ensure this always mapped correctly no matter context
+    this.rebind("addConstraint", "addValueConstraint");
+  }
+
+  rebind(...methods) {
+    methods.map(name => {
+      const method = this[name];
+      this[name] = this.isFunctionType(method) ? method.bind(this) : method;
+    });
   }
 
   validateOnCreate(key, value) {
@@ -85,13 +96,8 @@ class YupMixed extends Base {
   }
 
   convert() {
-    this.nullable()
-      .required()
-      .notRequired()
-      .oneOf()
-      .notOneOf()
-      .ensureDefault()
-      .strict();
+    this.addMappedConstraints();
+    this.oneOf().notOneOf();
     return this;
   }
 
@@ -117,6 +123,8 @@ class YupMixed extends Base {
         this.valErrMessage(constraintName) ||
         (errName && this.valErrMessage(errName));
       const constraintValue = value === true ? propValue : value;
+      this.onConstraintAdded({ name: constraintName, value: constraintValue });
+
       const newBase = constraintValue
         ? constraintFn(constraintValue, errFn)
         : constraintFn(errFn);
@@ -125,24 +133,27 @@ class YupMixed extends Base {
     return this;
   }
 
-  ensureDefault() {
-    return this.addValueConstraint("default");
+  onConstraintAdded({ name, value }) {
+    this.constraintsAdded[name] = value;
+    return this;
   }
 
-  strict() {
-    return this.addValueConstraint("strict");
+  addMappedConstraints() {
+    const $map = this.constraintsMap;
+    const keys = Object.keys($map);
+    keys.map(key => {
+      const list = $map[key];
+      const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
+      list.map(this[fnName]);
+    });
+    return this;
   }
 
-  required() {
-    return this.addConstraint("required");
-  }
-
-  notRequired() {
-    return this.addConstraint("notRequired");
-  }
-
-  nullable() {
-    return this.addConstraint("nullable");
+  get constraintsMap() {
+    return {
+      simple: ["required", "notRequired", "nullable"],
+      value: ["default", "strict"]
+    };
   }
 
   oneOf() {

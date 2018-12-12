@@ -2,12 +2,24 @@ const { YupMixed } = require("../mixed");
 const { createRange, Range } = require("./range");
 const { createNumberGuard, NumberGuard } = require("./guard");
 
+const proceed = (obj, config = {}) => {
+  return createNumberGuard(obj, config).verify();
+};
+
 function toYupNumber(obj, config = {}) {
-  return createNumberGuard(obj, config).verify() && buildSchemaEntry(obj);
+  return proceed(obj, config) && buildYupNumber(obj);
+}
+
+function toYupNumberSchemaEntry(obj, config = {}) {
+  return proceed(obj, config) && buildSchemaEntry(obj);
 }
 
 function buildSchemaEntry(obj) {
   return YupNumber.schemaEntryFor(obj);
+}
+
+function buildYupNumber(obj) {
+  return YupNumber.create(obj);
 }
 
 class YupNumber extends YupMixed {
@@ -103,6 +115,7 @@ class YupNumber extends YupMixed {
 
 module.exports = {
   toYupNumber,
+  toYupNumberSchemaEntry,
   YupNumber,
   createNumberGuard,
   NumberGuard,
