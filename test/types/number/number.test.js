@@ -34,7 +34,7 @@ describe("toYupNumber", () => {
     expect(createEntry(1)).toBeFalsy();
   });
 
-  test("array - %", () => {
+  test("entryay - %", () => {
     expect(createEntry([1])).toBeFalsy();
   });
 
@@ -70,8 +70,8 @@ describe("toYupNumber", () => {
     });
 
     describe("validate", () => {
-      const arr = createNumEntry({ max: 2 });
-      const schema = createSchema(arr);
+      const entry = createNumEntry({ max: 2 });
+      const schema = createSchema(entry);
 
       test("less", () => {
         const valid = schema.isValidSync({
@@ -109,8 +109,8 @@ describe("toYupNumber", () => {
     });
 
     describe("validate", () => {
-      const arr = createNumEntry({ min: 2 });
-      const schema = createSchema(arr);
+      const entry = createNumEntry({ min: 2 });
+      const schema = createSchema(entry);
 
       test("less", () => {
         const valid = schema.isValidSync({
@@ -129,6 +129,48 @@ describe("toYupNumber", () => {
         });
         expect(valid).toBeTruthy();
       });
+    });
+  });
+
+  describe("positive - validate", () => {
+    const entry = createNumEntry({ positive: true });
+    const schema = createSchema(entry);
+
+    test("negative: -1", () => {
+      const valid = schema.isValidSync({
+        value: -1
+      });
+      expect(valid).toBeFalsy();
+    });
+
+    test("zero: 0", () => {
+      // expect(schema.isValidSync({ value: 0 })).toBeFalsy();
+      expect(schema.isValidSync({ value: 0 })).toBeTruthy();
+    });
+
+    test("positive: 2", () => {
+      expect(schema.isValidSync({ value: 2 })).toBeTruthy();
+    });
+  });
+
+  describe("negative - validate", () => {
+    const entry = createNumEntry({ negative: true });
+    const schema = createSchema(entry);
+
+    test("negative: -1", () => {
+      const valid = schema.isValidSync({
+        value: -1
+      });
+      expect(valid).toBeTruthy();
+    });
+
+    test("zero: 0", () => {
+      // expect(schema.isValidSync({ value: 0 })).toBeFalsy();
+      expect(schema.isValidSync({ value: 0 })).toBeTruthy();
+    });
+
+    test("positive: 2", () => {
+      expect(schema.isValidSync({ value: 2 })).toBeFalsy();
     });
   });
 });

@@ -83,40 +83,36 @@ class YupString extends YupMixed {
     return this.constraints.url || this.format === "url";
   }
 
+  // todo: use NumericConstraint or RangeConstraint
   minLength() {
-    const newBase =
-      this.constraints.minLength &&
-      this.base.min(
-        this.constraints.minLength,
-        this.valErrMessage("minLength") || this.valErrMessage("min")
-      );
+    const { minLength } = this.constraints;
+    const errMsg = this.valErrMessage("minLength") || this.valErrMessage("min");
+    const newBase = minLength && this.base.min(minLength, errMsg);
     this.base = newBase || this.base;
     return this;
   }
 
+  // todo: use NumericConstraint or RangeConstraint
   maxLength() {
-    const newBase =
-      this.constraints.maxLength &&
-      this.base.min(
-        this.constraints.maxLength,
-        this.valErrMessage("maxLength") || this.valErrMessage("max")
-      );
+    const { maxLength } = this.constraints;
+    const errMsg = this.valErrMessage("maxLength") || this.valErrMessage("max");
+    const newBase = maxLength && this.base.max(maxLength, errMsg);
     this.base = newBase || this.base;
     return this;
   }
 
   pattern() {
-    if (this.constraints.pattern) {
-      this.regex = new RegExp(this.constraints.pattern);
+    const { pattern } = this.constraints;
+    if (!pattern) {
+      return this;
     }
-    const newBase =
-      this.constraints.pattern &&
-      this.base.matches(
-        this.regex,
-        this.valErrMessage("pattern") ||
-          this.valErrMessage("matches") ||
-          this.valErrMessage("regex")
-      );
+    const regex = new RegExp(pattern);
+    const errMsg =
+      this.valErrMessage("pattern") ||
+      this.valErrMessage("matches") ||
+      this.valErrMessage("regex");
+
+    const newBase = regex && this.base.matches(regex, errMsg);
     this.base = newBase || this.base;
     return this;
   }
