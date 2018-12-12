@@ -12,7 +12,7 @@ class StringHandler {
   handle(obj) {
     return (
       this.isString(obj) &&
-      YupString.create({ config: this.config, ...obj }).yupped()
+      YupString.create({ config: this.config, ...obj }).createSchemaEntry()
     );
   }
 }

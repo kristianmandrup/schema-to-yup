@@ -10,7 +10,7 @@ class DateHandler {
   }
 
   handle(obj) {
-    return this.isDate(obj) && YupDate.create(obj).yupped();
+    return this.isDate(obj) && YupDate.create(obj).createSchemaEntry();
   }
 }
 

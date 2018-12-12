@@ -17,7 +17,7 @@ class ArrayHandler extends Base {
   }
 
   handle(obj) {
-    return this.isArray(obj) && YupArray.create(obj).yupped();
+    return this.isArray(obj) && YupArray.create(obj).createSchemaEntry();
   }
 }
 

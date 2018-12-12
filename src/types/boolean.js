@@ -10,7 +10,7 @@ class BooleanHandler {
   }
 
   handle(obj) {
-    return this.isBoolean(obj) && YupBoolean.create(obj).yupped();
+    return this.isBoolean(obj) && YupBoolean.create(obj).createSchemaEntry();
   }
 }
 

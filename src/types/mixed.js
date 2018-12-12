@@ -63,11 +63,24 @@ class YupMixed extends Base {
     }
   }
 
+  // override for each type
+  get enabled() {
+    [];
+  }
+
+  convertEnabled() {
+    this.enabled.map(name => {
+      if (this[name]) {
+        this[name]();
+      }
+    });
+  }
+
   getConstraints() {
     return this.config.getConstraints(this.value);
   }
 
-  yupped() {
+  createSchemaEntry() {
     return this.convert().base;
   }
 

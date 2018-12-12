@@ -556,11 +556,11 @@ class YupNumber extends YupMixed {
     const $map = this.constraintMap;
     Object.keys($map).map(yupMethod => {
       const names = $map[yupMethod];
-      this.checkConstraints(yupMethod, names);
+      this.addConstraints(yupMethod, names);
     });
   }
 
-  checkConstraints(method, names = []) {
+  addConstraints(method, names = []) {
     names.map(name => {
       const value = this.validateAndTransform(name);
       this.addConstraint(name, { method, value });

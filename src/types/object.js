@@ -12,7 +12,7 @@ class ObjectHandler {
   }
 
   handle(obj) {
-    return this.isObject(obj) && YupObject.create(obj).yupped();
+    return this.isObject(obj) && YupObject.create(obj).createSchemaEntry();
   }
 }
 
