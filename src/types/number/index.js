@@ -57,10 +57,6 @@ class YupNumber extends YupMixed {
     fn && typeof fn === "function" ? fn.bind(this)() : fn.add();
   }
 
-  truncate() {
-    return this.addConstraint("truncate");
-  }
-
   round() {
     const { round } = this.constraints;
     if (this.isNothing(round)) {
@@ -71,45 +67,42 @@ class YupNumber extends YupMixed {
     return this;
   }
 
-  posNeg() {
-    this.positive();
-    this.negative();
+  get $map() {
+    return {
+      range: {
+        moreThan: ["exclusiveMinimum", "moreThan"],
+        lessThan: ["exclusiveMaximum", "lessThan"],
+        max: ["maximum", "max"],
+        min: ["minimum", "min"]
+      }
+    };
   }
 
-  integer() {
-    this.isInteger && this.addConstraint("integer");
-    return this;
+  get grouped() {
+    return {
+      posNeg: ["positive", "negative"]
+    };
   }
 
-  get isInteger() {
-    return this.config.isInteger(this.type);
+  get constraintsMap() {
+    return {
+      on: ["posNeg", "integer", "truncate", "round"],
+      value: ["range"]
+    };
   }
 
-  positive() {
-    return this.addConstraint("positive");
+  get constraintsCheckMap() {
+    return {
+      integer: () => this.isIntegerType(this.type)
+    };
   }
 
-  negative() {
-    return this.addConstraint("negative");
-  }
-
-  get isNegative() {
-    const { exclusiveMaximum, negative } = this.constraints;
-    if (negative) return true;
-    if (exclusiveMaximum === undefined) return false;
-    return exclusiveMaximum === 0;
-  }
-
-  get isPositive() {
-    const { exclusiveMinimum, positive } = this.constraints;
-    if (positive) return true;
-    if (exclusiveMinimum === undefined) return false;
-    return exclusiveMinimum === 0;
-  }
-
-  normalize() {
-    this.constraints.maximum = this.constraints.maximum || this.constraints.max;
-    this.constraints.minimum = this.constraints.minimum || this.constraints.min;
+  // for normalize
+  get aliasMap() {
+    return {
+      maximum: ["max"],
+      minimum: ["min"]
+    };
   }
 }
 

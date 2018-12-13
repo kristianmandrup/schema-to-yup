@@ -1,12 +1,12 @@
 const { Constraint } = require("../constraints/base");
 
-function createNumericConstraint(typer) {
-  return new NumericConstraint(typer);
+function createNumericConstraint(typer, opts) {
+  return new NumericConstraint(typer, opts);
 }
 
 class NumericConstraint extends Constraint {
-  constructor(typer) {
-    super(typer);
+  constructor(typer, opts = {}) {
+    super(typer, opts);
   }
 
   transform(value) {
@@ -14,11 +14,11 @@ class NumericConstraint extends Constraint {
   }
 
   isValidConstraint(value) {
-    return this.typer.isNumberLike(value);
+    return this.typer.isNumberLike(value) && this.checkValue(value);
   }
 
   get explainConstraintValidMsg() {
-    return `Must be a number or convertible to a number`;
+    return `Must be a number or convertible to a number.`;
   }
 }
 

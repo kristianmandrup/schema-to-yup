@@ -1,12 +1,12 @@
 const { Constraint } = require("./base");
 
-function createRegExpConstraint(typer, map) {
-  return new RegExpConstraint(typer, map);
+function createRegExpConstraint(typer, opts) {
+  return new RegExpConstraint(typer, opts);
 }
 
 class RegExpConstraint extends Constraint {
-  constructor(typer, map = {}) {
-    super(typer, map);
+  constructor(typer, opts = {}) {
+    super(typer, opts);
   }
 
   transform(value) {

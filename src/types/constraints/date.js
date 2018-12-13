@@ -1,12 +1,12 @@
 const { Constraint } = require("../constraints/base");
 
-function createDateConstraint(typer, map) {
-  return new DateConstraint(typer, map);
+function createDateConstraint(typer, opts) {
+  return new DateConstraint(typer, opts);
 }
 
 class DateConstraint extends Constraint {
-  constructor(typer, map = {}) {
-    super(typer, map);
+  constructor(typer, opts = {}) {
+    super(typer, opts);
   }
 
   transform(date) {

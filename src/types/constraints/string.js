@@ -1,12 +1,12 @@
 const { Constraint } = require("./base");
 
-function createStringConstraint(typer, map) {
-  return new StringConstraint(typer, map);
+function createStringConstraint(typer, opts) {
+  return new StringConstraint(typer, opts);
 }
 
 class StringConstraint extends Constraint {
-  constructor(typer, map = {}) {
-    super(typer, map);
+  constructor(typer, opts = {}) {
+    super(typer, opts);
   }
 
   isValidConstraint(value) {

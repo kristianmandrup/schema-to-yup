@@ -1,24 +1,24 @@
-const { YupMixed } = require("./mixed");
+const { YupMixed } = require("../mixed");
+const { createStringGuard, StringGuard } = require("./guard");
 
-class StringHandler {
-  constructor(config) {
-    this.config = config;
-  }
-
-  isString(obj) {
-    return this.config.isString(obj);
-  }
-
-  handle(obj) {
-    return (
-      this.isString(obj) &&
-      YupString.create({ config: this.config, ...obj }).createSchemaEntry()
-    );
-  }
-}
+const proceed = (obj, config = {}) => {
+  return createStringGuard(obj, config).verify();
+};
 
 function toYupString(obj, config = {}) {
-  return obj && new StringHandler(config).handle(obj);
+  return proceed(obj, config) && buildYupString(obj);
+}
+
+function toYupStringSchemaEntry(obj, config = {}) {
+  return proceed(obj, config) && buildSchemaEntry(obj);
+}
+
+function buildSchemaEntry(obj) {
+  return YupString.schemaEntryFor(obj);
+}
+
+function buildYupString(obj) {
+  return YupString.create(obj);
 }
 
 // Note: all types inherit from mixed
@@ -103,6 +103,8 @@ class YupString extends YupMixed {
 
 module.exports = {
   toYupString,
+  toYupStringSchemaEntry,
   YupString,
-  StringHandler
+  StringGuard,
+  createStringGuard
 };

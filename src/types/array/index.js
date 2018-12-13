@@ -1,27 +1,26 @@
 // See:
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
-const { YupMixed } = require("./mixed");
-const { Base } = require("./base");
+const { YupMixed } = require("../mixed");
+const { ArrayGuard, createArrayGuard } = require("./guard");
 
-class ArrayHandler extends Base {
-  constructor(config) {
-    super(config);
-  }
-
-  isArray(obj) {
-    if (!this.config.isArray) {
-      this.error("ArrayHandler: mising isArray in config", this.config);
-    }
-    return this.config.isArray(obj);
-  }
-
-  handle(obj) {
-    return this.isArray(obj) && YupArray.create(obj).createSchemaEntry();
-  }
-}
+const proceed = (obj, config = {}) => {
+  return createArrayGuard(obj, config).verify();
+};
 
 function toYupArray(obj, config = {}) {
-  return obj && new ArrayHandler(config).handle(obj);
+  return proceed(obj, config) && buildYupArray(obj);
+}
+
+function toYupArraySchemaEntry(obj, config = {}) {
+  return proceed(obj, config) && buildSchemaEntry(obj);
+}
+
+function buildSchemaEntry(obj) {
+  return YupArray.schemaEntryFor(obj);
+}
+
+function buildYupArray(obj) {
+  return YupArray.create(obj);
 }
 
 // Note: all types inherit from mixed
@@ -39,10 +38,6 @@ class YupArray extends YupMixed {
   }
 
   convert() {
-    this.maxItems();
-    this.minItems();
-    this.ensureItems();
-    this.compact();
     // this.$uniqueItems()
     //   .$contains()
     //   .$additionalItems()
@@ -54,12 +49,25 @@ class YupArray extends YupMixed {
     return this;
   }
 
-  ensureItems() {
-    return this.addConstraint("ensure");
+  get constraintsTypeMap() {
+    return {
+      rangeItems: "numeric",
+      maxItems: "numeric",
+      minItems: "numeric"
+    };
   }
 
-  compact() {
-    return this.addConstraint("compact");
+  get constraintsMap() {
+    return {
+      on: ["ensure", "compact"]
+    };
+  }
+
+  get aliasMap() {
+    return {
+      minItems: ["min"],
+      maxItems: ["max"]
+    };
   }
 
   // TODO: not yet implemented
@@ -91,7 +99,7 @@ class YupArray extends YupMixed {
   maxItems() {
     const { maxItems, max } = this.constraints;
     const $max = maxItems || max;
-    if (!this.isNumberType($max)) {
+    if (!this.isArrayType($max)) {
       return this;
     }
     if (!this.isValidSize($max)) {
@@ -102,55 +110,17 @@ class YupArray extends YupMixed {
     return this;
   }
 
-  minItems() {
-    const { minItems, min } = this.constraints;
-    const $min = minItems || min;
-    if (!this.isNumberType($min)) {
-      return this;
-    }
-    if (!this.isValidSize($min)) {
-      return this.handleInvalidSize("minItems", $min);
-    }
-    const newBase = $min && this.base.min($min);
-    this.base = newBase || this.base;
-    return this;
-  }
-
-  $items() {
-    return this;
-  }
-
-  $additionalItems() {
-    return this;
-  }
-
-  $uniqueItems() {
-    return this;
-  }
-
-  $contains() {
-    return this;
-  }
-
-  // utility
-
-  handleInvalidSize(name, value) {
-    const msg = `invalid array size constraint for ${name}, was ${value}. Must be a number >= 0`;
-    if (this.config.warnOnInvalid) {
-      this.warn(msg);
-      return this;
-    }
-    this.error(msg, value);
-    return this;
-  }
-
-  isValidSize(num) {
-    return this.isNumberType(num) && num >= 0;
+  get constraintsCheckMap() {
+    return {
+      size: num => this.isArrayType(num) && num >= 0
+    };
   }
 }
 
 module.exports = {
   toYupArray,
+  toYupArraySchemaEntry,
   YupArray,
-  ArrayHandler
+  ArrayGuard,
+  createArrayGuard
 };

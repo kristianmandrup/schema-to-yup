@@ -1,10 +1,16 @@
 const { TypeMatcher } = require("../_type-matcher");
 
+const alwaysTrueFn = () => true;
+const identity = val => val;
+
 class Constraint extends TypeMatcher {
-  constructor(typer, map) {
+  constructor(typer, { value, errorMsg, checkValue, toYupArg }) {
     super(typer.config);
     this.map = this.mapFor(value);
+    this.errorMsg = errorMsg || "";
+    this.checkValue = checkValue || alwaysTrueFn;
     this.typer = typer;
+    this.toYupArg = toYupArg || identity;
     this.delegates.map(name => {
       const delegate = typer[name];
       if (!delegate) {
@@ -46,7 +52,8 @@ class Constraint extends TypeMatcher {
   processConstraints(method, names = []) {
     names.map(name => {
       const value = this.validateAndTransform(name);
-      this.yupValueConstraint(name, value, method);
+      const arg = this.toYupArg(value);
+      this.yupValueConstraint(name, value, arg, method);
     });
     return this;
   }
@@ -62,13 +69,15 @@ class Constraint extends TypeMatcher {
   }
 
   get explainConstraintValidMsg() {
-    return "";
+    return this.errorMsg;
   }
 
   invalidConstraintMsg(name, value) {
-    return [this.invalidMsg(name, value), this.explainConstraintValidMsg].join(
-      "\n"
-    );
+    const msg = [
+      this.invalidMsg(name, value),
+      this.explainConstraintValidMsg
+    ].join("\n");
+    return this.errMsg ? [msg, this.errMsg].join(" ") : msg;
   }
 
   validate(cv) {
