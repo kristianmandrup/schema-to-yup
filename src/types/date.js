@@ -1,4 +1,4 @@
-const { YupMixed } = require("./mixed");
+const { YupBaseType } = require("./base-type");
 
 class DateHandler {
   constructor(config) {
@@ -18,7 +18,7 @@ function toYupDate(obj, config = {}) {
   return obj && new DateHandler(config).handle(obj);
 }
 
-class YupDate extends YupMixed {
+class YupDate extends YupBaseType {
   constructor(obj) {
     super(obj);
     this.type = "date";

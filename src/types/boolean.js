@@ -1,4 +1,4 @@
-const { YupMixed } = require("./mixed");
+const { YupBaseType } = require("./base-type");
 
 class BooleanHandler {
   constructor(config) {
@@ -18,7 +18,7 @@ function toYupBoolean(obj, config = {}) {
   return obj && new BooleanHandler(config).handle(obj);
 }
 
-class YupBoolean extends YupMixed {
+class YupBoolean extends YupBaseType {
   constructor(obj) {
     super(obj);
     this.type = "boolean";

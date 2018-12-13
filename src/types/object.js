@@ -1,4 +1,4 @@
-const { YupMixed } = require("./mixed");
+const { YupBaseType } = require("./base-type");
 
 const { buildYup } = require("../");
 
@@ -21,7 +21,7 @@ function toYupObject(obj, config = {}) {
 }
 
 // Allow recursive schema
-class YupObject extends YupMixed {
+class YupObject extends YupBaseType {
   constructor(obj) {
     super(obj);
     this.type = "object";

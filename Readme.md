@@ -562,7 +562,7 @@ Can be rewritten to use conventions, iterating a map:
 
   get constraintsMap() {
     return {
-      simple: ["required", "notRequired", "nullable"],
+      on: ["required", "notRequired", "nullable"],
       value: ["default", "strict"]
     };
   }

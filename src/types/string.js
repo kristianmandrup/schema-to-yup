@@ -1,4 +1,4 @@
-const { YupMixed } = require("./mixed");
+const { YupBaseType } = require("./base-type");
 
 class StringHandler {
   constructor(config) {
@@ -21,7 +21,7 @@ function toYupString(obj, config = {}) {
   return obj && new StringHandler(config).handle(obj);
 }
 
-class YupString extends YupMixed {
+class YupString extends YupBaseType {
   constructor(obj) {
     super(obj);
     this.type = "string";
@@ -32,17 +32,40 @@ class YupString extends YupMixed {
     return new YupString(obj);
   }
 
+  get enabled() {
+    return [
+      "lengthRange",
+      "pattern",
+      "case",
+      "email",
+      "url",
+      "genericFormat",
+      "trim"
+    ];
+  }
+
+  get constraintsMap() {
+    return {
+      on: ["trim", "cased", "email", "url"],
+      value: ["pattern", "lengthRange"]
+    };
+  }
+
   convert() {
     super.convert();
     this.normalize();
-    this.minLength()
-      .maxLength()
-      .pattern();
-    this.lowercase().uppercase();
+    this.lengthRange();
+    this.cased();
+    this.pattern();
     this.email();
     this.url();
+    this.trim();
     this.genericFormat();
     return this;
+  }
+
+  cased() {
+    this.lowercase().uppercase();
   }
 
   trim() {
@@ -81,6 +104,10 @@ class YupString extends YupMixed {
 
   get isUrl() {
     return this.constraints.url || this.format === "url";
+  }
+
+  lengthRange() {
+    this.minLength().maxLength();
   }
 
   // todo: use NumericConstraint or RangeConstraint
