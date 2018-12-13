@@ -1,5 +1,4 @@
 const { YupMixed } = require("./mixed");
-
 const { buildYup } = require("../");
 
 class ObjectHandler {

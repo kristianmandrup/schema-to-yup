@@ -3,7 +3,7 @@ const { TypeMatcher } = require("../_type-matcher");
 class Constraint extends TypeMatcher {
   constructor(typer, map) {
     super(typer.config);
-    this.map = map || this.$map || {};
+    this.map = this.mapFor(value);
     this.typer = typer;
     this.delegates.map(name => {
       const delegate = typer[name];
@@ -18,19 +18,24 @@ class Constraint extends TypeMatcher {
     });
   }
 
+  mapFor(value) {
+    if (!value) return this.$map || {};
+    return this.isStringType(value) ? { [value]: value } : value;
+  }
+
   isStringType(val) {
     return typeof val === "string";
   }
 
   get delegates() {
-    return ["constraints", "addConstraint", "constraintsAdded"];
+    return ["constraints", "yupValueConstraint", "constraintsAdded"];
   }
 
   add() {
     const $map = this.map;
     Object.keys($map).map(yupMethod => {
       const names = this.entryNames($map[yupMethod]);
-      this.addConstraints(yupMethod, names);
+      this.processConstraints(yupMethod, names);
     });
   }
 
@@ -38,10 +43,10 @@ class Constraint extends TypeMatcher {
     return Array.isArray(entry) ? entry : [entry];
   }
 
-  addConstraints(method, names = []) {
+  processConstraints(method, names = []) {
     names.map(name => {
       const value = this.validateAndTransform(name);
-      this.addConstraint(name, { method, value });
+      this.yupValueConstraint(name, value, method);
     });
     return this;
   }

@@ -35,7 +35,12 @@ class YupMixed extends YupBaseType {
     };
   }
 
-  normalize() {}
+  get baseAliasMap() {
+    return {
+      oneOf: ["enum"],
+      notOneOf: ["not"]
+    };
+  }
 }
 
 module.exports = {

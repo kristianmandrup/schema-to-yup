@@ -1,6 +1,11 @@
 const yup = require("yup");
 const { Base } = require("./base");
-const merge = require("deepmerge");
+const {
+  createStringConstraint,
+  createRegExpConstraint,
+  createDateConstraint,
+  createNumericConstraint
+} = require("./constraints");
 // class ConvertYupSchemaError extends Error {}
 
 class YupBaseType extends Base {
@@ -38,8 +43,8 @@ class YupBaseType extends Base {
 
   convert() {}
 
-  addValueConstraint(propName, { constraintName, errName } = {}) {
-    return this.addConstraint(propName, {
+  processValueConstraint(propName, { constraintName, errName } = {}) {
+    return this.processConstraint(propName, {
       constraintName,
       value: true,
       errName
@@ -50,14 +55,18 @@ class YupBaseType extends Base {
     return (this.grouped || {})[name];
   }
 
-  addConstraint(propName, opts = {}) {
+  processConstraint(propName, opts = {}) {
     const names = this.groupedConstraint(propName);
 
     // support for groupd constraints
     if (names && this.isEnabled(propName)) {
-      names.map(name => this.addConstraint(name, { ...opts, enabled: true }));
+      // allow group type
+      const type = this.constraintsTypeMap[propName];
+      names.map(name =>
+        this.processConstraint(name, { ...opts, enabled: true, type })
+      );
     }
-    let { constraintName, method, value, errName, enabled } = opts;
+    let { constraintName, method, value, enabled, type } = opts;
 
     const propValue = this.constraints[propName];
     if (!propValue) {
@@ -68,22 +77,65 @@ class YupBaseType extends Base {
       return this;
     }
     method = method || constraintName;
+    const error = this.errorMessageFor(constraintName);
+    const constraintValue = value === true ? undefined : value;
+    this.onConstraintAdded({ name: constraintName, value, constraintValue });
+    const newBase = constraintValue
+      ? this.addValueConstraint(constraintName, constraintValue, {
+          error,
+          type
+        })
+      : this.switchOnConstraint(method, error);
+    this.base = newBase || this.base;
+    return this;
+  }
+
+  addValueConstraint(name, value, { error, type }) {
+    const constraintType = type || this.constraintsTypeMap[name];
+    if (!constraintType) {
+      return this.yupValueConstraint(name, value, error);
+    }
+    const typedContraintFactory = this.typedContraintFactoryMap[constraintType];
+    typedContraintFactory(value);
+  }
+
+  yupValueConstraint(name, value, method) {
+    method = method || name;
+    if (this.base[method]) {
+      this.base = this.base[method](value);
+    }
+    return this;
+  }
+
+  get typedContraintFactoryMap() {
+    return {
+      string: createStringConstraint,
+      regexp: createRegExpConstraint,
+      date: createDateConstraint,
+      numeric: createNumericConstraint
+    };
+  }
+
+  get constraintsTypeMap() {
+    return {};
+  }
+
+  switchOnConstraint(method, error) {
     const apiMethod = this.base[method];
     if (!apiMethod) {
       this.warn(`Yup has no such API method: ${method}`);
       return this;
     }
-    const constraintFn = apiMethod.bind(this.base);
-    const errFn =
-      this.valErrMessage(constraintName) ||
-      (errName && this.valErrMessage(errName));
-    const constraintValue = value === true ? undefined : value;
-    this.onConstraintAdded({ name: constraintName, value, constraintValue });
-    const newBase = constraintValue
-      ? constraintFn(constraintValue, errFn)
-      : constraintFn(errFn);
-    this.base = newBase || this.base;
-    return this;
+    apiMethod(error);
+  }
+
+  errorMessageFor(name) {
+    const aliases = this.fullAliasMap[name] || [];
+    let errMsg;
+    aliases.find(alias => {
+      errMsg = errMsg || this.valErrMessage(alias);
+    });
+    return errMsg;
   }
 
   onConstraintAdded({ name, value }) {
@@ -91,12 +143,12 @@ class YupBaseType extends Base {
     return this;
   }
 
-  addMappedConstraintsFor($map) {
+  processMappedConstraintsFor($map) {
     const keys = Object.keys($map);
     keys.map(key => {
       const list = $map[key];
       const constraintName =
-        key === "value" ? "addValueConstraint" : "addConstraint";
+        key === "value" ? "processValueConstraint" : "processConstraint";
       list.map(this[constraintName]);
     });
     return this;
@@ -106,8 +158,8 @@ class YupBaseType extends Base {
     return this.allEnabled.includes(name);
   }
 
-  addMappedConstraints() {
-    this.addMappedConstraintsFor(this.constraintsMap);
+  processMappedConstraints() {
+    this.processMappedConstraintsFor(this.constraintsMap);
   }
 
   // override for each type
@@ -148,7 +200,18 @@ class YupBaseType extends Base {
 
   toValidJSONSchema() {}
 
-  normalize() {}
+  normalize() {
+    const fullAliasMap = {
+      ...this.aliasMap,
+      ...this.baseAliasMap
+    };
+    Object.keys(fullAliasMap).map(key => {
+      const aliases = this.aliasMap[key];
+      aliases.map(alias => {
+        this.constraints[key] = this.constraints[key] || alias;
+      });
+    });
+  }
 
   deNormalize() {}
 
@@ -170,53 +233,6 @@ class YupBaseType extends Base {
   // throw ConvertYupSchemaError(fullMsg);
   throwError(msg) {
     throw msg;
-  }
-
-  oneOf() {
-    const value = this.constraints.enum || this.constraints.oneOf;
-    return this.addConstraint("oneOf", { value, errName: "enum" });
-  }
-
-  notOneOf() {
-    const { not, notOneOf } = this.constraints;
-    const value = notOneOf || (not && (not.enum || not.oneOf));
-    return this.addConstraint("notOneOf", { value });
-  }
-
-  $const() {
-    return this;
-  }
-
-  // boolean https: //ajv.js.org/keywords.html#allof
-  $allOf() {
-    return this;
-  }
-
-  // https://ajv.js.org/keywords.html#anyof
-  $anyOf() {
-    return this;
-  }
-
-  // https: //ajv.js.org/keywords.html#oneof
-  $oneOf() {
-    return this;
-  }
-
-  // conditions https://ajv.js.org/keywords.html#not
-  $not() {
-    return this;
-  }
-
-  $if() {
-    return this;
-  }
-
-  $then() {
-    return this;
-  }
-
-  $else() {
-    return this;
   }
 }
 
