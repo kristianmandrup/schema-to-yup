@@ -9,7 +9,7 @@ class RangeConstraint extends NumericConstraint {
     super(typer);
   }
 
-  get map() {
+  get $map() {
     return {
       moreThan: ["exclusiveMinimum", "moreThan"],
       lessThan: ["exclusiveMaximum", "lessThan"],

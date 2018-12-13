@@ -47,7 +47,7 @@ class YupDate extends YupMixed {
 
   isValidDate(date) {
     if (!this.isValidDateType(date)) return false;
-    return this.isStringType(date) ? Date.parse(date) !== NaN : true;
+    return this.isStringType(date) ? Boolean(Date.parse(date)) : true;
   }
 
   // optionally transform millisecs to Date value?
