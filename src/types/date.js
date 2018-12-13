@@ -1,4 +1,4 @@
-const { YupBaseType } = require("./base-type");
+const { YupMixed } = require("./mixed");
 
 class DateHandler {
   constructor(config) {
@@ -18,7 +18,9 @@ function toYupDate(obj, config = {}) {
   return obj && new DateHandler(config).handle(obj);
 }
 
-class YupDate extends YupBaseType {
+// Note: all types inherit from mixed
+// See https://github.com/jquense/yup#mixed
+class YupDate extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "date";

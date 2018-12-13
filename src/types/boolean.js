@@ -1,4 +1,4 @@
-const { YupBaseType } = require("./base-type");
+const { YupMixed } = require("./mixed");
 
 class BooleanHandler {
   constructor(config) {
@@ -18,7 +18,9 @@ function toYupBoolean(obj, config = {}) {
   return obj && new BooleanHandler(config).handle(obj);
 }
 
-class YupBoolean extends YupBaseType {
+// Note: all types inherit from mixed
+// See https://github.com/jquense/yup#mixed
+class YupBoolean extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "boolean";

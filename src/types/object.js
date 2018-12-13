@@ -1,4 +1,4 @@
-const { YupBaseType } = require("./base-type");
+const { YupMixed } = require("./mixed");
 
 const { buildYup } = require("../");
 
@@ -20,8 +20,10 @@ function toYupObject(obj, config = {}) {
   return obj && new ObjectHandler(config).handle(obj);
 }
 
-// Allow recursive schema
-class YupObject extends YupBaseType {
+// TODO: Allow recursive schema
+// Note: all types inherit from mixed
+// See https://github.com/jquense/yup#mixed
+class YupObject extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "object";

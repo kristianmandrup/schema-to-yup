@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "dashify": "^2.0.0",
+    "deepmerge": "^3.0.0",
     "uppercamelcase": "^3.0.0",
     "yup": "^0.26.0"
   },

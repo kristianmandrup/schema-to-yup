@@ -58,7 +58,7 @@ describe("toYupString", () => {
     expect(() => createStr(null)).toThrow();
   });
 
-  describe("lowercase - strict", () => {
+  describe.only("lowercase - strict", () => {
     const conf = { lowercase: true, strict: true, key: "name" };
     describe("create schema", () => {
       test("lowercase", () => {
@@ -86,7 +86,7 @@ describe("toYupString", () => {
     });
   });
 
-  describe("uppercase - strict", () => {
+  describe.only("uppercase - strict", () => {
     const conf = { uppercase: true, strict: true, key: "name" };
     describe("create schema", () => {
       test("uppercase", () => {

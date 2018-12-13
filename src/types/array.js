@@ -1,7 +1,6 @@
 // See:
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
-
-const { YupBaseType } = require("./base-type");
+const { YupMixed } = require("./mixed");
 const { Base } = require("./base");
 
 class ArrayHandler extends Base {
@@ -25,7 +24,9 @@ function toYupArray(obj, config = {}) {
   return obj && new ArrayHandler(config).handle(obj);
 }
 
-class YupArray extends YupBaseType {
+// Note: all types inherit from mixed
+// See https://github.com/jquense/yup#mixed
+class YupArray extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "array";

@@ -43,10 +43,6 @@ class YupSchemaEntry extends Base {
   toEntry() {
     if (!this.isValidSchema()) this.error("Not a valid schema");
     const config = this.obj;
-
-    // always run mixed first
-    const mixed = this.mixed(config);
-
     // try to find a type specific Yup schema entry
     return (
       this.string(config) ||
@@ -55,14 +51,13 @@ class YupSchemaEntry extends Base {
       this.array(config) ||
       this.object(config) ||
       this.date(config) ||
-      this.fallbackType(mixed)
+      this.fallbackType(config)
     );
   }
 
   // fallback to mixed if no match
-  // possibly error instead!?
-  fallbackType(mixed) {
-    return mixed;
+  fallbackType(config) {
+    this.mixed(config);
   }
 
   get obj() {

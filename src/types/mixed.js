@@ -14,59 +14,28 @@ class YupMixed extends YupBaseType {
     return new YupMixed(obj);
   }
 
-  get constraintsMap() {
+  get allEnabled() {
+    return [...this.baseEnabled, ...this.enabled];
+  }
+
+  convert() {
+    this.normalize();
+    this.addMappedConstraintsFor(this.baseConstraintsMap);
+    return this;
+  }
+
+  get baseEnabled() {
+    return ["required", "notRequired", "nullable", "default", "strict"];
+  }
+
+  get baseConstraintsMap() {
     return {
       on: ["required", "notRequired", "nullable"],
       value: ["default", "strict"]
     };
   }
 
-  oneOf() {
-    const value = this.constraints.enum || this.constraints.oneOf;
-    return this.addConstraint("oneOf", { value, errName: "enum" });
-  }
-
-  notOneOf() {
-    const { not, notOneOf } = this.constraints;
-    const value = notOneOf || (not && (not.enum || not.oneOf));
-    return this.addConstraint("notOneOf", { value });
-  }
-
-  $const() {
-    return this;
-  }
-
-  // boolean https: //ajv.js.org/keywords.html#allof
-  $allOf() {
-    return this;
-  }
-
-  // https://ajv.js.org/keywords.html#anyof
-  $anyOf() {
-    return this;
-  }
-
-  // https: //ajv.js.org/keywords.html#oneof
-  $oneOf() {
-    return this;
-  }
-
-  // conditions https://ajv.js.org/keywords.html#not
-  $not() {
-    return this;
-  }
-
-  $if() {
-    return this;
-  }
-
-  $then() {
-    return this;
-  }
-
-  $else() {
-    return this;
-  }
+  normalize() {}
 }
 
 module.exports = {

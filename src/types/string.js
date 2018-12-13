@@ -1,4 +1,4 @@
-const { YupBaseType } = require("./base-type");
+const { YupMixed } = require("./mixed");
 
 class StringHandler {
   constructor(config) {
@@ -21,7 +21,9 @@ function toYupString(obj, config = {}) {
   return obj && new StringHandler(config).handle(obj);
 }
 
-class YupString extends YupBaseType {
+// Note: all types inherit from mixed
+// See https://github.com/jquense/yup#mixed
+class YupString extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "string";
@@ -36,7 +38,7 @@ class YupString extends YupBaseType {
     return [
       "lengthRange",
       "pattern",
-      "case",
+      "cased",
       "email",
       "url",
       "genericFormat",
@@ -51,19 +53,20 @@ class YupString extends YupBaseType {
     };
   }
 
+  get grouped() {
+    return {
+      cased: ["lowercase", "uppercase"]
+    };
+  }
+
   convert() {
     super.convert();
-    this.normalize();
-    this.lengthRange();
-    this.cased();
-    this.pattern();
-    this.email();
-    this.url();
-    this.trim();
+    this.addMappedConstraints();
     this.genericFormat();
     return this;
   }
 
+  // must be in grouped to be enabled
   cased() {
     this.lowercase().uppercase();
   }
