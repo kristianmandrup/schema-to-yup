@@ -578,12 +578,12 @@ You can create a separate `Constraint` subclass, to offload and handle it all se
 Here is a sample `RangeConstraint` used by number.
 
 ```js
-class Range extends NumericConstraint {
+class RangeConstraint extends NumericConstraint {
   constructor(typer) {
     super(typer);
   }
 
-  get map() {
+  get $map() {
     return {
       moreThan: ["exclusiveMinimum", "moreThan"],
       lessThan: ["exclusiveMaximum", "lessThan"],
@@ -591,6 +591,16 @@ class Range extends NumericConstraint {
       min: ["minimum", "min"]
     };
   }
+}
+```
+
+Instead of wrapping a `Constraint` you can call it directly with a `map`
+
+```js
+// this would be an instance such as YupNumber
+// map equivalent to $map in the RangeConstraint
+range() {
+  return createNumericConstraint(this, map);
 }
 ```
 
@@ -608,9 +618,16 @@ For the core type constraint class (such as `YupNumber`) you should now be able 
   }
 ```
 
-Currently only `YupNumber` has been (mostly) refactored to take advantage of this new infrastructure. Please help refactor the rest!
+The following constraint classes are available for use:
 
-`YupNumber` also has the most unit test coverage, used to test the current infra!
+- `NumericConstraint`
+- `StringConstraint`
+- `RegExpConstraint`
+- `DateConstraint`
+
+Currently only `YupNumber` has been (partly) refactored to take advantage of this new infrastructure. Please help refactor the rest!
+
+`YupNumber` also has the most unit test coverage, used to test the current infrastructure!
 
 ## Similar projects
 
