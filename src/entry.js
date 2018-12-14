@@ -11,6 +11,8 @@ const {
   toYupDate
 } = types;
 
+console.log({ Base });
+
 class YupSchemaEntryError extends Error {}
 
 class YupSchemaEntry extends Base {

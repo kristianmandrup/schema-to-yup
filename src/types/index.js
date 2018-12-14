@@ -8,6 +8,8 @@ const { YupDate, toYupDate } = require("./date");
 const { Base } = require("./base");
 const { defaults, errValKeys } = require("./_errors");
 
+console.log("types", { Base });
+
 module.exports = {
   errValKeys,
   defaults,

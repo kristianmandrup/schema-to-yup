@@ -33,6 +33,10 @@ class TypeMatcher extends Loggable {
     return typeof val === "function";
   }
 
+  isArrayType(val) {
+    return Array.isArray(val);
+  }
+
   isDateType(val) {
     return val instanceof Date;
   }

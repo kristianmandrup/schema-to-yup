@@ -4,6 +4,12 @@ function createNumericConstraint(typer, opts) {
   return new NumericConstraint(typer, opts);
 }
 
+const checkPositive = val => val >= 0;
+
+function createPositiveNumberConstraint(typer, opts) {
+  return new NumericConstraint(typer, { ...opts, checkValue: checkPositive });
+}
+
 class NumericConstraint extends Constraint {
   constructor(typer, opts = {}) {
     super(typer, opts);
@@ -24,5 +30,6 @@ class NumericConstraint extends Constraint {
 
 module.exports = {
   createNumericConstraint,
+  createPositiveNumberConstraint,
   NumericConstraint
 };

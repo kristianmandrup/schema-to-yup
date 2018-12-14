@@ -26,7 +26,13 @@ class Constraint extends TypeMatcher {
 
   mapFor(value) {
     if (!value) return this.$map || {};
-    return this.isStringType(value) ? { [value]: value } : value;
+    if (this.isStringType(value)) return { [value]: value };
+    if (this.isArrayType(value))
+      return value.reduce((acc, key) => {
+        acc[key] = { [value]: value };
+        return acc;
+      }, {});
+    return value;
   }
 
   isStringType(val) {
@@ -39,29 +45,46 @@ class Constraint extends TypeMatcher {
 
   add() {
     const $map = this.map;
-    Object.keys($map).map(yupMethod => {
-      const names = this.entryNames($map[yupMethod]);
+    const mapKeys = Object.keys($map);
+    mapKeys.map(yupMethod => {
+      const names = this.NamesFor(yupMethod);
       this.processConstraints(yupMethod, names);
     });
   }
 
+  namesFor(yupMethod) {
+    const entry = this.map[yupMethod];
+    const names = this.entryNames(entry);
+    console.log({ entry, names });
+    return [yupMethod, ...names];
+  }
+
   entryNames(entry) {
-    return Array.isArray(entry) ? entry : [entry];
+    return this.isArrayType(entry) ? entry : [entry];
   }
 
   processConstraints(method, names = []) {
     names.map(name => {
       const value = this.validateAndTransform(name);
-      const arg = this.toArgument(value);
-      this.applyConstraintToValidator(name, value, arg, method);
+      if (value) {
+        const arg = this.toArgument(value);
+        this.applyConstraintToValidator(name, value, arg, method);
+      }
     });
     return this;
   }
 
   validateAndTransform(name) {
-    const cv = this.constraints[name];
+    const cv = this.constraintFor(name);
+    if (this.isNothing(cv)) {
+      return null;
+    }
     this.validate(cv);
     return this.transform(cv);
+  }
+
+  constraintFor(name) {
+    return this.constraints[name];
   }
 
   invalidMsg(name, value) {

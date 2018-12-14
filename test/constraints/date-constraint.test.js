@@ -14,7 +14,6 @@ describe("createDateConstraint", () => {
       format: "date"
     },
     applyConstraintToValidator: (name, value, method) => true,
-    constraintsAdded: (name, value, method) => true,
     toDate: val => Date(val)
   };
 

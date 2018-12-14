@@ -1,5 +1,4 @@
 const { YupMixed } = require("../mixed");
-const { createRange, Range } = require("./range-constraint");
 const { createNumberGuard, NumberGuard } = require("./guard");
 
 const proceed = (obj, config = {}) => {
@@ -27,7 +26,6 @@ class YupNumber extends YupMixed {
     super(obj);
     this.type = this.normalizeNumType(obj.type);
     this.validatorTypeApi = this.yup.number();
-    this.range = createRange(this);
   }
 
   normalizeNumType(type) {
@@ -43,7 +41,7 @@ class YupNumber extends YupMixed {
   }
 
   get enabled() {
-    return ["range", "posNeg", "integer"];
+    return ["range", "posNeg", "integer", "truncate", "round"];
   }
 
   convert() {
@@ -67,20 +65,22 @@ class YupNumber extends YupMixed {
     return this;
   }
 
-  get $map() {
+  get grouped() {
     return {
-      range: {
-        moreThan: ["exclusiveMinimum", "moreThan"],
-        lessThan: ["exclusiveMaximum", "lessThan"],
-        max: ["maximum", "max"],
-        min: ["minimum", "min"]
-      }
+      posNeg: ["positive", "negative"],
+      range: ["moreThan", "lessThan", "max", "min"]
     };
   }
 
-  get grouped() {
+  get constraintsTypeMap() {
     return {
-      posNeg: ["positive", "negative"]
+      round: {
+        type: "string",
+        toArg: val => ({
+          type: val
+        })
+      },
+      range: "positive"
     };
   }
 
@@ -100,8 +100,10 @@ class YupNumber extends YupMixed {
   // for normalize
   get aliasMap() {
     return {
-      maximum: ["max"],
-      minimum: ["min"]
+      max: ["maximum"],
+      min: ["minimum"],
+      moreThan: ["exclusiveMinimum"],
+      lessThan: ["exclusiveMaximum"]
     };
   }
 }
@@ -111,7 +113,5 @@ module.exports = {
   toYupNumberSchemaEntry,
   YupNumber,
   createNumberGuard,
-  NumberGuard,
-  Range,
-  createRange
+  NumberGuard
 };

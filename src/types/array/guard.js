@@ -1,6 +1,6 @@
 const { Guard } = require("../_guard");
 
-class ArrayGuard extends Base {
+class ArrayGuard extends Guard {
   constructor(config) {
     super(config);
   }

@@ -1,9 +1,8 @@
-const { types } = require("../../src");
-const { toYupArray } = types;
-const yup = require("yup");
+const { yup, toYupArray } = require("./_imports");
 
 const isArray = fieldDef => fieldDef && fieldDef.type === "array";
 const defaultConfig = { isArray };
+
 const create = (fieldDef, config = defaultConfig) => {
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
   return toYupArray(obj, config);

@@ -1,12 +1,12 @@
 const { Constraint } = require("./_imports");
 
 describe("Constraint", () => {
-  const map = {
-    max: ["maxDate", "max"],
-    min: ["minDate", "min"]
+  const value = {
+    max: ["maxDate"],
+    min: ["minDate"]
   };
   const opts = {
-    map
+    value
   };
   const typer = {
     constraints: {
@@ -19,7 +19,12 @@ describe("Constraint", () => {
   describe("instance", () => {
     const constraint = new Constraint(typer, opts);
     test("mapFor", () => {
-      expect(constraint.mapFor(map)).toBe(map);
+      expect(constraint.mapFor(value)).toBe(value);
+    });
+
+    test("namesFor", () => {
+      const names = constraint.namesFor("max");
+      expect(names).toEqual(["max", "maxDate"]);
     });
 
     test("checkValue - identity", () => {
