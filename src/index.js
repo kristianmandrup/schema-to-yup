@@ -100,7 +100,7 @@ class YupBuilder extends Base {
       //   key
       // });
       const value = properties[key];
-      const yupSchemaEntry = this.propToYupSchemaEntry({
+      const yupSchemaEntry = this.propToValidatorSchemaEntry({
         name,
         key,
         value
@@ -111,7 +111,7 @@ class YupBuilder extends Base {
     }, {});
   }
 
-  propToYupSchemaEntry({ name, key, value = {} }) {
+  propToValidatorSchemaEntry({ name, key, value = {} }) {
     const entryBuilder =
       this.createYupSchemaEntry || this.config.createYupSchemaEntry;
     return entryBuilder({ name, key, value, config: this.config });

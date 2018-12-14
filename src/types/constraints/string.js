@@ -9,7 +9,7 @@ class StringConstraint extends Constraint {
     super(typer, opts);
   }
 
-  isValidConstraint(value) {
+  isValidConstraintValue(value) {
     return this.typer.isStringType(value);
   }
 

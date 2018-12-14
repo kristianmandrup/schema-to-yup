@@ -13,7 +13,7 @@ class RegExpConstraint extends Constraint {
     return this.toRegExp(value);
   }
 
-  isValidConstraint(value) {
+  isValidConstraintValue(value) {
     return this.isRegExpLike(value);
   }
 

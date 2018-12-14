@@ -1,5 +1,5 @@
-const { YupMixed } = require("./mixed");
-const { buildYup } = require("../");
+const { YupMixed } = require("../mixed");
+const { buildYup } = require("../..");
 
 class ObjectHandler {
   constructor(config) {
@@ -26,7 +26,7 @@ class YupObject extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "object";
-    this.base = this.yup.object();
+    this.validatorTypeApi = this.yup.object();
     this.properties = this.value.properties;
   }
 
@@ -64,7 +64,7 @@ class YupObject extends YupMixed {
         $names,
         this.valErrMessage("propertyNames") || this.valErrMessage("noUnknown")
       );
-    this.base = newBase || this.base;
+    this.validatorTypeApi = newBase || this.base;
     return this;
   }
 }

@@ -84,13 +84,13 @@ class Constraint extends TypeMatcher {
     if (this.isNothing(cv)) {
       return this;
     }
-    if (!this.isValidConstraint(cv)) {
+    if (!this.isValidConstraintValue(cv)) {
       return this.handleInvalidConstraint(name, cv);
     }
   }
 
   // override
-  isValidConstraint(value) {
+  isValidConstraintValue(value) {
     return true;
   }
 

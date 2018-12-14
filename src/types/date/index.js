@@ -27,7 +27,7 @@ class YupDate extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "date";
-    this.base = this.yup.date();
+    this.validatorTypeApi = this.yup.date();
   }
 
   static create(obj) {

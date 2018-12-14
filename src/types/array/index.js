@@ -29,7 +29,7 @@ class YupArray extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "array";
-    this.base = this.yup.array();
+    this.validatorTypeApi = this.yup.array();
     this.createYupSchemaEntry = this.config.createYupSchemaEntry;
   }
 
@@ -106,7 +106,7 @@ class YupArray extends YupMixed {
       return this.handleInvalidSize("maxItems", $max);
     }
     const newBase = $max && this.base.max($max);
-    this.base = newBase || this.base;
+    this.validatorTypeApi = newBase || this.base;
     return this;
   }
 

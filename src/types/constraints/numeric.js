@@ -13,7 +13,7 @@ class NumericConstraint extends Constraint {
     return this.typer.toNumber(value);
   }
 
-  isValidConstraint(value) {
+  isValidConstraintValue(value) {
     return this.typer.isNumberLike(value) && this.checkValue(value);
   }
 

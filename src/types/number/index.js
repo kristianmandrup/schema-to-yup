@@ -26,7 +26,7 @@ class YupNumber extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = this.normalizeNumType(obj.type);
-    this.base = this.yup.number();
+    this.validatorTypeApi = this.yup.number();
     this.range = createRange(this);
   }
 

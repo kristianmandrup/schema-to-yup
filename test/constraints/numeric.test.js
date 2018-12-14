@@ -15,5 +15,33 @@ describe("createNumericConstraint", () => {
     test("map", () => {
       expect(constraint.map).toBe(map);
     });
+
+    describe("isValidConstraintValue", () => {
+      test("valid number string - number", () => {
+        expect(constraint.isValidConstraintValue("12")).toBeTruthy();
+      });
+
+      test("invalid date string - throws", () => {
+        expect(constraint.isValidConstraintValue("xa")).toBeFalsy();
+      });
+
+      test("integer - Date", () => {
+        expect(constraint.isValidConstraintValue(1)).toBeTruthy();
+      });
+    });
+
+    describe("transform", () => {
+      test("valid number string - number", () => {
+        expect(constraint.transform("12") instanceof Number).toBeTruthy();
+      });
+
+      test("invalid date string - throws", () => {
+        expect(constraint.transform("xa") instanceof Number).toBeFalsy();
+      });
+
+      test("integer - Date", () => {
+        expect(constraint.transform(1) instanceof Number).toBeTruthy();
+      });
+    });
   });
 });

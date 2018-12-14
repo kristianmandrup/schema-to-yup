@@ -27,7 +27,7 @@ class YupString extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "string";
-    this.base = this.yup.string();
+    this.validatorTypeApi = this.yup.string();
   }
 
   static create(obj) {

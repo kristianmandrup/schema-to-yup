@@ -86,7 +86,7 @@ class YupBaseType extends Base {
           type
         })
       : this.switchOnConstraint(method, error);
-    this.base = newBase || this.base;
+    this.validatorTypeApi = newBase || this.base;
     return this;
   }
 
@@ -102,7 +102,7 @@ class YupBaseType extends Base {
   yupValueConstraint(name, value, method) {
     method = method || name;
     if (this.base[method]) {
-      this.base = this.base[method](value);
+      this.validatorTypeApi = this.base[method](value);
     }
     return this;
   }

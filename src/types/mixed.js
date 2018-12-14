@@ -7,7 +7,7 @@ function toYupMixed(obj, config = {}) {
 class YupMixed extends YupBaseType {
   constructor(obj) {
     super(obj);
-    this.base = this.yup.mixed();
+    this.validatorTypeApi = this.yup.mixed();
   }
 
   static create(obj) {
