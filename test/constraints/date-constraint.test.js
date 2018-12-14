@@ -1,24 +1,27 @@
 const { createDateConstraint } = require("./_imports");
 
 describe("createDateConstraint", () => {
-  const map = {
+  const value = {
     max: ["maxDate", "max"],
     min: ["minDate", "min"]
   };
   const opts = {
-    map
+    value
   };
   const typer = {
     constraints: {
       type: "string",
       format: "date"
-    }
+    },
+    applyConstraintToValidator: (name, value, method) => true,
+    constraintsAdded: (name, value, method) => true,
+    toDate: val => Date(val)
   };
 
   describe("instance", () => {
     const constraint = createDateConstraint(typer, opts);
     test("map", () => {
-      expect(constraint.map).toBe(map);
+      expect(constraint.map).toBe(value);
     });
 
     describe("isValidDateType", () => {
@@ -27,7 +30,7 @@ describe("createDateConstraint", () => {
       });
 
       test("invalid date string - true", () => {
-        expect(() => constraint.isValidDateType("1-2012")).toBeTrue();
+        expect(constraint.isValidDateType("1-2012")).toBeTruthy();
       });
 
       test("integer - true", () => {
@@ -41,7 +44,7 @@ describe("createDateConstraint", () => {
       });
 
       test("invalid date string - false", () => {
-        expect(() => constraint.isValidDate("1-2012")).toBeFalsy();
+        expect(constraint.isValidDate("1-2012")).toBeFalsy();
       });
 
       test("integer - true", () => {
@@ -55,7 +58,7 @@ describe("createDateConstraint", () => {
       });
 
       test("invalid date string - false", () => {
-        expect(() => constraint.isDateParseable("1-2012")).toBeFalsy();
+        expect(constraint.isDateParseable("1-2012")).toBeFalsy();
       });
 
       test("integer - false (also warns)", () => {
@@ -83,7 +86,7 @@ describe("createDateConstraint", () => {
       });
 
       test("invalid date string - false", () => {
-        expect(() => constraint.isDateLike("1-2012")).toBeFalsy();
+        expect(constraint.isDateLike("1-2012")).toBeFalsy();
       });
 
       test("integer - true", () => {
@@ -97,7 +100,7 @@ describe("createDateConstraint", () => {
       });
 
       test("invalid date string - false", () => {
-        expect(() => constraint.isValidConstraintValue("1-2012")).toBeFalsy();
+        expect(constraint.isValidConstraintValue("1-2012")).toBeFalsy();
       });
 
       test("integer - true", () => {
@@ -107,9 +110,8 @@ describe("createDateConstraint", () => {
 
     describe("transformToDate", () => {
       test("valid date string - Date", () => {
-        expect(
-          constraint.transformToDate("1-1-2012") instanceof Date
-        ).toBeTruthy();
+        const validDate = constraint.transformToDate("1-1-2012");
+        expect(validDate instanceof Date).toBeTruthy();
       });
 
       test("invalid date string - throws", () => {
