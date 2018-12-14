@@ -8,7 +8,12 @@ describe("createDateConstraint", () => {
   const opts = {
     map
   };
-  const typer = {};
+  const typer = {
+    constraints: {
+      type: "string",
+      format: "date"
+    }
+  };
 
   describe("instance", () => {
     const constraint = createDateConstraint(typer, opts);

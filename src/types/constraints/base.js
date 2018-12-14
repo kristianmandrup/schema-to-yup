@@ -4,13 +4,13 @@ const alwaysTrueFn = () => true;
 const identity = val => val;
 
 class Constraint extends TypeMatcher {
-  constructor(typer, { value, errorMsg, checkValue, toYupArg }) {
+  constructor(typer, { value, errorMsg, checkValue, toArgument }) {
     super(typer.config);
     this.map = this.mapFor(value);
     this.errorMsg = errorMsg || "";
     this.checkValue = checkValue || alwaysTrueFn;
     this.typer = typer;
-    this.toYupArg = toYupArg || identity;
+    this.toArgument = toArgument || identity;
     this.delegates.map(name => {
       const delegate = typer[name];
       if (!delegate) {
@@ -34,7 +34,7 @@ class Constraint extends TypeMatcher {
   }
 
   get delegates() {
-    return ["constraints", "yupValueConstraint", "constraintsAdded"];
+    return ["constraints", "applyConstraintToValidator"];
   }
 
   add() {
@@ -52,8 +52,8 @@ class Constraint extends TypeMatcher {
   processConstraints(method, names = []) {
     names.map(name => {
       const value = this.validateAndTransform(name);
-      const arg = this.toYupArg(value);
-      this.yupValueConstraint(name, value, arg, method);
+      const arg = this.toArgument(value);
+      this.applyConstraintToValidator(name, value, arg, method);
     });
     return this;
   }

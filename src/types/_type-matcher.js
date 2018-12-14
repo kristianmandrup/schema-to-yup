@@ -18,7 +18,7 @@ class TypeMatcher extends Loggable {
   }
 
   isNumberLike(num) {
-    return !isNaN(this.toNumber(num));
+    return this.isNumberType(this.toNumber(num));
   }
 
   isNumberType(num) {

@@ -5,7 +5,11 @@ describe("createStringConstraint", () => {
   const opts = {
     map
   };
-  const typer = {};
+  const typer = {
+    constraints: {
+      type: "string"
+    }
+  };
   const constraint = createStringConstraint(typer, opts);
 
   describe("instance", () => {

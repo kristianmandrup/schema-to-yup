@@ -9,7 +9,7 @@ const {
   createNumericConstraint,
   StringConstraint,
   createStringConstraint
-} = require("../../../src/constraints");
+} = require("../../src/types/constraints");
 
 module.exports = {
   Constraint,

@@ -93,13 +93,13 @@ class YupBaseType extends Base {
   addValueConstraint(name, value, { error, type }) {
     const constraintType = type || this.constraintsTypeMap[name];
     if (!constraintType) {
-      return this.yupValueConstraint(name, value, error);
+      return this.applyConstraintToValidator(name, value, error);
     }
     const typedContraintFactory = this.typedContraintFactoryMap[constraintType];
     typedContraintFactory(value);
   }
 
-  yupValueConstraint(name, value, method) {
+  applyConstraintToValidator(name, value, method) {
     method = method || name;
     if (this.base[method]) {
       this.validatorTypeApi = this.base[method](value);
