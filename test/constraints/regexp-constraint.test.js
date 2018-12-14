@@ -1,20 +1,22 @@
 const { createRegExpConstraint } = require("./_imports");
 
 describe("createRegExpConstraint", () => {
-  const map = "pattern";
+  const pattern = "pattern";
   const opts = {
-    map
+    value: pattern
   };
   const typer = {
     constraints: {
       type: "string"
-    }
+    },
+    applyConstraintToValidator: (name, value, method) => true,
+    toRegExp: val => new RegExp(val)
   };
   const constraint = createRegExpConstraint(typer, opts);
 
   describe("instance", () => {
     test("map", () => {
-      expect(constraint.map).toBe({ pattern });
+      expect(constraint.map).toEqual({ pattern });
     });
 
     describe("isRegExpLike", () => {
@@ -22,8 +24,8 @@ describe("createRegExpConstraint", () => {
         expect(constraint.isRegExpLike("12")).toBeTruthy();
       });
 
-      test("number - false", () => {
-        expect(constraint.isRegExpLike(14)).toBeFalsy();
+      test("number - true", () => {
+        expect(constraint.isRegExpLike(14)).toBeTruthy();
       });
 
       test("RegExp - true", () => {
@@ -36,8 +38,8 @@ describe("createRegExpConstraint", () => {
         expect(constraint.isValidConstraintValue("12")).toBeTruthy();
       });
 
-      test("number - throws", () => {
-        expect(constraint.isValidConstraintValue(14)).toBeFalsy();
+      test("number - true", () => {
+        expect(constraint.isValidConstraintValue(14)).toBeTruthy();
       });
 
       test("RegExp - true", () => {
@@ -46,15 +48,15 @@ describe("createRegExpConstraint", () => {
     });
 
     describe("transform", () => {
-      test("string - true", () => {
+      test("string - RegExp", () => {
         expect(constraint.transform("12") instanceof RegExp).toBeTruthy();
       });
 
-      test("number - throws", () => {
-        expect(() => constraint.transform(14)).toThrow();
+      test("number - RegExp", () => {
+        expect(constraint.transform(14) instanceof RegExp).toBeTruthy();
       });
 
-      test("RegExp - true", () => {
+      test("RegExp - RegExp", () => {
         expect(
           constraint.transform(new RegExp("x")) instanceof RegExp
         ).toBeTruthy();

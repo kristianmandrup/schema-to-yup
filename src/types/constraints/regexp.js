@@ -22,7 +22,19 @@ class RegExpConstraint extends Constraint {
   }
 
   isRegExpLike(value) {
-    return value instanceof RegExp || this.isStringType(value);
+    return this.isRegExpConvertible(value);
+  }
+
+  isRegExpConvertible(value) {
+    return (
+      this.isRegExpType(value) ||
+      this.isStringType(value) ||
+      this.isNumberType(value)
+    );
+  }
+
+  isRegExpType(value) {
+    return value instanceof RegExp;
   }
 
   get explainConstraintValidMsg() {

@@ -15,7 +15,6 @@ describe("createNumericConstraint", () => {
       type: "number"
     },
     applyConstraintToValidator: (name, value, method) => true,
-    constraintsAdded: (name, value, method) => true,
     toNumber: val => Number(val)
   };
   typer.isNumberLike = val => !isNaN(typer.toNumber(val));
@@ -59,7 +58,6 @@ describe("createNumericConstraint", () => {
 
       test("invalid date string - throws", () => {
         const nan = constraint.transform("xa");
-        console.log({ nan: isNumber(NaN) });
         expect(isNumber(nan)).toBeFalsy();
       });
 
