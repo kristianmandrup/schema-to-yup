@@ -1,21 +1,17 @@
-const { Base } = require("./types");
-const types = require("./types");
+import { Base } from "./base";
+import * as validators from "./validators";
+import { ObjectDef } from "./_types";
 
-const {
-  toYupString,
-  toYupNumberSchemaEntry,
-  toYupBoolean,
-  toYupArray,
-  toYupObject,
-  toYupMixed,
-  toYupDate
-} = types;
+class SchemaEntryError extends Error {}
 
-console.log({ Base });
+export class SchemaEntry extends Base {
+  key: string;
+  name: string;
+  type: string;
+  types: ObjectDef;
+  value: ObjectDef;
+  config: ObjectDef;
 
-class YupSchemaEntryError extends Error {}
-
-class YupSchemaEntry extends Base {
   constructor({ name, key, value, config }) {
     super(config);
     this.key = key;
@@ -99,9 +95,3 @@ class YupSchemaEntry extends Base {
     return toYupMixed(obj || this.obj, this.config);
   }
 }
-
-module.exports = {
-  YupSchemaEntryError,
-  YupSchemaEntry,
-  Base
-};
