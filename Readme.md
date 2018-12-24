@@ -649,6 +649,19 @@ Uses [jest](jestjs.io/) for unit testing.
 - Could use some refactoring using the latest infrastructure (see `NumericConstraint`)
 - Please help add more test coverage and help refactor to make this lib even more awesome :)
 
+## Development
+
+Current development is taking place on [convert-ts](https://github.com/kristianmandrup/json-schema-to-yup/tree/convert-ts) branch.
+
+On his branch:
+
+- all the code has been converted to TypeScript
+- constraint classes for String, Numeric, RegExp etc.
+- Validator building has been extracted so you can add support for any Validator, such as Forg
+- more...
+
+If you would like to further improved this library or add support for more validators than Yup, please help on this branch. Cheers!
+
 ## Ideas and suggestions
 
 Please feel free to come with ideas and suggestions on how to further improve this library.
