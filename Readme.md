@@ -651,7 +651,7 @@ Uses [jest](jestjs.io/) for unit testing.
 
 ## Development
 
-Current development is taking place on [convert-ts](https://github.com/kristianmandrup/json-schema-to-yup/tree/convert-ts) branch.
+Current development is taking place on [refactoring](https://github.com/kristianmandrup/json-schema-to-yup/tree/refactoring) branch.
 
 On his branch:
 
