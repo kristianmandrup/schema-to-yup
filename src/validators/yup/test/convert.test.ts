@@ -1,6 +1,5 @@
-const { buildYup } = require("../");
-
-var yup = require("yup");
+import { buildSchema } from "../";
+import yup from "yup";
 
 //check validity
 describe("yup schema validation", () => {
@@ -36,7 +35,7 @@ describe("name schema", () => {
     }
   };
 
-  const schema = buildYup(nameJsonSchema);
+  const schema = buildSchema(nameJsonSchema);
 
   test("invalid json is invalid", async () => {
     const valid = schema.isValidSync({ blip: "jimmy" });
@@ -74,7 +73,7 @@ test("converts JSON schema to Yup Schema and validates", async () => {
   };
 
   const errMessages = {};
-  const schema = buildYup(json, { errMessages });
+  const schema = buildSchema(json, { errMessages });
   // console.dir(schema)
   const valid = await schema.isValid({ name: "jimmy", age: 24 });
   expect(valid).toBe(true);

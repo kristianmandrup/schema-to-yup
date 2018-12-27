@@ -1,4 +1,5 @@
-const { buildYup } = require("../");
+import { buildSchema } from "../";
+import yup from "yup";
 
 let valid;
 test("yup inserts custom messages for required fields", () => {
@@ -19,7 +20,7 @@ test("yup inserts custom messages for required fields", () => {
     }
   };
   try {
-    const yupSchema = buildYup(message, config);
+    const yupSchema = buildSchema(message, config);
     valid = yupSchema.validateSync({
       foo: "dfds"
     });
@@ -45,7 +46,7 @@ test("yup inserts custom messages for regex fields", () => {
     }
   };
   try {
-    const yupSchema = buildYup(message2, config);
+    const yupSchema = buildSchema(message2, config);
     valid = yupSchema.validateSync({
       amazon: "dfds"
     });

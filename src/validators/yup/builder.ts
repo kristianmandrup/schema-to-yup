@@ -2,7 +2,7 @@ import yup from "yup";
 import { Builder } from "../base/builder";
 export { extendYupApi } from "./validator-bridge";
 
-function buildSchema(schema, config = {}) {
+export function buildSchema(schema, config = {}) {
   return new YupBuilder(schema, config).validatorSchema;
 }
 

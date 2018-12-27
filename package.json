@@ -21,6 +21,8 @@
     "yup": "^0.26.0"
   },
   "devDependencies": {
+    "@cesium133/forgjs": "^2.1.4",
+    "@types/jest": "^23.3.10",
     "jest": "^23.0.0"
   },
   "keywords": [

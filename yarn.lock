@@ -102,6 +102,14 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
+"@cesium133/forgjs@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@cesium133/forgjs/-/forgjs-2.1.4.tgz#53c56a2a93bbafbb2351904cf004bc5325a5b410"
+
+"@types/jest@^23.3.10":
+  version "23.3.10"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.10.tgz#4897974cc317bf99d4fe6af1efa15957fa9c94de"
+
 abab@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.0.tgz#aba0ab4c5eee2d4c79d3487d85450fb2376ebb0f"

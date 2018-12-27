@@ -105,13 +105,13 @@ export class Builder extends Base {
       //   key
       // });
       const value = properties[key];
-      const yupSchemaEntry = this.propToValidatorSchemaEntry({
+      const schemaEntry = this.propToValidatorSchemaEntry({
         name,
         key,
         value
       });
-      this.logInfo("propsToShape", { key, yupSchemaEntry });
-      acc[key] = yupSchemaEntry;
+      this.logInfo("propsToShape", { key, schemaEntry });
+      acc[key] = schemaEntry;
       return acc;
     }, {});
   }

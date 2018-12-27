@@ -1,6 +1,8 @@
 import { Validator, Rule } from "@cesium133/forgjs";
+import { Loggable } from "../../src";
 
 export class ForgValidator extends Loggable {
+  validator: any;
   constructor(config = {}) {
     super(config);
   }
