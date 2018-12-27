@@ -10,7 +10,7 @@ export function toSchemaEntry(obj, config = {}) {
 }
 
 export function buildSchemaEntry(obj) {
-  return YupString.schemaEntryFor(obj);
+  return StringSchemaEntry.schemaEntryFor(obj);
 }
 
 export function createSchemaEntry(obj) {
@@ -25,8 +25,12 @@ export class StringSchemaEntry extends MixedSchemaEntry {
     this.type = "string";
   }
 
+  static schemaEntryFor(obj) {
+    return StringSchemaEntry.create(obj).schemaEntry;
+  }
+
   static create(obj) {
-    return new YupString(obj);
+    return new StringSchemaEntry(obj);
   }
 
   get enabled() {
@@ -93,11 +97,3 @@ export class StringSchemaEntry extends MixedSchemaEntry {
     };
   }
 }
-
-module.exports = {
-  toYupString,
-  toYupStringSchemaEntry,
-  YupString,
-  StringGuard,
-  createStringGuard
-};

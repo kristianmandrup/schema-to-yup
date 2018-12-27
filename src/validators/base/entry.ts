@@ -1,8 +1,24 @@
-import { Base } from "./base";
-import * as validators from "./validators";
-import { ObjectDef } from "./_types";
+import { Base } from "../../base";
+import * as validators from "..";
+import { ObjectDef } from "../../_types";
 
-class SchemaEntryError extends Error {}
+export class SchemaEntryError extends Error {}
+
+export { Base };
+
+export function createSchemaEntry(opts: any = {}) {
+  const { name, key, value, config } = opts;
+  const { SchemaEntry = null } = config || {};
+  if (!SchemaEntry) {
+    throw "missing SchemaEntry class in config";
+  }
+  return new SchemaEntry({
+    name,
+    key,
+    value,
+    config
+  }).toEntry();
+}
 
 export class SchemaEntry extends Base {
   key: string;
@@ -35,7 +51,7 @@ export class SchemaEntry extends Base {
   }
 
   error(msg) {
-    throw new YupSchemaEntryError(msg);
+    throw new SchemaEntryError(msg);
   }
 
   toEntry() {

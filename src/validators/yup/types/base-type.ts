@@ -22,6 +22,7 @@ export class BaseType extends Base {
   baseAliasMap: ObjectDef = {};
   messages: ObjectDef = {};
   type: string = "mixed";
+  schemaEntry: any;
 
   constructor({ key, value, config }: any = {}) {
     super(config);
