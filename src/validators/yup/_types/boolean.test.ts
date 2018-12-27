@@ -1,24 +1,24 @@
-const { types } = require("../../src");
-const { toYupBoolean } = types;
+import { boolean } from "./_imports";
+const { toSchemaEntry } = boolean;
 
 const isBoolean = fieldDef => fieldDef && fieldDef.type === "boolean";
 const config = { isBoolean };
 const create = fieldDef => {
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
-  return toYupBoolean(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createBool = value => {
   const obj = { value, config, key: "x", type: "boolean" };
-  return toYupBoolean(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createBoolNoKey = value => {
   const obj = { value, config, type: "boolean" };
-  return toYupBoolean(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
-describe("toYupBoolean", () => {
+describe("toSchemaEntry", () => {
   test("null - %", () => {
     expect(create(null)).toBeFalsy();
   });

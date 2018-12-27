@@ -7,19 +7,19 @@ const proceed = (obj, config = {}) => {
   return createArrayGuard(obj, config).verify();
 };
 
-function toYupArray(obj, config = {}) {
-  return proceed(obj, config) && buildYupArray(obj);
+export function toSchemaEntry(obj, config = {}) {
+  return proceed(obj, config) && createSchemaEntry(obj);
 }
 
-function toYupArraySchemaEntry(obj, config = {}) {
+export function toArraySchemaEntry(obj, config = {}) {
   return proceed(obj, config) && buildSchemaEntry(obj);
 }
 
-function buildSchemaEntry(obj) {
+export function buildSchemaEntry(obj) {
   return ArraySchemaEntry.schemaEntryFor(obj);
 }
 
-function buildYupArray(obj) {
+export function createSchemaEntry(obj) {
   return ArraySchemaEntry.create(obj);
 }
 

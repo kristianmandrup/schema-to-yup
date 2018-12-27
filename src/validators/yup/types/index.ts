@@ -4,6 +4,7 @@ import * as boolean from "./boolean";
 import * as number from "./number";
 import * as object from "./object";
 import * as string from "./string";
+import * as date from "./date";
 
-export { mixed, array, boolean, number, object, string };
-export const types = { mixed, array, boolean, number, object, string };
+export { mixed, array, boolean, number, object, string, date };
+export const types = { mixed, array, boolean, number, object, string, date };

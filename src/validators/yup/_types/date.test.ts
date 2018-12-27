@@ -1,24 +1,23 @@
-const { types } = require("../../src");
-const { toYupDate } = types;
-const yup = require("yup");
+import { date } from "./_imports";
+const { toSchemaEntry } = date;
 
 const isDate = fieldDef => fieldDef && fieldDef.type === "date";
 const config = { isDate };
 const create = fieldDef => {
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
-  return toYupDate(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const oneDay = 86400000;
 
 const createDate = value => {
   const obj = { value, config, key: "createdAt", type: "date" };
-  return toYupDate(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createDateNoKey = value => {
   const obj = { value, config, type: "date" };
-  return toYupDate(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createSchema = createdAt => {
@@ -27,7 +26,7 @@ const createSchema = createdAt => {
   });
 };
 
-describe("toYupDate", () => {
+describe("toSchemaEntry", () => {
   test("null - %", () => {
     expect(create(null)).toBeFalsy();
   });

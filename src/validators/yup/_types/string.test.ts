@@ -1,22 +1,21 @@
-const yup = require("yup");
-const { types } = require("../../src");
-const { toYupString } = types;
+import { object } from "./_imports";
+const { toSchemaEntry } = object;
 
 const isString = fieldDef => fieldDef && fieldDef.type === "string";
 const config = { isString };
 const create = fieldDef => {
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
-  return toYupString(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createStr = (value, key = "x") => {
   const obj = { value, config, key, type: "string" };
-  return toYupString(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createStrNoKey = value => {
   const obj = { value, config, type: "string" };
-  return toYupString(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createSchema = (schemaEntry, label = "value") => {
@@ -25,7 +24,7 @@ const createSchema = (schemaEntry, label = "value") => {
   });
 };
 
-describe("toYupString", () => {
+describe("toSchemaEntry", () => {
   test("null - %", () => {
     expect(create(null)).toBeFalsy();
   });

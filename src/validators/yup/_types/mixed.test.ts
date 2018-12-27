@@ -1,17 +1,18 @@
-const { yup, toYupMixed } = require("./_imports");
+import { mixed } from "./_imports";
+const { toSchemaEntry } = mixed;
 
 const defaultConfig = {};
 
 const create = (fieldDef, config = defaultConfig) => {
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
-  return toYupMixed(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
-describe("toYupMixed", () => {
+describe("toSchemaEntry", () => {
   describe("instance", () => {
     const max = 42;
     const min = 10;
-    const mixed = create({
+    const mixed: any = create({
       strict: true,
       maximum: max,
       minimum: min

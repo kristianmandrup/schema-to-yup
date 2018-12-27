@@ -6,7 +6,11 @@ const proceed = (obj, config = {}) => {
   return createObjectGuard(obj, config).verify();
 };
 
-export function toYupObjectSchemaEntry(obj, config = {}) {
+export function toSchemaEntry(obj, config = {}) {
+  return proceed(obj, config) && createSchemaEntry(obj);
+}
+
+export function toObjectSchemaEntry(obj, config = {}) {
   return proceed(obj, config) && buildSchemaEntry(obj);
 }
 

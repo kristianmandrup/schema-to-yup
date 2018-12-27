@@ -1,20 +1,15 @@
-const { Guard } = require("../_guard");
+import { Guard } from "../guard";
 
-class DateGuard extends Guard {
-  constructor(config) {
-    this.config = config;
+export class DateGuard extends Guard {
+  constructor(obj, config) {
+    super(obj, config);
   }
 
-  isValid(obj) {
-    return this.config.isDate(obj);
+  isValid() {
+    return this.config.isDate(this.obj);
   }
 }
 
-function createDateGuard(obj, config) {
+export function createDateGuard(obj, config) {
   return new DateGuard(obj, config);
 }
-
-module.exports = {
-  createDateGuard,
-  DateGuard
-};

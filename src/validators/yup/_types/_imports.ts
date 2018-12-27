@@ -1,2 +1,3 @@
 import yup from "yup";
-export { array } from "../types";
+export { array, boolean, date, object, mixed, string } from "../types";
+export { yup };

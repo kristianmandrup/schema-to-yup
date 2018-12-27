@@ -1,21 +1,22 @@
-const { yup, toYupArray } = require("./_imports");
+import { yup, array } from "./_imports";
+const { toSchemaEntry } = array;
 
 const isArray = fieldDef => fieldDef && fieldDef.type === "array";
 const defaultConfig = { isArray };
 
 const create = (fieldDef, config = defaultConfig) => {
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
-  return toYupArray(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createArr = (value, config = defaultConfig) => {
   const obj = { value, config, key: "list", type: "array" };
-  return toYupArray(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createArrNoKey = (value, config = defaultConfig) => {
   const obj = { value, config, type: "array" };
-  return toYupArray(obj, config);
+  return toSchemaEntry(obj, config);
 };
 
 const createSchema = list => {
@@ -24,7 +25,7 @@ const createSchema = list => {
   });
 };
 
-describe("toYupArray", () => {
+describe("toSchemaEntry", () => {
   test("null - %", () => {
     expect(create(null)).toBeFalsy();
   });
