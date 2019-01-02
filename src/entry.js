@@ -1,7 +1,4 @@
-const { Base } = require("./types");
-const types = require("./types");
-
-const {
+import { Base,
   toYupString,
   toYupNumberSchemaEntry,
   toYupBoolean,
@@ -9,7 +6,7 @@ const {
   toYupObject,
   toYupMixed,
   toYupDate
-} = types;
+} from './types';
 
 class YupSchemaEntryError extends Error {}
 
@@ -92,7 +89,7 @@ class YupSchemaEntry extends Base {
   }
 }
 
-module.exports = {
+export {
   YupSchemaEntryError,
   YupSchemaEntry,
   Base

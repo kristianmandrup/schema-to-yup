@@ -1,4 +1,4 @@
-const { Base } = require("./base");
+import { Base } from './base';
 
 class Guard extends Base {
   constructor(obj, config) {
@@ -15,6 +15,6 @@ class Guard extends Base {
   }
 }
 
-module.exports = {
+export {
   Guard
 };

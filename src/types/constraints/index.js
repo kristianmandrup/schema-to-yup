@@ -1,10 +1,10 @@
-const { Constraint } = require("./base");
-const { DateConstraint } = require("./date");
-const { RegExpConstraint } = require("./regexp");
-const { NumericConstraint } = require("./numeric");
-const { StringConstraint } = require("./string");
+import { Constraint } from './base';
+import { DateConstraint } from './date';
+import { RegExpConstraint } from './regexp';
+import { NumericConstraint } from './numeric';
+import { StringConstraint } from './string';
 
-module.exports = {
+export {
   Constraint,
   DateConstraint,
   RegExpConstraint,

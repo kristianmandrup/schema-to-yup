@@ -1,4 +1,4 @@
-const { Constraint } = require("./base");
+import { Constraint } from './base';
 
 function createRegExpConstraint(typer, map) {
   return new RegExpConstraint(typer, map);
@@ -30,7 +30,7 @@ class RegExpConstraint extends Constraint {
   }
 }
 
-module.exports = {
+export {
   createRegExpConstraint,
   RegExpConstraint
 };

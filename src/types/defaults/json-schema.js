@@ -16,4 +16,4 @@ const defaults = {
   isRequired: obj => obj && obj.required
 };
 
-module.exports = defaults;
+export default defaults;

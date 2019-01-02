@@ -1,4 +1,4 @@
-const { NumericConstraint } = require("../constraints/numeric");
+import { NumericConstraint } from '../constraints/numeric';
 
 function createRange(typer) {
   return new RangeConstraint(typer);
@@ -19,7 +19,7 @@ class RangeConstraint extends NumericConstraint {
   }
 }
 
-module.exports = {
+export {
   createRange,
   RangeConstraint
 };

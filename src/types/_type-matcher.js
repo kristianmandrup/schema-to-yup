@@ -1,4 +1,4 @@
-const { Loggable } = require("./_loggable");
+import { Loggable } from './_loggable';
 
 class TypeMatcher extends Loggable {
   constructor(config = {}) {
@@ -38,6 +38,6 @@ class TypeMatcher extends Loggable {
   }
 }
 
-module.exports = {
+export {
   TypeMatcher
 };

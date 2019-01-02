@@ -11,6 +11,6 @@ function createYupSchemaEntry({ name, key, value, config }) {
   }).toEntry();
 }
 
-module.exports = {
+export {
   createYupSchemaEntry
 };

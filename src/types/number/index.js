@@ -1,6 +1,6 @@
-const { YupMixed } = require("../mixed");
-const { createRange, Range } = require("./range-constraint");
-const { createNumberGuard, NumberGuard } = require("./guard");
+import { YupMixed } from '../mixed';
+import { createRange, Range } from './range-constraint';
+import { createNumberGuard, NumberGuard } from './guard';
 
 const proceed = (obj, config = {}) => {
   return createNumberGuard(obj, config).verify();
@@ -113,7 +113,7 @@ class YupNumber extends YupMixed {
   }
 }
 
-module.exports = {
+export {
   toYupNumber,
   toYupNumberSchemaEntry,
   YupNumber,
