@@ -1,10 +1,10 @@
-import { Base,
+import { 
+  Base,
   toYupString,
   toYupNumberSchemaEntry,
   toYupBoolean,
   toYupArray,
   toYupObject,
-  toYupMixed,
   toYupDate
 } from './types';
 
@@ -24,8 +24,7 @@ class YupSchemaEntry extends Base {
       boolean: toYupBoolean,
       array: toYupArray,
       object: toYupObject,
-      date: toYupDate,
-      mixed: toYupMixed
+      date: toYupDate
     };
   }
 
@@ -82,10 +81,6 @@ class YupSchemaEntry extends Base {
 
   date(obj) {
     return toYupDate(obj || this.obj, this.config);
-  }
-
-  mixed(obj) {
-    return toYupMixed(obj || this.obj, this.config);
   }
 }
 
