@@ -1,7 +1,8 @@
 {
   "name": "json-schema-to-yup",
   "version": "1.8.7",
-  "main": "src/index.js",
+  "source": "src/index.js",
+  "main": "dist/index.js",
   "description": "Build a Yup schema from a JSON Schema. Also supports custom/alternative schema models such as GraphQL type defs",
   "license": "MIT",
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
@@ -20,7 +21,8 @@
     "yup": "^0.26.0"
   },
   "devDependencies": {
-    "jest": "^23.0.0"
+    "jest": "^23.0.0",
+    "microbundle": "^0.9.0"
   },
   "keywords": [
     "yup",
@@ -37,6 +39,8 @@
     "typedef"
   ],
   "scripts": {
+    "build": "rm -rf ./dist && microbundle build -f cjs --target browser",
+    "prepublishOnly": "npm run build",
     "test": "jest"
   }
 }
