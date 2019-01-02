@@ -1,4 +1,4 @@
-const { YupMixed } = require("./mixed");
+import { YupMixed } from './mixed';
 
 class DateHandler {
   constructor(config) {
@@ -104,7 +104,7 @@ class YupDate extends YupMixed {
   }
 }
 
-module.exports = {
+export {
   toYupDate,
   YupDate,
   DateHandler

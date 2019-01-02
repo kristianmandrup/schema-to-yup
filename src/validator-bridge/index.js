@@ -23,10 +23,12 @@
 // - `uuid`
 
 // const validator = require("validator");
-const dashify = require("dashify");
+import dashify from 'dashify';
+
 //const camelCase = require("camelcase");
-const camelCase = require("uppercamelcase");
-const { addMethod, string } = require("yup");
+import camelCase from 'uppercamelcase';
+
+import { addMethod, string } from 'yup';
 
 const toConstraintsMap = (values, opts = {}) => {
   return values.reduce((acc, value) => {
@@ -189,7 +191,7 @@ function extendYupApi({
   });
 }
 
-module.exports = {
+export {
   extendYupApi,
   toConstraintsMap
 };

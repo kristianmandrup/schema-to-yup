@@ -13,4 +13,4 @@ const defaults = {
   isRequired: obj => obj && !obj.isNullable
 };
 
-module.exports = defaults;
+export default defaults;

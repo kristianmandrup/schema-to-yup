@@ -1,4 +1,4 @@
-const yup = require("yup");
+import * as yup from 'yup';
 
 class ConvertYupSchemaError extends Error {}
 
@@ -37,7 +37,7 @@ const defaults = {
     }, {})
 };
 
-const { Base } = require("./base");
+import { Base } from './base';
 
 class YupMixed extends Base {
   constructor({ key, value, config } = {}) {
@@ -241,7 +241,7 @@ class YupMixed extends Base {
   }
 }
 
-module.exports = {
+export {
   defaults,
   errValKeys,
   YupMixed,

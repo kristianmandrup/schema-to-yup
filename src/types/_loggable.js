@@ -26,6 +26,6 @@ class Loggable {
   }
 }
 
-module.exports = {
+export {
   Loggable
 };

@@ -1,19 +1,13 @@
-const {
-  YupMixed,
-  toYupMixed,
-  ConvertYupSchemaError,
-  errValKeys,
-  defaults
-} = require("./mixed");
-const { YupArray, toYupArray } = require("./array");
-const { YupBoolean, toYupBoolean } = require("./boolean");
-const { YupNumber, toYupNumber, toYupNumberSchemaEntry } = require("./number");
-const { YupObject, toYupObject } = require("./object");
-const { YupString, toYupString } = require("./string");
-const { YupDate, toYupDate } = require("./date");
-const { Base } = require("./base");
+import { YupMixed, ConvertYupSchemaError, errValKeys, defaults } from './mixed';
+import { YupArray, toYupArray } from './array';
+import { YupBoolean, toYupBoolean } from './boolean';
+import { YupNumber, toYupNumber, toYupNumberSchemaEntry } from './number';
+import { YupObject, toYupObject } from './object';
+import { YupString, toYupString } from './string';
+import { YupDate, toYupDate } from './date';
+import { Base } from './base';
 
-module.exports = {
+export {
   errValKeys,
   defaults,
   YupArray,
@@ -30,7 +24,6 @@ module.exports = {
   YupDate,
   toYupDate,
   YupMixed,
-  toYupMixed,
   ConvertYupSchemaError,
   Base
 };

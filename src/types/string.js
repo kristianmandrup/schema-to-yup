@@ -1,4 +1,4 @@
-const { YupMixed } = require("./mixed");
+import { YupMixed } from './mixed';
 
 class StringHandler {
   constructor(config) {
@@ -129,7 +129,7 @@ class YupString extends YupMixed {
   }
 }
 
-module.exports = {
+export {
   toYupString,
   YupString,
   StringHandler

@@ -1,6 +1,6 @@
-const yup = require("yup");
-const { Base, YupSchemaEntry, YupSchemaEntryError } = require("./entry");
-const { extendYupApi } = require("./validator-bridge");
+import * as yup from 'yup';
+import { Base, YupSchemaEntry, YupSchemaEntryError } from './entry';
+import { extendYupApi } from './validator-bridge';
 
 function isObject(type) {
   return type && type === "object";
@@ -128,10 +128,10 @@ class YupBuilder extends Base {
   }
 }
 
-const types = require("./types");
-const { createYupSchemaEntry } = require("./create-entry");
+import * as types from './types';
+import { createYupSchemaEntry } from './create-entry';
 
-module.exports = {
+export {
   buildYup,
   YupBuilder,
   YupSchemaEntry,

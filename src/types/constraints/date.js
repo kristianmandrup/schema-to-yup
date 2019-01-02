@@ -1,4 +1,4 @@
-const { Constraint } = require("../constraints/base");
+import { Constraint } from '../constraints/base';
 
 function createDateConstraint(typer, map) {
   return new DateConstraint(typer, map);
@@ -52,7 +52,7 @@ class DateConstraint extends Constraint {
   }
 }
 
-module.exports = {
+export {
   createDateConstraint,
   DateConstraint
 };

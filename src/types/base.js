@@ -1,6 +1,6 @@
-const defaults = require("./defaults");
-const { createYupSchemaEntry } = require("../create-entry");
-const { TypeMatcher } = require("./_type-matcher");
+import defaults from './defaults';
+import { createYupSchemaEntry } from '../create-entry';
+import { TypeMatcher } from './_type-matcher';
 
 class Base extends TypeMatcher {
   constructor(config = {}) {
@@ -15,6 +15,6 @@ class Base extends TypeMatcher {
   }
 }
 
-module.exports = {
+export {
   Base
 };

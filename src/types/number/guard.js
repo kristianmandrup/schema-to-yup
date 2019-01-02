@@ -1,4 +1,4 @@
-const { Guard } = require("../_guard");
+import { Guard } from '../_guard';
 
 class NumberGuard extends Guard {
   constructor(obj, config) {
@@ -14,7 +14,7 @@ function createNumberGuard(obj, config) {
   return new NumberGuard(obj, config);
 }
 
-module.exports = {
+export {
   createNumberGuard,
   NumberGuard
 };

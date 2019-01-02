@@ -1,4 +1,4 @@
-const { YupMixed } = require("./mixed");
+import { YupMixed } from './mixed';
 
 class BooleanHandler {
   constructor(config) {
@@ -30,7 +30,7 @@ class YupBoolean extends YupMixed {
   }
 }
 
-module.exports = {
+export {
   toYupBoolean,
   YupBoolean
 };

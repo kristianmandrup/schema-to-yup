@@ -1,4 +1,9 @@
-module.exports = {
-  "json-schema": require("./json-schema"),
-  "type-def": require("./type-def")
+import jsonSchemaDefaults from "./json-schema";
+import typeDefDefaults from "./type-def";
+
+const defaults = {
+  "json-schema": jsonSchemaDefaults,
+  "type-def": typeDefDefaults
 };
+
+export default defaults

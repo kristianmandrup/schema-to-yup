@@ -1,4 +1,4 @@
-const { Constraint } = require("../constraints/base");
+import { Constraint } from '../constraints/base';
 
 function createNumericConstraint(typer) {
   return new NumericConstraint(typer);
@@ -22,7 +22,7 @@ class NumericConstraint extends Constraint {
   }
 }
 
-module.exports = {
+export {
   createNumericConstraint,
   NumericConstraint
 };

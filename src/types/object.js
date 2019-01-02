@@ -1,6 +1,5 @@
-const { YupMixed } = require("./mixed");
-
-const { buildYup } = require("../");
+import { YupMixed } from './mixed';
+import { buildYup } from '../';
 
 class ObjectHandler {
   constructor(config) {
@@ -68,7 +67,7 @@ class YupObject extends YupMixed {
   }
 }
 
-module.exports = {
+export {
   toYupObject,
   YupObject,
   ObjectHandler

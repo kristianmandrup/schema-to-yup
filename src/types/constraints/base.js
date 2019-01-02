@@ -1,4 +1,4 @@
-const { TypeMatcher } = require("../_type-matcher");
+import { TypeMatcher } from '../_type-matcher';
 
 class Constraint extends TypeMatcher {
   constructor(typer, map) {
@@ -91,6 +91,6 @@ class Constraint extends TypeMatcher {
   }
 }
 
-module.exports = {
+export {
   Constraint
 };

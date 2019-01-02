@@ -1,5 +1,5 @@
-const { toConstraintsMap, extendYupApi } = require(".");
-const yup = require("yup");
+import { toConstraintsMap, extendYupApi } from '.';
+import * as yup from 'yup';
 describe("toConstraintsMap", () => {
   test("no args - throws", () => {
     expect(() => toConstraintsMap()).toThrow();

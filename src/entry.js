@@ -1,15 +1,12 @@
-const { Base } = require("./types");
-const types = require("./types");
-
-const {
+import { 
+  Base,
   toYupString,
   toYupNumberSchemaEntry,
   toYupBoolean,
   toYupArray,
   toYupObject,
-  toYupMixed,
   toYupDate
-} = types;
+} from './types';
 
 class YupSchemaEntryError extends Error {}
 
@@ -27,8 +24,7 @@ class YupSchemaEntry extends Base {
       boolean: toYupBoolean,
       array: toYupArray,
       object: toYupObject,
-      date: toYupDate,
-      mixed: toYupMixed
+      date: toYupDate
     };
   }
 
@@ -86,13 +82,9 @@ class YupSchemaEntry extends Base {
   date(obj) {
     return toYupDate(obj || this.obj, this.config);
   }
-
-  mixed(obj) {
-    return toYupMixed(obj || this.obj, this.config);
-  }
 }
 
-module.exports = {
+export {
   YupSchemaEntryError,
   YupSchemaEntry,
   Base

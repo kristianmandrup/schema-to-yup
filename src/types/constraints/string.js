@@ -1,4 +1,4 @@
-const { Constraint } = require("./base");
+import { Constraint } from './base';
 
 function createStringConstraint(typer, map) {
   return new StringConstraint(typer, map);
@@ -18,7 +18,7 @@ class StringConstraint extends Constraint {
   }
 }
 
-module.exports = {
+export {
   createStringConstraint,
   StringConstraint
 };

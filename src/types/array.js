@@ -1,8 +1,8 @@
 // See:
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
 
-const { YupMixed } = require("./mixed");
-const { Base } = require("./base");
+import { YupMixed } from './mixed';
+import { Base } from './base';
 
 class ArrayHandler extends Base {
   constructor(config) {
@@ -148,7 +148,7 @@ class YupArray extends YupMixed {
   }
 }
 
-module.exports = {
+export {
   toYupArray,
   YupArray,
   ArrayHandler
