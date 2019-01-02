@@ -46,7 +46,7 @@
     "typedef"
   ],
   "scripts": {
-    "build": "rm -rf ./dist && microbundle build -f cjs --target browser",
+    "build": "rm -rf ./dist && microbundle build -f cjs",
     "prepublishOnly": "npm run build",
     "test": "jest"
   }
