@@ -1,4 +1,4 @@
-import yup from 'yup';
+import * as yup from 'yup';
 
 class ConvertYupSchemaError extends Error {}
 

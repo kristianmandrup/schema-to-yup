@@ -1,5 +1,5 @@
 import { toConstraintsMap, extendYupApi } from '.';
-import yup from 'yup';
+import * as yup from 'yup';
 describe("toConstraintsMap", () => {
   test("no args - throws", () => {
     expect(() => toConstraintsMap()).toThrow();

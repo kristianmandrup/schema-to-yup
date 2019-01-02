@@ -1,4 +1,4 @@
-import yup from 'yup';
+import * as yup from 'yup';
 import { Base, YupSchemaEntry, YupSchemaEntryError } from './entry';
 import { extendYupApi } from './validator-bridge';
 
