@@ -1,6 +1,6 @@
 import { NumericConstraint } from '../constraints/numeric';
 
-function createRange(typer) {
+function createRangeConstraint(typer) {
   return new RangeConstraint(typer);
 }
 
@@ -20,6 +20,6 @@ class RangeConstraint extends NumericConstraint {
 }
 
 export {
-  createRange,
+  createRangeConstraint,
   RangeConstraint
 };

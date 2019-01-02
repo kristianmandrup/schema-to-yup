@@ -3,11 +3,11 @@ const {
   createNumberGuard,
   toYupNumber,
   toYupNumberSchemaEntry,
-  createRange
+  createRangeConstraint
 } = require("../../../src/types/number");
 module.exports = {
   createNumberGuard,
-  createRange,
+  createRangeConstraint,
   toYupNumber,
   toYupNumberSchemaEntry,
   yup
