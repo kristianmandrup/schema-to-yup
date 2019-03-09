@@ -1,4 +1,4 @@
-import { 
+import {
   Base,
   toYupString,
   toYupNumberSchemaEntry,
@@ -6,13 +6,14 @@ import {
   toYupArray,
   toYupObject,
   toYupDate
-} from './types';
+} from "./types";
 
 class YupSchemaEntryError extends Error {}
 
 class YupSchemaEntry extends Base {
-  constructor({ name, key, value, config }) {
+  constructor({ schema, name, key, value, config }) {
     super(config);
+    this.schema = schema;
     this.key = key;
     this.value = value;
     this.config = config;
@@ -52,6 +53,7 @@ class YupSchemaEntry extends Base {
 
   get obj() {
     return {
+      schema: this.schema,
       key: this.key,
       value: this.value,
       type: this.type,
@@ -84,8 +86,4 @@ class YupSchemaEntry extends Base {
   }
 }
 
-export {
-  YupSchemaEntryError,
-  YupSchemaEntry,
-  Base
-};
+export { YupSchemaEntryError, YupSchemaEntry, Base };

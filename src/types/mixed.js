@@ -46,11 +46,13 @@ function isObjectType(obj) {
 import { Base } from "./base";
 
 class YupMixed extends Base {
-  constructor({ key, value, config } = {}) {
+  constructor({ schema, key, value, config } = {}) {
     super(config);
     this.validateOnCreate(key, value);
     this.yup = yup;
     this.key = key;
+    this.schema = schema;
+    this.properties = schema.properties;
     this.value = value;
     this.constraints = this.getConstraints();
     this.format = value.format || this.constraints.format;
@@ -156,10 +158,9 @@ class YupMixed extends Base {
       }
 
       this.onConstraintAdded({ name: constraintName, value: values });
+      console.log("constraint", { method, values });
 
-      const newBase = constraintValue
-        ? constraintFn(...values, errFn)
-        : constraintFn(errFn);
+      const newBase = constraintFn(...values, errFn);
       return newBase;
     }
     this.warn("buildConstraint: missing value or values options");
@@ -213,31 +214,63 @@ class YupMixed extends Base {
     return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
   }
 
+  keysArePresent(keys) {
+    const properties = this.properties;
+    return keys.every(key => properties[key] !== undefined);
+  }
+
   when() {
     const whenObjs = this.constraints.when;
     if (!isObjectType(whenObjs)) return this;
     const keys = Object.keys(whenObjs);
+    const present = this.keysArePresent(keys);
+
     const configObj = keys.reduce((acc, key) => {
       // clone
-      const whenObj = {
-        ...whenObjs[key]
-      };
-      const { then, otherwise } = whenObj;
+      const whenObj = whenObjs[key];
+      const { then, otherwise, is } = whenObj;
+
+      console.log({
+        whenObj,
+        then,
+        is,
+        value: this.value,
+        properties: this.properties
+      });
+
+      if (is === true) {
+        // test if keys are present in current object
+        if (!present) {
+          console.log({ is, present, acc });
+          return acc;
+        }
+      }
+      if (is === false) {
+        // test if keys are not present in current object
+        if (present) {
+          console.log({ is, present, acc });
+          return acc;
+        }
+      }
 
       if (then) {
+        console.log("TODO: build then schema", then);
         // recursive apply then object
-        whenObj.then = buildYup(then, this.config);
+        // whenObj.then = buildYup(then, this.config);
       }
       if (otherwise) {
-        whenObj.otherwise = buildYup(then, this.config);
+        console.log("TODO: build otherwise schema", then);
+        // whenObj.otherwise = buildYup(otherwise, this.config);
       }
 
-      acc = acc.assign(whenObj);
+      acc = Object.assign(acc, whenObj);
+      // console.log({ acc });
       return acc;
     }, {});
 
     const values = [keys, configObj];
 
+    console.log("when", values);
     this.addConstraint("when", { values, errName: "when" });
 
     return this;

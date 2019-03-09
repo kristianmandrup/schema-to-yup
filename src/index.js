@@ -1,6 +1,6 @@
-import * as yup from 'yup';
-import { Base, YupSchemaEntry, YupSchemaEntryError } from './entry';
-import { extendYupApi } from './validator-bridge';
+import * as yup from "yup";
+import { Base, YupSchemaEntry, YupSchemaEntryError } from "./entry";
+import { extendYupApi } from "./validator-bridge";
 
 function isObject(type) {
   return type && type === "object";
@@ -114,12 +114,19 @@ class YupBuilder extends Base {
   propToYupSchemaEntry({ name, key, value = {} }) {
     const entryBuilder =
       this.createYupSchemaEntry || this.config.createYupSchemaEntry;
-    return entryBuilder({ name, key, value, config: this.config });
+    return entryBuilder({
+      schema: this.schema,
+      name,
+      key,
+      value,
+      config: this.config
+    });
   }
 
-  createYupSchemaEntry({ name, key, value, config }) {
+  createYupSchemaEntry({ schema, name, key, value, config }) {
     // return createYupSchemaEntry({ name, key, value, config });
     return new YupSchemaEntry({
+      schema,
       name,
       key,
       value,
@@ -128,8 +135,8 @@ class YupBuilder extends Base {
   }
 }
 
-import * as types from './types';
-import { createYupSchemaEntry } from './create-entry';
+import * as types from "./types";
+import { createYupSchemaEntry } from "./create-entry";
 
 export {
   buildYup,
