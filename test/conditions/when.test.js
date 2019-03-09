@@ -1,15 +1,8 @@
-const { buildYup } = require("../..");
+const { createWhenCondition } = require("../../src/conditions");
 
 describe("when", () => {
-  const createTester = schema => {
-    return (json, expectedResult) => {
-      const valid = schema.isValidSync(json);
-      expect(valid).toBe(expectedResult);
-    };
-  };
-
   describe("then", () => {
-    const whenThenjson = {
+    const schema = {
       title: "user",
       type: "object",
       properties: {
@@ -28,99 +21,81 @@ describe("when", () => {
       }
     };
 
-    const json = {
-      valid: {
-        name: "mike",
-        age: 32
-      },
-      invalid: {
-        name: "mike"
-      }
-    };
+    const properties = schema.properties;
+    const ageObj = properties.age;
 
-    const yupSchema = buildYup(whenThenjson);
-    const tester = createTester(yupSchema);
-
-    test.only("valid", () => {
-      tester(json.valid, true);
+    const whenCondition = createWhenCondition({
+      schema,
+      properties,
+      key: "age",
+      value: ageObj,
+      when: ageObj.when
     });
 
-    test.only("invalid", () => {
-      tester(json.invalid, false);
-    });
-  });
+    describe("validateAndConfigure", () => {
+      test("not object - false", () => {
+        const when = "hello";
 
-  describe("then otherwise", () => {
-    const whenThenOtherwisejson = {
-      title: "user",
-      type: "object",
-      properties: {
-        isBig: {
-          type: "string",
-          min: 1
-        },
-        level: {
-          type: "number",
-          required: true,
-          when: {
-            isBig: {
-              is: true,
-              then: {
-                min: 2
-              },
-              otherwise: {
-                min: 10
-              }
-            }
-          }
-        }
-      }
-    };
+        const v = whenCondition.validateAndConfigure(when);
+        expect(v).toBe(false);
+      });
+      test("empty object - false", () => {
+        const when = {};
 
-    const $json = {
-      isBig: {
-        valid: {
-          isBig: "x",
-          level: 3
-        },
-        invalid: {
-          isBig: "x",
-          level: 0
-        }
-      },
-      isNotBig: {
-        isBig: "",
-        age: 3
-      },
-      invalid: {
-        isBig: "",
-        level: 0
-      }
-    };
-
-    const yupSchema = buildYup(whenThenOtherwisejson);
-    const tester = createTester(yupSchema);
-
-    describe("isBig", () => {
-      const json = $json.isBig;
-      test("valid", () => {
-        tester(json.valid, true);
+        const v = whenCondition.validateAndConfigure(when);
+        expect(v).toBe(false);
       });
 
-      test("valid", () => {
-        tester(json.invalid, false);
+      test("object single is key - false", () => {
+        const when = {
+          is: true
+        };
+
+        const v = whenCondition.validateAndConfigure(when);
+        expect(v).toBe(true);
+      });
+
+      test("object single is and then keys - true", () => {
+        const when = {
+          is: true,
+          then: "required"
+        };
+
+        const v = whenCondition.validateAndConfigure(when);
+        expect(v).toBe(true);
       });
     });
 
-    describe("isNotBig", () => {
-      const json = $json.isNotBig;
-      test("valid", () => {
-        tester(json.valid, true);
+    describe("whenEntryFor", () => {
+      test("true, present - true", () => {
+        let whenObj = {
+          min: 2
+        };
+        const modfWhenObj = whenCondition.whenEntryFor(whenObj, "then");
+        expect(modfWhenObj.then).toBeDefined();
+      });
+    });
+
+    describe("checkIs", () => {
+      test("true, present - true", () => {
+        const check = whenCondition.checkIs(true, true);
+        expect(check).toBe(true);
       });
 
-      test("valid", () => {
-        tester(json.invalid, false);
+      test("false, present - false", () => {
+        const check = whenCondition.checkIs(false, true);
+        expect(check).toBe(false);
       });
+    });
+
+    test("constraintValue", () => {
+      const { constraintValue } = whenCondition;
+      expect(constraintValue).toBeDefined();
+    });
+
+    test("constraint", () => {
+      const { constraint } = whenCondition;
+      expect(constraint).toBeDefined();
     });
   });
 });

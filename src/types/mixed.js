@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import { createYupSchemaEntry } from "../create-entry";
+
 // import { buildYup } from "../";
 
 class ConvertYupSchemaError extends Error {}
@@ -44,6 +45,7 @@ function isObjectType(obj) {
 }
 
 import { Base } from "./base";
+import { createWhenCondition } from "../conditions";
 
 class YupMixed extends Base {
   constructor(opts = {}) {
@@ -251,55 +253,19 @@ class YupMixed extends Base {
   }
 
   when() {
-    const whenObjs = this.constraints.when;
-    if (!isObjectType(whenObjs)) return this;
-    const keys = Object.keys(whenObjs);
-    const present = this.keysArePresent(keys);
+    const when = this.constraints.when;
+    if (!isObjectType(when)) return this;
+    const constraint = createWhenCondition({
+      key: this.key,
+      value: this.value,
+      schema: this.schema,
+      properties: this.properties,
+      when
+    }).constraint;
 
-    const configObj = keys.reduce((acc, key) => {
-      // clone
-      const whenObj = whenObjs[key];
-      const { then, otherwise, is } = whenObj;
+    if (!constraint) return this;
 
-      console.log({
-        whenObj,
-        then,
-        is,
-        value: this.value,
-        properties: this.properties
-      });
-
-      if (is === true) {
-        // test if keys are present in current object
-        if (!present) {
-          return acc;
-        }
-      }
-      if (is === false) {
-        // test if keys are not present in current object
-        if (present) {
-          return acc;
-        }
-      }
-
-      if (then) {
-        console.log({ then });
-        whenObj.then = this.createEntry(then, "then");
-      }
-      if (otherwise) {
-        console.log({ otherwise });
-        whenObj.otherwise = this.createEntry(otherwise, "otherwise");
-      }
-
-      acc = Object.assign(acc, whenObj);
-      // console.log({ acc });
-      return acc;
-    }, {});
-
-    const values = [keys, configObj];
-
-    console.log("when", values);
-    this.addConstraint("when", { values, errName: "when" });
+    this.addConstraint("when", { values: constraint, errName: "when" });
 
     return this;
   }
