@@ -1,4 +1,6 @@
-import * as yup from 'yup';
+import * as yup from "yup";
+// import { createYupSchemaEntry } from "../create-entry";
+import { buildYup } from "../";
 
 class ConvertYupSchemaError extends Error {}
 
@@ -37,7 +39,7 @@ const defaults = {
     }, {})
 };
 
-import { Base } from './base';
+import { Base } from "./base";
 
 class YupMixed extends Base {
   constructor({ key, value, config } = {}) {
@@ -98,6 +100,7 @@ class YupMixed extends Base {
   convert() {
     this.addMappedConstraints();
     this.oneOf().notOneOf();
+    this.when();
     return this;
   }
 
@@ -109,28 +112,58 @@ class YupMixed extends Base {
     });
   }
 
-  addConstraint(propName, { constraintName, method, value, errName } = {}) {
+  buildConstraint(propName, opts = {}) {
+    let { constraintName, method, yup, value, errName } = opts;
+    yup = yup || this.base;
     const propValue = this.constraints[propName];
-    if (propValue) {
-      constraintName = constraintName || propName;
-      method = method || constraintName;
-      if (!this.base[method]) {
-        this.warn(`Yup has no such API method: ${method}`);
-        return this;
-      }
-      const constraintFn = this.base[method].bind(this.base);
-      const errFn =
-        this.valErrMessage(constraintName) ||
-        (errName && this.valErrMessage(errName));
+    if (!propValue) {
+      return yup;
+    }
+    constraintName = constraintName || propName;
+    method = method || constraintName;
+    if (!yup[method]) {
+      this.warn(`Yup has no such API method: ${method}`);
+      return this;
+    }
+    const constraintFn = yup[method].bind(yup);
+    const errFn =
+      this.valErrMessage(constraintName) ||
+      (errName && this.valErrMessage(errName));
+
+    if (value) {
+      // call yup constraint function with single value arguments (default)
       const constraintValue = value === true ? propValue : value;
+
       this.onConstraintAdded({ name: constraintName, value: constraintValue });
 
       const newBase = constraintValue
         ? constraintFn(constraintValue, errFn)
         : constraintFn(errFn);
-      this.base = newBase || this.base;
+      return newBase;
+    } else if (values) {
+      // call yup constraint function with multiple arguments
+      if (!Array.isArray(values)) {
+        this.warn(
+          "buildConstraint: values option must be an array of arguments"
+        );
+        return yup;
+      }
+
+      this.onConstraintAdded({ name: constraintName, value: values });
+
+      const newBase = constraintValue
+        ? constraintFn(...values, errFn)
+        : constraintFn(errFn);
+      return newBase;
+    } else {
+      this.warn("buildConstraint: missing value or values options");
+      return yup;
     }
-    return this;
+  }
+
+  addConstraint(propName, opts) {
+    const contraint = buildConstraint(propName, opts);
+    this.base = contraint || this.base;
   }
 
   onConstraintAdded({ name, value }) {
@@ -172,6 +205,35 @@ class YupMixed extends Base {
       ? this.errMessages[this.key][constraint]
       : undefined;
     return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
+  }
+
+  when() {
+    const whenObjs = this.constraints.when;
+    const keys = Object.keys(whenObjs);
+    const configObj = keys.reduce((acc, key) => {
+      // clone
+      const whenObj = {
+        ...whenObjs[key]
+      };
+      const { then, otherwise } = whenObj;
+
+      if (then) {
+        // recursive apply then object
+        whenObj.then = buildYup(then, this.config);
+      }
+      if (otherwise) {
+        whenObj.otherwise = buildYup(then, this.config);
+      }
+
+      acc = acc.assign(whenObj);
+      return acc;
+    }, {});
+
+    const values = [keys, configObj];
+
+    this.addConstraint("when", { values, errName: "when" });
+
+    return this;
   }
 
   $const() {
@@ -241,9 +303,4 @@ class YupMixed extends Base {
   }
 }
 
-export {
-  defaults,
-  errValKeys,
-  YupMixed,
-  ConvertYupSchemaError
-};
+export { defaults, errValKeys, YupMixed, ConvertYupSchemaError };
