@@ -39,6 +39,10 @@ const defaults = {
     }, {})
 };
 
+function isObjectType(obj) {
+  return obj === Object(obj);
+}
+
 import { Base } from "./base";
 
 class YupMixed extends Base {
@@ -113,7 +117,7 @@ class YupMixed extends Base {
   }
 
   buildConstraint(propName, opts = {}) {
-    let { constraintName, method, yup, value, errName } = opts;
+    let { constraintName, method, yup, value, values, errName } = opts;
     yup = yup || this.base;
     const propValue = this.constraints[propName];
     if (!propValue) {
@@ -140,7 +144,9 @@ class YupMixed extends Base {
         ? constraintFn(constraintValue, errFn)
         : constraintFn(errFn);
       return newBase;
-    } else if (values) {
+    }
+
+    if (values) {
       // call yup constraint function with multiple arguments
       if (!Array.isArray(values)) {
         this.warn(
@@ -155,15 +161,15 @@ class YupMixed extends Base {
         ? constraintFn(...values, errFn)
         : constraintFn(errFn);
       return newBase;
-    } else {
-      this.warn("buildConstraint: missing value or values options");
-      return yup;
     }
+    this.warn("buildConstraint: missing value or values options");
+    return yup;
   }
 
   addConstraint(propName, opts) {
-    const contraint = buildConstraint(propName, opts);
+    const contraint = this.buildConstraint(propName, opts);
     this.base = contraint || this.base;
+    return this;
   }
 
   onConstraintAdded({ name, value }) {
@@ -209,6 +215,7 @@ class YupMixed extends Base {
 
   when() {
     const whenObjs = this.constraints.when;
+    if (!isObjectType(whenObjs)) return this;
     const keys = Object.keys(whenObjs);
     const configObj = keys.reduce((acc, key) => {
       // clone
