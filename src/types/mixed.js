@@ -216,56 +216,30 @@ class YupMixed extends Base {
     return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
   }
 
-  keysArePresent(keys) {
-    const properties = this.properties;
-    return keys.every(key => properties[key] !== undefined);
-  }
-
-  createEntry(entryObj, $key) {
-    if (typeof entryObj === "string") {
-      entryObj = {
-        [entryObj]: true
-      };
-    }
-    if (!isObjectType(entryObj)) {
-      this.error(`${$key}: must be a schema object`);
-    }
-    const value = {
-      type: this.type,
-      ...entryObj
-    };
-    console.log("build entry", value);
-    // recursive apply then object
-    const name = this.key;
-    const key = this.key;
+  createWhenConditionFor(when) {
     const opts = {
+      key: this.key,
+      value: this.value,
       schema: this.schema,
-      name,
-      key,
-      value,
-      config: this.config
+      properties: this.properties,
+      config: this.config,
+      when
     };
-    console.log("entry opts", opts);
-    const entry = createYupSchemaEntry(opts);
-    console.log({ entry });
-    return entry;
+    return createWhenCondition(opts);
   }
 
   when() {
     const when = this.constraints.when;
     if (!isObjectType(when)) return this;
-    const constraint = createWhenCondition({
-      key: this.key,
-      value: this.value,
-      schema: this.schema,
-      properties: this.properties,
-      when
-    }).constraint;
+    const { constraint } = this.createWhenConditionFor(when);
 
-    if (!constraint) return this;
-
-    this.addConstraint("when", { values: constraint, errName: "when" });
-
+    if (!constraint) {
+      this.warn(`Invalid when constraint for: ${when}`);
+      return this;
+    } else {
+      this.logInfo(`Adding when constraint for ${this.key}`, constraint);
+      this.addConstraint("when", { values: constraint, errName: "when" });
+    }
     return this;
   }
 
