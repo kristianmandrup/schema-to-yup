@@ -32,14 +32,11 @@ class YupBuilder extends Base {
         this.validSchema = true;
         return;
       } else {
-        this.error(
-          `invalid schema: must have a properties object: ${JSON.stringify(
-            properties
-          )}`
-        );
+        const props = JSON.stringify(properties);
+        this.error(`invalid schema: must have a properties object: ${props}`);
       }
     } else {
-      this.error(`invalid schema: must be an object type, was: ${type}`);
+      this.error(`invalid schema: must be type: "object", was type: ${type}`);
     }
   }
 
@@ -80,7 +77,12 @@ class YupBuilder extends Base {
       // });
       const value = properties[key];
       const isRequired = required.indexOf(key) >= 0;
-      value.required = this.isRequired(value) || isRequired;
+      if (isObjectType(value)) {
+        value.required = this.isRequired(value) || isRequired;
+      } else {
+        this.warn(`Bad value: ${value} must be an object`);
+      }
+
       acc[key] = value;
       return acc;
     }, {});
@@ -125,13 +127,14 @@ class YupBuilder extends Base {
 
   createYupSchemaEntry({ schema, name, key, value, config }) {
     // return createYupSchemaEntry({ name, key, value, config });
-    return new YupSchemaEntry({
+    const yupEntry = new YupSchemaEntry({
       schema,
       name,
       key,
       value,
       config
-    }).toEntry();
+    });
+    return yupEntry.toEntry();
   }
 }
 

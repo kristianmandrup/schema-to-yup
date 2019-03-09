@@ -38,7 +38,14 @@ class YupSchemaEntry extends Base {
   }
 
   toEntry() {
-    if (!this.isValidSchema()) this.error("Not a valid schema");
+    if (!this.isValidSchema()) {
+      const schema = JSON.stringify(this.schema);
+      this.error(
+        `Not a valid schema: type ${
+          this.type
+        } must be a string, was ${typeof this.type} ${schema}`
+      );
+    }
     const config = this.obj;
     return (
       this.string(config) ||

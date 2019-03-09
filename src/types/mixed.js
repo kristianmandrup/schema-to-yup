@@ -1,6 +1,6 @@
 import * as yup from "yup";
-// import { createYupSchemaEntry } from "../create-entry";
-import { buildYup } from "../";
+import { createYupSchemaEntry } from "../create-entry";
+// import { buildYup } from "../";
 
 class ConvertYupSchemaError extends Error {}
 
@@ -46,9 +46,10 @@ function isObjectType(obj) {
 import { Base } from "./base";
 
 class YupMixed extends Base {
-  constructor({ schema, key, value, config } = {}) {
-    super(config);
-    this.validateOnCreate(key, value);
+  constructor(opts = {}) {
+    super(opts.config);
+    const { schema, key, value, config } = opts;
+    this.validateOnCreate(key, value, opts);
     this.yup = yup;
     this.key = key;
     this.schema = schema;
@@ -73,12 +74,12 @@ class YupMixed extends Base {
     });
   }
 
-  validateOnCreate(key, value) {
+  validateOnCreate(key, value, opts) {
     if (!key) {
-      this.error("create: missing key");
+      this.error(`create: missing key ${JSON.stringify(opts)}`);
     }
     if (!value) {
-      this.error("create: missing value");
+      this.error(`create: missing value ${JSON.stringify(opts)}`);
     }
   }
 
@@ -219,6 +220,36 @@ class YupMixed extends Base {
     return keys.every(key => properties[key] !== undefined);
   }
 
+  createEntry(entryObj, $key) {
+    if (typeof entryObj === "string") {
+      entryObj = {
+        [entryObj]: true
+      };
+    }
+    if (!isObjectType(entryObj)) {
+      this.error(`${$key}: must be a schema object`);
+    }
+    const value = {
+      type: this.type,
+      ...entryObj
+    };
+    console.log("build entry", value);
+    // recursive apply then object
+    const name = this.key;
+    const key = this.key;
+    const opts = {
+      schema: this.schema,
+      name,
+      key,
+      value,
+      config: this.config
+    };
+    console.log("entry opts", opts);
+    const entry = createYupSchemaEntry(opts);
+    console.log({ entry });
+    return entry;
+  }
+
   when() {
     const whenObjs = this.constraints.when;
     if (!isObjectType(whenObjs)) return this;
@@ -241,26 +272,23 @@ class YupMixed extends Base {
       if (is === true) {
         // test if keys are present in current object
         if (!present) {
-          console.log({ is, present, acc });
           return acc;
         }
       }
       if (is === false) {
         // test if keys are not present in current object
         if (present) {
-          console.log({ is, present, acc });
           return acc;
         }
       }
 
       if (then) {
-        console.log("TODO: build then schema", then);
-        // recursive apply then object
-        // whenObj.then = buildYup(then, this.config);
+        console.log({ then });
+        whenObj.then = this.createEntry(then, "then");
       }
       if (otherwise) {
-        console.log("TODO: build otherwise schema", then);
-        // whenObj.otherwise = buildYup(otherwise, this.config);
+        console.log({ otherwise });
+        whenObj.otherwise = this.createEntry(otherwise, "otherwise");
       }
 
       acc = Object.assign(acc, whenObj);
