@@ -17,27 +17,31 @@ function isObjectType(obj) {
 class YupBuilder extends Base {
   constructor(schema, config = {}) {
     super(config);
+    config.buildYup = buildYup;
+
     this.schema = schema;
     const type = this.getType(schema);
     const props = this.getProps(schema);
     this.type = type;
     this.properties = props;
     this.required = this.getRequired(schema);
-    if (isObject(type)) {
-      if (isObjectType(props)) {
-        const name = this.getName(schema);
-        const properties = this.normalizeRequired(schema);
-        const shapeConfig = this.propsToShape({ properties, name, config });
-        this.shapeConfig = shapeConfig;
-        this.validSchema = true;
-        return;
-      } else {
-        const props = JSON.stringify(properties);
-        this.error(`invalid schema: must have a properties object: ${props}`);
-      }
-    } else {
+
+    if (!isObject(type)) {
       this.error(`invalid schema: must be type: "object", was type: ${type}`);
+      return;
     }
+
+    if (!isObjectType(props)) {
+      const props = JSON.stringify(properties);
+      this.error(`invalid schema: must have a properties object: ${props}`);
+      return;
+    }
+    const name = this.getName(schema);
+    const properties = this.normalizeRequired(schema);
+    const shapeConfig = this.propsToShape({ properties, name, config });
+
+    this.shapeConfig = shapeConfig;
+    this.validSchema = true;
   }
 
   getRequired(obj) {

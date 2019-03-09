@@ -1,12 +1,19 @@
+// import { YupSchemaEntry } from "../entry";
+
 function isObjectType(obj) {
   return obj === Object(obj);
 }
 
+function isStringType(val) {
+  return typeof val === "string";
+}
+
 class WhenCondition {
   constructor(opts = {}) {
-    const { key, value, when, schema, properties, config } = opts;
+    const { type, key, value, when, schema, properties, config } = opts;
     this.when = when;
     this.key = key;
+    this.type = type;
     this.value = value;
     this.schema = schema;
     this.properties = properties;
@@ -15,8 +22,12 @@ class WhenCondition {
   }
 
   validate() {
+    if (!isStringType(this.type)) {
+      this.error(`invalid or mising type: ${type}`);
+    }
+
     if (!isObjectType(this.when)) {
-      this.error("invalid or mising when");
+      this.error(`invalid or mising when: ${when}`);
     }
   }
 
@@ -25,16 +36,17 @@ class WhenCondition {
     return keys.every(key => properties[key] !== undefined);
   }
 
-  createValue(entryObj, whenKey) {
+  createValue(entryObj, key) {
     if (typeof entryObj === "string") {
       entryObj = {
         [entryObj]: true
       };
     }
     if (!isObjectType(entryObj)) {
-      this.error(`${$key}: must be a schema object`);
+      this.error(`${key}: must be a schema object`);
     }
     return {
+      key: this.key,
       type: this.type,
       ...entryObj
     };
@@ -42,19 +54,24 @@ class WhenCondition {
 
   createEntryOpts(entryObj, whenKey) {
     // recursive apply then object
-    const value = createValue(entryObj, whenKey);
+    const value = this.createValue(entryObj, whenKey);
     return {
       schema: this.schema,
+      properties: this.properties,
       key: this.key,
+      type: this.type,
       value,
       config: this.config
     };
   }
 
+  createYupSchemaEntry(opts) {
+    return this.config.createYupSchemaEntry(opts);
+  }
+
   createEntry(entryObj, whenKey) {
-    const opts = createEntryOpts(entryObj, whenKey);
-    const entry = createYupSchemaEntry(opts);
-    return entry;
+    const opts = this.createEntryOpts(entryObj, whenKey);
+    return this.createYupSchemaEntry(opts);
   }
 
   hasKey(keys, findKey) {
@@ -105,8 +122,8 @@ class WhenCondition {
 
     if (!this.checkIs(is)) return acc;
 
-    whenObj = whenEntryFor(whenObj, "then");
-    whenObj = whenEntryFor(whenObj, "otherwise");
+    whenObj = this.whenEntryFor(whenObj, "then");
+    whenObj = this.whenEntryFor(whenObj, "otherwise");
 
     acc = Object.assign(acc, whenObj);
     return acc;
