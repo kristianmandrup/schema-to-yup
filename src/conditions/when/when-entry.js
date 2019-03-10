@@ -9,17 +9,19 @@ function isStringType(val) {
 export class WhenEntry {
   constructor(whenEntryObj, opts = {}) {
     this.whenEntryObj = whenEntryObj;
-    const { schema, properties, config, key, type } = opts;
+    const { schema, properties, config, key, keys, when, type } = opts;
     this.schema = schema;
+    this.when = when;
     this.properties = properties || {};
     this.key = key;
+    this.whenKeys = (when ? Object.keys(when) : keys) || [];
     this.type = type;
     this.config = config;
   }
 
   keysArePresent(keys) {
-    const properties = this.properties;
-    return keys.every(key => properties[key] !== undefined);
+    const whenKeys = this.whenKeys;
+    return keys.every(key => !!whenKeys.includes(key));
   }
 
   validateAndConfigure(whenEntryObj) {
@@ -60,7 +62,7 @@ export class WhenEntry {
       return false;
     }
 
-    this.whenEntryKeys = whenEntryKeys;
+    this.whenEntryKeys = this.keys || [];
     this.whenEntryKeysPresent = this.keysArePresent(this.whenEntryKeys);
 
     return true;
@@ -111,14 +113,14 @@ export class WhenEntry {
   checkIs(is, present) {
     present = present || this.whenEntryKeysPresent;
     const checked = (is === true && present) || (is === false && !present);
-    console.log({ checked, is, present });
+    // const keys = this.whenEntryKeys;
     return checked;
   }
 
   whenEntryFor(whenObj, key) {
     const entryDef = whenObj[key];
     if (!entryDef) return whenObj;
-    whenObj = this.createEntry(entryDef, "then");
+    whenObj[key] = this.createEntry(entryDef, key);
     return whenObj;
   }
 
@@ -127,6 +129,7 @@ export class WhenEntry {
     let whenEntryObj = {
       ...this.whenEntryObj
     };
+
     const { is } = whenEntryObj;
 
     const checkedIs = this.checkIs(is);
@@ -137,7 +140,6 @@ export class WhenEntry {
 
     whenEntryObj = this.whenEntryFor(whenEntryObj, "then");
     whenEntryObj = this.whenEntryFor(whenEntryObj, "otherwise");
-
     return whenEntryObj;
   }
 

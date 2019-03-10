@@ -62,7 +62,10 @@ class WhenCondition {
       return acc;
     }
 
+    const keys = Object.keys(whenEntryObj);
+
     const opts = {
+      keys,
       type: this.type,
       key: this.key,
       schema: this.schema,

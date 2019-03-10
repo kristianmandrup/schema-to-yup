@@ -5,7 +5,8 @@ import defaults from "../../src/types/defaults";
 import * as yup from "yup";
 
 function expectYupSchemaEntry(obj) {
-  expect(obj.tests).toBeDefined();
+  expect(obj.is).toBeDefined();
+  expect(obj.then.tests).toBeDefined();
 }
 
 describe("WhenEntry", () => {
@@ -38,6 +39,7 @@ describe("WhenEntry", () => {
 
   const type = "number";
   const key = "count";
+  const keys = Object.keys(countObj.when);
 
   // console.log({ config });
 
@@ -46,6 +48,7 @@ describe("WhenEntry", () => {
     properties,
     type,
     key,
+    // keys,
     value: countObj,
     when: countObj.when,
     config
@@ -167,6 +170,29 @@ describe("WhenEntry", () => {
       });
     });
 
+    describe("keysArePresent", () => {
+      test("every", () => {
+        const keys = ["name"];
+        const whenKeys = ["name", "count"];
+        const present = keys.every(key => !!whenKeys.includes(key));
+        expect(present).toBe(true);
+      });
+
+      test("all present - true", () => {
+        const keys = ["name"];
+        whenEntry.whenKeys = ["name", "count"];
+        const present = whenEntry.keysArePresent(keys);
+        expect(present).toBe(true);
+      });
+
+      test("one not present - false", () => {
+        const keys = ["name", "unknown"];
+        whenEntry.whenKeys = ["name", "count"];
+        const present = whenEntry.keysArePresent(keys);
+        expect(present).toBe(false);
+      });
+    });
+
     describe("checkIs", () => {
       test("true, present - true", () => {
         const check = whenEntry.checkIs(true, true);
@@ -200,13 +226,16 @@ describe("WhenEntry", () => {
   // https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema
 
   describe("manual setup", () => {
+    const whenObj = {
+      is: true,
+      then: yup.number().min(5)
+    };
+
+    // console.log("manual", { whenObj });
+
     var inst = yup.object({
       isBig: yup.boolean(),
-      count: yup.number().when("isBig", {
-        is: true,
-        then: yup.number().min(5),
-        otherwise: yup.number().min(0)
-      })
+      count: yup.number().when("isBig", whenObj)
     });
 
     test("validate", () => {
@@ -217,13 +246,14 @@ describe("WhenEntry", () => {
         count: 10
       };
       const result = inst.validateSync(value);
-      console.log({ result });
+
+      // console.log({ result });
 
       expect(result).toEqual(value);
     });
   });
 
-  describe.skip("use WhenEntry", () => {
+  describe("use WhenEntry", () => {
     const entry = createWhenEntry(
       {
         is: true,
@@ -235,16 +265,24 @@ describe("WhenEntry", () => {
         key: "count",
         type: "number",
         schema,
+        keys: ["name", "count"],
         properties,
         config
       }
-    ).entryObj;
-    console.log({ entry });
+    );
 
-    const { entryObj } = whenEntry;
-    console.log({ entryObj });
+    // console.log({ entry });
 
-    const count = yup.number().when("isBig", entry);
+    const { entryObj } = entry;
+
+    // console.log({ entryObj });
+
+    // whenEntry.whenEntryObj = whenEntryObj;
+
+    // const { entryObj } = whenEntry;
+    // console.log({ entryObj });
+
+    const count = yup.number().when("isBig", entryObj);
 
     var inst = yup.object({
       isBig: yup.boolean(),
@@ -260,7 +298,7 @@ describe("WhenEntry", () => {
       };
       const result = inst.validateSync(value);
 
-      console.log({ result });
+      // console.log({ result });
 
       expect(result).toEqual(value);
     });
