@@ -170,41 +170,41 @@ describe("WhenEntry", () => {
       });
     });
 
-    describe("keysArePresent", () => {
-      test("every", () => {
-        const keys = ["name"];
-        const whenKeys = ["name", "count"];
-        const present = keys.every(key => !!whenKeys.includes(key));
-        expect(present).toBe(true);
-      });
+    // describe("keysArePresent", () => {
+    //   test("every", () => {
+    //     const keys = ["name"];
+    //     const whenKeys = ["name", "count"];
+    //     const present = keys.every(key => !!whenKeys.includes(key));
+    //     expect(present).toBe(true);
+    //   });
 
-      test("all present - true", () => {
-        const keys = ["name"];
-        whenEntry.whenKeys = ["name", "count"];
-        const present = whenEntry.keysArePresent(keys);
-        expect(present).toBe(true);
-      });
+    //   test("all present - true", () => {
+    //     const keys = ["name"];
+    //     whenEntry.whenKeys = ["name", "count"];
+    //     const present = whenEntry.keysArePresent(keys);
+    //     expect(present).toBe(true);
+    //   });
 
-      test("one not present - false", () => {
-        const keys = ["name", "unknown"];
-        whenEntry.whenKeys = ["name", "count"];
-        const present = whenEntry.keysArePresent(keys);
-        expect(present).toBe(false);
-      });
-    });
+    //   test("one not present - false", () => {
+    //     const keys = ["name", "unknown"];
+    //     whenEntry.whenKeys = ["name", "count"];
+    //     const present = whenEntry.keysArePresent(keys);
+    //     expect(present).toBe(false);
+    //   });
+    // });
 
-    describe("checkIs", () => {
-      test("true, present - true", () => {
-        const check = whenEntry.checkIs(true, true);
-        expect(check).toBe(true);
-      });
+  //   describe("checkIs", () => {
+  //     test("true, present - true", () => {
+  //       const check = whenEntry.checkIs(true, true);
+  //       expect(check).toBe(true);
+  //     });
 
-      test("false, present - false", () => {
-        const check = whenEntry.checkIs(false, true);
-        expect(check).toBe(false);
-      });
-    });
-  });
+  //     test("false, present - false", () => {
+  //       const check = whenEntry.checkIs(false, true);
+  //       expect(check).toBe(false);
+  //     });
+  //   });
+  // });
 
   describe("calcEntryObj", () => {
     test("missing is constraint - unmodified", () => {

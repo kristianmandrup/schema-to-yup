@@ -2,10 +2,6 @@ function isObjectType(obj) {
   return obj === Object(obj);
 }
 
-function isStringType(val) {
-  return typeof val === "string";
-}
-
 export class WhenEntry {
   constructor(whenEntryObj, opts = {}) {
     this.whenEntryObj = whenEntryObj;
@@ -14,15 +10,15 @@ export class WhenEntry {
     this.when = when;
     this.properties = properties || {};
     this.key = key;
-    this.whenKeys = (when ? Object.keys(when) : keys) || [];
+    // this.whenKeys = (when ? Object.keys(when) : keys) || [];
     this.type = type;
     this.config = config;
   }
 
-  keysArePresent(keys) {
-    const whenKeys = this.whenKeys;
-    return keys.every(key => !!whenKeys.includes(key));
-  }
+  // keysArePresent(keys) {
+  //   const whenKeys = this.whenKeys;
+  //   return keys.every(key => !!whenKeys.includes(key));
+  // }
 
   validateAndConfigure(whenEntryObj) {
     whenEntryObj = whenEntryObj || this.whenEntryObj;
@@ -62,8 +58,8 @@ export class WhenEntry {
       return false;
     }
 
-    this.whenEntryKeys = this.keys || [];
-    this.whenEntryKeysPresent = this.keysArePresent(this.whenEntryKeys);
+    // this.whenEntryKeys = this.keys || [];
+    // this.whenEntryKeysPresent = this.keysArePresent(this.whenEntryKeys);
 
     return true;
   }
@@ -110,12 +106,12 @@ export class WhenEntry {
     return keys.find(key => key === findKey);
   }
 
-  checkIs(is, present) {
-    present = present || this.whenEntryKeysPresent;
-    const checked = (is === true && present) || (is === false && !present);
-    // const keys = this.whenEntryKeys;
-    return checked;
-  }
+  // checkIs(is, present) {
+  //   present = present || this.whenEntryKeysPresent;
+  //   const checked = (is === true && present) || (is === false && !present);
+  //   // const keys = this.whenEntryKeys;
+  //   return checked;
+  // }
 
   whenEntryFor(whenObj, key) {
     const entryDef = whenObj[key];
@@ -130,13 +126,12 @@ export class WhenEntry {
       ...this.whenEntryObj
     };
 
-    const { is } = whenEntryObj;
-
-    const checkedIs = this.checkIs(is);
-    if (!checkedIs) {
-      this.warn(`calcEntryObj: missing or invalid is constraint`, is);
-      return whenEntryObj;
-    }
+    // const { is } = whenEntryObj;
+    // const checkedIs = this.checkIs(is);
+    // if (!checkedIs) {
+    //   this.warn(`calcEntryObj: missing or invalid is constraint`, is);
+    //   return whenEntryObj;
+    // }
 
     whenEntryObj = this.whenEntryFor(whenEntryObj, "then");
     whenEntryObj = this.whenEntryFor(whenEntryObj, "otherwise");
