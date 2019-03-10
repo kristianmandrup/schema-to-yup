@@ -52,7 +52,7 @@ export class WhenEntry {
     // must have then condition
     if (!this.hasKey(whenEntryKeys, "then")) {
       this.warn(
-        `validateAndConfigure: when entry constraint missing 'then' constraint: ${whenEntryKeys}`,
+        `validateAndConfigure: when entry constraint missing 'then' or 'else' constraint: ${whenEntryKeys}`,
         whenEntryObj
       );
       return false;
@@ -106,6 +106,10 @@ export class WhenEntry {
     return keys.find(key => key === findKey);
   }
 
+  hasAnyKey(keys, findKeys) {
+    return keys.find(key => findKeys.includes(key));
+  }
+
   // checkIs(is, present) {
   //   present = present || this.whenEntryKeysPresent;
   //   const checked = (is === true && present) || (is === false && !present);
@@ -132,8 +136,9 @@ export class WhenEntry {
     //   this.warn(`calcEntryObj: missing or invalid is constraint`, is);
     //   return whenEntryObj;
     // }
+    const elseKey = whenEntryObj.then ? "else" : "otherwise";
 
-    whenEntryObj = this.whenEntryFor(whenEntryObj, "then");
+    whenEntryObj = this.whenEntryFor(whenEntryObj, thenKey);
     whenEntryObj = this.whenEntryFor(whenEntryObj, "otherwise");
     return whenEntryObj;
   }

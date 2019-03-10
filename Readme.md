@@ -15,7 +15,7 @@ According to the JSON schema specs, you are free to add extra metadata to the fi
 
 Install
 
-`npm install json-schema-to-yup -S` or `yarn add json-schema-to-yup`
+`npm install schema-to-yup -S` or `yarn add schema-to-yup`
 
 Use
 
@@ -69,7 +69,7 @@ const config = {
   }
 };
 
-const { buildYup } = require("json-schema-to-yup");
+const { buildYup } = require("schema-to-yup");
 const yupSchema = buildYup(json, config);
 // console.dir(schema)
 const valid = await yupSchema.isValid({
@@ -108,7 +108,7 @@ Note the `"required": true` for the `age` property (not natively supported by JS
 - `notRequired`
 - `oneOf` (`enum`, `anyOf`)
 - `notOneOf`
-- `when` (`if`) _NEW_
+- `when` _NEW_
 - `isType` _NEW_
 - `nullable` (`isNullable`) _NEW_
 
@@ -211,9 +211,13 @@ More advanced conditionals support will likely be included the next major releas
 
 You are welcome to continue the effort to support more conditional schema logic by continuing on this branch and making PRs.
 
-Support for `if` `then` and `else` constraints in JSON schema can be added using the `when` condition (ie. transalating to equivalent: `when`, `then` and `otherwise`).
+Support for `if` `then` and `else` [conditional JSON schema constraints](https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6) can likely be added using an approach like the `when` condition (perhaps by transalating to equivalent: `when`, `then` and `otherwise`).
 
-Likewise, `not` can be implemented via a single `notOneOf`.
+- `if` - This keyword's value MUST be a valid JSON Schema
+- `then` - This keyword's value MUST be a valid JSON Schema
+- `else` - This keyword's value MUST be a valid JSON Schema
+
+See also [json-schema-spec](https://github.com/json-schema-org/json-schema-spec/issues/180)
 
 ## Complex example
 

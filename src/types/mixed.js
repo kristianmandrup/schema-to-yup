@@ -251,7 +251,7 @@ class YupMixed extends Base {
   }
 
   when() {
-    const when = this.constraints.when || this.constraints.if;
+    const when = this.constraints.when;
     if (!isObjectType(when)) return this;
     const { constraint } = this.createWhenConditionFor(when);
 
@@ -300,14 +300,20 @@ class YupMixed extends Base {
   }
 
   $if() {
+    const $if = this.constraints.if;
+    // TODO: translate to when?
     return this;
   }
 
   $then() {
+    const $then = this.constraints.then;
+    // TODO: use with if translated to when?
     return this;
   }
 
   $else() {
+    const $else = this.constraints.else;
+    // TODO: use with if translated to when?
     return this;
   }
 
