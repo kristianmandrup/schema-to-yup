@@ -238,6 +238,8 @@ class YupMixed extends Base {
       return this;
     } else {
       this.logInfo(`Adding when constraint for ${this.key}`, constraint);
+      // use buildConstraint or addConstraint to add when constraint (to this.base)
+
       this.addConstraint("when", { values: constraint, errName: "when" });
     }
     return this;

@@ -135,7 +135,7 @@ class WhenCondition {
   }
 
   get keyVal() {
-    const keys = this.keys || [];
+    const keys = this.whenKeys || [];
     return keys.length === 1 ? keys[0] : keys;
   }
 

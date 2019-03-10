@@ -1,6 +1,7 @@
 const { createWhenCondition } = require("../../src/conditions");
 const { createYupSchemaEntry } = require("../../src/create-entry");
 import defaults from "../../src/types/defaults";
+import * as yup from "yup";
 
 function expectYupSchemaEntry(obj) {
   expect(obj.tests).toBeDefined();
@@ -169,6 +170,43 @@ describe("when", () => {
       });
     });
 
+    describe("accumulate", () => {
+      test("name", () => {
+        const acc = {};
+        const newAcc = whenCondition.accumulate(acc, "name");
+        expect(newAcc).not.toEqual(acc);
+      });
+    });
+
+    describe("get constraintObj", () => {
+      test("no keys - empty", () => {
+        whenCondition.whenKeys = undefined;
+        const result = whenCondition.constraintObj;
+        expect(result).toEqual({});
+      });
+
+      test("has keys - not empty", () => {
+        whenCondition.whenKeys = ["name"];
+        const result = whenCondition.constraintObj;
+        expect(result).not.toEqual({});
+      });
+    });
+
+    describe("get keyVal", () => {
+      test("single key - string", () => {
+        whenCondition.whenKeys = ["name"];
+        const result = whenCondition.keyVal;
+        expect(result).toEqual("name");
+      });
+
+      test("multiple keys - array", () => {
+        const keys = ["name", "age"];
+        whenCondition.whenKeys = keys;
+        const result = whenCondition.keyVal;
+        expect(result).toEqual(keys);
+      });
+    });
+
     test("constraintValue", () => {
       const { constraintValue } = whenCondition;
       expect(constraintValue).toBeDefined();
@@ -177,6 +215,43 @@ describe("when", () => {
     test("constraint", () => {
       const { constraint } = whenCondition;
       expect(constraint).toBeDefined();
+    });
+  });
+
+  describe("manual setup", () => {
+    var inst = yup.object({
+      isBig: yup.boolean(),
+      count: yup.number().when("isBig", {
+        is: true,
+        then: yup.number().min(5),
+        otherwise: yup.number().min(0)
+      })
+    });
+
+    test("validate", () => {
+      const result = inst.validate({
+        isBig: true,
+        count: 10
+      });
+      expect(result).toBe(true);
+    });
+  });
+
+  describe("use WhenCondition", () => {
+    const { constraint } = whenCondition;
+    const count = yup.number().when(constraint);
+
+    var inst = yup.object({
+      isBig: yup.boolean(),
+      count
+    });
+
+    test("validate", () => {
+      const result = inst.validate({
+        isBig: true,
+        count: 10
+      });
+      expect(result).toBe(true);
     });
   });
 });
