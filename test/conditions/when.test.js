@@ -8,49 +8,49 @@ function expectYupSchemaEntry(obj) {
 }
 
 describe("when", () => {
-  describe("then", () => {
-    const schema = {
-      title: "user",
-      type: "object",
-      properties: {
-        name: {
-          type: "string"
-        },
-        age: {
-          type: "number",
-          when: {
-            name: {
-              is: true,
-              then: "required"
-            }
+  const schema = {
+    title: "user",
+    type: "object",
+    properties: {
+      name: {
+        type: "string"
+      },
+      age: {
+        type: "number",
+        when: {
+          name: {
+            is: true,
+            then: "required"
           }
         }
       }
-    };
+    }
+  };
 
-    const properties = schema.properties;
-    const ageObj = properties.age;
+  const properties = schema.properties;
+  const ageObj = properties.age;
 
-    const config = {
-      createYupSchemaEntry,
-      ...defaults["json-schema"]
-    };
+  const config = {
+    createYupSchemaEntry,
+    ...defaults["json-schema"]
+  };
 
-    const type = "number";
-    const key = "age";
+  const type = "number";
+  const key = "age";
 
-    // console.log({ config });
+  // console.log({ config });
 
-    const whenCondition = createWhenCondition({
-      schema,
-      properties,
-      type,
-      key,
-      value: ageObj,
-      when: ageObj.when,
-      config
-    });
+  const whenCondition = createWhenCondition({
+    schema,
+    properties,
+    type,
+    key,
+    value: ageObj,
+    when: ageObj.when,
+    config
+  });
 
+  describe("then", () => {
     describe("validateAndConfigure", () => {
       test("not object - false", () => {
         const when = "hello";
@@ -218,6 +218,9 @@ describe("when", () => {
     });
   });
 
+  // Yup mixed.when:
+  // https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema
+
   describe("manual setup", () => {
     var inst = yup.object({
       isBig: yup.boolean(),
@@ -229,16 +232,21 @@ describe("when", () => {
     });
 
     test("validate", () => {
-      const result = inst.validate({
+      const result = inst.validateSync({
         isBig: true,
         count: 10
       });
+      console.log({ result });
+
       expect(result).toBe(true);
     });
   });
 
-  describe("use WhenCondition", () => {
+  describe.skip("use WhenCondition", () => {
     const { constraint } = whenCondition;
+
+    console.log({ constraint });
+
     const count = yup.number().when(constraint);
 
     var inst = yup.object({
@@ -247,10 +255,13 @@ describe("when", () => {
     });
 
     test("validate", () => {
-      const result = inst.validate({
+      const result = inst.validateSync({
         isBig: true,
         count: 10
       });
+
+      console.log({ result });
+
       expect(result).toBe(true);
     });
   });
