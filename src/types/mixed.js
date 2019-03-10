@@ -49,12 +49,13 @@ import { createWhenCondition } from "../conditions";
 class YupMixed extends Base {
   constructor(opts = {}) {
     super(opts.config);
-    const { schema, key, value, config } = opts;
+    let { schema, key, value, config } = opts;
+    schema = schema || {};
     this.validateOnCreate(key, value, opts);
     this.yup = yup;
     this.key = key;
     this.schema = schema;
-    this.properties = schema.properties;
+    this.properties = schema.properties || {};
     this.value = value;
     this.constraints = this.getConstraints();
     this.format = value.format || this.constraints.format;
@@ -109,6 +110,7 @@ class YupMixed extends Base {
     this.addMappedConstraints();
     this.oneOf().notOneOf();
     this.when();
+    this.nullable().isType();
     return this;
   }
 
@@ -121,18 +123,30 @@ class YupMixed extends Base {
   }
 
   buildConstraint(propName, opts = {}) {
-    let { constraintName, method, yup, value, values, errName } = opts;
+    let {
+      constraintName,
+      propValue,
+      method,
+      yup,
+      value,
+      values,
+      errName
+    } = opts;
     yup = yup || this.base;
-    const propValue = this.constraints[propName];
+    propValue = propValue || this.constraints[propName];
+
     if (!propValue) {
+      this.warn("no prop value");
       return yup;
     }
     constraintName = constraintName || propName;
     method = method || constraintName;
+
     if (!yup[method]) {
       this.warn(`Yup has no such API method: ${method}`);
       return this;
     }
+
     const constraintFn = yup[method].bind(yup);
     const errFn =
       this.valErrMessage(constraintName) ||
@@ -160,8 +174,6 @@ class YupMixed extends Base {
       }
 
       this.onConstraintAdded({ name: constraintName, value: values });
-
-      // console.log("constraint", { method, values });
 
       const newBase = constraintFn(...values, errFn);
       return newBase;
@@ -200,13 +212,21 @@ class YupMixed extends Base {
   }
 
   oneOf() {
-    const value = this.constraints.enum || this.constraints.oneOf;
+    let value =
+      this.constraints.enum || this.constraints.oneOf || this.constraints.anyOf;
+    if (value === null) {
+      this.error("oneOf", "should not be null");
+      return this;
+    }
+    if (this.isNothing(value)) return this;
+    value = Array.isArray(value) ? value : [value];
     return this.addConstraint("oneOf", { value, errName: "enum" });
   }
 
   notOneOf() {
     const { not, notOneOf } = this.constraints;
-    const value = notOneOf || (not && (not.enum || not.oneOf));
+    let value = notOneOf || (not && (not.enum || not.oneOf));
+    value = Array.isArray(value) ? value : [value];
     return this.addConstraint("notOneOf", { value });
   }
 
@@ -231,7 +251,7 @@ class YupMixed extends Base {
   }
 
   when() {
-    const when = this.constraints.when;
+    const when = this.constraints.when || this.constraints.if;
     if (!isObjectType(when)) return this;
     const { constraint } = this.createWhenConditionFor(when);
 
@@ -244,6 +264,19 @@ class YupMixed extends Base {
 
       this.addConstraint("when", { values: constraint, errName: "when" });
     }
+    return this;
+  }
+
+  isType() {
+    const value = this.constraints.isType;
+    this.addConstraint("isType", { value, errName: "notOneOf" });
+    return this;
+  }
+
+  nullable() {
+    const { nullable, isNullable } = this.constraints;
+    const value = nullable || isNullable;
+    this.addConstraint("nullable", { value, errName: "notOneOf" });
     return this;
   }
 
@@ -263,11 +296,6 @@ class YupMixed extends Base {
 
   // https: //ajv.js.org/keywords.html#oneof
   $oneOf() {
-    return this;
-  }
-
-  // conditions https://ajv.js.org/keywords.html#not
-  $not() {
     return this;
   }
 

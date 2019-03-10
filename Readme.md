@@ -106,8 +106,11 @@ Note the `"required": true` for the `age` property (not natively supported by JS
 - `nullable`
 - `required`
 - `notRequired`
-- `oneOf` (`enum`)
+- `oneOf` (`enum`, `anyOf`)
 - `notOneOf`
+- `when` (`if`) _NEW_
+- `isType` _NEW_
+- `nullable` (`isNullable`) _NEW_
 
 ### Array
 
@@ -116,6 +119,7 @@ Note the `"required": true` for the `age` property (not natively supported by JS
 - `items` (`of`)
 - `maxItems` (`max`)
 - `minItems` (`min`)
+- `itemsOf` (`of`) _NEW_
 
 ### Boolean
 
@@ -155,7 +159,7 @@ No keys
 - `uppercase`
 - `trim`
 
-## Conditional logic support
+## Conditional logic
 
 Basic support for [when conditions](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) as requested and outlined in [this issue](https://github.com/kristianmandrup/schema-to-yup/issues/14) is now included.
 
@@ -206,6 +210,10 @@ Currently basic support is included in `schema-to-yup@1.9.0` on [npmjs](https://
 More advanced conditionals support will likely be included the next major release: `2.0`.
 
 You are welcome to continue the effort to support more conditional schema logic by continuing on this branch and making PRs.
+
+Support for `if` `then` and `else` constraints in JSON schema can be added using the `when` condition (ie. transalating to equivalent: `when`, `then` and `otherwise`).
+
+Likewise, `not` can be implemented via a single `notOneOf`.
 
 ## Complex example
 

@@ -1,6 +1,6 @@
-import { YupMixed } from '../mixed';
-import { createRangeConstraint, RangeConstraint } from './range-constraint';
-import { createNumberGuard, NumberGuard } from './guard';
+import { YupMixed } from "../mixed";
+import { createRangeConstraint, RangeConstraint } from "./range-constraint";
+import { createNumberGuard, NumberGuard } from "./guard";
 
 const proceed = (obj, config = {}) => {
   return createNumberGuard(obj, config).verify();

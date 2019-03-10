@@ -1,4 +1,4 @@
-import { Loggable } from './_loggable';
+import { Loggable } from "./_loggable";
 
 class TypeMatcher extends Loggable {
   constructor(config = {}) {
@@ -21,6 +21,10 @@ class TypeMatcher extends Loggable {
     return !isNaN(this.toNumber(num));
   }
 
+  isObjectType(obj) {
+    return obj === Object(obj);
+  }
+
   isNumberType(num) {
     return !isNaN(num);
   }
@@ -38,6 +42,4 @@ class TypeMatcher extends Loggable {
   }
 }
 
-export {
-  TypeMatcher
-};
+export { TypeMatcher };

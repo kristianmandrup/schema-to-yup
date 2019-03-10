@@ -1,8 +1,8 @@
 // See:
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
 
-import { YupMixed } from './mixed';
-import { Base } from './base';
+import { YupMixed } from "./mixed";
+import { Base } from "./base";
 
 class ArrayHandler extends Base {
   constructor(config) {
@@ -47,7 +47,7 @@ class YupArray extends YupMixed {
     //   .$additionalItems()
     //   .$items();
 
-    // this.itemsOf()
+    this.itemsOf();
 
     super.convert();
     return this;
@@ -61,30 +61,46 @@ class YupArray extends YupMixed {
     return this.addConstraint("compact");
   }
 
-  // TODO: not yet implemented
   itemsOf() {
+    const { items, itemsOf } = this.constraints;
+    const $of = items || itemsOf || this.constraints.of;
+
+    if (this.isNothing($of)) return;
+
+    if (Array.isArray($of)) {
+      this.error("itemsOf", "does not (yet) support an Array of schemas");
+      return;
+    }
+
+    if (!this.isObjectType($of)) {
+      this.error("itemsOf", `must be a schema object, was ${typeof $of}`);
+      return;
+    }
+
+    if (!this.createYupSchemaEntry) {
+      this.warn(
+        "missing createYupSchemaEntry in config, needed for recursive validation"
+      );
+      return;
+    }
+
+    try {
+      const schemaConf = {
+        key: this.key,
+        value: $of,
+        config: this.config
+      };
+
+      const schemaEntry = this.createYupSchemaEntry(schemaConf);
+
+      return this.addConstraint("of", {
+        value: schemaEntry,
+        propValue: $of
+      });
+    } catch (ex) {
+      this.error("itemsOf: Error", ex);
+    }
     return this;
-    // const { items, itemsOf } = this.constraints;
-    // const $itemsOfSchema = items || itemsOf || this.constraints.of;
-
-    // if (Array.isArray($itemsOfSchema)) {
-    //   this.error("itemsOf", "does not (yet) support an Array of schemas");
-    // }
-
-    // if (!this.createYupSchemaEntry) {
-    //   this.warn(
-    //     "missing createYupSchemaEntry in config, needed for recursive validation"
-    //   );
-    //   return;
-    // }
-    // this.createYupSchemaEntry({
-    //   key: this.key,
-    //   value: $itemsOfSchema,
-    //   type: this.type,
-    //   config: this.config
-    // });
-    // $of && this.base.of($max);
-    // return this;
   }
 
   maxItems() {
@@ -148,8 +164,4 @@ class YupArray extends YupMixed {
   }
 }
 
-export {
-  toYupArray,
-  YupArray,
-  ArrayHandler
-};
+export { toYupArray, YupArray, ArrayHandler };
