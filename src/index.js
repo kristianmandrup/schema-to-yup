@@ -1,5 +1,8 @@
 import * as yup from "yup";
 import { Base, YupSchemaEntry, YupSchemaEntryError } from "./entry";
+
+import { createYupSchemaEntry } from "./create-entry";
+
 import { extendYupApi } from "./validator-bridge";
 
 function isObject(type) {
@@ -18,6 +21,9 @@ class YupBuilder extends Base {
   constructor(schema, config = {}) {
     super(config);
     config.buildYup = buildYup;
+    config.createYupSchemaEntry =
+      config.createYupSchemaEntry || createYupSchemaEntry;
+    this.config = Object.assign(this.config, config);
 
     this.schema = schema;
     const type = this.getType(schema);
@@ -131,19 +137,19 @@ class YupBuilder extends Base {
 
   createYupSchemaEntry({ schema, name, key, value, config }) {
     // return createYupSchemaEntry({ name, key, value, config });
-    const yupEntry = new YupSchemaEntry({
+    const yupEntry = config.createYupSchemaEntry({
       schema,
       name,
       key,
       value,
       config
     });
-    return yupEntry.toEntry();
+    return yupEntry; // .toEntry();
   }
 }
 
 import * as types from "./types";
-import { createYupSchemaEntry } from "./create-entry";
+// import { createYupSchemaEntry } from "./create-entry";
 
 export {
   buildYup,

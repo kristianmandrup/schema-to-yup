@@ -87,7 +87,7 @@ describe("WhenCondition", () => {
         console.log({ when: whenCondition.when });
 
         const newAcc = whenCondition.accumulate(acc, "name");
-        expect(newAcc).not.toEqual(acc);
+        expect(newAcc).not.toEqual({});
       });
     });
 
@@ -152,18 +152,19 @@ describe("WhenCondition", () => {
         count: 10
       };
       const result = inst.validateSync(value);
-      console.log({ result });
+
+      // console.log({ result });
 
       expect(result).toEqual(value);
     });
   });
 
-  describe.skip("use WhenCondition", () => {
+  describe("use WhenCondition", () => {
     const { constraint } = whenCondition;
 
-    console.log({ constraint });
+    // console.log({ constraint });
 
-    const count = yup.number().when(constraint);
+    const count = yup.number().when(...constraint);
 
     var inst = yup.object({
       isBig: yup.boolean(),
@@ -179,7 +180,7 @@ describe("WhenCondition", () => {
       };
       const result = inst.validateSync(value);
 
-      console.log({ result });
+      // console.log({ result });
 
       expect(result).toEqual(value);
     });

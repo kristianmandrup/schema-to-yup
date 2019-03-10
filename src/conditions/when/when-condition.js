@@ -11,6 +11,7 @@ function isStringType(val) {
 class WhenCondition {
   constructor(opts = {}) {
     const { type, key, value, when, schema, properties, config } = opts;
+    this.opts = opts;
     this.when = when;
     this.key = key;
     this.type = type;
@@ -23,11 +24,11 @@ class WhenCondition {
 
   validate() {
     if (!isStringType(this.type)) {
-      this.error(`invalid or mising type: ${type}`);
+      this.error(`validate: invalid or mising type: ${this.type}`, this.opts);
     }
 
     if (!isObjectType(this.when)) {
-      this.error(`invalid or mising when: ${when}`);
+      this.error(`validate: invalid or mising when: ${this.when}`, this.opts);
     }
   }
 
@@ -58,7 +59,9 @@ class WhenCondition {
     let whenEntryObj = this.when[key];
 
     if (!isObjectType(whenEntryObj)) {
-      this.warn(`invalid when entry constraint object ${whenObj} for ${key}`);
+      this.warn(
+        `invalid when entry constraint object ${whenEntryObj} for ${key}`
+      );
       return acc;
     }
 
@@ -95,7 +98,16 @@ class WhenCondition {
   }
 
   get constraint() {
-    return this.validateAndConfigure() && constraintValue;
+    return this.validateAndConfigure() && this.constraintValue;
+  }
+
+  warn(msg, value) {
+    console.error("[WhenCondition] WARNING", msg, value);
+  }
+
+  error(msg, value) {
+    console.error("[WhenCondition] ERROR", msg, value);
+    throw msg;
   }
 }
 

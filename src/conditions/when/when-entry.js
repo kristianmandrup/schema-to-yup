@@ -38,7 +38,7 @@ export class WhenEntry {
 
     if (whenEntryKeys.length < 2) {
       this.warn(
-        `when entry constraint must have at least 2 keys: ${whenEntryKeys}`,
+        `validateAndConfigure: when entry constraint must have at least 2 keys: ${whenEntryKeys}`,
         whenEntryObj
       );
       return false;
@@ -47,7 +47,7 @@ export class WhenEntry {
     // must have is condition
     if (!this.hasKey(whenEntryKeys, "is")) {
       this.warn(
-        `when entry constraint missing 'is' constraint: ${whenEntryKeys}`,
+        `validateAndConfigure: when entry constraint missing 'is' constraint: ${whenEntryKeys}`,
         whenEntryObj
       );
       return false;
@@ -56,7 +56,7 @@ export class WhenEntry {
     // must have then condition
     if (!this.hasKey(whenEntryKeys, "then")) {
       this.warn(
-        `when entry constraint missing 'then' constraint: ${whenEntryKeys}`,
+        `validateAndConfigure: when entry constraint missing 'then' constraint: ${whenEntryKeys}`,
         whenEntryObj
       );
       return false;
@@ -79,7 +79,7 @@ export class WhenEntry {
       };
     }
     if (!isObjectType(entryObj)) {
-      this.error(`${key}: must be a schema object`);
+      this.error(`createValue: ${key} must be a schema object`);
     }
     return {
       key: this.key,
@@ -134,7 +134,7 @@ export class WhenEntry {
 
     const checkedIs = this.checkIs(is);
     if (!checkedIs) {
-      this.warn(`missing or invalid is constraint`, is);
+      this.warn(`calcEntryObj: missing or invalid is constraint`, is);
       return whenEntryObj;
     }
 
@@ -148,11 +148,11 @@ export class WhenEntry {
   }
 
   warn(msg, value) {
-    console.error("WARNING", msg, value);
+    console.error("[WhenEntry] WARNING", msg, value);
   }
 
   error(msg, value) {
-    console.error("ERROR", msg, value);
+    console.error("[WhenEntry] ERROR", msg, value);
     throw msg;
   }
 }

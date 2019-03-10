@@ -160,7 +160,8 @@ class YupMixed extends Base {
       }
 
       this.onConstraintAdded({ name: constraintName, value: values });
-      console.log("constraint", { method, values });
+
+      // console.log("constraint", { method, values });
 
       const newBase = constraintFn(...values, errFn);
       return newBase;
@@ -219,6 +220,7 @@ class YupMixed extends Base {
   createWhenConditionFor(when) {
     const opts = {
       key: this.key,
+      type: this.type,
       value: this.value,
       schema: this.schema,
       properties: this.properties,
