@@ -1,6 +1,9 @@
-import * as yup from 'yup';
-import { Base, YupSchemaEntry, YupSchemaEntryError } from './entry';
-import { extendYupApi } from './validator-bridge';
+import * as yup from "yup";
+import { Base, YupSchemaEntry, YupSchemaEntryError } from "./entry";
+
+import { createYupSchemaEntry } from "./create-entry";
+
+import { extendYupApi } from "./validator-bridge";
 
 function isObject(type) {
   return type && type === "object";
@@ -17,30 +20,34 @@ function isObjectType(obj) {
 class YupBuilder extends Base {
   constructor(schema, config = {}) {
     super(config);
+    config.buildYup = buildYup;
+    config.createYupSchemaEntry =
+      config.createYupSchemaEntry || createYupSchemaEntry;
+    this.config = Object.assign(this.config, config);
+
     this.schema = schema;
     const type = this.getType(schema);
     const props = this.getProps(schema);
     this.type = type;
     this.properties = props;
     this.required = this.getRequired(schema);
-    if (isObject(type)) {
-      if (isObjectType(props)) {
-        const name = this.getName(schema);
-        const properties = this.normalizeRequired(schema);
-        const shapeConfig = this.propsToShape({ properties, name, config });
-        this.shapeConfig = shapeConfig;
-        this.validSchema = true;
-        return;
-      } else {
-        this.error(
-          `invalid schema: must have a properties object: ${JSON.stringify(
-            properties
-          )}`
-        );
-      }
-    } else {
-      this.error(`invalid schema: must be an object type, was: ${type}`);
+
+    if (!isObject(type)) {
+      this.error(`invalid schema: must be type: "object", was type: ${type}`);
+      return;
     }
+
+    if (!isObjectType(props)) {
+      const props = JSON.stringify(properties);
+      this.error(`invalid schema: must have a properties object: ${props}`);
+      return;
+    }
+    const name = this.getName(schema);
+    const properties = this.normalizeRequired(schema);
+    const shapeConfig = this.propsToShape({ properties, name, config });
+
+    this.shapeConfig = shapeConfig;
+    this.validSchema = true;
   }
 
   getRequired(obj) {
@@ -80,7 +87,12 @@ class YupBuilder extends Base {
       // });
       const value = properties[key];
       const isRequired = required.indexOf(key) >= 0;
-      value.required = this.isRequired(value) || isRequired;
+      if (isObjectType(value)) {
+        value.required = this.isRequired(value) || isRequired;
+      } else {
+        this.warn(`Bad value: ${value} must be an object`);
+      }
+
       acc[key] = value;
       return acc;
     }, {});
@@ -114,22 +126,30 @@ class YupBuilder extends Base {
   propToYupSchemaEntry({ name, key, value = {} }) {
     const entryBuilder =
       this.createYupSchemaEntry || this.config.createYupSchemaEntry;
-    return entryBuilder({ name, key, value, config: this.config });
+    return entryBuilder({
+      schema: this.schema,
+      name,
+      key,
+      value,
+      config: this.config
+    });
   }
 
-  createYupSchemaEntry({ name, key, value, config }) {
+  createYupSchemaEntry({ schema, name, key, value, config }) {
     // return createYupSchemaEntry({ name, key, value, config });
-    return new YupSchemaEntry({
+    const yupEntry = config.createYupSchemaEntry({
+      schema,
       name,
       key,
       value,
       config
-    }).toEntry();
+    });
+    return yupEntry; // .toEntry();
   }
 }
 
-import * as types from './types';
-import { createYupSchemaEntry } from './create-entry';
+import * as types from "./types";
+// import { createYupSchemaEntry } from "./create-entry";
 
 export {
   buildYup,

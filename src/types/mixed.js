@@ -1,4 +1,6 @@
-import * as yup from 'yup';
+import * as yup from "yup";
+
+// import { buildYup } from "../";
 
 class ConvertYupSchemaError extends Error {}
 
@@ -37,14 +39,22 @@ const defaults = {
     }, {})
 };
 
-import { Base } from './base';
+function isObjectType(obj) {
+  return obj === Object(obj);
+}
+
+import { Base } from "./base";
+import { createWhenCondition } from "../conditions";
 
 class YupMixed extends Base {
-  constructor({ key, value, config } = {}) {
-    super(config);
-    this.validateOnCreate(key, value);
+  constructor(opts = {}) {
+    super(opts.config);
+    const { schema, key, value, config } = opts;
+    this.validateOnCreate(key, value, opts);
     this.yup = yup;
     this.key = key;
+    this.schema = schema;
+    this.properties = schema.properties;
     this.value = value;
     this.constraints = this.getConstraints();
     this.format = value.format || this.constraints.format;
@@ -65,12 +75,12 @@ class YupMixed extends Base {
     });
   }
 
-  validateOnCreate(key, value) {
+  validateOnCreate(key, value, opts) {
     if (!key) {
-      this.error("create: missing key");
+      this.error(`create: missing key ${JSON.stringify(opts)}`);
     }
     if (!value) {
-      this.error("create: missing value");
+      this.error(`create: missing value ${JSON.stringify(opts)}`);
     }
   }
 
@@ -98,6 +108,7 @@ class YupMixed extends Base {
   convert() {
     this.addMappedConstraints();
     this.oneOf().notOneOf();
+    this.when();
     return this;
   }
 
@@ -109,27 +120,59 @@ class YupMixed extends Base {
     });
   }
 
-  addConstraint(propName, { constraintName, method, value, errName } = {}) {
+  buildConstraint(propName, opts = {}) {
+    let { constraintName, method, yup, value, values, errName } = opts;
+    yup = yup || this.base;
     const propValue = this.constraints[propName];
-    if (propValue) {
-      constraintName = constraintName || propName;
-      method = method || constraintName;
-      if (!this.base[method]) {
-        this.warn(`Yup has no such API method: ${method}`);
-        return this;
-      }
-      const constraintFn = this.base[method].bind(this.base);
-      const errFn =
-        this.valErrMessage(constraintName) ||
-        (errName && this.valErrMessage(errName));
+    if (!propValue) {
+      return yup;
+    }
+    constraintName = constraintName || propName;
+    method = method || constraintName;
+    if (!yup[method]) {
+      this.warn(`Yup has no such API method: ${method}`);
+      return this;
+    }
+    const constraintFn = yup[method].bind(yup);
+    const errFn =
+      this.valErrMessage(constraintName) ||
+      (errName && this.valErrMessage(errName));
+
+    if (value) {
+      // call yup constraint function with single value arguments (default)
       const constraintValue = value === true ? propValue : value;
+
       this.onConstraintAdded({ name: constraintName, value: constraintValue });
 
       const newBase = constraintValue
         ? constraintFn(constraintValue, errFn)
         : constraintFn(errFn);
-      this.base = newBase || this.base;
+      return newBase;
     }
+
+    if (values) {
+      // call yup constraint function with multiple arguments
+      if (!Array.isArray(values)) {
+        this.warn(
+          "buildConstraint: values option must be an array of arguments"
+        );
+        return yup;
+      }
+
+      this.onConstraintAdded({ name: constraintName, value: values });
+
+      // console.log("constraint", { method, values });
+
+      const newBase = constraintFn(...values, errFn);
+      return newBase;
+    }
+    this.warn("buildConstraint: missing value or values options");
+    return yup;
+  }
+
+  addConstraint(propName, opts) {
+    const contraint = this.buildConstraint(propName, opts);
+    this.base = contraint || this.base;
     return this;
   }
 
@@ -172,6 +215,36 @@ class YupMixed extends Base {
       ? this.errMessages[this.key][constraint]
       : undefined;
     return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
+  }
+
+  createWhenConditionFor(when) {
+    const opts = {
+      key: this.key,
+      type: this.type,
+      value: this.value,
+      schema: this.schema,
+      properties: this.properties,
+      config: this.config,
+      when
+    };
+    return createWhenCondition(opts);
+  }
+
+  when() {
+    const when = this.constraints.when;
+    if (!isObjectType(when)) return this;
+    const { constraint } = this.createWhenConditionFor(when);
+
+    if (!constraint) {
+      this.warn(`Invalid when constraint for: ${when}`);
+      return this;
+    } else {
+      this.logInfo(`Adding when constraint for ${this.key}`, constraint);
+      // use buildConstraint or addConstraint to add when constraint (to this.base)
+
+      this.addConstraint("when", { values: constraint, errName: "when" });
+    }
+    return this;
   }
 
   $const() {
@@ -241,9 +314,4 @@ class YupMixed extends Base {
   }
 }
 
-export {
-  defaults,
-  errValKeys,
-  YupMixed,
-  ConvertYupSchemaError
-};
+export { defaults, errValKeys, YupMixed, ConvertYupSchemaError };

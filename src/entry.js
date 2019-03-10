@@ -1,4 +1,4 @@
-import { 
+import {
   Base,
   toYupString,
   toYupNumberSchemaEntry,
@@ -6,13 +6,14 @@ import {
   toYupArray,
   toYupObject,
   toYupDate
-} from './types';
+} from "./types";
 
 class YupSchemaEntryError extends Error {}
 
 class YupSchemaEntry extends Base {
-  constructor({ name, key, value, config }) {
+  constructor({ schema, name, key, value, config }) {
     super(config);
+    this.schema = schema;
     this.key = key;
     this.value = value;
     this.config = config;
@@ -37,7 +38,14 @@ class YupSchemaEntry extends Base {
   }
 
   toEntry() {
-    if (!this.isValidSchema()) this.error("Not a valid schema");
+    if (!this.isValidSchema()) {
+      const schema = JSON.stringify(this.schema);
+      this.error(
+        `Not a valid schema: type ${
+          this.type
+        } must be a string, was ${typeof this.type} ${schema}`
+      );
+    }
     const config = this.obj;
     return (
       this.string(config) ||
@@ -46,12 +54,19 @@ class YupSchemaEntry extends Base {
       this.array(config) ||
       this.object(config) ||
       this.date(config) ||
-      this.mixed(config)
+      this.defaultType(config)
     );
+  }
+
+  defaultType(config) {
+    console.error({ type: config.type });
+    // return this.mixed(config)
+    this.error("toEntry: unknown type", config);
   }
 
   get obj() {
     return {
+      schema: this.schema,
       key: this.key,
       value: this.value,
       type: this.type,
@@ -84,8 +99,4 @@ class YupSchemaEntry extends Base {
   }
 }
 
-export {
-  YupSchemaEntryError,
-  YupSchemaEntry,
-  Base
-};
+export { YupSchemaEntryError, YupSchemaEntry, Base };

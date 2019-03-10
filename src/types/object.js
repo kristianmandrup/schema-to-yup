@@ -1,5 +1,5 @@
-import { YupMixed } from './mixed';
-import { buildYup } from '../';
+import { YupMixed } from "./mixed";
+// import { buildYup } from "../";
 
 class ObjectHandler {
   constructor(config) {
@@ -39,7 +39,7 @@ class YupObject extends YupMixed {
 
     // recursive definition
     if (this.value) {
-      const schema = buildYup(this.value);
+      const schema = this.config.buildYup(this.value);
       this.base.shape(schema);
     }
     return this;
@@ -67,8 +67,4 @@ class YupObject extends YupMixed {
   }
 }
 
-export {
-  toYupObject,
-  YupObject,
-  ObjectHandler
-};
+export { toYupObject, YupObject, ObjectHandler };

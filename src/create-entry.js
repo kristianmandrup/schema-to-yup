@@ -1,16 +1,9 @@
-function createYupSchemaEntry({ name, key, value, config }) {
-  const { YupSchemaEntry } = config || {};
-  if (!YupSchemaEntry) {
-    throw "missing YupSchemaEntry class in config";
-  }
-  return new YupSchemaEntry({
-    name,
-    key,
-    value,
-    config
-  }).toEntry();
+import { YupSchemaEntry } from "./entry";
+
+function createYupSchemaEntry(opts = {}) {
+  const { schema, name, key, value, config } = opts;
+
+  return new YupSchemaEntry(opts).toEntry();
 }
 
-export {
-  createYupSchemaEntry
-};
+export { createYupSchemaEntry };
