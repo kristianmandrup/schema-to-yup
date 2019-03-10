@@ -157,11 +157,55 @@ No keys
 
 ## Conditional logic support
 
-Basic support for [when conditions](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) as requested and outlined in [this issue](https://github.com/kristianmandrup/schema-to-yup/issues/14) are now included in the [when-condition](https://github.com/kristianmandrup/schema-to-yup/tree/when-condition) branch.
+Basic support for [when conditions](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) as requested and outlined in [this issue](https://github.com/kristianmandrup/schema-to-yup/issues/14) is now included.
 
-This will be merged in the next major release, most likely 2.0.
+Work will continue in the [when-condition](https://github.com/kristianmandrup/schema-to-yup/tree/when-condition) branch.
 
-You are most welcome to continue the effort to support more conditional schema logic by continuing on this branch and making PRs.
+Sample schema using simple `when` constraint:
+
+```js
+const biggyJson = {
+  title: "biggy",
+  type: "object",
+  properties: {
+    isBig: {
+      type: "boolean"
+    },
+    count: {
+      type: "number",
+      when: {
+        isBig: {
+          is: true,
+          then: {
+            min: 5
+          }
+        }
+      }
+    }
+  }
+};
+```
+
+Sample valid and invalid values with respect to `biggyJson` schema
+
+```js
+const bigJson = {
+  valid: {
+    isBig: true,
+    count: 5 // since isBig is set, must be >= 5
+  },
+  invalid: {
+    isBig: true,
+    count: 4 // since isBig is set, must be >= 5
+  }
+};
+```
+
+Currently basic support is included in `schema-to-yup@1.9.0` on [npmjs](https://www.npmjs.com)
+
+More advanced conditionals support will likely be included the next major release: `2.0`.
+
+You are welcome to continue the effort to support more conditional schema logic by continuing on this branch and making PRs.
 
 ## Complex example
 
