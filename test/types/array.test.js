@@ -143,13 +143,9 @@ describe("toYupArray", () => {
       });
     });
 
-    describe("manual simple validate", () => {
+    describe.skip("manual simple validate", () => {
       const constraint = yup.number().min(2);
-      // console.log("manual simple", { constraint });
-
       const schema = yup.array().of(constraint);
-
-      // console.log("manual simple", { schema });
 
       test("valid", () => {
         const valid = schema.isValidSync([2, 3]); //=> true
@@ -157,19 +153,16 @@ describe("toYupArray", () => {
       });
       test("invalid", () => {
         const valid = schema.isValidSync([1, -24]); //=> false
-        console.log("invalid", { valid });
         expect(valid).toBeFalsy();
       });
     });
 
-    describe("manual schema validate", () => {
+    describe.skip("manual schema validate", () => {
       const constraint = yup.number().min(2);
 
       const schema = yup.object().shape({
         list: yup.array().of(constraint)
       });
-
-      // console.log("manual schema", { schema });
 
       test("valid", () => {
         const valid = schema.isValidSync({ list: [4, 2] }); //=> true
@@ -177,26 +170,21 @@ describe("toYupArray", () => {
       });
       test("invalid", () => {
         const valid = schema.isValidSync({ list: [1, 2] }); //=> false
-        console.log("invalid", { valid });
         expect(valid).toBeFalsy();
       });
     });
 
-    describe.only("validate", () => {
-      const arrNoKey = createArrNoKey({ type: "number", min: 2 });
+    describe("validate", () => {
       const arr = createArr({ itemsOf: { type: "number", min: 2 } });
       const schema = createSchema(arr);
 
-      console.log("validate", { schema });
-
       test("valid", () => {
-        const valid = schema.isValidSync({ list: [1, 2] });
+        const valid = schema.isValidSync({ list: [2, 3] });
         expect(valid).toBeTruthy();
       });
 
       test("invalid", () => {
         const valid = schema.isValidSync({ list: [1, "yb", {}] });
-
         expect(valid).toBeFalsy();
       });
     });

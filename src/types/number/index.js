@@ -28,8 +28,6 @@ class YupNumber extends YupMixed {
     this.type = this.normalizeNumType(obj.type);
     this.base = this.yup.number();
     this.range = createRangeConstraint(this);
-
-    console.log({ constraints: this.constraints, type: this.type });
   }
 
   normalizeNumType(type) {

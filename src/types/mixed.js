@@ -58,9 +58,6 @@ class YupMixed extends Base {
     this.properties = schema.properties || {};
     this.value = value;
     this.constraints = this.getConstraints();
-
-    console.log({ "all constraints": this.constraints });
-
     this.format = value.format || this.constraints.format;
     this.config = config || {};
     this.type = "mixed";
@@ -80,9 +77,9 @@ class YupMixed extends Base {
   }
 
   validateOnCreate(key, value, opts) {
-    // if (!key) {
-    //   this.error(`create: missing key ${JSON.stringify(opts)}`);
-    // }
+    if (!key) {
+      this.error(`create: missing key ${JSON.stringify(opts)}`);
+    }
     if (!value) {
       this.error(`create: missing value ${JSON.stringify(opts)}`);
     }
@@ -137,24 +134,18 @@ class YupMixed extends Base {
     } = opts;
     yup = yup || this.base;
     propValue = propValue || this.constraints[propName];
-    console.log("buildConstraint", { propValue, propName, value });
+
     if (!propValue) {
       this.warn("no prop value");
       return yup;
     }
-    console.log("buildConstraint", "on it...");
-
     constraintName = constraintName || propName;
     method = method || constraintName;
-
-    console.log({ constraintName, method });
 
     if (!yup[method]) {
       this.warn(`Yup has no such API method: ${method}`);
       return this;
     }
-
-    console.log("bind to method");
 
     const constraintFn = yup[method].bind(yup);
     const errFn =
@@ -165,8 +156,6 @@ class YupMixed extends Base {
       // call yup constraint function with single value arguments (default)
       const constraintValue = value === true ? propValue : value;
 
-      console.log("adding constraint", { constraintValue });
-
       this.onConstraintAdded({ name: constraintName, value: constraintValue });
 
       const newBase = constraintValue
@@ -174,8 +163,6 @@ class YupMixed extends Base {
         : constraintFn(errFn);
       return newBase;
     }
-
-    console.log("no value");
 
     if (values) {
       // call yup constraint function with multiple arguments
@@ -187,8 +174,6 @@ class YupMixed extends Base {
       }
 
       this.onConstraintAdded({ name: constraintName, value: values });
-
-      // console.log("constraint", { method, values });
 
       const newBase = constraintFn(...values, errFn);
       return newBase;
@@ -227,7 +212,8 @@ class YupMixed extends Base {
   }
 
   oneOf() {
-    let value = this.constraints.enum || this.constraints.oneOf;
+    let value =
+      this.constraints.enum || this.constraints.oneOf || this.constraints.anyOf;
     if (value === null) {
       this.error("oneOf", "should not be null");
       return this;
@@ -265,7 +251,7 @@ class YupMixed extends Base {
   }
 
   when() {
-    const when = this.constraints.when;
+    const when = this.constraints.when || this.constraints.if;
     if (!isObjectType(when)) return this;
     const { constraint } = this.createWhenConditionFor(when);
 
@@ -310,11 +296,6 @@ class YupMixed extends Base {
 
   // https: //ajv.js.org/keywords.html#oneof
   $oneOf() {
-    return this;
-  }
-
-  // conditions https://ajv.js.org/keywords.html#not
-  $not() {
     return this;
   }
 

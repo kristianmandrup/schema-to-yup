@@ -67,8 +67,6 @@ class YupArray extends YupMixed {
 
     if (this.isNothing($of)) return;
 
-    // console.log("itemsOf", { of: $of });
-
     if (Array.isArray($of)) {
       this.error("itemsOf", "does not (yet) support an Array of schemas");
       return;
@@ -88,37 +86,16 @@ class YupArray extends YupMixed {
 
     try {
       const schemaConf = {
-        // schema: this.schema,
-        // properties: this.properties,
         key: this.key,
-        value: {
-          ...$of,
-          of: $of
-        },
-        // type: this.type,
+        value: $of,
         config: this.config
       };
 
-      // const schemaConf = {
-      //   value: $of,
-      //   config: this.config
-      // };
-
-      console.log("itemsOf", schemaConf);
-
       const schemaEntry = this.createYupSchemaEntry(schemaConf);
 
-      console.log("itemsOf", { schemaEntry });
-
-      // TODO
-      // populate subtype!!
-      // _subType: undefined
-
-      // this.buildConstraint
       return this.addConstraint("of", {
         value: schemaEntry,
         propValue: $of
-        // yup: yup.array()
       });
     } catch (ex) {
       this.error("itemsOf: Error", ex);
