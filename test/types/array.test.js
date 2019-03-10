@@ -1,10 +1,20 @@
 const { types } = require("../../src");
 const { toYupArray } = types;
+const { createYupSchemaEntry } = require("../../src/create-entry");
+const defaults = require("../../src/types/defaults/json-schema").default;
+
 const yup = require("yup");
 
-const isArray = fieldDef => fieldDef && fieldDef.type === "array";
-const defaultConfig = { isArray };
-const create = (fieldDef, config = defaultConfig) => {
+// const isArray = fieldDef => fieldDef && fieldDef.type === "array";
+// const isString = fieldDef => fieldDef && fieldDef.type === "string";
+// const isObject = fieldDef => fieldDef && fieldDef.type === "object";
+
+const defaultConfig = { ...defaults, createYupSchemaEntry };
+
+// console.log({ defaultConfig });
+
+const create = (fieldDef, config = {}) => {
+  config = Object.assign(defaultConfig, config);
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
   return toYupArray(obj, config);
 };
@@ -113,6 +123,81 @@ describe("toYupArray", () => {
 
       test("more count", () => {
         expect(schema.isValidSync({ list: [1, 2, 3, 4] })).toBeTruthy();
+      });
+    });
+  });
+
+  describe("itemsOf", () => {
+    describe("schema opts", () => {
+      test("type: number - ok", () => {
+        expect(() => createArr({ itemsOf: { type: "number" } })).not.toThrow();
+        try {
+          createArr({ itemsOf: { type: "number" } });
+        } catch (ex) {
+          console.error(ex);
+        }
+      });
+
+      test("negative - throws", () => {
+        expect(() => createArr({ itemsOf: -1 })).toThrow();
+      });
+    });
+
+    describe("manual simple validate", () => {
+      const constraint = yup.number().min(2);
+      // console.log("manual simple", { constraint });
+
+      const schema = yup.array().of(constraint);
+
+      // console.log("manual simple", { schema });
+
+      test("valid", () => {
+        const valid = schema.isValidSync([2, 3]); //=> true
+        expect(valid).toBeTruthy();
+      });
+      test("invalid", () => {
+        const valid = schema.isValidSync([1, -24]); //=> false
+        console.log("invalid", { valid });
+        expect(valid).toBeFalsy();
+      });
+    });
+
+    describe("manual schema validate", () => {
+      const constraint = yup.number().min(2);
+
+      const schema = yup.object().shape({
+        list: yup.array().of(constraint)
+      });
+
+      // console.log("manual schema", { schema });
+
+      test("valid", () => {
+        const valid = schema.isValidSync({ list: [4, 2] }); //=> true
+        expect(valid).toBeTruthy();
+      });
+      test("invalid", () => {
+        const valid = schema.isValidSync({ list: [1, 2] }); //=> false
+        console.log("invalid", { valid });
+        expect(valid).toBeFalsy();
+      });
+    });
+
+    describe.only("validate", () => {
+      const arrNoKey = createArrNoKey({ type: "number", min: 2 });
+      const arr = createArr({ itemsOf: { type: "number", min: 2 } });
+      const schema = createSchema(arr);
+
+      console.log("validate", { schema });
+
+      test("valid", () => {
+        const valid = schema.isValidSync({ list: [1, 2] });
+        expect(valid).toBeTruthy();
+      });
+
+      test("invalid", () => {
+        const valid = schema.isValidSync({ list: [1, "yb", {}] });
+
+        expect(valid).toBeFalsy();
       });
     });
   });

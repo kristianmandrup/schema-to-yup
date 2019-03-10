@@ -1,6 +1,6 @@
-import { YupMixed } from '../mixed';
-import { createRangeConstraint, RangeConstraint } from './range-constraint';
-import { createNumberGuard, NumberGuard } from './guard';
+import { YupMixed } from "../mixed";
+import { createRangeConstraint, RangeConstraint } from "./range-constraint";
+import { createNumberGuard, NumberGuard } from "./guard";
 
 const proceed = (obj, config = {}) => {
   return createNumberGuard(obj, config).verify();
@@ -28,6 +28,8 @@ class YupNumber extends YupMixed {
     this.type = this.normalizeNumType(obj.type);
     this.base = this.yup.number();
     this.range = createRangeConstraint(this);
+
+    console.log({ constraints: this.constraints, type: this.type });
   }
 
   normalizeNumType(type) {
