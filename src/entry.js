@@ -54,8 +54,14 @@ class YupSchemaEntry extends Base {
       this.array(config) ||
       this.object(config) ||
       this.date(config) ||
-      this.mixed(config)
+      this.defaultType(config)
     );
+  }
+
+  defaultType(config) {
+    console.error({ type: config.type });
+    // return this.mixed(config)
+    this.error("toEntry: unknown type", config);
   }
 
   get obj() {
