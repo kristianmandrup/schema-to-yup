@@ -155,6 +155,14 @@ No keys
 - `uppercase`
 - `trim`
 
+## Conditional logic support
+
+Basic support for [when conditions](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) as requested and outlined in [this issue](https://github.com/kristianmandrup/schema-to-yup/issues/14) are now included in the [when-condition](https://github.com/kristianmandrup/schema-to-yup/tree/when-condition) branch.
+
+This will be merged in the next major release, most likely 2.0.
+
+You are most welcome to continue the effort to support more conditional schema logic by continuing on this branch and making PRs.
+
 ## Complex example
 
 Here a more complete example of the variations currently possible
