@@ -152,7 +152,7 @@ class YupMixed extends Base {
       this.valErrMessage(constraintName) ||
       (errName && this.valErrMessage(errName));
 
-    if (value) {
+    if (!this.isPresent(value)) {
       // call yup constraint function with single value arguments (default)
       const constraintValue = value === true ? propValue : value;
 
@@ -164,7 +164,7 @@ class YupMixed extends Base {
       return newBase;
     }
 
-    if (values) {
+    if (this.isPresent(value)) {
       // call yup constraint function with multiple arguments
       if (!Array.isArray(values)) {
         this.warn(
@@ -214,10 +214,6 @@ class YupMixed extends Base {
   oneOf() {
     let value =
       this.constraints.enum || this.constraints.oneOf || this.constraints.anyOf;
-    if (value === null) {
-      this.error("oneOf", "should not be null");
-      return this;
-    }
     if (this.isNothing(value)) return this;
     value = Array.isArray(value) ? value : [value];
     return this.addConstraint("oneOf", { value, errName: "enum" });

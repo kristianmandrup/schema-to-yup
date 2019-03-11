@@ -279,18 +279,14 @@ describe("toYupString", () => {
     });
   });
 
-  describe.only("oneOf", () => {
+  describe("oneOf", () => {
     describe("schema opts", () => {
       test("string array - ok", () => {
-        expect(() => createSchema({ oneOf: ["2"] })).not.toThrow();
+        expect(() => createStr({ oneOf: ["2"] })).not.toThrow();
       });
 
-      test("negative - ok", () => {
-        expect(() => createSchema({ oneOf: -1 })).not.toThrow();
-      });
-
-      test("null - throws", () => {
-        expect(() => createSchema({ oneOf: null })).toThrow();
+      test.only("negative - ok", () => {
+        expect(() => createStr({ oneOf: -1 })).not.toThrow();
       });
     });
 

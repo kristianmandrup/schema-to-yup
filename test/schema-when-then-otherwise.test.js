@@ -4,7 +4,7 @@ describe("when", () => {
   const createTester = schema => {
     return (json, expectedResult) => {
       const valid = schema.isValidSync(json);
-      console.log({ json, valid, expectedResult });
+      // console.log({ json, valid, expectedResult });
       expect(valid).toBe(expectedResult);
     };
   };

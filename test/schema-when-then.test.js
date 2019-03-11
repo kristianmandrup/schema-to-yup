@@ -10,7 +10,7 @@ const createValidateTester = yupSchema => {
       console.error("validation exception", { ex });
     }
 
-    console.log("Validate result", { yupSchema, json, valid, expectedResult });
+    // console.log("Validate result", { yupSchema, json, valid, expectedResult });
 
     if (expectedResult) {
       expect(valid).toEqual(json);
@@ -23,7 +23,7 @@ const createValidateTester = yupSchema => {
 const createValidTester = schema => {
   return (json, expectedResult) => {
     const valid = schema.isValidSync(json);
-    console.log("Tester", { json, valid, expectedResult });
+    // console.log("Tester", { json, valid, expectedResult });
     expect(valid).toBe(expectedResult);
   };
 };

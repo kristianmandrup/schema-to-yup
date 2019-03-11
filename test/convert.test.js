@@ -5,15 +5,9 @@ var yup = require("yup");
 //check validity
 describe("yup schema validation", () => {
   const name = yup.string().required();
-  // console.log("yup entry", { name });
   const shapeConfig = {
     name
-    // age: yup
-    //   .number()
-    //   .required()
-    //   .positive()
   };
-  // console.log("original shape config", { shapeConfig });
   const schema = yup.object().shape(shapeConfig);
   test("valid json is valid", async () => {
     // , age: 24

@@ -2,6 +2,10 @@ function isObjectType(obj) {
   return obj === Object(obj);
 }
 
+function isStringType(val) {
+  return typeof val === "string";
+}
+
 export class WhenEntry {
   constructor(whenEntryObj, opts = {}) {
     this.whenEntryObj = whenEntryObj;
@@ -117,10 +121,26 @@ export class WhenEntry {
   //   return checked;
   // }
 
-  whenEntryFor(whenObj, key) {
-    const entryDef = whenObj[key];
+  whenEntryFor(whenObj, createEntryKey, whenKey) {
+    whenKey = whenKey || createEntryKey;
+
+    if (isStringType(whenObj)) {
+      whenObj = {
+        [whenObj]: true
+      };
+    }
+
+    if (!isObjectType(whenObj)) {
+      throw `whenEntryFor: Invalid when object ${whenObj}`;
+    }
+
+    // clone
+    const entryDef = {
+      ...whenObj[whenKey]
+    };
+    delete whenObj[whenKey];
     if (!entryDef) return whenObj;
-    whenObj[key] = this.createEntry(entryDef, key);
+    whenObj[createEntryKey] = this.createEntry(entryDef, createEntryKey);
     return whenObj;
   }
 
@@ -136,10 +156,10 @@ export class WhenEntry {
     //   this.warn(`calcEntryObj: missing or invalid is constraint`, is);
     //   return whenEntryObj;
     // }
-    const elseKey = whenEntryObj.then ? "else" : "otherwise";
+    const otherwiseKey = whenEntryObj.then ? "else" : "otherwise";
 
-    whenEntryObj = this.whenEntryFor(whenEntryObj, thenKey);
-    whenEntryObj = this.whenEntryFor(whenEntryObj, "otherwise");
+    whenEntryObj = this.whenEntryFor(whenEntryObj, "then");
+    whenEntryObj = this.whenEntryFor(whenEntryObj, "otherwise", otherwiseKey);
     return whenEntryObj;
   }
 

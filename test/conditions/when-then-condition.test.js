@@ -38,8 +38,6 @@ describe("WhenCondition", () => {
   const type = "number";
   const key = "age";
 
-  // console.log({ config });
-
   const whenCondition = createWhenCondition({
     schema,
     properties,
@@ -50,7 +48,7 @@ describe("WhenCondition", () => {
     config
   });
 
-  describe("then", () => {
+  describe("when: then", () => {
     describe("validateAndConfigure", () => {
       test("not object - false", () => {
         const when = "hello";
@@ -84,8 +82,7 @@ describe("WhenCondition", () => {
         whenCondition.validateAndConfigure();
 
         // should be an object with keys 'is' and 'then' minimum
-        console.log({ when: whenCondition.when });
-
+        // console.log({ when: whenCondition.when });
         const newAcc = whenCondition.accumulate(acc, "name");
         expect(newAcc).not.toEqual({});
       });
@@ -134,7 +131,7 @@ describe("WhenCondition", () => {
   // Yup mixed.when:
   // https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema
 
-  describe("manual setup", () => {
+  describe.skip("manual setup", () => {
     var inst = yup.object({
       isBig: yup.boolean(),
       count: yup.number().when("isBig", {
@@ -152,18 +149,12 @@ describe("WhenCondition", () => {
         count: 10
       };
       const result = inst.validateSync(value);
-
-      // console.log({ result });
-
       expect(result).toEqual(value);
     });
   });
 
   describe("use WhenCondition", () => {
     const { constraint } = whenCondition;
-
-    // console.log({ constraint });
-
     const count = yup.number().when(...constraint);
 
     var inst = yup.object({
@@ -179,9 +170,6 @@ describe("WhenCondition", () => {
         count: 10
       };
       const result = inst.validateSync(value);
-
-      // console.log({ result });
-
       expect(result).toEqual(value);
     });
   });
