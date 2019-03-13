@@ -9,6 +9,7 @@ describe("yup schema validation", () => {
     name
   };
   const schema = yup.object().shape(shapeConfig);
+
   test("valid json is valid", async () => {
     // , age: 24
     const valid = await schema.isValid({ name: "jimmy" });
@@ -26,7 +27,10 @@ describe("name schema", () => {
     title: "users",
     type: "object",
     properties: {
-      name: { type: "string", required: true }
+      name: {
+        type: "string",
+        required: true
+      }
     }
   };
 
@@ -39,7 +43,7 @@ describe("name schema", () => {
 });
 
 test("converts JSON schema to Yup Schema and validates", async () => {
-  const json = {
+  const personSchema = {
     $schema: "http://json-schema.org/draft-07/schema#",
     $id: "http://example.com/person.schema.json",
     title: "Person",
@@ -68,7 +72,7 @@ test("converts JSON schema to Yup Schema and validates", async () => {
   };
 
   const errMessages = {};
-  const schema = buildYup(json, { errMessages });
+  const schema = buildYup(personSchema, { errMessages });
   // console.dir(schema)
   const valid = await schema.isValid({ name: "jimmy", age: 24 });
   expect(valid).toBe(true);

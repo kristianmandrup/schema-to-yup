@@ -42,6 +42,7 @@ class YupBuilder extends Base {
       this.error(`invalid schema: must have a properties object: ${props}`);
       return;
     }
+
     const name = this.getName(schema);
     const properties = this.normalizeRequired(schema);
     const shapeConfig = this.propsToShape({ properties, name, config });
