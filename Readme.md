@@ -2,6 +2,14 @@
 
 Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
+## Important
+
+Use the stable package [json-schema-to-yup](https://www.npmjs.com/package/json-schema-to-yup) for now.
+
+We will fix the [schema-to-yup](https://www.npmjs.com/package/schema-to-yup) package shortly (moving to TypeScript, making architecture more pluggable etc).
+
+## Schemas
+
 - [AJV: JSON Schema keywords](https://ajv.js.org/keywords.html)
 - [Learn JsonSchema](https://cswr.github.io/JsonSchema/)
 
@@ -15,7 +23,7 @@ According to the JSON schema specs, you are free to add extra metadata to the fi
 
 Install
 
-`npm install schema-to-yup -S` or `yarn add schema-to-yup`
+`npm install json-schema-to-yup -S` or `yarn add json-schema-to-yup`
 
 Use
 
@@ -69,7 +77,7 @@ const config = {
   }
 };
 
-const { buildYup } = require("schema-to-yup");
+const { buildYup } = require("json-schema-to-yup");
 const yupSchema = buildYup(json, config);
 // console.dir(schema)
 const valid = await yupSchema.isValid({

@@ -1,4 +1,4 @@
-const { buildYup } = require("../");
+const { buildYup } = require("../src");
 
 var yup = require("yup");
 
