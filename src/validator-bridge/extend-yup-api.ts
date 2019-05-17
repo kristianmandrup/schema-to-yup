@@ -1,7 +1,8 @@
 import { defaults, fallBackFnMap } from "./defaults";
 import { defaultConstraints } from "./default-contraints";
-import { addMethod, string } from "yup";
-import * as Yup from "yup";
+import { string } from "yup";
+import Yup from "yup";
+import { toConstraintsMap } from "./to-constraints-map";
 
 export function extendYupApi({
   constraints,

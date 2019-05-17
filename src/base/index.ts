@@ -1,6 +1,6 @@
-import { defaults } from "./defaults";
+import { defaults } from "../defaults";
 import { TypeMatcher } from "./type-matcher";
-import { ObjectDef } from "./_types";
+import { ObjectDef } from "../common/_types";
 
 export class Base extends TypeMatcher {
   config: ObjectDef;

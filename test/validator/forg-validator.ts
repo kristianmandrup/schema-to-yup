@@ -1,6 +1,9 @@
 import { Validator, Rule } from "@cesium133/forgjs";
+import { Loggable } from "../../src/common/loggable";
 
 export class ForgValidator extends Loggable {
+  validator: any;
+
   constructor(config = {}) {
     super(config);
   }
@@ -18,6 +21,8 @@ export class ForgValidator extends Loggable {
 
   toArg() {}
 }
+
+const email = "abc@mail.com";
 
 export class RuleFactory {
   rule() {

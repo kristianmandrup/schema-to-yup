@@ -7,32 +7,30 @@ const proceed = (obj, config = {}) => {
   return createArrayGuard(obj, config).verify();
 };
 
-function toYupArray(obj, config = {}) {
-  return proceed(obj, config) && buildYupArray(obj);
+export function toArray(obj, config = {}) {
+  return proceed(obj, config) && buildArray(obj);
 }
 
-function toYupArraySchemaEntry(obj, config = {}) {
+export function toSchemaEntry(obj, config = {}) {
   return proceed(obj, config) && buildSchemaEntry(obj);
 }
 
-function buildSchemaEntry(obj) {
+export function buildSchemaEntry(obj) {
   return ArraySchemaEntry.schemaEntryFor(obj);
 }
 
-function buildYupArray(obj) {
+export function buildArray(obj) {
   return ArraySchemaEntry.create(obj);
 }
 
 // Note: all types inherit from mixed
 // See https://github.com/jquense/yup#mixed
-class ArraySchemaEntry extends MixedSchemaEntry {
-  createYupSchemaEntry: Function;
-
+export class ArraySchemaEntry extends MixedSchemaEntry {
   constructor(obj) {
     super(obj);
     this.type = "array";
     // this.validatorTypeApi = this.yup.array();
-    this.createYupSchemaEntry = this.config.createYupSchemaEntry;
+    this.createSchemaEntry = this.config.createSchemaEntry;
   }
 
   static create(obj) {

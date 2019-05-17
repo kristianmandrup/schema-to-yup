@@ -1,6 +1,7 @@
-const yup = require("yup");
-const { types } = require("../../src");
-const { toYupString } = types;
+import { types, yup } from "./_imports";
+const { string } = types;
+const { toSchemaEntry } = string;
+const toYupString = toSchemaEntry;
 
 const isString = fieldDef => fieldDef && fieldDef.type === "string";
 const config = { isString };

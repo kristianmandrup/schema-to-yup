@@ -1,6 +1,7 @@
-import { Base } from "./base";
-import { SchemaEntry } from "./entry";
-import { createSchemaEntry } from "./create-entry";
+import yup from "yup";
+import { Base } from "../base";
+import { SchemaEntry } from "../entry";
+import { createSchemaEntry } from "../create-entry";
 
 function isObject(type) {
   return type && type === "object";
@@ -64,7 +65,11 @@ export class YupBuilder extends Base {
   }
 
   get yupSchema() {
-    return yup.object().shape(this.shapeConfig);
+    return this.object.shape(this.shapeConfig);
+  }
+
+  get object() {
+    return yup.object();
   }
 
   normalizeRequired(schema?: any) {

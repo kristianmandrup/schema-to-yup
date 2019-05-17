@@ -1,4 +1,7 @@
-const { yup, toYupMixed } = require("./_imports");
+import { types, yup } from "./_imports";
+const { mixed } = types;
+const { toSchemaEntry } = mixed;
+const toYupMixed = toSchemaEntry;
 
 const defaultConfig = {};
 
@@ -11,7 +14,7 @@ describe("toYupMixed", () => {
   describe("instance", () => {
     const max = 42;
     const min = 10;
-    const mixed = create({
+    const mixed: any = create({
       strict: true,
       maximum: max,
       minimum: min

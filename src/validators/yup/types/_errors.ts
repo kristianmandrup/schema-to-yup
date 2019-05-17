@@ -1,4 +1,4 @@
-const errValKeys = [
+export const errValKeys = [
   "oneOf",
   "enum",
   "required",
@@ -31,9 +31,4 @@ const defaults = {
       acc[key] = fn;
       return acc;
     }, {})
-};
-
-module.exports = {
-  defaults,
-  errValKeys
 };

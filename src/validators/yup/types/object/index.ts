@@ -1,12 +1,12 @@
 import { MixedSchemaEntry } from "../mixed";
 import { createObjectGuard } from "./guard";
-import { ObjectDef } from "../../../../_types";
+import { ObjectDef } from "../../../../common/_types";
 
 const proceed = (obj, config = {}) => {
   return createObjectGuard(obj, config).verify();
 };
 
-export function toYupObjectSchemaEntry(obj, config = {}) {
+export function toSchemaEntry(obj, config = {}) {
   return proceed(obj, config) && buildSchemaEntry(obj);
 }
 
@@ -48,10 +48,15 @@ class ObjectSchemaEntry extends MixedSchemaEntry {
 
     // recursive definition
     if (this.value) {
-      const schema = buildYup(this.value);
+      const schema = this.buildYup(this.value);
       // this.base.shape(schema);
     }
     return this;
+  }
+
+  // TODO: add error handler
+  buildYup(value: any) {
+    this.config.buildYup(value);
   }
 
   camelCase() {

@@ -1,5 +1,7 @@
-const { types } = require("../../src");
-const { toYupBoolean } = types;
+import { types, yup } from "./_imports";
+const { boolean } = types;
+const { toSchemaEntry } = boolean;
+const toYupBoolean = toSchemaEntry;
 
 const isBoolean = fieldDef => fieldDef && fieldDef.type === "boolean";
 const config = { isBoolean };

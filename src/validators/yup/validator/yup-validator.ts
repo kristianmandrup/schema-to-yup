@@ -1,4 +1,5 @@
-import { Loggable } from "../../../loggable";
+import yup from "yup";
+import { Loggable } from "../../../common/loggable";
 
 type YupApiMethod = "mixed " | "string" | "date";
 

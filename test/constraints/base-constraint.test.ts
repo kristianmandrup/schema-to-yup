@@ -1,4 +1,4 @@
-const { Constraint } = require("./_imports");
+import { Constraint } from "./_imports";
 
 describe("Constraint", () => {
   const value = {
@@ -31,8 +31,8 @@ describe("Constraint", () => {
       expect(constraint.checkValue(1)).toBe(true);
     });
 
-    test("toArgument - identity", () => {
-      expect(constraint.toArgument(1)).toBe(1);
-    });
+    // test("toArgument - identity", () => {
+    //   expect(constraint.toArgument(1)).toBe(1);
+    // });
   });
 });

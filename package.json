@@ -21,7 +21,11 @@
     "yup": "^0.26.0"
   },
   "devDependencies": {
-    "jest": "^23.0.0"
+    "@cesium133/forgjs": "^1.1.9",
+    "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.2",
+    "jest": "^23.0.0",
+    "typescript": "^3.4.5"
   },
   "keywords": [
     "yup",

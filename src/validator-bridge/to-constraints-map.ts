@@ -1,4 +1,4 @@
-export const toConstraintsMap = (values, opts: any = {}) => {
+export const toConstraintsMap = (values: any[] = [], opts: any = {}) => {
   return values.reduce((acc, value) => {
     if (typeof value !== "string" && !(value instanceof Object)) {
       if (opts.throws !== false) {

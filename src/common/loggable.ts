@@ -1,4 +1,4 @@
-type Enable = {
+export type Enable = {
   log: boolean;
   error: boolean;
   warn: boolean;

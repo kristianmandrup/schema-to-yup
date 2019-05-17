@@ -1,14 +1,7 @@
-const yup = require("yup");
-const {
+import yup from "yup";
+export { yup };
+export {
   createNumberGuard,
-  toYupNumber,
-  toYupNumberSchemaEntry,
-  createRange
-} = require("../../../src/types/number");
-module.exports = {
-  createNumberGuard,
-  createRange,
-  toYupNumber,
-  toYupNumberSchemaEntry,
-  yup
-};
+  toNumber,
+  toSchemaEntry
+} from "../../../src/validators/yup/types/number";

@@ -1,5 +1,5 @@
 import { Base } from "../../../base";
-import { ObjectDef } from "../../../_types";
+import { ObjectDef } from "../../../common/_types";
 
 export class Guard extends Base {
   config: ObjectDef = {};
@@ -9,7 +9,7 @@ export class Guard extends Base {
     this.obj = obj;
   }
 
-  isValid() {
+  isValid(): boolean {
     return false;
   }
 

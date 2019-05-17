@@ -1,6 +1,13 @@
-const { createNumericConstraint } = require("./_imports");
+import { createNumericConstraint } from "./_imports";
 
 const isNumber = val => !isNaN(val) && typeof val === "number";
+
+interface ITyper {
+  isNumberLike: any;
+  constraints: any;
+  applyConstraintToValidator: (opts: any) => void;
+  toNumber: (val: any) => any;
+}
 
 describe("createNumericConstraint", () => {
   const value = {
@@ -10,11 +17,12 @@ describe("createNumericConstraint", () => {
   const opts = {
     value
   };
-  const typer = {
+  const typer: ITyper = {
+    isNumberLike: null,
     constraints: {
       type: "number"
     },
-    applyConstraintToValidator: (name, value, method) => true,
+    applyConstraintToValidator: ({ name, value, method }) => true,
     toNumber: val => Number(val)
   };
   typer.isNumberLike = val => !isNaN(typer.toNumber(val));

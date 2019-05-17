@@ -5,7 +5,7 @@ export class ObjectGuard extends Guard {
     super(obj, config);
   }
 
-  isValid() {
+  isValid(): boolean {
     return this.config.isObject(this.obj);
   }
 }

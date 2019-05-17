@@ -1,4 +1,6 @@
-const { toYupNumber, toYupNumberSchemaEntry, yup } = require("./_imports");
+import { toNumber, toSchemaEntry, yup } from "./_imports";
+const toYupNumber = toNumber;
+const toYupNumberSchemaEntry = toSchemaEntry;
 
 const isInteger = fieldDef =>
   fieldDef && (fieldDef.type === "int" || fieldDef.type === "integer");

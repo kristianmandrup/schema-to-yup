@@ -5,25 +5,25 @@ const proceed = (obj, config = {}) => {
   return createDateGuard(obj, config).verify();
 };
 
-function toYupDate(obj, config = {}) {
-  return proceed(obj, config) && buildYupDate(obj);
+export function toDate(obj, config = {}) {
+  return proceed(obj, config) && buildDate(obj);
 }
 
-function toYupDateSchemaEntry(obj, config = {}) {
+export function toSchemaEntry(obj, config = {}) {
   return proceed(obj, config) && buildSchemaEntry(obj);
 }
 
-function buildSchemaEntry(obj) {
-  return YupDate.schemaEntryFor(obj);
+export function buildSchemaEntry(obj) {
+  return DateSchemaEntry.schemaEntryFor(obj);
 }
 
-function buildYupDate(obj) {
-  return YupDate.create(obj);
+export function buildDate(obj) {
+  return DateSchemaEntry.create(obj);
 }
 
 // Note: all types inherit from mixed
 // See https://github.com/jquense/yup#mixed
-class YupDate extends YupMixed {
+export class DateSchemaEntry extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "date";
@@ -31,7 +31,7 @@ class YupDate extends YupMixed {
   }
 
   static create(obj) {
-    return new YupDate(obj);
+    return new DateSchemaEntry(obj);
   }
 
   get constraintsTypeMap() {
@@ -55,11 +55,3 @@ class YupDate extends YupMixed {
     };
   }
 }
-
-module.exports = {
-  toYupDate,
-  toYupDateSchemaEntry,
-  YupDate,
-  DateGuard,
-  createDateGuard
-};

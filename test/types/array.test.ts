@@ -1,4 +1,7 @@
-const { yup, toYupArray } = require("./_imports");
+import { yup, types } from "./_imports";
+const { array } = types;
+const { toSchemaEntry } = array;
+const toYupArray = toSchemaEntry;
 
 const isArray = fieldDef => fieldDef && fieldDef.type === "array";
 const defaultConfig = { isArray };

@@ -1,5 +1,5 @@
-const { createRange } = require("./_imports");
-const { createNum } = require("./_helpers");
+import { createRange } from "./_imports";
+import { createNum } from "./_helpers";
 
 function addContraints(obj) {
   const num = createNum(obj);

@@ -1,5 +1,5 @@
-import { TypeMatcher } from "../type-matcher";
-import { ObjectDef } from "../_types";
+import { TypeMatcher } from "../base/type-matcher";
+import { ObjectDef } from "../common/_types";
 
 const alwaysTrueFn = () => true;
 const identity = val => val;
@@ -13,7 +13,10 @@ export class Constraint extends TypeMatcher {
   constraints: ObjectDef = {};
   checkValue: (value: any) => boolean;
 
-  constructor(typer, { name, value, errorMsg, checkValue, constraints }) {
+  constructor(
+    typer,
+    { name, value, errorMsg, checkValue, constraints }: any = {}
+  ) {
     super(typer.config);
     this.typer = typer;
     this.map = this.mapFor(value);

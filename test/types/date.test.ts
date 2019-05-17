@@ -1,5 +1,8 @@
-const { types } = require("../../src");
-const { toYupDate } = types;
+import { types, yup } from "./_imports";
+const { date } = types;
+const { toSchemaEntry } = date;
+const toYupDate = toSchemaEntry;
+
 const yup = require("yup");
 
 const isDate = fieldDef => fieldDef && fieldDef.type === "date";

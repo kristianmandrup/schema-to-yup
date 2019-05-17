@@ -6,7 +6,8 @@ import {
   createDateConstraint,
   createNumericConstraint
 } from "../../../constraints";
-import { ObjectDef } from "../../../_types";
+
+import { ObjectDef } from "../../../common/_types";
 // class ConvertYupSchemaError extends Error {}
 
 export class BaseType extends Base {

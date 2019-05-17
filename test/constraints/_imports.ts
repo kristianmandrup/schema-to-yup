@@ -1,5 +1,6 @@
-const yup = require("yup");
-const {
+import yup from "yup";
+export { yup };
+export {
   Constraint,
   DateConstraint,
   createDateConstraint,
@@ -9,17 +10,4 @@ const {
   createNumericConstraint,
   StringConstraint,
   createStringConstraint
-} = require("../../src/types/constraints");
-
-module.exports = {
-  Constraint,
-  DateConstraint,
-  createDateConstraint,
-  RegExpConstraint,
-  createRegExpConstraint,
-  NumericConstraint,
-  createNumericConstraint,
-  StringConstraint,
-  createStringConstraint,
-  yup
-};
+} from "../../src/constraints";

@@ -1,4 +1,4 @@
-const { createStringConstraint } = require("./_imports");
+import { createStringConstraint } from "./_imports";
 
 const isString = val => typeof val === "string";
 describe("createStringConstraint", () => {

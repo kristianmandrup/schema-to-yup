@@ -1,6 +1,5 @@
-const { buildYup } = require("../");
-
-var yup = require("yup");
+import { buildYup } from "../";
+import yup from "yup";
 
 //check validity
 describe("yup schema validation", () => {

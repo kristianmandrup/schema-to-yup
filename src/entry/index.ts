@@ -1,6 +1,7 @@
-import { Base } from "./base";
+import { Base } from "../base";
 // import * as validators from "./validators";
-import { ObjectDef } from "./_types";
+import { ObjectDef } from "../common/_types";
+import * as types from "../validators/types";
 
 export class SchemaEntryError extends Error {}
 
@@ -11,6 +12,7 @@ export class SchemaEntry extends Base {
   types: ObjectDef;
   value: ObjectDef;
   config: ObjectDef;
+  validatorName: string;
 
   constructor({ name, key, value, config }) {
     super(config);
@@ -19,15 +21,11 @@ export class SchemaEntry extends Base {
     this.config = config;
     this.name = name;
     this.type = value.type;
-    this.types = {
-      string: toYupString,
-      number: toYupNumberSchemaEntry,
-      boolean: toYupBoolean,
-      array: toYupArray,
-      object: toYupObject,
-      date: toYupDate,
-      mixed: toYupMixed
-    };
+
+    const validatorName = config.validatorName || "yup";
+    this.validatorName = validatorName;
+
+    this.types = types[validatorName];
   }
 
   isValidSchema() {
@@ -38,24 +36,14 @@ export class SchemaEntry extends Base {
     throw new SchemaEntryError(msg);
   }
 
+  // TODO: needs rewrite. See json-schema-to-mapping-es library
   toEntry() {
     if (!this.isValidSchema()) this.error("Not a valid schema");
     const config = this.obj;
     // try to find a type specific Yup schema entry
-    return (
-      this.string(config) ||
-      this.number(config) ||
-      this.boolean(config) ||
-      this.array(config) ||
-      this.object(config) ||
-      this.date(config) ||
-      this.fallbackType(config)
-    );
-  }
 
-  // fallback to mixed if no match
-  fallbackType(config) {
-    this.mixed(config);
+    // TODO: make generic
+    // use typeOrder, see json-schema-to-mapping-es library
   }
 
   get obj() {
@@ -65,33 +53,5 @@ export class SchemaEntry extends Base {
       type: this.type,
       config: this.config
     };
-  }
-
-  string(obj) {
-    return toYupString(obj || this.obj, this.config);
-  }
-
-  number(obj) {
-    return toYupNumberSchemaEntry(obj || this.obj, this.config);
-  }
-
-  boolean(obj) {
-    return toYupBoolean(obj || this.obj, this.config);
-  }
-
-  array(obj) {
-    return toYupArray(obj || this.obj, this.config);
-  }
-
-  object(obj) {
-    return toYupObject(obj || this.obj, this.config);
-  }
-
-  date(obj) {
-    return toYupDate(obj || this.obj, this.config);
-  }
-
-  mixed(obj) {
-    return toYupMixed(obj || this.obj, this.config);
   }
 }

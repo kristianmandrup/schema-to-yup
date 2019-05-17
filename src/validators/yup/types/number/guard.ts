@@ -10,6 +10,6 @@ export class NumberGuard extends Guard {
   }
 }
 
-export function createNumberGuard(obj, config) {
+export function createNumberGuard(obj, config = {}) {
   return new NumberGuard(obj, config);
 }

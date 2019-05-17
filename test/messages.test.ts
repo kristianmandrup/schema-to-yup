@@ -1,4 +1,4 @@
-const { buildYup } = require("../");
+import { buildYup } from "../";
 
 let valid;
 test("yup inserts custom messages for required fields", () => {

@@ -1,4 +1,4 @@
-const { createDateConstraint } = require("./_imports");
+import { createDateConstraint } from "./_imports";
 
 describe("createDateConstraint", () => {
   const value = {
@@ -14,7 +14,7 @@ describe("createDateConstraint", () => {
       format: "date"
     },
     applyConstraintToValidator: (name, value, method) => true,
-    toDate: val => Date(val)
+    toDate: val => new Date(val)
   };
 
   describe("instance", () => {

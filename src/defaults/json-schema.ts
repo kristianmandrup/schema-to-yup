@@ -1,4 +1,4 @@
-const defaults: any = {
+export const defaults: any = {
   getProps: obj => obj && obj.properties,
   getType: obj => obj && obj.type,
   getName: obj => (obj && obj.name) || obj.title,
