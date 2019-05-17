@@ -1,11 +1,11 @@
-const { Constraint } = require("./base");
+import { Constraint } from "./base";
 
-function createStringConstraint(typer, opts) {
+export function createStringConstraint(typer, opts) {
   return new StringConstraint(typer, opts);
 }
 
-class StringConstraint extends Constraint {
-  constructor(typer, opts = {}) {
+export class StringConstraint extends Constraint {
+  constructor(typer, opts: any = {}) {
     super(typer, opts);
   }
 
@@ -33,8 +33,3 @@ class StringConstraint extends Constraint {
     return typeof val === "string";
   }
 }
-
-module.exports = {
-  createStringConstraint,
-  StringConstraint
-};

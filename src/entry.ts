@@ -1,8 +1,8 @@
 import { Base } from "./base";
-import * as validators from "./validators";
+// import * as validators from "./validators";
 import { ObjectDef } from "./_types";
 
-class SchemaEntryError extends Error {}
+export class SchemaEntryError extends Error {}
 
 export class SchemaEntry extends Base {
   key: string;
@@ -35,7 +35,7 @@ export class SchemaEntry extends Base {
   }
 
   error(msg) {
-    throw new YupSchemaEntryError(msg);
+    throw new SchemaEntryError(msg);
   }
 
   toEntry() {

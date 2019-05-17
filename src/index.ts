@@ -1,12 +1,13 @@
-const yup = require("yup");
-const { Base, YupSchemaEntry, YupSchemaEntryError } = require("./entry");
-const { extendYupApi } = require("./validator-bridge");
+import yup from "yup";
+import { SchemaEntry, SchemaEntryError } from "./entry";
+import { extendYupApi } from "./validator-bridge";
+import { Base } from "./base";
 
 function isObject(type) {
   return type && type === "object";
 }
 
-function buildYup(schema, config = {}) {
+export function buildYup(schema, config = {}) {
   return new YupBuilder(schema, config).yupSchema;
 }
 
@@ -15,16 +16,23 @@ function isObjectType(obj) {
 }
 
 class YupBuilder extends Base {
+  schema: any;
+  type: any;
+  properties: any;
+  required: any;
+  shapeConfig: any;
+  validSchema: boolean = false;
+
   constructor(schema, config = {}) {
     super(config);
     this.schema = schema;
     const type = this.getType(schema);
-    const props = this.getProps(schema);
+    const properties = this.getProps(schema);
     this.type = type;
-    this.properties = props;
+    this.properties = properties;
     this.required = this.getRequired(schema);
     if (isObject(type)) {
-      if (isObjectType(props)) {
+      if (isObjectType(properties)) {
         const name = this.getName(schema);
         const properties = this.normalizeRequired(schema);
         const shapeConfig = this.propsToShape({ properties, name, config });
@@ -64,7 +72,7 @@ class YupBuilder extends Base {
     return yup.object().shape(this.shapeConfig);
   }
 
-  normalizeRequired() {
+  normalizeRequired(schema?: any) {
     const properties = {
       ...this.properties
     };
@@ -90,8 +98,8 @@ class YupBuilder extends Base {
     return this.config.isRequired(value);
   }
 
-  propsToShape({ name }) {
-    const properties = {
+  propsToShape({ properties, name, config }) {
+    properties = properties || {
       ...this.properties
     };
     const keys = Object.keys(properties);
@@ -119,7 +127,7 @@ class YupBuilder extends Base {
 
   createYupSchemaEntry({ name, key, value, config }) {
     // return createYupSchemaEntry({ name, key, value, config });
-    return new YupSchemaEntry({
+    return new SchemaEntry({
       name,
       key,
       value,
@@ -127,16 +135,3 @@ class YupBuilder extends Base {
     }).toEntry();
   }
 }
-
-const types = require("./types");
-const { createYupSchemaEntry } = require("./create-entry");
-
-module.exports = {
-  buildYup,
-  YupBuilder,
-  YupSchemaEntry,
-  YupSchemaEntryError,
-  types,
-  createYupSchemaEntry,
-  extendYupApi
-};

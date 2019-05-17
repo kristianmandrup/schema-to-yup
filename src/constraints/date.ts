@@ -1,11 +1,11 @@
-const { Constraint } = require("../constraints/base");
+import { Constraint } from "../constraints";
 
-function createDateConstraint(typer, opts) {
+export function createDateConstraint(typer, opts) {
   return new DateConstraint(typer, opts);
 }
 
-class DateConstraint extends Constraint {
-  constructor(typer, opts = {}) {
+export class DateConstraint extends Constraint {
+  constructor(typer, opts: any = {}) {
     super(typer, opts);
   }
 
@@ -72,8 +72,3 @@ class DateConstraint extends Constraint {
     return `Must be either: a Date, a number (ms) or a String in date format`;
   }
 }
-
-module.exports = {
-  createDateConstraint,
-  DateConstraint
-};

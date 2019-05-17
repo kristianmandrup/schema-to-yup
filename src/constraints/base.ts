@@ -1,5 +1,5 @@
 import { TypeMatcher } from "../type-matcher";
-import { ObjectDef } from "../../entry";
+import { ObjectDef } from "../_types";
 
 const alwaysTrueFn = () => true;
 const identity = val => val;

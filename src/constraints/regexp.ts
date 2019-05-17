@@ -1,11 +1,11 @@
-const { Constraint } = require("./base");
+import { Constraint } from "./base";
 
-function createRegExpConstraint(typer, opts) {
+export function createRegExpConstraint(typer, opts) {
   return new RegExpConstraint(typer, opts);
 }
 
-class RegExpConstraint extends Constraint {
-  constructor(typer, opts = {}) {
+export class RegExpConstraint extends Constraint {
+  constructor(typer, opts: any = {}) {
     super(typer, opts);
   }
 
@@ -41,8 +41,3 @@ class RegExpConstraint extends Constraint {
     return `Must be either a RegExp or String`;
   }
 }
-
-module.exports = {
-  createRegExpConstraint,
-  RegExpConstraint
-};

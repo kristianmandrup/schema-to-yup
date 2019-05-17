@@ -11,7 +11,7 @@ export function createPositiveNumberConstraint(typer, opts) {
 }
 
 export class NumericConstraint extends Constraint {
-  constructor(typer, opts = {}) {
+  constructor(typer, opts: any = {}) {
     super(typer, opts);
   }
 
