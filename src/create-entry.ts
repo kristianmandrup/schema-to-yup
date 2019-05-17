@@ -1,13 +1,11 @@
 export function createSchemaEntry(opts: any = {}) {
-  const { name, key, value, config } = opts;
-  const { SchemaEntry = null } = config || {};
-  if (!SchemaEntry) {
-    throw "missing SchemaEntry class in config";
+  const config = opts.config || {};
+  const { SchemaEntry, buildSchemaEntry } = config;
+  if (buildSchemaEntry) {
+    return buildSchemaEntry(opts);
   }
-  return new SchemaEntry({
-    name,
-    key,
-    value,
-    config
-  }).toEntry();
+  if (!SchemaEntry) {
+    throw "missing buildSchemaEntry or SchemaEntry class in config to create entries";
+  }
+  return new SchemaEntry(opts).toEntry();
 }

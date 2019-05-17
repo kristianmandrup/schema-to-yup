@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.0-alpha
+
+Status: WIP
+
+Complete redesign
+
+- Extract contraints into separate classes
+- Extract builders to support building multiple validators
+- Extract validators
+- Extract validator bridge
+- Added unit test suite
+
 ## 1.6.4
 
 List similar JSON schema -> model projects
