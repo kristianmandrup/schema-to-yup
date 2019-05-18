@@ -1,13 +1,13 @@
 import yup from "yup";
 import { Loggable } from "@schema-validator/core";
-import { createSchemaEntry } from "../create-entry";
-import { isObjectType } from "./is-object";
+import { isObjectType, isObject } from "./is-object";
 
-export function buildValidator(schema, config = {}) {
-  return new ValidatorBuilder(schema, config).instance;
+export function buildWalker(schema, config = {}) {
+  return new SchemaWalker(schema, config).instance;
 }
 
-export class ValidatorBuilder extends Loggable {
+export class SchemaWalker extends Loggable {
+  config: any;
   schema: any;
   type: any;
   properties: any;
@@ -43,7 +43,7 @@ export class ValidatorBuilder extends Loggable {
     }
   }
 
-  // TODO: return .instance of Validator built
+  // TODO: return .instance of Validator built (see)
   get instance() {
     return {};
     //

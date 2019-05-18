@@ -1,10 +1,9 @@
-import { Base } from "../base";
 // import * as validators from "./validators";
-import { ObjectDef } from "@schema-validator/core";
+import { Loggable, ObjectDef } from "@schema-validator/core";
 
 export class SchemaEntryError extends Error {}
 
-export class SchemaEntry extends Base {
+export class SchemaEntry extends Loggable {
   key: string;
   name: string;
   type: string;
