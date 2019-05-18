@@ -3,24 +3,26 @@ import { isFunction, isObject, isObjectType } from "@schema-validator/core";
 export { isObject };
 
 export function toObject(obj) {
-  return isObject(obj) && ObjectSchemaEntryWalker.create(obj).walk()
+  return isObject(obj) && ObjectSchemaEntryWalker.create(obj).walk();
 }
 
 // Allow recursive schema
 export class ObjectSchemaEntryWalker extends SchemaEntryWalker {
+  config: any;
   properties: any;
   typeNameFor: (obj: any) => string;
   objTypeName: string;
+  result: any;
 
   constructor(opts, config = {}) {
     super(opts, config);
-    this.properties = this.value.properties;
+    this.properties = this.entry.properties;
     this.typeNameFor = this.config.typeNameFor;
-    this.objTypeName = this.value.typeName || this.value.className;
+    this.objTypeName = this.entry.typeName || this.entry.className;
   }
 
   get children() {
-    return this.properties || []
+    return this.properties || [];
   }
 
   get baseType() {
@@ -57,7 +59,7 @@ export class ObjectSchemaEntryWalker extends SchemaEntryWalker {
 
   buildObjectValueMapping() {
     const { buildProperties } = this.config;
-    return buildProperties(this.objectValue, this.mappingConfig);
+    return buildProperties(this.objectValue, this.recursiveConfig);
   }
 
   get incNestingLevel() {
@@ -65,7 +67,7 @@ export class ObjectSchemaEntryWalker extends SchemaEntryWalker {
     return nestingLevel++;
   }
 
-  get mappingConfig() {
+  get recursiveConfig() {
     return {
       result: this.result,
       name: this.key,
@@ -88,7 +90,7 @@ export class ObjectSchemaEntryWalker extends SchemaEntryWalker {
       wasCacheHit: this.wasCacheHit,
       parentName: this.key,
       typeName: this.resolvedTypeName,
-      ...this.value
+      ...this.entry
     };
   }
 
