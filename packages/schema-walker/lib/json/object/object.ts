@@ -19,6 +19,10 @@ export class ObjectSchemaEntryWalker extends SchemaEntryWalker {
     this.objTypeName = this.value.typeName || this.value.className;
   }
 
+  get children() {
+    return this.properties || []
+  }
+
   get baseType() {
     return "object";
   }

@@ -13,10 +13,16 @@ export class SchemaEntryWalker implements ISchemaEntryWalker {
     this.listeners = config.listeners
   }
 
+  init() {}
+
   walkEntry(entry: any) {
     this.onEnterEntry(entry)
     this.walk(entry)
     this.onExitEntry(entry)
+  }
+
+  get children() {
+    return []
   }
 
   onEnterEntry(entry: any) {
