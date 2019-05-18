@@ -65,6 +65,20 @@ const valid = validator.validateSync(obj);
 
 ## Development
 
+## Design
+
+The packages should be designed to have little to no inter-dependencies. We strive for a loosely coupled, flexible design, using interfaces.
+
+### Package structure
+
+- `api` library surface API
+- `constraints` type constraint classes (parse and resolve from schema)
+- `core` core functionality such as Logger
+- `schema-walker` general purpose walker architecture
+- `validator-bridge` add extra validation methods to validator
+- `forg-builder` build forg validator from constraints
+- `yup-builder` build yup validator from constraints
+
 ## Test
 
 ## License

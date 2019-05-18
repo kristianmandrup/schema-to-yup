@@ -1,13 +1,13 @@
-import { MappingBaseType } from "../base";
-import { isFunction, isObject, isObjectType } from "../util";
+import { SchemaEntryWalker } from "../entry";
+import { isFunction, isObject, isObjectType } from "@schema-validator/core";
 export { isObject };
 
 export function toObject(obj) {
-  return isObject(obj) && ObjectEntry.create(obj).convert();
+  return isObject(obj) && ObjectSchemaEntryWalker.create(obj).walk()
 }
 
 // Allow recursive schema
-export class ObjectEntry extends MappingBaseType {
+export class ObjectSchemaEntryWalker extends SchemaEntryWalker {
   properties: any;
   typeNameFor: (obj: any) => string;
   objTypeName: string;
@@ -28,7 +28,7 @@ export class ObjectEntry extends MappingBaseType {
   }
 
   static create(obj) {
-    return new MappingObject(obj).init();
+    return new ObjectSchemaEntryWalker(obj).init();
   }
 
   createMappingResult() {

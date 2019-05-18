@@ -1,6 +1,4 @@
-import { SchemaWalker } from "./schema-walker";
-export { SchemaWalker };
-
-export function buildWalker(schema, config = {}) {
-  return new SchemaWalker(schema, config).instance;
-}
+import { RootSchemaWalker, buildWalker } from "./root-object-schema-walker";
+export { ObjectSchemaWalker } from "./object-schema-walker";
+export { ArraySchemaWalker } from "./array-schema-walker";
+export { RootSchemaWalker, buildWalker };

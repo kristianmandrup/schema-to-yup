@@ -4,10 +4,10 @@ import { Validator } from "@cesium133/forgjs";
 import { createSchemaValidator } from "../validator";
 
 export function buildWalker(schema, config = {}) {
-  return new SchemaWalker(schema, config).instance;
+  return new RootSchemaWalker(schema, config).instance;
 }
 
-export class SchemaWalker extends Loggable {
+export class RootSchemaWalker extends Loggable {
   config: any;
   schema: any;
   name: string = "unknown";
