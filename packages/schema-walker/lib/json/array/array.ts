@@ -32,7 +32,7 @@ export class ArraySchemaEntryWalker extends SchemaEntryWalker {
   }
 
   get isReference() {
-    return isReferenceArray(this.value);
+    return isReferenceArray(this.entry);
   }
 
   get validItems() {
@@ -62,7 +62,7 @@ export class ArraySchemaEntryWalker extends SchemaEntryWalker {
   }
 
   get items() {
-    return this.value.items;
+    return this.entry.items;
   }
 
   get children() {
