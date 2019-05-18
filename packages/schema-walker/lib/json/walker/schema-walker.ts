@@ -1,6 +1,7 @@
-import yup from "yup";
 import { Loggable } from "@schema-validator/core";
 import { isObjectType, isObject } from "./is-object";
+import { Validator } from "@cesium133/forgjs";
+import { createSchemaValidator } from "../validator";
 
 export function buildWalker(schema, config = {}) {
   return new SchemaWalker(schema, config).instance;
@@ -9,45 +10,52 @@ export function buildWalker(schema, config = {}) {
 export class SchemaWalker extends Loggable {
   config: any;
   schema: any;
+  name: string = "unknown";
   type: any;
   properties: any;
   required: any;
   shapeConfig: any;
   validSchema: boolean = false;
+  validator: any;
+  createSchemaValidator: (config: any) => any;
 
-  constructor(schema, config = {}) {
+  constructor(schema, config: any = {}) {
     super(config);
     this.schema = schema;
-    const type = this.getType(schema);
-    const properties = this.getProps(schema);
-    this.type = type;
-    this.properties = properties;
-    this.required = this.getRequired(schema);
-    if (isObject(type)) {
-      if (isObjectType(properties)) {
-        const name = this.getName(schema);
-        const properties = this.normalizeRequired(schema);
-        const shapeConfig = this.propsToShape({ properties, name, config });
-        this.shapeConfig = shapeConfig;
-        this.validSchema = true;
-        return;
-      } else {
-        this.error(
-          `invalid schema: must have a properties object: ${JSON.stringify(
-            properties
-          )}`
-        );
-      }
-    } else {
-      this.error(`invalid schema: must be an object type, was: ${type}`);
-    }
+    this.type = this.getType(schema);
+    this.properties = this.getProps(schema);
+    this.createSchemaValidator =
+      config.createSchemaValidator || createSchemaValidator;
   }
 
-  // TODO: return .instance of Validator built (see)
-  get instance() {
-    return {};
-    //
+  init() {
+    const {
+      createSchemaValidator,
+      validator,
+      properties,
+      schema,
+      config
+    } = this;
+    this.validator = validator || createSchemaValidator(config);
+    this.required = this.getRequired(schema);
+    const valid = this.validator.validate(schema);
+    if (!valid) {
+      this.error(
+        `invalid schema: must have a properties object: ${JSON.stringify(
+          properties
+        )}`
+      );
+    }
+    if (!isObjectType(this.properties)) {
+      this.invalidProperties();
+    }
+    this.name = this.getName(this.schema);
+    this.properties = this.normalizeRequired(schema);
+    this.validSchema = true;
+    return this;
   }
+
+  invalidProperties() {}
 
   getRequired(obj) {
     const { getRequired } = this.config;
@@ -90,36 +98,5 @@ export class SchemaWalker extends Loggable {
 
   isRequired(value) {
     return this.config.isRequired(value);
-  }
-
-  propsToShape({ properties, name, config }) {
-    properties = properties || {
-      ...this.properties
-    };
-    const keys = Object.keys(properties);
-    return keys.reduce((acc, key) => {
-      // this.logInfo("propsToShape", {
-      //   key
-      // });
-      const value = properties[key];
-      const yupSchemaEntry = this.propToValidatorSchemaEntry({
-        name,
-        key,
-        value
-      });
-      this.logInfo("propsToShape", { key, yupSchemaEntry });
-      acc[key] = yupSchemaEntry;
-      return acc;
-    }, {});
-  }
-
-  propToValidatorSchemaEntry({ name, key, value = {} }) {
-    const entryBuilder =
-      this.createSchemaEntry || this.config.createYupSchemaEntry;
-    return entryBuilder({ name, key, value, config: this.config });
-  }
-
-  createSchemaEntry(opts: any = {}) {
-    return createSchemaEntry(opts);
   }
 }

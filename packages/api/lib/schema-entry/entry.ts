@@ -1,33 +1,12 @@
-import * as types from "./types";
-const {
-  toString,
-  toNumber,
-  toBoolean,
-  toArray,
-  toObject,
-  toDate,
-  toIp,
-  toGeoPoint,
-  toNumericRange,
-  toDateRange,
-  obj,
-  chooseObjMapper,
-  AnyOfMapper
-} = types;
-import { InfoHandler } from "./types/info";
-import {
-  isFunction,
-  isStringType,
-  isObjectType,
-  isArrayType
-} from "./types/util";
+import { Loggable } from "@schema-validator/core";
+import { isFunction, isStringType, isObjectType, isArrayType } from "../util";
 
 export class SchemaEntryError extends Error {}
 
 export const createSchemaEntry = (obj, config = {}) =>
   new SchemaEntry(obj, config);
 
-export class SchemaEntry extends InfoHandler {
+export class SchemaEntry extends Loggable {
   parentName: string;
   key: string;
   value: any;
@@ -44,7 +23,6 @@ export class SchemaEntry extends InfoHandler {
     this.key = key;
     this.value = value;
     this.type = value.type;
-
     this.typeMappers = {
       ...this.defaults.typeMappers,
       ...(config.typeMappers || {})
@@ -57,35 +35,11 @@ export class SchemaEntry extends InfoHandler {
     return this.typeMappers[type];
   }
 
-  get defaults() {
-    return {
-      typeMappers: this.defaultTypeMappers,
-      typeOrder: this.defaultTypeOrder
-    };
-  }
 
-  get defaultTypeMappers() {
-    return {
-      ip: toIp,
-      point: toGeoPoint,
-      string: toString,
-      number: toNumber,
-      boolean: toBoolean,
-      array: toArray,
-      object: toObject,
-      date: toDate,
-      dateRange: toDateRange,
-      numericRange: toNumericRange
-    };
-  }
 
   get defaultTypeOrder() {
     return [
-      "ip",
-      "point",
       "string",
-      "dateRange",
-      "numericRange",
       "number",
       "boolean",
       "array",
