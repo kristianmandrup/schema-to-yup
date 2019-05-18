@@ -1,188 +1,66 @@
-import { build } from "../..";
+import { schemas } from './_schemas_'
+import { toArray } from ".";
+
+const build = toArray
 
 describe("array", () => {
-  test("no items", () => {
-    const json = {
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "http://example.com/person.schema.json",
-      title: "Person",
-      description: "A person",
-      type: "object",
-      properties: {
-        friendNames: {
-          description: "Names of friends",
-          type: "array"
-        }
-      }
+  test("no items", done => {
+    const schema = schemas.noItems
+    const onComplete = (result) => {
+      done()
+    }
+    const config = {
+      onComplete
     };
-
-    const config = {};
-    const { properties } = build(json, config);
+    build(schema, config);
     // console.log({ mapping });
     // console.log("Array - no items", JSON.stringify(mapping, null, 2));
-    expect(properties).toEqual({
-      friendNames: {
-        // include_in_parent: true,
-        type: "nested"
-      }
-    });
   });
 
-  test("empty items", () => {
-    const json = {
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "http://example.com/person.schema.json",
-      title: "Person",
-      description: "A person",
-      type: "object",
-      properties: {
-        friendNames: {
-          description: "Names of friends",
-          type: "array",
-          items: {}
-        }
-      }
-    };
-
-    const config = {};
-    const { properties } = build(json, config);
-    // console.log({ properties });
-    // console.log("Array - no items", JSON.stringify(properties, null, 2));
-    expect(properties).toEqual({
-      friendNames: {
-        // include_in_parent: true,
-        type: "nested"
-      }
-    });
-  });
-
-  test("empty items", () => {
-    const json = {
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "http://example.com/person.schema.json",
-      title: "Person",
-      description: "A person",
-      type: "object",
-      properties: {
-        friendNames: {
-          description: "Names of friends",
-          type: "array",
-          items: {}
-        }
-      }
-    };
-
-    const config = {};
-    const { properties } = build(json, config);
-    // console.log({ properties });
-    // console.log("Array - empty items", JSON.stringify(properties, null, 2));
-    expect(properties).toEqual({
-      friendNames: {
-        // include_in_parent: true,
-        type: "nested"
-      }
-    });
-  });
-
-  test("items object - string type", () => {
-    const json = {
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "http://example.com/person.schema.json",
-      title: "Person",
-      description: "A person",
-      type: "object",
-      properties: {
-        friendNames: {
-          description: "Names of friends",
-          type: "array",
-          items: {
-            type: "string"
-          }
-        }
-      }
-    };
-
+  test("empty items", done => {
+    const schema = schemas.emptyItems
+    const onComplete = (result) => {
+      done()
+    }
     const config = {
-      typeMap: {
-        string: "string"
-      }
+      onComplete
     };
+    build(schema, config);
 
-    const { properties } = build(json, config);
-    // console.log({ properties });
-    // console.log("Array - empty items", JSON.stringify(properties, null, 2));
-    expect(properties).toEqual({
-      friendNames: {
-        // include_in_parent: true,
-        type: "string"
-      }
-    });
   });
 
-  test("items array - one item string type", () => {
-    const json = {
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "http://example.com/person.schema.json",
-      title: "Person",
-      description: "A person",
-      type: "object",
-      properties: {
-        friendNames: {
-          description: "Names of friends",
-          type: "array",
-          items: [
-            {
-              type: "string"
-            }
-          ]
-        }
-      }
-    };
-
+  test("items object - string type", done => {
+    const schema = schemas.itemsObjString
+    const onComplete = (result) => {
+      done()
+    }
     const config = {
-      typeMap: {
-        string: "text"
-      }
+      onComplete
     };
-    const { properties } = build(json, config);
-    // console.log({ properties });
-    // console.log("Array - empty items", JSON.stringify(properties, null, 2));
-    expect(properties).toEqual({
-      friendNames: {
-        // include_in_parent: true,
-        type: "text"
-      }
-    });
+    build(schema, config);
+
+  });
+    
+  itemsArrayOneString
+  test("items array - one item string type", done => {
+    const schema = schemas.itemsArrayOneString
+    const onComplete = (result) => {
+      done()
+    }
+    const config = {
+      onComplete
+    };
+    build(schema, config);
   });
 
-  describe("items array - two items string and number type", () => {
-    const json = {
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "http://example.com/person.schema.json",
-      title: "Person",
-      description: "A person",
-      type: "object",
-      properties: {
-        friendNames: {
-          description: "Names of friends",
-          type: "array",
-          items: [
-            {
-              type: "string"
-            },
-            {
-              type: "number"
-            }
-          ]
-        }
-      }
+  describe("items array - two items string and number type", done => {
+    const schema = schemas.itemsArrayStringNumber
+    const onComplete = (result) => {
+      done()
+    }
+    const config = {
+      onComplete
     };
-
-    const config = {};
-
-    test("throws", () => {
-      const fn = () => build(json, config);
-      expect(fn).toThrow();
-    });
+    build(schema, config);
   });
 });

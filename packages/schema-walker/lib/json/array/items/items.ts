@@ -5,7 +5,7 @@ export const createItemsMapping = (opts, config) => {
   return new MappingItems(opts, config);
 };
 
-export class MappingItems extends MappingBaseType {
+export class ItemsWalker extends SchemaEntryWalker {
   items: any[];
   ownerName: string;
   itemResolver: (item, config?: any) => any;
@@ -14,39 +14,27 @@ export class MappingItems extends MappingBaseType {
     super(opts, config);
     const { items, owner = {} } = opts;
     this.items = items;
-    this.ownerName = owner.name;
-
-    const createMappingItem = createMappingItemFactory(config);
-    const itemResolver = item => {
-      return createMappingItem(this.opts).resolve(item);
+    this.ownerName = owner.name || this.key;
+    const createItemResolver = config.createItemResolver;
+    const resolveItem = item => {
+      return createItemResolver(this.opts).resolve(item);
     };
-    this.itemResolver = config.itemResolver || itemResolver;
+    this.resolveItem = resolveItem;
   }
 
   resolve() {
     const resolveItem = this.resolveItem.bind(this);
-    return this.items.map(resolveItem);
-  }
-
-  resolveItem(item) {
-    item.ownerName = this.ownerName;
-    return this.typeResolver(item);
-  }
-
-  typeResolver(item) {
-    const payload = this.itemEntryPayload(item);
-    return this.itemResolver(payload, this.config);
+    return this.items.map(item => {
+      const payload = itemEntryPayload(item)
+      resolveItem(payload, this.config)
+    });
   }
 
   itemEntryPayload(item) {
     return {
-      ownerName: this.key,
+      ownerName: this.ownerName,
       item
     };
   }
 }
 
-module.exports = {
-  createItemsMapping,
-  MappingItems
-};

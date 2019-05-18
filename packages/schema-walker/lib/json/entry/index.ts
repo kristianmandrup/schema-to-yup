@@ -1,3 +1,5 @@
+import { classify } from "@schema-validator/core";
+
 type VoidEntryFn: (entry: any) => void
 
 export interface ISchemaEntryWalker {
@@ -7,15 +9,34 @@ export interface ISchemaEntryWalker {
 }
 
 export class SchemaEntryWalker implements ISchemaEntryWalker {
-  walk(entry: any) {
-
+  constructor(config: any = {}) {
+    this.listeners = config.listeners
   }
 
-  onEnterEntry() {
-
+  walkEntry(entry: any) {
+    this.onEnterEntry(entry)
+    this.walk(entry)
+    this.onExitEntry(entry)
   }
 
-  onExitEntry() {
-    
+  onEnterEntry(entry: any) {
+    this.genericOnEntry(entry, 'Enter')
+  }
+
+  onEnterEntry(entry: any) {
+    this.genericOnEntry(entry, 'Exit')
+  }
+
+  genericOnEntry(entry: any, lifecycle: string = 'Enter') {
+    const { type } = entry
+    const methodName = this.methodName(type, lifecycle)
+    this.listeners.map(listener => {
+      const eventHandler = listener[]
+    })    
+  }
+
+  methodName(type: string) {
+    type = classify(type)
+    return `on${lifecycle}${type}`
   }
 }

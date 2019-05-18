@@ -1,13 +1,13 @@
 {
-  "name": "@schema-validator/validator-bridge",
+  "name": "@schema-validator/yup-validator-bridge",
   "version": "1.0.0",
-  "description": "validator bridge",
+  "description": "Yup validator.js bridge",
   "keywords": [
     "validator",
     "bridge"
   ],
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
-  "homepage": "https://github.com/kristianmandrup/json-schema-to-yup/tree/master/packages/validator-bridge#readme",
+  "homepage": "https://github.com/kristianmandrup/json-schema-to-yup/tree/master/packages/yup-validator-bridge#readme",
   "license": "ISC",
   "main": "lib/validator-bridge.js",
   "directories": {

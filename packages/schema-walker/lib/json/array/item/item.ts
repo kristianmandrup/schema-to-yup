@@ -9,7 +9,7 @@ export const createMappingItemFactory = (config = {}) => {
   };
 };
 
-export class MappingItem extends MappingBaseType {
+export class ItemSchemaEntryWalker extends SchemaEntryWalker {
   item: any;
   ownerName: string;
 
@@ -18,6 +18,10 @@ export class MappingItem extends MappingBaseType {
     const { item, owner = {} } = opts;
     this.item = item;
     this.ownerName = owner.name;
+  }
+
+  walk(item: any) {
+    return this.resolve(item)
   }
 
   get resolver() {

@@ -6,28 +6,17 @@ export function toArray(obj) {
   return isArray(obj.type) && MappingArray.create(obj).convert();
 }
 
-export class MappingArray extends MappingBaseType {
-  get baseType() {
-    return "nested";
+export class ArraySchemaEntryWalker extends SchemaEntryWalker {
+  static create(obj) {
+    return new ArraySchemaEntryWalker(obj).init();
+  }
+  
+  get schemaType() {
+    return "array"
   }
 
-  get typeName() {
-    return "array";
-  }
-
-  get entry() {
-    return {
-      ...this.lookedUpEntry,
-      ...this.resolvedEntry
-    };
-  }
-
-  get resolvedResult() {
-    const result = this.createResult();
-    if (this.isReference) {
-      delete result.type;
-    }
-    return result;
+  get walk(entry: any) {
+    // TODO
   }
 
   get includeInParent() {
@@ -50,14 +39,6 @@ export class MappingArray extends MappingBaseType {
     return isReferenceArray(this.value);
   }
 
-  get referenceEntry() {
-    return {
-      _parent: { type: this.parentName },
-      _source: { enabled: true },
-      _all: { enabled: false }
-    };
-  }
-
   get validItems() {
     return Array.isArray(this.items) || isObjectType(this.items);
   }
@@ -73,18 +54,6 @@ export class MappingArray extends MappingBaseType {
 
   get selectFirstItem() {
     return this.hasValidItemTypes ? this.firstItem : this.invalidItemTypes();
-  }
-
-  invalidItemTypes() {
-    this.error(
-      `Invalid item types for ${
-        this.key
-      }. All array items must share the same type to be mappable to ElasticSearch`,
-      {
-        schema: this.schema,
-        items: this.items
-      }
-    );
   }
 
   get hasValidItemTypes() {
@@ -104,15 +73,15 @@ export class MappingArray extends MappingBaseType {
     return this.resolveFirstItem.type;
   }
 
-  get resolvedArrayType() {
-    return this.typeMap[this.arrayType];
-  }
-
-  get type() {
-    return this.configType || this.resolvedArrayType || this.baseType;
-  }
-
-  static create(obj) {
-    return new MappingArray(obj).init();
+  invalidItemTypes() {
+    this.error(
+      `Invalid item types for ${
+        this.key
+      }. All array items must share the same type to be mappable to ElasticSearch`,
+      {
+        schema: this.schema,
+        items: this.items
+      }
+    );
   }
 }
