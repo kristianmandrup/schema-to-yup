@@ -11,6 +11,10 @@ export class MixedSchemaEntry extends BaseType {
     super(obj);
   }
 
+  static schemaEntryFor(obj: any): any {
+    return {};
+  }
+
   static create(obj) {
     return new MixedSchemaEntry(obj);
   }

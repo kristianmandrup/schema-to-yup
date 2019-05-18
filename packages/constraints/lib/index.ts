@@ -1,4 +1,4 @@
-import { Constraint } from "./base";
+import { Constraint } from "./constraint";
 import { DateConstraint, createDateConstraint } from "./date";
 import { RegExpConstraint, createRegExpConstraint } from "./regexp";
 import {

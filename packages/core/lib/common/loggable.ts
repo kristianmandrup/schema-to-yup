@@ -5,12 +5,14 @@ export type Enable = {
 };
 
 export class Loggable {
+  config: any;
   enable: Enable;
   log: Function;
   err: Function;
   warnOnInvalid: boolean;
 
   constructor(config: any = {}) {
+    this.config = this.config || config;
     const { log, error, warn, warnOnInvalid } = config;
     const enable: Enable = config.enable || {};
     this.enable = enable;

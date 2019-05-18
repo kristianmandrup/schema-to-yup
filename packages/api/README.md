@@ -2,6 +2,10 @@
 
 API to create a validator from a schema
 
+## TODO
+
+Extract API from latest `schema-to-yup#master` and from `*-es-mapping` sister library. Ensure we have a `results` object available on `config` passed around and also an event/callback mechanism (such as `onComplete`, `onTypeEntry`, `onError` etc)
+
 ## Usage
 
 ```ts

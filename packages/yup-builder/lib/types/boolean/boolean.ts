@@ -1,25 +1,5 @@
-import { MixedSchemaEntry } from "./mixed";
-import { Guard } from "./guard";
-
-export class BooleanGuard extends Guard {
-  constructor(obj, config) {
-    super(obj, config);
-  }
-
-  isBoolean(obj) {
-    return this.config.isBoolean(obj);
-  }
-
-  validate(obj) {
-    return (
-      this.isBoolean(obj) && BooleanSchemaEntry.create(obj).createSchemaEntry()
-    );
-  }
-}
-
-export function createBooleanGuard(obj, config = {}) {
-  return new BooleanGuard(obj, config);
-}
+import { MixedSchemaEntry } from "../mixed";
+import { createBooleanGuard } from "./guard";
 
 export function proceed(obj, config = {}) {
   return obj && createBooleanGuard(obj, config).isValid();

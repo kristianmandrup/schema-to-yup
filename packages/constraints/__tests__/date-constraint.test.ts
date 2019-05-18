@@ -18,7 +18,7 @@ describe("createDateConstraint", () => {
   };
 
   describe("instance", () => {
-    const constraint = createDateConstraint(typer, opts);
+    const constraint: any = createDateConstraint(typer, opts);
     test("map", () => {
       expect(constraint.map).toBe(value);
     });

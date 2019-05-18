@@ -1,21 +1,13 @@
 import yup from "yup";
-import { Base } from "../base";
-import { SchemaEntry } from "../entry";
+import { Loggable } from "@schema-validator/core";
 import { createSchemaEntry } from "../create-entry";
-
-function isObject(type) {
-  return type && type === "object";
-}
-
-function isObjectType(obj) {
-  return obj === Object(obj);
-}
+import { isObjectType } from "./is-object";
 
 export function buildValidator(schema, config = {}) {
-  return new ValidatorBuilder(schema, config).yupSchema;
+  return new ValidatorBuilder(schema, config).instance;
 }
 
-export class ValidatorBuilder extends Base {
+export class ValidatorBuilder extends Loggable {
   schema: any;
   type: any;
   properties: any;
@@ -51,6 +43,12 @@ export class ValidatorBuilder extends Base {
     }
   }
 
+  // TODO: return .instance of Validator built
+  get instance() {
+    return {};
+    //
+  }
+
   getRequired(obj) {
     const { getRequired } = this.config;
     return getRequired ? getRequired(obj) : obj.required || [];
@@ -66,14 +64,6 @@ export class ValidatorBuilder extends Base {
 
   getName(obj) {
     return this.config.getName(obj);
-  }
-
-  get yupSchema() {
-    return this.object.shape(this.shapeConfig);
-  }
-
-  get object() {
-    return yup.object();
   }
 
   normalizeRequired(schema?: any) {

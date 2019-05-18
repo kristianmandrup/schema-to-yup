@@ -7,10 +7,11 @@ import {
   createNumericConstraint
 } from "@schema-validator/constraints";
 
-import { ObjectDef } from "@schema-validator/core";
+import { ObjectDef, TypeMatcher } from "@schema-validator/core";
 // class ConvertYupSchemaError extends Error {}
 
-export class BaseType extends Base {
+export class TypeSchemaEntry extends TypeMatcher {
+  config: any;
   key: string;
   format: string;
   value: ObjectDef;

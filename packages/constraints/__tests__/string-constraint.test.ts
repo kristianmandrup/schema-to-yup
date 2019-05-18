@@ -13,7 +13,7 @@ describe("createStringConstraint", () => {
     applyConstraintToValidator: (name, value, method) => true,
     toString: val => String(val)
   };
-  const constraint = createStringConstraint(typer, opts);
+  const constraint: any = createStringConstraint(typer, opts);
 
   describe("instance", () => {
     test("map", () => {
