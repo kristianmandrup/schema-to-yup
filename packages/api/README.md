@@ -1,13 +1,8 @@
-# Schema to Validator
+# `@schema-validator/api`
 
-Build a Validator from a schema such as a JSON schema or GraphQL schema (type definition)
+API to create a validator from a schema
 
-## Install
-
-- npm: `npm install schema-to-validator -S`
-- yarn: `yarn add schema-to-validator`
-
-## Quickstart
+## Usage
 
 ```ts
 import { buildValidator } from "@schema-validator/api";
@@ -52,19 +47,3 @@ const validator = buildValidator({
 
 const valid = validator.validateSync(obj);
 ```
-
-### Yup example
-
-### JSON Schema
-
-### GraphQL Schema
-
-### Forg example
-
-## Advanced
-
-## Development
-
-## Test
-
-## License
