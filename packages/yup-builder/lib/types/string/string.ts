@@ -1,4 +1,4 @@
-import { MixedSchemaEntry } from "../mixed";
+import { MixedSchemaEntry } from "../mixed/mixed";
 
 export class StringSchemaEntry extends MixedSchemaEntry {
   constructor(obj) {

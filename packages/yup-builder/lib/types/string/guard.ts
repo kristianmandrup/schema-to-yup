@@ -1,4 +1,4 @@
-import { Guard } from "../guard";
+import { Guard } from "../base/guard";
 
 export class StringGuard extends Guard {
   constructor(obj, config) {

@@ -1,4 +1,4 @@
-import { buildYup } from "../";
+import { buildYup } from "../../..";
 import yup from "yup";
 
 //check validity

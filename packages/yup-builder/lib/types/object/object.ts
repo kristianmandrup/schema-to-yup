@@ -1,4 +1,4 @@
-import { MixedSchemaEntry } from "../mixed";
+import { MixedSchemaEntry } from "../mixed/mixed";
 import { ObjectDef } from "@schema-validator/core";
 
 class ObjectSchemaEntry extends MixedSchemaEntry {

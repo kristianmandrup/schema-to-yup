@@ -1,4 +1,4 @@
-import { Guard } from "../guard";
+import { Guard } from "../base/guard";
 
 export class NumberGuard extends Guard {
   constructor(obj, config) {

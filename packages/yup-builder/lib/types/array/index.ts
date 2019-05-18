@@ -1,6 +1,6 @@
 // See:
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
-import { MixedSchemaEntry } from "../mixed";
+import { MixedSchemaEntry } from "../mixed/mixed";
 import { ArrayGuard, createArrayGuard } from "./guard";
 
 const proceed = (obj, config = {}) => {

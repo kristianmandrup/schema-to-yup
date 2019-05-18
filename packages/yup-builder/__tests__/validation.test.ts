@@ -1,4 +1,4 @@
-import { buildYup } from "../";
+import { buildYup } from "../../..";
 
 const invalidjson = {
   title: "users",

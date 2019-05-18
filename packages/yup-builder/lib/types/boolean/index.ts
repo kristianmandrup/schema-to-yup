@@ -1,4 +1,5 @@
 import { createBooleanGuard } from "./guard";
+import { BooleanSchemaEntry } from './boolean';
 
 export function proceed(obj, config = {}) {
   return obj && createBooleanGuard(obj, config).isValid();

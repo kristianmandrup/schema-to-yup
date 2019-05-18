@@ -1,10 +1,7 @@
-import { BaseType } from "./base-type";
+import { TypeSchemaEntry } from "../base/type-schema-entry";
 
-export function toSchemaEntry(obj, config = {}) {
-  return obj && MixedSchemaEntry.create(obj).createSchemaEntry();
-}
 
-export class MixedSchemaEntry extends BaseType {
+export class MixedSchemaEntry extends TypeSchemaEntry {
   enabled: any;
 
   constructor(obj) {

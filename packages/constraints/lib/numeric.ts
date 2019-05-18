@@ -1,4 +1,4 @@
-import { Constraint } from "./base";
+import { Constraint } from "./constraint";
 
 export function createNumericConstraint(typer, opts) {
   return new NumericConstraint(typer, opts);

@@ -1,4 +1,4 @@
-import { Guard } from "../guard";
+import { Guard } from "../base/guard";
 import { BooleanSchemaEntry } from "./boolean";
 
 export class BooleanGuard extends Guard {

@@ -1,4 +1,4 @@
-import { toConstraintsMap, extendYupApi } from ".";
+import { toConstraintsMap, extendYupApi } from "../lib";
 import yup from "yup";
 describe("toConstraintsMap", () => {
   test("no args - throws", () => {

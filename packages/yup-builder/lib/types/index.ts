@@ -1,6 +1,6 @@
-import * as mixed from "./mixed";
+import * as mixed from "./mixed/mixed";
 import * as array from "./array";
-import * as boolean from "./boolean";
+import * as boolean from "./boolean/boolean";
 import * as number from "./number";
 import * as object from "./object";
 import * as string from "./string";

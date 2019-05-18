@@ -1,4 +1,4 @@
-import { Guard } from "../guard";
+import { Guard } from "../base/guard";
 
 class DateGuard extends Guard {
   config: any;

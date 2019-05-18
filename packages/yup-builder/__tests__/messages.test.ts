@@ -1,4 +1,4 @@
-import { buildYup } from "../";
+import { buildYup } from "../../..";
 
 let valid;
 test("yup inserts custom messages for required fields", () => {
