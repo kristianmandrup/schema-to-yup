@@ -107,7 +107,7 @@ export const isBoolean = type => {
   return type === "boolean";
 };
 
-const schemaEntryTypeMap = {
+export const schemaEntryTypeMap = {
   object: isObject,
   array: isArray,
   boolean: isBoolean,
@@ -116,7 +116,18 @@ const schemaEntryTypeMap = {
   date: isDate
 };
 
-const schemaEntryMainType = (type?: string) => {
+export const primitiveSchemaEntryTypeMap = {
+  boolean: isBoolean,
+  string: isString,
+  number: isNumber,
+  date: isDate
+};
+
+const primitiveTypeNames = ["boolean", "string", "number", "date"];
+
+export const isPrimitiveType = type => primitiveTypeNames.includes(type);
+
+export const schemaEntryMainType = (type?: string) => {
   switch (type) {
     case "array":
       return "array";
@@ -127,7 +138,7 @@ const schemaEntryMainType = (type?: string) => {
   }
 };
 
-const schemaTypeOf = (entry: any = {}) => {
+export const schemaTypeOf = (entry: any = {}) => {
   const { type } = entry;
   const keys = Object.keys(schemaEntryTypeMap);
   return keys.find((key: string) => {
@@ -141,6 +152,7 @@ const schemaEntryMainTypeOf = (entry: any = {}) => {
   const schemaType = schemaTypeOf(type);
   return schemaEntryMainType(schemaType);
 };
+
 export const createAssign = map => (pos, value) => {
   map[pos] = value;
 };

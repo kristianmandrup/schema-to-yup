@@ -42,11 +42,13 @@ export class SchemaEntryWalker extends Loggable implements ISchemaEntryWalker {
   }
 
   walkChildEntries() {
-    return this.children.map(childEntry => {
-      const schemaType = this.entryType(childEntry);
-      return this.schemaTypeWalkerFor(schemaType).walkEntry(childEntry);
-    });
+    return this.children.map(this.walkChild);
   }
+
+  walkChild = (entry: any) => {
+    const schemaType = this.entryType(entry);
+    return this.schemaTypeWalkerFor(schemaType).walkEntry(entry);
+  };
 
   schemaTypeWalkerFor(schemaType) {
     const walkerFactory = this.schemaTypeWalkerFactoryFor(schemaType);

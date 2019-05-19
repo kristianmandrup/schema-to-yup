@@ -1,4 +1,4 @@
-import { Loggable } from "@schema-validator/core";
+import { Loggable } from "./loggable";
 
 export class TypeMatcher extends Loggable {
   constructor(config = {}) {

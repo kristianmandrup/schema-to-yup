@@ -1,6 +1,5 @@
 import {
   Loggable,
-  TypeMatcher,
   isFunction,
   isStringType,
   isObjectType,
