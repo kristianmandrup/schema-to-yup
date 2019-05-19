@@ -25,8 +25,8 @@ export class ItemsWalker extends SchemaEntryWalker {
   resolve() {
     const resolveItem = this.resolveItem.bind(this);
     return this.items.map(item => {
-      const payload = itemEntryPayload(item)
-      resolveItem(payload, this.config)
+      const payload = itemEntryPayload(item);
+      resolveItem(payload, this.config);
     });
   }
 
@@ -37,4 +37,3 @@ export class ItemsWalker extends SchemaEntryWalker {
     };
   }
 }
-

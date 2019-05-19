@@ -1,4 +1,4 @@
-import { isArray, toArray, MappingArray } from ".";
+import { isArray, toArray, MappingArray } from "./array";
 
 const create = opts => ({
   type: "array",

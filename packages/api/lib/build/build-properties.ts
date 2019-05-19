@@ -1,4 +1,4 @@
-import { isObject, isFunction, camelcase } from "../util";
+import { isObject, isFunction, camelcase } from "@schema-validator/core";
 
 const error = (msg, data) => {
   data ? console.error(msg, data) : console.error(msg);

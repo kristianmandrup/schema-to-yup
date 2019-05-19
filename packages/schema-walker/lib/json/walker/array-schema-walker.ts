@@ -1,5 +1,3 @@
-import { ArraySchemaEntryWalker as BaseArraySchemaEntryWalker  } from '../array'
+import { ArraySchemaEntryWalker as BaseArraySchemaEntryWalker } from "../array/array";
 
-export class ArraySchemaEntryWalker extends BaseArraySchemaEntryWalker {
-
-}
+export class ArraySchemaEntryWalker extends BaseArraySchemaEntryWalker {}
