@@ -107,6 +107,40 @@ export const isBoolean = type => {
   return type === "boolean";
 };
 
+const schemaEntryTypeMap = {
+  object: isObject,
+  array: isArray,
+  boolean: isBoolean,
+  string: isString,
+  number: isNumber,
+  date: isDate
+};
+
+const schemaEntryMainType = (type?: string) => {
+  switch (type) {
+    case "array":
+      return "array";
+    case "object":
+      return "object";
+    default:
+      return "primitive";
+  }
+};
+
+const schemaTypeOf = (entry: any = {}) => {
+  const { type } = entry;
+  const keys = Object.keys(schemaEntryTypeMap);
+  return keys.find((key: string) => {
+    const typeTestmethod = schemaEntryTypeMap[key];
+    return typeTestmethod(type);
+  });
+};
+
+const schemaEntryMainTypeOf = (entry: any = {}) => {
+  const { type } = entry;
+  const schemaType = schemaTypeOf(type);
+  return schemaEntryMainType(schemaType);
+};
 export const createAssign = map => (pos, value) => {
   map[pos] = value;
 };

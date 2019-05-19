@@ -1,5 +1,11 @@
-import { Loggable } from "@schema-validator/core";
-import { isFunction, isStringType, isObjectType, isArrayType } from "../util";
+import {
+  Loggable,
+  TypeMatcher,
+  isFunction,
+  isStringType,
+  isObjectType,
+  isArrayType
+} from "@schema-validator/core";
 
 export class SchemaEntryError extends Error {}
 
@@ -35,17 +41,8 @@ export class SchemaEntry extends Loggable {
     return this.typeMappers[type];
   }
 
-
-
   get defaultTypeOrder() {
-    return [
-      "string",
-      "number",
-      "boolean",
-      "array",
-      "object",
-      "date"
-    ];
+    return ["string", "number", "boolean", "array", "object", "date"];
   }
 
   get isValidSchema() {

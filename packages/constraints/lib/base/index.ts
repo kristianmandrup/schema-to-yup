@@ -1,5 +1,5 @@
 import { defaults } from "../defaults";
-import { TypeMatcher } from "./type-matcher";
+import { TypeMatcher } from "@schema-validator/core";
 import { ObjectDef } from "./_types";
 export { ObjectDef, TypeMatcher };
 

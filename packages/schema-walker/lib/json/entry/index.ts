@@ -1,4 +1,7 @@
-import { classify, Loggable } from "@schema-validator/core";
+import { classify, Loggable, util } from "@schema-validator/core";
+import { ObjectSchemaEntryWalker } from "../object/object";
+import { ArraySchemaEntryWalker } from "../array/array";
+const { schemaEntryMainTypeOf } = util;
 
 type VoidEntryFn = (entry: any) => void;
 
@@ -8,14 +11,23 @@ export interface ISchemaEntryWalker {
   onExitEntry: (entry: any, result: any) => void;
 }
 
+const schemaTypeWalkerMap = {
+  object: opts => new ObjectSchemaEntryWalker(opts),
+  array: opts => new ArraySchemaEntryWalker(opts),
+  primitive: opts => new SchemaEntryWalker(opts)
+};
+
 export class SchemaEntryWalker extends Loggable implements ISchemaEntryWalker {
   _entry: any;
+  config: any;
+  opts: any;
   listeners: any[];
   wasCacheHit: boolean = false;
   key: string = "";
 
   constructor(opts: any = {}, config: any = {}) {
     super(config);
+    this.opts = opts;
     this.listeners = config.listeners;
   }
 
@@ -25,7 +37,28 @@ export class SchemaEntryWalker extends Loggable implements ISchemaEntryWalker {
     this.onEnterEntry(entry);
     this.entry = entry;
     const result = this.walk(entry);
+    this.walkChildEntries();
     this.onExitEntry(entry, result);
+  }
+
+  walkChildEntries() {
+    return this.children.map(childEntry => {
+      const schemaType = this.entryType(childEntry);
+      return this.schemaTypeWalkerFor(schemaType).walkEntry(childEntry);
+    });
+  }
+
+  schemaTypeWalkerFor(schemaType) {
+    const walkerFactory = this.schemaTypeWalkerFactoryFor(schemaType);
+    return walkerFactory(this.opts, this.config);
+  }
+
+  schemaTypeWalkerFactoryFor(schemaType) {
+    return schemaTypeWalkerMap[schemaType];
+  }
+
+  entryType(entry: any) {
+    return schemaEntryMainTypeOf(entry.type);
   }
 
   get entry() {
@@ -40,7 +73,9 @@ export class SchemaEntryWalker extends Loggable implements ISchemaEntryWalker {
     return [];
   }
 
-  walk(entry: any) {}
+  walk(entry: any): any {
+    return entry;
+  }
 
   onEnterEntry(entry: any) {
     this.genericOnEntry({ lifecycle: "Enter", entry });
