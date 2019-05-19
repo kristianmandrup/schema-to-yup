@@ -1,15 +1,15 @@
 {
-  "name": "@schema-validator/schema-walker",
+  "name": "@schema-validator/schema-resolver",
   "version": "1.0.0",
-  "description": "schema walker",
+  "description": "schema resolver",
   "keywords": [
     "schema",
-    "walker"
+    "resolver"
   ],
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "homepage": "https://github.com/kristianmandrup/schema-to-yup#readme",
   "license": "ISC",
-  "main": "lib/schema-walker.js",
+  "main": "lib/schema-resolver.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -29,16 +29,5 @@
   },
   "bugs": {
     "url": "https://github.com/kristianmandrup/schema-to-yup/issues"
-  },
-  "dependencies": {
-    "@schema-validator/core": "^1.0.0",
-    "@schema-validator/schema-resolver": "^1.0.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^24.0.13",
-    "@types/node": "^12.0.2",
-    "jest": "^23.0.0",
-    "lerna": "^3.13.1",
-    "typescript": "^3.4.5"
   }
 }

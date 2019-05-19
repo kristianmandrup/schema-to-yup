@@ -1,6 +1,6 @@
 import { classify, Loggable, util } from "@schema-validator/core";
-import { ObjectSchemaEntryWalker } from "../object/object";
-import { ArraySchemaEntryWalker } from "../array/array";
+import { ObjectSchemaEntryWalker } from "../object/object-walker";
+import { ArraySchemaEntryWalker } from "../array/array-walker";
 const { schemaEntryMainTypeOf } = util;
 
 type VoidEntryFn = (entry: any) => void;

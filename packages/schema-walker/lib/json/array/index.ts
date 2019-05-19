@@ -1,4 +1,4 @@
-import { ArraySchemaEntryWalker } from "./array";
+import { ArraySchemaEntryWalker } from "./array-walker";
 import { isArray } from "../util";
 
 export function toArray(obj) {

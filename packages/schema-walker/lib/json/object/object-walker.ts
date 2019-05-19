@@ -1,5 +1,6 @@
 import { SchemaEntryWalker } from "../entry";
-import { isFunction, isObject, isObjectType } from "@schema-validator/core";
+import { util } from "@schema-validator/core";
+const { isFunction, isObject, isObjectType } = util;
 export { isObject };
 
 export function toObject(obj) {

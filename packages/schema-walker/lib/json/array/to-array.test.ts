@@ -1,4 +1,4 @@
-import { isArray, toArray, MappingArray } from "./array";
+import { isArray, toArray, MappingArray } from "./array-walker";
 
 const create = opts => ({
   type: "array",

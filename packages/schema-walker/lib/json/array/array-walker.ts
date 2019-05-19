@@ -1,6 +1,8 @@
 import { SchemaEntryWalker } from "../entry";
-import { isObjectType, isArray, isReferenceArray } from "../util";
+import { util } from "@schema-validator/core";
 export { isArray };
+
+const { isObjectType, isArray, isReferenceArray } = util;
 
 export class ArraySchemaEntryWalker extends SchemaEntryWalker {
   static create(obj) {
