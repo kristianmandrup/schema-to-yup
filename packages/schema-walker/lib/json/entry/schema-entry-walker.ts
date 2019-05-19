@@ -1,7 +1,6 @@
-import { classify, Loggable, util } from "@schema-validator/core";
-import { ObjectSchemaEntryWalker } from "../object/object-walker";
-import { ArraySchemaEntryWalker } from "../array/array-walker";
-const { schemaEntryMainTypeOf } = util;
+import { classify, util } from "@schema-validator/core";
+import { SchemaTypeResolver } from "../resolver";
+import { BaseSchemaEntryWalker } from "./base-entry-walker";
 
 type VoidEntryFn = (entry: any) => void;
 
@@ -11,24 +10,24 @@ export interface ISchemaEntryWalker {
   onExitEntry: (entry: any, result: any) => void;
 }
 
-const schemaTypeWalkerMap = {
-  object: opts => new ObjectSchemaEntryWalker(opts),
-  array: opts => new ArraySchemaEntryWalker(opts),
-  primitive: opts => new SchemaEntryWalker(opts)
-};
-
-export class SchemaEntryWalker extends Loggable implements ISchemaEntryWalker {
+export class SchemaEntryWalker extends BaseSchemaEntryWalker
+  implements ISchemaEntryWalker {
   _entry: any;
   config: any;
   opts: any;
   listeners: any[];
   wasCacheHit: boolean = false;
   key: string = "";
+  schemaTypeResolver: any;
+  childEntryWalker: any;
 
   constructor(opts: any = {}, config: any = {}) {
     super(config);
     this.opts = opts;
     this.listeners = config.listeners;
+    this.schemaTypeResolver = new SchemaTypeResolver(opts, config);
+    const createChildEntryWalker = config.createChildEntryWalker;
+    this.childEntryWalker = createChildEntryWalker({ entryWalker: this });
   }
 
   init() {}
@@ -45,33 +44,8 @@ export class SchemaEntryWalker extends Loggable implements ISchemaEntryWalker {
     return this.children.map(this.walkChildEntry);
   }
 
-  walkChildEntry = (entry: any) => {
-    const schemaType = this.entryType(entry);
-    if (!this.isValidChildEntryType(schemaType)) {
-      this.invalidChildEntryType(entry);
-    }
-    return this.schemaTypeWalkerFor(schemaType).walkEntry(entry);
-  };
-
-  invalidChildEntryType(entry: any) {
-    this.error("walkChild", "invalid child entry type", entry);
-  }
-
-  isValidChildEntryType(entryType: string) {
-    return true;
-  }
-
-  schemaTypeWalkerFor(schemaType) {
-    const walkerFactory = this.schemaTypeWalkerFactoryFor(schemaType);
-    return walkerFactory(this.opts, this.config);
-  }
-
-  schemaTypeWalkerFactoryFor(schemaType) {
-    return schemaTypeWalkerMap[schemaType];
-  }
-
-  entryType(entry: any) {
-    return schemaEntryMainTypeOf(entry.type);
+  walkChildEntry(entry: any) {
+    this.childEntryWalker.walkChildEntry(entry);
   }
 
   get entry() {
