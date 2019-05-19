@@ -9,7 +9,7 @@
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "homepage": "https://github.com/kristianmandrup/json-schema-to-yup/tree/master/packages/constraints#readme",
   "license": "ISC",
-  "main": "lib/constraints.js",
+  "main": "dist/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"

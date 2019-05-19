@@ -9,7 +9,7 @@
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "homepage": "https://github.com/kristianmandrup/schema-to-yup#readme",
   "license": "ISC",
-  "main": "lib/schema-resolver.js",
+  "main": "dist/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"

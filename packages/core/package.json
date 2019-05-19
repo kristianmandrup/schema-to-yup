@@ -10,7 +10,7 @@
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
   "homepage": "https://github.com/kristianmandrup/json-schema-to-yup/tree/master/packages/core#readme",
   "license": "ISC",
-  "main": "lib/core.js",
+  "main": "dist/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
