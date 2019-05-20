@@ -1,4 +1,4 @@
-import { ChildEntryWalker } from "./child-entry-walker";
+import { ChildEntryWalker } from "../../../lib/json/entry/child-entry-walker";
 
 const create = (opts = {}, config = {}) => new ChildEntryWalker(opts, config);
 

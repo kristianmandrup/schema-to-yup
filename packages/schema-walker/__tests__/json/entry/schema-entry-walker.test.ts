@@ -1,4 +1,4 @@
-import { SchemaEntryWalker } from "./schema-entry-walker";
+import { SchemaEntryWalker } from "../../../lib/json/entry/schema-entry-walker";
 
 const create = (opts = {}, config = {}) => new SchemaEntryWalker(opts, config);
 
@@ -20,7 +20,7 @@ describe("SchemaEntryWalker", () => {
       const entry = {
         type: "string"
       };
-      const walker = instance
+      const walker = instance;
       test("empty obj result", () => {
         const result = walker.walkEntry(entry);
         expect(result).toEqual({});

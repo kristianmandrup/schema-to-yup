@@ -16,9 +16,9 @@ Each schema entry walker class must implement `ISchemaEntryWalker`
 
 ```ts
 export interface ISchemaEntryWalker {
-  walk: VoidEntryFn
-  onEnterEntry: VoidEntryFn
-  onExitEntry: VoidEntryFn
+  walk: VoidEntryFn;
+  onEnterEntry: VoidEntryFn;
+  onExitEntry: VoidEntryFn;
 }
 ```
 
@@ -37,3 +37,13 @@ export interface ISchemaEntryWalker {
 ### ArraySchemaEntryWalker
 
 `ArraySchemaEntryWalker` is used to walk an array entries
+
+## Tests
+
+Running all tests
+
+`$ npx jest` or `$ npm test`
+
+### Running matching tests
+
+`$ npx jest -t 'child-entry'`
