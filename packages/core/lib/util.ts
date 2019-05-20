@@ -2,6 +2,26 @@ export const hasDateContraint = obj => {
   return false;
 };
 
+export const isNothing = val => {
+  return val === undefined || val === null;
+};
+
+export const isPresent = num => {
+  return !this.isNothing(num);
+};
+
+export const toNumber = num => {
+  return Number(num);
+};
+
+export const isNumberLike = num => {
+  return this.isNumberType(this.toNumber(num));
+};
+
+export const isNumberType = num => {
+  return !isNaN(num);
+};
+
 export const isString = type => {
   return type === "string";
 };
@@ -12,6 +32,10 @@ export const isFunction = fun => {
 
 export const isDateFormat = type => {
   return ["date", "date-time", "time"].find(t => t === type);
+};
+
+export const isDateType = val => {
+  return val instanceof Date;
 };
 
 export const isDate = obj => {

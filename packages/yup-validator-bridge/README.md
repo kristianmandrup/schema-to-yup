@@ -17,29 +17,34 @@ You can optionally pass in a custom `validator` and a constraints map of your ch
 
 You can either extend the default constraints or override them with your own map.
 
+## Forg bridge
+
+A similar bridge should be available for Forg (community effort?)
+
 ## Usage
 
-```js
+```ts
 const myValidator = new MyValidator();
 const constraints = ["creditCard", "currency", { name: "hash", opts: "algo" }];
 extendYupApi({ validator: myValidator, override: true, constraints });
 
-const { buildYup } = // ...
+const { buildValidator } = // ...
+
 // type def sample schema, using credit-card format validator
 const schema = {
   name: "BankAccount",
   fields: {
     accountNumber: {
       type: "String",
-      format: "credit-card"
+      format: "credit-card" // use credit card validation from validator npm module
     }
   }
 };
 
 // opt in to use generic string format validation, via format: true config option
-const yupSchema = buildYup(schema, { format: true, schemaType: "type-def" });
+const validator = buildValidator(schema, { format: true, schemaType: "type-def" });
 // ...do your validation
-const valid = await yupSchema.isValid({
+const valid = await validator.isValid({
   accountNumber: "123-4567-1828-2929"
 });
 ```
