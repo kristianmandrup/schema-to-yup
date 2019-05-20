@@ -1,4 +1,4 @@
-import { isArray, toArray, MappingArray } from "./array-walker";
+import { toArray, ArraySchemaEntryWalker } from "../../../lib/json/array";
 
 const create = opts => ({
   type: "array",
@@ -18,22 +18,9 @@ const array = opts => {
   return toArray($opts);
 };
 
-describe("isArray", () => {
-  test("type: array - true", () => {
-    expect(isArray("array")).toBeTruthy();
-  });
-  test("type: integer - true", () => {
-    expect(isArray("integer")).toBeTruthy();
-  });
-
-  test("type: array - false", () => {
-    expect(isArray("array")).toBeFalsy();
-  });
-});
-
 describe.only("MappingArray", () => {
   const obj = objFor();
-  const mapper = MappingArray.create(obj);
+  const mapper = ArraySchemaEntryWalker.create(obj);
 
   describe("type", () => {
     test("default: is array", () => {

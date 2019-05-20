@@ -1,5 +1,5 @@
-import { createItemsMapping } from "./items";
-import { arrays } from "../data";
+import { createItemsMapping } from "../../../../lib/json/array/items/items";
+import { arrays } from "../_schemas_/data";
 
 const create = (opts, config) => {
   return createItemsMapping(opts, config);

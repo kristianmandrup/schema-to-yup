@@ -22,6 +22,8 @@ export class SchemaEntryWalker extends BaseSchemaEntryWalker
   schemaTypeResolver: any;
   childEntryWalker: any;
   schema: any;
+  type: any;
+  referenceEntry: any; // resolved from $ref
 
   constructor(opts: any = {}, config: any = {}) {
     super(config);
@@ -32,7 +34,9 @@ export class SchemaEntryWalker extends BaseSchemaEntryWalker
     this.childEntryWalker = createChildEntryWalker({ entryWalker: this });
   }
 
-  init() {}
+  init() {
+    return this;
+  }
 
   walkEntry(entry: any) {
     this.onEnterEntry(entry);

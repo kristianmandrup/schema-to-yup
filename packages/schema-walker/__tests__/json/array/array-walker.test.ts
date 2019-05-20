@@ -1,5 +1,5 @@
-import { schemas } from "./_schemas_";
-import { toArray } from ".";
+import { schemas } from "../../../lib/json/array/_schemas_";
+import { toArray } from "../../../lib/json/array";
 
 const build = toArray;
 
@@ -39,7 +39,7 @@ describe("array", () => {
     build(schema, config);
   });
 
-  itemsArrayOneString;
+  // itemsArrayOneString;
   test("items array - one item string type", done => {
     const schema = schemas.itemsArrayOneString;
     const onComplete = result => {
@@ -51,14 +51,16 @@ describe("array", () => {
     build(schema, config);
   });
 
-  describe("items array - two items string and number type", done => {
-    const schema = schemas.itemsArrayStringNumber;
-    const onComplete = result => {
-      done();
-    };
-    const config = {
-      onComplete
-    };
-    build(schema, config);
+  describe("items array - two items string and number type", () => {
+    test("doh!", done => {
+      const schema = schemas.itemsArrayStringNumber;
+      const onComplete = result => {
+        done();
+      };
+      const config = {
+        onComplete
+      };
+      build(schema, config);
+    });
   });
 });
