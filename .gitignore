@@ -4,5 +4,7 @@ dist
 lib/**/*.js
 lerna-debug.log
 npm-debug.log
+# we're using yarn, so ignore package-lock.json
+package-lock.json
 packages/*/dist
 .idea
