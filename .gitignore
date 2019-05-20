@@ -2,3 +2,7 @@ node_modules
 *.log
 dist
 lib/**/*.js
+lerna-debug.log
+npm-debug.log
+packages/*/dist
+.idea

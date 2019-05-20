@@ -5,7 +5,7 @@ const create = (opts = {}, config = {}) => new SchemaEntryWalker(opts, config);
 describe("SchemaEntryWalker", () => {
   const config = {};
   const opts = {};
-  const instance = create(opts, config);
+  const instance: any = create(opts, config);
 
   describe("create", () => {
     describe("config", () => {
@@ -15,91 +15,12 @@ describe("SchemaEntryWalker", () => {
     });
   });
 
-  describe("isValidChildEntryType", () => {
-    test("is true", () => {
-      expect(instance.isValidChildEntryType).toBeTruthy();
-    });
-  });
-
-  describe("entryType", () => {
-    describe("array", () => {
-      const entry = {
-        type: "array"
-      };
-      test("is array", () => {
-        expect(instance.entryType(entry)).toEqual("array");
-      });
-    });
-
-    describe("object", () => {
-      const entry = {
-        type: "object"
-      };
-      test("is object", () => {
-        expect(instance.entryType(entry)).toEqual("object");
-      });
-    });
-
-    describe("string", () => {
-      const entry = {
-        type: "string"
-      };
-      test("is primitive", () => {
-        expect(instance.entryType(entry)).toEqual("primitive");
-      });
-    });
-  });
-
-  describe("schemaTypeWalkerFor", () => {
-    describe("array", () => {
-      const entry = {
-        type: "array"
-      };
-      const walker = instance.schemaTypeWalkerFor(entry);
-      test("is array walker", () => {
-        expect(walker.schemaType).toEqual("array");
-      });
-    });
-
-    describe("object", () => {
-      const entry = {
-        type: "object"
-      };
-      const walker = instance.schemaTypeWalkerFor(entry);
-      test("is object walker", () => {
-        expect(walker.schemaType).toEqual("object");
-      });
-    });
-
-    describe("string", () => {
-      const entry = {
-        type: "string"
-      };
-      const walker = instance.schemaTypeWalkerFor(entry);
-      test("is primitive walker", () => {
-        expect(walker.schemaType).toEqual("primitive");
-      });
-    });
-  });
-
-  describe("schemaTypeWalkerFactoryFor", () => {
-    describe("string", () => {
-      const entry = {
-        type: "string"
-      };
-      const factory = instance.schemaTypeWalkerFactoryFor(entry);
-      test("is function", () => {
-        expect(typeof factory).toEqual("function");
-      });
-    });
-  });
-
   describe("walkEntry", () => {
     describe("string", () => {
       const entry = {
         type: "string"
       };
-      const walker = instance.schemaTypeWalkerFor(entry);
+      const walker = instance
       test("empty obj result", () => {
         const result = walker.walkEntry(entry);
         expect(result).toEqual({});

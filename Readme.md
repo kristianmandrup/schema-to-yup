@@ -79,6 +79,8 @@ The packages should be designed to have little to no inter-dependencies. We stri
 - `forg-builder` build forg validator from constraints
 - `yup-builder` build yup validator from constraints
 
+[Setting up a monorepo with Lerna for a TypeScript project](https://blog.logrocket.com/setting-up-a-monorepo-with-lerna-for-a-typescript-project-b6a81fe8e4f8)
+
 ## Test
 
 ## License

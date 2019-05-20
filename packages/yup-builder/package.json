@@ -26,7 +26,8 @@
     "url": "git+https://github.com/kristianmandrup/schema-to-yup.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "jest",
+    "tsc": "tsc"
   },
   "bugs": {
     "url": "https://github.com/kristianmandrup/schema-to-yup/issues"

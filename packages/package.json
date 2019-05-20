@@ -42,6 +42,7 @@
     "typedef"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "tsc": "tsc"
   }
 }
