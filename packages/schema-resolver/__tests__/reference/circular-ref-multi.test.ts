@@ -1,4 +1,4 @@
-const { createReference } = require("./reference");
+import { createReference } from "../../lib/reference";
 
 const refs = {
   car: "#/definitions/car",
@@ -44,12 +44,14 @@ describe("Multi Reference", () => {
   };
 
   describe("circular resolved via cache", () => {
-    const obj = ref.resolveRefObject();
+    const reference = refs.car;
+
     const config = {};
     const opts = { schema: multiRefSchema, reference };
     const ref = createReference(opts, config);
+    const obj = ref.resolveRefObject();
+    const expected = {};
 
-    const reference = refs.car;
     test("is ", () => {
       expect(obj).toEqual(expected);
     });

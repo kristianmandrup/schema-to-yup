@@ -1,4 +1,4 @@
-const { createReference } = require("./reference");
+import { createReference } from "../../lib/reference/reference";
 
 const refs = {
   car: "#/definitions/car",
@@ -45,7 +45,7 @@ describe("Reference", () => {
     logging: true
   };
 
-  const run = (name, config) => {
+  const run = (name, config = {}) => {
     const reference = refs[name];
     const opts = { schema, reference };
     const ref = createReference(opts, config);

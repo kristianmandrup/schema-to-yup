@@ -21,6 +21,7 @@ export class SchemaEntryWalker extends BaseSchemaEntryWalker
   key: string = "";
   schemaTypeResolver: any;
   childEntryWalker: any;
+  schema: any;
 
   constructor(opts: any = {}, config: any = {}) {
     super(config);
