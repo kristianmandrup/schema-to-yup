@@ -14,12 +14,17 @@ export class ChildEntryWalker extends BaseSchemaEntryWalker {
   }
 
   walkChildEntry = (entry: any) => {
+    const schemaType = this.validateChildEntryType(entry);
+    return this.schemaTypeWalkerFor(schemaType).walkEntry(entry);
+  };
+
+  validateChildEntryType(entry: any): string {
     const schemaType = this.entryType(entry);
     if (!this.isValidChildEntryType(schemaType)) {
       this.invalidChildEntryType(entry);
     }
-    return this.schemaTypeWalkerFor(schemaType).walkEntry(entry);
-  };
+    return schemaType;
+  }
 
   invalidChildEntryType(entry: any) {
     this.error("walkChild", "invalid child entry type", entry);

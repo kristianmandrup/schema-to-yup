@@ -30,6 +30,26 @@ describe("ChildEntryWalker", () => {
     });
   });
 
+  describe("validateChildEntryType", () => {
+    describe("invalid", () => {
+      const entry = {
+        type: "blip"
+      };
+      test("throws", () => {
+        expect(() => instance.validateChildEntryType(entry)).toThrow();
+      });
+    });
+
+    describe("valid", () => {
+      const entry = {
+        type: "string"
+      };
+      test("throws", () => {
+        expect(() => instance.validateChildEntryType(entry)).not.toThrow();
+      });
+    });
+  });
+
   describe("walkChildEntry", () => {
     const entry = {
       type: "string"
