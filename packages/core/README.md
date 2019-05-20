@@ -47,7 +47,7 @@ The inquiry methods are:
 ## Usage
 
 ```ts
-import { util, Loggable } from "@schema-validator/core";
+import { util, Loggable, inquiry } from "@schema-validator/core";
 const { isArray } = util;
 
 export class Xyz extends Loggable {
@@ -58,3 +58,13 @@ export class Xyz extends Loggable {
   }
 }
 ```
+
+## Tests
+
+Running all tests
+
+`$ npx jest` or `$ npm test`
+
+### Running matching tests
+
+`$ npx jest -t 'child-entry'`

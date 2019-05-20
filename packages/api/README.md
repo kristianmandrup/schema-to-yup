@@ -51,3 +51,13 @@ const validator = buildValidator({
 
 const valid = validator.validateSync(obj);
 ```
+
+## Tests
+
+Running all tests
+
+`$ npx jest` or `$ npm test`
+
+### Running matching tests
+
+`$ npx jest -t 'child-entry'`

@@ -81,6 +81,20 @@ The packages should be designed to have little to no inter-dependencies. We stri
 
 [Setting up a monorepo with Lerna for a TypeScript project](https://blog.logrocket.com/setting-up-a-monorepo-with-lerna-for-a-typescript-project-b6a81fe8e4f8)
 
-## Test
+## Tests
+
+Tests should in general be run from within the root of each individual package
+
+Running all tests
+
+`$ npx jest` or `$ npm test`
+
+### Running matching tests
+
+`$ npx jest -t 'child-entry'`
+
+## Run tests of all packages
+
+`$ lerna run test`
 
 ## License

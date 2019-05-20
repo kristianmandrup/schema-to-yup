@@ -49,6 +49,12 @@ const valid = await validator.isValid({
 });
 ```
 
-```
+## Tests
 
-```
+Running all tests
+
+`$ npx jest` or `$ npm test`
+
+### Running matching tests
+
+`$ npx jest -t 'child-entry'`

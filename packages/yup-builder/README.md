@@ -48,3 +48,13 @@ const builder = createYupBuilder(config);
 The builder should be listening to events carrying constraint information that trigger it to build an internal model. It should then receive an `onComplete` event (no more constraints to be found), which it can delegate to whoever is listening for the builder to finish. This is the async model.
 
 Alternatively call the internal build methods directly with constraints (synchronous model).
+
+## Tests
+
+Running all tests
+
+`$ npx jest` or `$ npm test`
+
+### Running matching tests
+
+`$ npx jest -t 'child-entry'`
