@@ -22,20 +22,21 @@ export class Loggable {
     this.err = typeof error === "function" ? error : console.error;
   }
 
-  error(errMsg: string, value?: any) {
+  error(methodName: string, errMsg: string, value?: any) {
     // only disable if directly disabled
     if (this.enable.error === false) return;
     this.err && (value ? this.err(errMsg, value) : this.err(errMsg));
     throw errMsg;
   }
 
-  warn(warnMsg: string, value?: any) {
+  warn(methodName: string, warnMsg: string, value?: any) {
     if (!this.enable.warn) return;
-    this.logInfo("WARNING: " + warnMsg, value);
+    this.logInfo(methodName, "WARNING: " + warnMsg, value);
   }
 
-  logInfo(name: string, value?: any) {
+  logInfo(methodName: string, msg: string, value?: any) {
     if (!this.enable.log) return;
-    this.log && (value ? this.log(name, value) : this.log(name));
+    this.log &&
+      (value ? this.log(methodName, msg, value) : this.log(methodName, msg));
   }
 }

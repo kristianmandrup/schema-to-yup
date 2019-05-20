@@ -20,4 +20,23 @@ describe("ChildEntryWalker", () => {
       expect(instance.isValidChildEntryType).toBeTruthy();
     });
   });
+
+  describe("invalidChildEntryType", () => {
+    const entry = {
+      type: "string"
+    };
+    test("throws", () => {
+      expect(() => instance.invalidChildEntryType(entry)).toThrow();
+    });
+  });
+
+  describe("walkChildEntry", () => {
+    const entry = {
+      type: "string"
+    };
+    const result = instance.walkChildEntry(entry);
+    test("result", () => {
+      expect(result).toBeDefined();
+    });
+  });
 });

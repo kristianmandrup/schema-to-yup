@@ -1,6 +1,7 @@
-import { classify, util } from "@schema-validator/core";
+import { util } from "@schema-validator/core";
 import { SchemaTypeResolver } from "../resolver";
 import { BaseSchemaEntryWalker } from "./base-entry-walker";
+const { classify } = util;
 
 type VoidEntryFn = (entry: any) => void;
 
