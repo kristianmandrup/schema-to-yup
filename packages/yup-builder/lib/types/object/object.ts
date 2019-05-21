@@ -1,7 +1,7 @@
 import { MixedSchemaEntry } from "../mixed/mixed";
 import { ObjectDef } from "@schema-validator/core";
 
-class ObjectSchemaEntry extends MixedSchemaEntry {
+export class ObjectSchemaEntry extends MixedSchemaEntry {
   // TODO: Allow recursive schema
   // Note: all types inherit from mixed
   // See https://github.com/jquense/yup#mixed

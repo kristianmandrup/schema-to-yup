@@ -92,7 +92,7 @@ export const isArrayType = obj => {
 };
 
 export const isObject = obj => {
-  return obj.type === "object" || obj === "object"; // && isObjectType(obj.properties)
+  return obj === "object" || obj.type === "object"; // && isObjectType(obj.properties)
 };
 
 export const isReferenceArray = obj => {

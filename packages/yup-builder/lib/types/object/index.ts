@@ -1,6 +1,5 @@
-import { MixedSchemaEntry } from "../mixed/mixed";
 import { createObjectGuard } from "./guard";
-import { ObjectDef } from "../../../../common/_types";
+import { ObjectSchemaEntry } from "./object";
 
 const proceed = (obj, config = {}) => {
   return createObjectGuard(obj, config).verify();

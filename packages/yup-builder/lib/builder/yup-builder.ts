@@ -1,5 +1,6 @@
-import yup from "yup";
-import { Loggable } from "@schema-validator/core";
+import * as yup from "yup";
+import { Loggable, util } from "@schema-validator/core";
+const { isObjectType } = util;
 
 type YupApiMethod = "mixed " | "string" | "date";
 
@@ -10,13 +11,13 @@ type ApiDef = {
 export class YupBuilder extends Loggable {
   type: YupApiMethod;
   api: ApiDef;
-  _shape: any;
+  methodArgs: any[];
 
-  constructor(shape: any, config: any = {}) {
+  constructor(yupMethodArgs: any[], config: any = {}) {
     super(config);
-    this._shape = shape;
     this.type = config.type || "mixed";
     this.api = yup[this.type]();
+    this.methodArgs = yupMethodArgs;
   }
 
   toArg() {}
@@ -25,14 +26,6 @@ export class YupBuilder extends Loggable {
     return {
       round: (val: string) => ({ type: val })
     };
-  }
-
-  get shape() {
-    return this._shape;
-  }
-
-  get schema() {
-    return this.object.shape(this._shape);
   }
 
   get object() {
