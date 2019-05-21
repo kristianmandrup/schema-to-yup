@@ -1,3 +1,4 @@
+// TODO: move to walker
 export function createSchemaEntry(opts: any = {}) {
   const config = opts.config || {};
   const { SchemaEntry, buildSchemaEntry } = config;

@@ -1,10 +1,5 @@
-import {
-  Loggable,
-  isFunction,
-  isStringType,
-  isObjectType,
-  isArrayType
-} from "@schema-validator/core";
+import { Loggable, util } from "@schema-validator/core";
+const { isFunction, isStringType, isObjectType, isArrayType } = util;
 
 export class SchemaEntryError extends Error {}
 
@@ -20,6 +15,7 @@ export class SchemaEntry extends Loggable {
   typeOrder: string[];
   typeObjMapperFor: any;
   typeObj: any;
+  defaults: any;
 
   constructor(opts: any, config: any = {}) {
     super(config);
@@ -33,7 +29,7 @@ export class SchemaEntry extends Loggable {
       ...(config.typeMappers || {})
     };
     this.typeOrder = config.typeOrder || this.defaults.typeOrder;
-    this.typeObjMapperFor = config.typeObjMapperFor || chooseObjMapper;
+    this.typeObjMapperFor = config.typeObjMapperFor; // || chooseObjMapper;
   }
 
   typeMapperFor(type) {
@@ -109,7 +105,7 @@ export class SchemaEntry extends Loggable {
     this.typeOrder.find(type => {
       const typeFn = this.typeMapperFor(type);
       if (!typeFn) {
-        this.info("toEntryStringType", `skipped ${type}`);
+        this.logInfo("toEntryStringType", `skipped ${type}`);
         return false;
       }
       if (!isFunction(typeFn)) {
