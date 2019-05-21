@@ -1,5 +1,6 @@
 import { MixedSchemaEntry } from "../mixed/mixed";
 import { createStringGuard, StringGuard } from "./guard";
+import { StringSchemaEntry } from "./string";
 
 const proceed = (obj, config = {}) => {
   return createStringGuard(obj, config).verify();

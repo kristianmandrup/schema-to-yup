@@ -41,15 +41,18 @@ export interface ISchemaEntryWalker {
 
 ### SchemaEntryWalker
 
-`SchemaEntryWalker` is the base class for any class used to walk the schema entries.
+- `BaseSchemaEntryWalker` base class for walking the child entries
+- `SchemaEntryWalker` class for walking schema entries
+- `ChildSchemaEntryWalker` class for walking set of child entries
 
 ### RootObjectSchemaEntryWalker
 
-`RootObjectSchemaEntryWalker` is used to walk the root schema object.
+- `RootObjectSchemaEntryWalker` is used to walk the root schema object
 
 ### ObjectSchemaEntryWalker
 
-`ObjectSchemaEntryWalker` is used to walk an object entry with sub entries as properties.
+- `ObjectSchemaEntryWalker` is used to walk an object entry with sub entries as properties
+- Uses `ChildSchemaEntryWalker` to walk property entries
 
 ### ArraySchemaEntryWalker
 

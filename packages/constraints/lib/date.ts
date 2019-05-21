@@ -22,16 +22,6 @@ export class DateConstraint extends Constraint {
     return this.isValidDate(date);
   }
 
-  toDate(date) {
-    try {
-      return new Date(date);
-    } catch (err) {
-      this.error("toDate", "Invalid date", {
-        date
-      });
-    }
-  }
-
   isValidDateType(date) {
     return isStringType(date) || isNumberType(date) || isDateType(date);
   }
@@ -52,6 +42,23 @@ export class DateConstraint extends Constraint {
 
   // optionally transform millisecs to Date date?
   transformToDate(date) {
+    this.validateDate(date);
+    return isNumberType(date) || this.isDateParseable(date)
+      ? this.toDate(date)
+      : date;
+  }
+
+  toDate(date) {
+    try {
+      return new Date(date);
+    } catch (err) {
+      this.error("toDate", "Invalid date", {
+        date
+      });
+    }
+  }
+
+  validateDate(date) {
     if (!this.isValidDate(date)) {
       return this.error(
         "transformToDate",
@@ -61,9 +68,6 @@ export class DateConstraint extends Constraint {
         }
       );
     }
-    return isNumberType(date) || this.isDateParseable(date)
-      ? this.toDate(date)
-      : date;
   }
 
   get explainConstraintValidMsg() {

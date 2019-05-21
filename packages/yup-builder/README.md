@@ -25,9 +25,56 @@ Object (nested)
 
 - `object`
 
-Conditionals:
+### Array
 
-- `when`
+`constraintsTypeMap`
+
+- `rangeItems` numeric
+- `maxItems` numeric
+- `minItems` numeric
+
+### Boolean
+
+### Date
+
+### Number
+
+### Object
+
+### String
+
+`constraintsTypeMap`:
+
+- `pattern` regexp
+- `lengthRange` numeric
+- `minLength` numeric
+- `maxLength` numeric
+
+`aliasMap`:
+
+- `matches` `["pattern", "regexp"]`
+- `maxLength` `["max"]`
+- `minLength` `["min"]`
+
+`constraintsMap`
+
+- `on` `["trim", "cased", "email", "url"]`
+- `value` `["matches", "lengthRange"]`
+
+`grouped`
+
+- `cased` `["lowercase", "uppercase"]`
+- `lengthRange` `["minLength", "maxLength"]`
+
+`enabled`:
+
+- `lengthRange`
+- `pattern`
+- `cased`
+- `email`
+- `url`
+- `genericFormat`
+- `trim`
 
 ## Usage
 

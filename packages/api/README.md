@@ -100,3 +100,7 @@ Running all tests
 ### Running matching tests
 
 `$ npx jest -t 'child-entry'`
+
+## TODO
+
+Move `build-properties` to walker if use at all.
