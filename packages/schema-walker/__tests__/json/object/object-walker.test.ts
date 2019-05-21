@@ -1,1 +1,1 @@
-import { ObjectSchemaEntryWalker } from "./object-walker";
+import { ObjectSchemaEntryWalker } from "../../../lib/json/object/object-walker";

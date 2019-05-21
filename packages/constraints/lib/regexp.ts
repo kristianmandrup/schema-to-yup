@@ -1,4 +1,5 @@
-import { Constraint } from "./base";
+import { Constraint, util } from "./constraint";
+const { isRegExpType, isStringType, isNumberType } = util;
 
 export function createRegExpConstraint(typer, opts) {
   return new RegExpConstraint(typer, opts);
@@ -26,15 +27,7 @@ export class RegExpConstraint extends Constraint {
   }
 
   isRegExpConvertible(value) {
-    return (
-      this.isRegExpType(value) ||
-      this.isStringType(value) ||
-      this.isNumberType(value)
-    );
-  }
-
-  isRegExpType(value) {
-    return value instanceof RegExp;
+    return isRegExpType(value) || isStringType(value) || isNumberType(value);
   }
 
   get explainConstraintValidMsg() {

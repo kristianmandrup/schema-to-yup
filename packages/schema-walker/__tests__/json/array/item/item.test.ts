@@ -1,4 +1,4 @@
-import { createMappingItemFactory } from "./item";
+import { createMappingItemFactory } from "../../../../lib/json/array/item/item";
 
 const createFactory = createMappingItemFactory;
 

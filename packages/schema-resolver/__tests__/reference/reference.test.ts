@@ -1,4 +1,4 @@
-import { createReference } from "./reference";
+import { createReference } from "../../lib/reference/reference";
 
 const reference = "#/definitions/car";
 const schema = {

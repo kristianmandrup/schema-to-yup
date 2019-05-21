@@ -1,4 +1,5 @@
-import { Constraint } from "./base";
+import { Constraint, util } from "./constraint";
+const { isStringType, isNumberType } = util;
 
 export function createStringConstraint(typer, opts) {
   return new StringConstraint(typer, opts);
@@ -22,14 +23,6 @@ export class StringConstraint extends Constraint {
   }
 
   isStringConvertible(value) {
-    return this.isStringType(value) || this.isNumberType(value);
-  }
-
-  isNumberType(num) {
-    return !isNaN(num);
-  }
-
-  isStringType(val) {
-    return typeof val === "string";
+    return isStringType(value) || isNumberType(value);
   }
 }

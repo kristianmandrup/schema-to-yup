@@ -1,4 +1,4 @@
-import { schemas } from "../../../lib/json/array/_schemas_";
+import { schemas } from "./_schemas_";
 import { toArray } from "../../../lib/json/array";
 
 const build = toArray;

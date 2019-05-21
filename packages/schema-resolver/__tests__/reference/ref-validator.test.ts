@@ -1,4 +1,4 @@
-import { createRefValidator } from "./ref-validator";
+import { createRefValidator } from "../../lib/reference/ref-validator";
 
 const reference = "#/definitions/car";
 const config = {};

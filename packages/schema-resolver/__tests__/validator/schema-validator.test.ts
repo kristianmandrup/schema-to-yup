@@ -1,4 +1,4 @@
-import { createSchemaValidator } from "./schema-validator";
+import { createSchemaValidator } from "../../lib/validator/schema-validator";
 
 const schema = {
   definitions: {

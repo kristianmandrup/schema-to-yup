@@ -30,6 +30,10 @@ export const isFunction = fun => {
   return typeof fun === "function";
 };
 
+export const isRegExpType = value => {
+  return value instanceof RegExp;
+};
+
 export const isDateFormat = type => {
   return ["date", "date-time", "time"].find(t => t === type);
 };
