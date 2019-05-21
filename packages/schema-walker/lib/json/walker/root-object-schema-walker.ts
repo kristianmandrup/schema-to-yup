@@ -1,7 +1,7 @@
 import { Loggable } from "@schema-validator/core";
 import { isObjectType, isObject } from "./is-object";
-import { Validator } from "@cesium133/forgjs";
 import { createSchemaValidator } from "@schema-validator/schema-resolver";
+import { normalizeRequired } from "@schema-validator/schema-resolver";
 
 export function buildWalker(schema, config = {}) {
   return new RootSchemaWalker(schema, config).instance;
@@ -41,6 +41,7 @@ export class RootSchemaWalker extends Loggable {
     const valid = this.validator.validate(schema);
     if (!valid) {
       this.error(
+        "init",
         `invalid schema: must have a properties object: ${JSON.stringify(
           properties
         )}`
@@ -75,25 +76,7 @@ export class RootSchemaWalker extends Loggable {
   }
 
   normalizeRequired(schema?: any) {
-    const properties = {
-      ...this.properties
-    };
-    const required = [...this.required] || [];
-    // this.logInfo("normalizeRequired", {
-    //   properties,
-    //   required
-    // });
-    const propKeys = Object.keys(properties);
-    return propKeys.reduce((acc, key) => {
-      // this.logInfo("normalizeRequired", {
-      //   key
-      // });
-      const value = properties[key];
-      const isRequired = required.indexOf(key) >= 0;
-      value.required = this.isRequired(value) || isRequired;
-      acc[key] = value;
-      return acc;
-    }, {});
+    this.properties = normalizeRequired(schema);
   }
 
   isRequired(value) {

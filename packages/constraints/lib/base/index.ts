@@ -1,9 +1,9 @@
-import { defaults } from "../defaults";
-import { TypeMatcher } from "@schema-validator/core";
 import { ObjectDef } from "./_types";
-export { ObjectDef, TypeMatcher };
+import { Loggable, inquiry, util } from "@schema-validator/core";
+export { ObjectDef, Loggable, util };
+const defaults = inquiry;
 
-export class Base extends TypeMatcher {
+export class Base extends Loggable {
   config: ObjectDef;
 
   constructor(config: ObjectDef = {}) {

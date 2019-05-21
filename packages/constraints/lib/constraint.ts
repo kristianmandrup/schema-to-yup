@@ -1,9 +1,12 @@
-import { TypeMatcher, ObjectDef } from "./base";
+import { Loggable, ObjectDef, util } from "./base";
+const { isStringType, isArrayType, isNothing } = util;
+
+export { util };
 
 const alwaysTrueFn = () => true;
 const identity = val => val;
 
-export class Constraint extends TypeMatcher {
+export class Constraint extends Loggable {
   name: string;
   typer: any;
   map: ObjectDef;
@@ -28,17 +31,13 @@ export class Constraint extends TypeMatcher {
 
   mapFor(value) {
     if (!value) return this.$map || {};
-    if (this.isStringType(value)) return { [value]: value };
-    if (this.isArrayType(value))
+    if (isStringType(value)) return { [value]: value };
+    if (isArrayType(value))
       return value.reduce((acc, key) => {
         acc[key] = { [value]: value };
         return acc;
       }, {});
     return value;
-  }
-
-  isStringType(val) {
-    return typeof val === "string";
   }
 
   get delegates() {
@@ -61,7 +60,7 @@ export class Constraint extends TypeMatcher {
   }
 
   entryNames(entry) {
-    return this.isArrayType(entry) ? entry : [entry];
+    return isArrayType(entry) ? entry : [entry];
   }
 
   processConstraints(method, names: string[] = []) {
@@ -79,7 +78,7 @@ export class Constraint extends TypeMatcher {
 
   validateAndTransform(name) {
     const cv = this.constraintFor(name);
-    if (this.isNothing(cv)) {
+    if (isNothing(cv)) {
       return null;
     }
     this.validate(cv);
@@ -111,7 +110,7 @@ export class Constraint extends TypeMatcher {
   }
 
   validate(value) {
-    if (this.isNothing(value)) {
+    if (isNothing(value)) {
       return this;
     }
     if (!this.isValidConstraintValue(value)) {

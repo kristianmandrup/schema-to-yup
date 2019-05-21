@@ -5,8 +5,8 @@ export { isArray };
 const { isObjectType, isArray, isReferenceArray } = util;
 
 export class ArraySchemaEntryWalker extends SchemaEntryWalker {
-  static create(obj) {
-    return new ArraySchemaEntryWalker(obj).init();
+  static create(obj, config = {}) {
+    return new ArraySchemaEntryWalker(obj, config).init();
   }
 
   get schemaType() {
@@ -77,6 +77,7 @@ export class ArraySchemaEntryWalker extends SchemaEntryWalker {
 
   invalidItemTypes() {
     this.error(
+      "invalidItemTypes",
       `Invalid item types for ${
         this.key
       }. All array items must share the same type to be mappable to ElasticSearch`,
