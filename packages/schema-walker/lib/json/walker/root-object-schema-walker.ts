@@ -1,7 +1,7 @@
 import { Loggable } from "@schema-validator/core";
 import { isObjectType, isObject } from "./is-object";
 import { Validator } from "@cesium133/forgjs";
-import { createSchemaValidator } from "../validator";
+import { createSchemaValidator } from "@schema-validator/schema-resolver";
 
 export function buildWalker(schema, config = {}) {
   return new RootSchemaWalker(schema, config).instance;

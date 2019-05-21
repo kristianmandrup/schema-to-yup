@@ -1,5 +1,7 @@
-import { buildYup } from "../../..";
+import * as builders from "../lib";
 import yup from "yup";
+
+const { yup: { buildYup } } = builders;
 
 //check validity
 describe("yup schema validation", () => {

@@ -1,7 +1,9 @@
-import { InfoHandler } from "../info";
+import { InfoHandler } from "./info";
 import dotProp from "dot-prop";
 import { createRefValidator } from "./ref-validator";
-import { classify, stringify } from "../util";
+import { util } from "@schema-validator/core";
+
+const { classify, stringify } = util;
 
 export const createReference = (opts, config = {}) =>
   new Reference(opts, config);

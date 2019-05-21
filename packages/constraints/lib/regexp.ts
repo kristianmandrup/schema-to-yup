@@ -1,4 +1,4 @@
-import { Constraint } from "./base";
+import { Constraint } from "./constraint";
 
 export function createRegExpConstraint(typer, opts) {
   return new RegExpConstraint(typer, opts);

@@ -3,8 +3,6 @@ const { date } = types;
 const { toSchemaEntry } = date;
 const toYupDate = toSchemaEntry;
 
-const yup = require("yup");
-
 const isDate = fieldDef => fieldDef && fieldDef.type === "date";
 const config = { isDate };
 const create = fieldDef => {

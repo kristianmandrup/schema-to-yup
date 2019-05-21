@@ -1,4 +1,4 @@
-import { Constraint } from "../constraints";
+import { Constraint } from "./constraint";
 
 export function createDateConstraint(typer, opts) {
   return new DateConstraint(typer, opts);

@@ -1,4 +1,4 @@
-import { Constraint } from "./base";
+import { Constraint } from "./constraint";
 
 export function createStringConstraint(typer, opts) {
   return new StringConstraint(typer, opts);

@@ -147,7 +147,7 @@ export const schemaTypeOf = (entry: any = {}) => {
   });
 };
 
-const schemaEntryMainTypeOf = (entry: any = {}) => {
+export const schemaEntryMainTypeOf = (entry: any = {}) => {
   const { type } = entry;
   const schemaType = schemaTypeOf(type);
   return schemaEntryMainType(schemaType);

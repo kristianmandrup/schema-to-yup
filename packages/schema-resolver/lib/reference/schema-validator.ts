@@ -1,5 +1,7 @@
-import { InfoHandler } from "../info";
-import { isObjectType } from "../util";
+import { InfoHandler } from "./info";
+import { util } from "@schema-validator/core";
+
+const { isObjectType } = util;
 
 export const createSchemaValidator = (config = {}) =>
   new SchemaValidator(config);

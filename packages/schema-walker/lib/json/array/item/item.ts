@@ -1,13 +1,7 @@
-import { MappingBaseType } from "../../base";
-import { isFunction } from "../../util";
-import { buildConfig } from "../../../build-config";
+import { SchemaEntryWalker } from "../../entry";
+import { util } from "@schema-validator/core";
 
-export const createMappingItemFactory = (config = {}) => {
-  config = buildConfig(config);
-  return opts => {
-    return new MappingItem(opts, config);
-  };
-};
+const { isFunction } = util;
 
 export class ItemSchemaEntryWalker extends SchemaEntryWalker {
   item: any;
@@ -21,7 +15,7 @@ export class ItemSchemaEntryWalker extends SchemaEntryWalker {
   }
 
   walk(item: any) {
-    return this.resolve(item)
+    return this.resolve(item);
   }
 
   get resolver() {
@@ -51,8 +45,3 @@ export class ItemSchemaEntryWalker extends SchemaEntryWalker {
     };
   }
 }
-
-module.exports = {
-  createMappingItemFactory,
-  MappingItem
-};

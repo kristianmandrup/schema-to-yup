@@ -1,6 +1,8 @@
-import { createMappingItemFactory } from "./item";
+import { ItemSchemaEntryWalker } from "./item";
 
-const createFactory = createMappingItemFactory;
+// TODO
+const createFactory = () => ({});
+const createMapper = () => ({});
 
 describe("MappingItem", () => {
   const strItem = {

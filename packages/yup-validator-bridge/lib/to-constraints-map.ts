@@ -8,7 +8,7 @@ export const toConstraintsMap = (values: any[] = [], opts: any = {}) => {
       }
     }
     if (typeof value === "string") {
-      acc[name] = {};
+      acc[value] = {};
     } else {
       if (!value.name) {
         if (opts.throws !== false) {

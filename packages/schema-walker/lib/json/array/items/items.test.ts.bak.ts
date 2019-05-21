@@ -1,8 +1,8 @@
-import { createItemsMapping } from "./items";
-import { arrays } from "../data";
+import { ItemsSchemaEntryWalker } from "./items";
+import { arrays } from "../_schemas_/data";
 
 const create = (opts, config) => {
-  return createItemsMapping(opts, config);
+  return new ItemsSchemaEntryWalker(opts, config);
 };
 
 describe("ItemsMapping", () => {

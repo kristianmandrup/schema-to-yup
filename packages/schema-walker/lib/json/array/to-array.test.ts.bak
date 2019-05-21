@@ -1,4 +1,15 @@
-import { isArray, toArray, MappingArray } from "./array-walker";
+import { toArray, ArraySchemaEntryWalker } from ".";
+import { toArray } from ".";
+
+import { SchemaEntryWalker } from "../entry";
+describe("foo", () => {
+  test("first test", () =>  {
+    console.log('SchemaEntryWalker', SchemaEntryWalker);
+    expect(1).toEqual(1)
+  });
+});
+
+const { isArray } = Array;
 
 const create = opts => ({
   type: "array",
@@ -20,20 +31,21 @@ const array = opts => {
 
 describe("isArray", () => {
   test("type: array - true", () => {
-    expect(isArray("array")).toBeTruthy();
+    expect(isArray(array)).toBeTruthy();
   });
   test("type: integer - true", () => {
-    expect(isArray("integer")).toBeTruthy();
+    expect(isArray(integer)).toBeTruthy();
   });
 
   test("type: array - false", () => {
+    // TODO
     expect(isArray("array")).toBeFalsy();
   });
 });
 
 describe.only("MappingArray", () => {
   const obj = objFor();
-  const mapper = MappingArray.create(obj);
+  const mapper = ArraySchemaEntryWalker.create(obj);
 
   describe("type", () => {
     test("default: is array", () => {
