@@ -11,13 +11,11 @@ type ApiDef = {
 export class YupBuilder extends Loggable {
   type: YupApiMethod;
   api: ApiDef;
-  methodArgs: any[];
 
-  constructor(yupMethodArgs: any[], config: any = {}) {
+  constructor(config: any = {}) {
     super(config);
     this.type = config.type || "mixed";
     this.api = yup[this.type]();
-    this.methodArgs = yupMethodArgs;
   }
 
   toArg() {}
@@ -30,5 +28,10 @@ export class YupBuilder extends Loggable {
 
   get object() {
     return yup.object();
+  }
+
+  build() {
+    // TODO
+    return {};
   }
 }
