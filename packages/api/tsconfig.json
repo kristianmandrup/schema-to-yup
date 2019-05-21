@@ -3,5 +3,10 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "include": ["./lib"]
+  "include": [
+    "./lib",
+    "__tests__/build/build.test.ts",
+    "__tests__/build/build-properties.test.ts",
+    "__tests__/build/build-config.test.ts"
+  ]
 }

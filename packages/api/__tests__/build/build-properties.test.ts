@@ -1,4 +1,4 @@
-import { buildProperties } from "./build-properties";
+import { buildProperties } from "../../lib/build/build-properties";
 
 describe("buildProperties", () => {
   describe("empty properties", () => {

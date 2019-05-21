@@ -1,4 +1,4 @@
-import { build } from "./build";
+import { build } from "../../lib/build/build";
 
 describe("build", () => {
   const schema = {
