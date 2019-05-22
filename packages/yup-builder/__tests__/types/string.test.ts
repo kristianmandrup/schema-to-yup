@@ -6,7 +6,7 @@ const toYupString = toSchemaEntry;
 const isString = fieldDef => fieldDef && fieldDef.type === "string";
 const config = { isString };
 const create = fieldDef => {
-  const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
+  const obj = typeof fieldDef === "object" ? { ...fieldDef, config } : fieldDef;
   return toYupString(obj, config);
 };
 

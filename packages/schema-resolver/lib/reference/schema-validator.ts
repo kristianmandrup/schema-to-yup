@@ -1,4 +1,4 @@
-import { InfoHandler } from "../reference/info";
+import { InfoHandler } from "./info";
 import { util } from "@schema-validator/core";
 
 const { isObjectType } = util;

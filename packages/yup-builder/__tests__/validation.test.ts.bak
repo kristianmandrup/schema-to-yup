@@ -1,4 +1,8 @@
-import { buildYup } from "../../..";
+import { YupBuilder } from "../lib";
+
+function buildYup(shape: any, config?: any) {
+  return new YupBuilder(shape, config).schema;
+}
 
 const invalidjson = {
   title: "users",

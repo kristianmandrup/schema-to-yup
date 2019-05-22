@@ -1,5 +1,4 @@
-import { InfoHandler } from "../info";
-import { isStringType, isObjectType } from "../util";
+import { InfoHandler } from "./info";
 
 export const createRefValidator = config => new RefValidator(config);
 
@@ -10,7 +9,7 @@ export class RefValidator extends InfoHandler {
 
   validate(reference) {
     !reference && this.error("validate", "Missing reference");
-    !isStringType(reference) &&
+    typeof reference !== 'string' &&
       this.error(
         "validate",
         `Reference invalid. Must be a string, was: ${typeof reference}`,

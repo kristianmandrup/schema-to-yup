@@ -1,6 +1,5 @@
 import * as yup from "yup";
 import {
-  Base,
   createStringConstraint,
   createRegExpConstraint,
   createDateConstraint,

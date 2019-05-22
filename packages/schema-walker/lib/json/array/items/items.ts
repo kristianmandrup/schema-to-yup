@@ -1,11 +1,6 @@
-import { MappingBaseType } from "../../base";
-import { createMappingItemFactory } from "../item";
+import { SchemaEntryWalker } from "../../entry";
 
-export const createItemsMapping = (opts, config) => {
-  return new MappingItems(opts, config);
-};
-
-export class ItemsWalker extends SchemaEntryWalker {
+export class ItemsSchemaEntryWalker extends SchemaEntryWalker {
   items: any[];
   ownerName: string;
   itemResolver: (item, config?: any) => any;

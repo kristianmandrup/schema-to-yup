@@ -1,0 +1,55 @@
+import { toArray, ArraySchemaEntryWalker } from ".";
+import { toArray } from ".";
+
+import { SchemaEntryWalker } from "../entry";
+describe("foo", () => {
+  test("first test", () =>  {
+    console.log('SchemaEntryWalker', SchemaEntryWalker);
+    expect(1).toEqual(1)
+  });
+});
+
+const { isArray } = Array;
+
+const create = opts => ({
+  type: "array",
+  ...opts
+});
+
+const config = {};
+const schema = {};
+
+const objFor = (opts = {}) => {
+  const value = create(opts);
+  return { key: "name", type: value.type, value, schema, config };
+};
+
+const array = opts => {
+  const $opts = objFor(opts);
+  return toArray($opts);
+};
+
+describe("isArray", () => {
+  test("type: array - true", () => {
+    expect(isArray(array)).toBeTruthy();
+  });
+  test("type: integer - true", () => {
+    expect(isArray(integer)).toBeTruthy();
+  });
+
+  test("type: array - false", () => {
+    // TODO
+    expect(isArray("array")).toBeFalsy();
+  });
+});
+
+describe.only("MappingArray", () => {
+  const obj = objFor();
+  const mapper = ArraySchemaEntryWalker.create(obj);
+
+  describe("type", () => {
+    test("default: is array", () => {
+      expect(mapper.type).toEqual("nested");
+    });
+  });
+});

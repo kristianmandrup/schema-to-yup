@@ -1,7 +1,6 @@
-import { Base } from "../../../base";
-import { ObjectDef } from "../../../common/_types";
+import { TypeMatcher, ObjectDef } from "@schema-validator/core";
 
-export class Guard extends Base {
+export class Guard extends TypeMatcher {
   config: ObjectDef = {};
   obj: any;
   constructor(obj, config) {

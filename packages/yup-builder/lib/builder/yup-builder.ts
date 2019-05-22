@@ -1,5 +1,6 @@
-import yup from "yup";
-import { Loggable } from "@schema-validator/core";
+import * as yup from "yup";
+import { Loggable, util } from "@schema-validator/core";
+const { isObjectType } = util;
 
 type YupApiMethod = "mixed " | "string" | "date";
 
@@ -25,15 +26,12 @@ export class YupBuilder extends Loggable {
     };
   }
 
-  get shape() {
-    return {};
-  }
-
-  get instance() {
-    return this.object.shape(this.shape);
-  }
-
   get object() {
     return yup.object();
+  }
+
+  build() {
+    // TODO
+    return {};
   }
 }

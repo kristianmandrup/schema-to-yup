@@ -4,4 +4,4 @@ export {
   createNumberGuard,
   toNumber,
   toSchemaEntry
-} from "../../../src/validators/yup/types/number";
+} from "../../../types/number";

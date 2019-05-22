@@ -76,7 +76,9 @@ module.exports = {
   ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  moduleNameMapper: {
+    "@schema-validator/(.*)": "<rootDir>/packages/$1/lib"
+  },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
@@ -137,8 +139,8 @@ module.exports = {
 
   // The glob patterns Jest uses to detect test files
   testMatch: [
-    "**/packages/*/__tests__/*.+(j|t)s",
-    "**/lib/**/?(*.)(spec|test).(j|t)s"
+    "**/packages/*/__tests__/*.test.(j|t)s",
+    "**/packages/*/lib/?(*.)+test.(j|t)s"
   ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
@@ -183,4 +185,3 @@ module.exports = {
   // Whether to use watchman for file crawling
   // watchman: true,
 };
->>>>>>> fdb1e39d889e7d6553caac9d9ae8a567462f6db6

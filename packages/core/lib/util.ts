@@ -120,7 +120,7 @@ export const isArrayType = obj => {
 };
 
 export const isObject = obj => {
-  return obj.type === "object" || obj === "object"; // && isObjectType(obj.properties)
+  return obj === "object" || obj.type === "object"; // && isObjectType(obj.properties)
 };
 
 export const isReferenceArray = obj => {
@@ -175,7 +175,7 @@ export const schemaTypeOf = (entry: any = {}) => {
   });
 };
 
-const schemaEntryMainTypeOf = (entry: any = {}) => {
+export const schemaEntryMainTypeOf = (entry: any = {}) => {
   const { type } = entry;
   const schemaType = schemaTypeOf(type);
   return schemaEntryMainType(schemaType);

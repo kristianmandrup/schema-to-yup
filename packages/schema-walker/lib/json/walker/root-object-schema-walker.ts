@@ -1,6 +1,6 @@
 import { Loggable } from "@schema-validator/core";
 import { isObjectType, isObject } from "./is-object";
-import { createSchemaValidator } from "../validator";
+import { createSchemaValidator } from "@schema-validator/schema-resolver";
 import { normalizeRequired } from "@schema-validator/schema-resolver";
 
 export function buildWalker(schema, config = {}) {

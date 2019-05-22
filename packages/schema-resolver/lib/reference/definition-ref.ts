@@ -1,5 +1,5 @@
 // for resolving a type definition reference
-import { InfoHandler } from "../info";
+import { InfoHandler } from "./info";
 import { createReference } from "./reference";
 import { createRefValidator } from "./ref-validator";
 import { createSchemaValidator } from "./schema-validator";
