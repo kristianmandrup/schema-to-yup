@@ -1,4 +1,4 @@
-import { BaseSchemaEntryWalker } from "../../../lib/json/entry/base-entry-walker";
+import { BaseSchemaEntryWalker } from "../../lib/entry/base-entry-walker";
 
 const create = (opts = {}, config = {}) =>
   new BaseSchemaEntryWalker(opts, config);

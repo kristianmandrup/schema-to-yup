@@ -1,4 +1,4 @@
-import { SchemaTypeResolver } from "./schema-type-resolver";
+import { SchemaTypeResolver } from "../../lib/resolver";
 
 describe("SchemaTypeResolver", () => {
   const opts = {};

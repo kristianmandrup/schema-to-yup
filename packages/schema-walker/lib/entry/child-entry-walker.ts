@@ -1,6 +1,6 @@
 import { BaseSchemaEntryWalker } from "./base-entry-walker";
 
-export class ChildEntryWalker extends BaseSchemaEntryWalker {
+export class ChildSchemaEntryWalker extends BaseSchemaEntryWalker {
   constructor(opts = {}, config = {}) {
     super(opts, config);
   }

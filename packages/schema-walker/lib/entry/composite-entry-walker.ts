@@ -11,7 +11,7 @@ export interface ISchemaEntryWalker {
   onExitEntry: (entry: any, result: any) => void;
 }
 
-export class SchemaEntryWalker extends BaseSchemaEntryWalker
+export class CompositeSchemaEntryWalker extends BaseSchemaEntryWalker
   implements ISchemaEntryWalker {
   _entry: any;
   config: any;

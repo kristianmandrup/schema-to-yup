@@ -1,25 +1,27 @@
-import { SchemaEntryWalker } from "../entry";
+import { CompositeSchemaEntryWalker } from "../entry";
 import { util } from "@schema-validator/core";
 const { isFunction, isObject, isObjectType } = util;
 export { isObject };
 
 export function toObject(obj) {
-  return isObject(obj) && ObjectSchemaEntryWalker.create(obj).walk();
+  return isObject(obj) && ObjectSchemaEntryWalker.create(obj).init();
 }
 
 // Allow recursive schema
-export class ObjectSchemaEntryWalker extends SchemaEntryWalker {
+export class ObjectSchemaEntryWalker extends CompositeSchemaEntryWalker {
   config: any;
-  properties: any;
   typeNameFor: (obj: any) => string;
   objTypeName: string;
   result: any;
 
   constructor(opts, config = {}) {
     super(opts, config);
-    this.properties = this.entry.properties;
     this.typeNameFor = this.config.typeNameFor;
     this.objTypeName = this.entry.typeName || this.entry.className;
+  }
+
+  get properties(): any {
+    return this.entry.properties;
   }
 
   get children() {

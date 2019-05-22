@@ -1,5 +1,5 @@
 import { Loggable, util } from "@schema-validator/core";
-import { schemaTypeWalkerMap } from "./walker-map";
+import { createSchemaTypeWalkerMap } from "./walker-map";
 const { schemaEntryMainTypeOf } = util;
 
 export class SchemaTypeResolver extends Loggable {
@@ -15,7 +15,7 @@ export class SchemaTypeResolver extends Loggable {
   }
 
   get defaultTypeWalkerMap() {
-    return schemaTypeWalkerMap;
+    return createSchemaTypeWalkerMap(this.config);
   }
 
   schemaTypeWalkerFor(schemaType) {
