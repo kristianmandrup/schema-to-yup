@@ -1,1 +1,1 @@
-export { YupBuilder } from "./yup-builder";
+export { createBuilder, YupBuilder } from "./yup-builder";

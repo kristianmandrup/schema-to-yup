@@ -1,5 +1,9 @@
 // import * as validators from "./validators";
-import { Loggable, ObjectDef } from "@schema-validator/core";
+import { Loggable } from "@schema-validator/core";
+
+export type ObjectDef = {
+  [key: string]: any;
+};
 
 export class SchemaEntryError extends Error {}
 

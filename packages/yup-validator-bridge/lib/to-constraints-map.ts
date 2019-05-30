@@ -1,4 +1,7 @@
 export const toConstraintsMap = (values: any[] = [], opts: any = {}) => {
+  if (!Array.isArray(values)) {
+    throw "toConstraintsMap: must take an array of values";
+  }
   return values.reduce((acc, value) => {
     if (typeof value !== "string" && !(value instanceof Object)) {
       if (opts.throws !== false) {

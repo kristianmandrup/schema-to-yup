@@ -2,6 +2,8 @@
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
 import { MixedSchemaEntry } from "../mixed/mixed";
 import { ArrayGuard, createArrayGuard } from "./guard";
+import { util } from "@schema-validator/core";
+const { isArrayType } = util;
 
 const proceed = (obj, config = {}) => {
   return createArrayGuard(obj, config).verify();
@@ -103,7 +105,7 @@ export class ArraySchemaEntry extends MixedSchemaEntry {
   maxItems() {
     const { maxItems, max } = this.constraints;
     const $max = maxItems || max;
-    if (!this.isArrayType($max)) {
+    if (!isArrayType($max)) {
       return this;
     }
     // TODO: use Numeric constraint
@@ -117,7 +119,7 @@ export class ArraySchemaEntry extends MixedSchemaEntry {
 
   get constraintsCheckMap() {
     return {
-      size: num => this.isArrayType(num) && num >= 0
+      size: num => isArrayType(num) && num >= 0
     };
   }
 }

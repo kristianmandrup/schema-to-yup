@@ -1,6 +1,7 @@
-import { TypeMatcher, ObjectDef } from "@schema-validator/core";
+import { Loggable, util, ObjectDef } from "@schema-validator/core";
+const { isPresent } = util;
 
-export class Guard extends TypeMatcher {
+export class Guard extends Loggable {
   config: ObjectDef = {};
   obj: any;
   constructor(obj, config) {
@@ -13,6 +14,6 @@ export class Guard extends TypeMatcher {
   }
 
   verify() {
-    return this.isPresent(this.obj) && this.isValid();
+    return isPresent(this.obj) && this.isValid();
   }
 }

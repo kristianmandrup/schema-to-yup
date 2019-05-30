@@ -19,11 +19,11 @@ export class TransformProps extends Loggable {
       // });
       const value = properties[key];
       const yupSchemaEntry = this.propToValidatorSchemaEntry({
-        name,
+        name: key,
         key,
         value
       });
-      this.logInfo("propsToShape", { key, yupSchemaEntry });
+      // this.logInfo("toShape", "info", { key, yupSchemaEntry });
       acc[key] = yupSchemaEntry;
       return acc;
     }, {});

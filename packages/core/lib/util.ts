@@ -29,6 +29,7 @@ export const isString = type => {
 export const isFunction = fun => {
   return typeof fun === "function";
 };
+export const isFunctionType = isFunction;
 
 export const isRegExpType = value => {
   return value instanceof RegExp;

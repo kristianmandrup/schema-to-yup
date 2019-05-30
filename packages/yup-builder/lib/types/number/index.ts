@@ -1,4 +1,4 @@
-import { MixedSchemaEntry } from "../mixed/mixed";
+import { NumberSchemaEntry } from "./number";
 import { createNumberGuard } from "./guard";
 
 export { createNumberGuard };
@@ -22,4 +22,3 @@ export function buildSchemaEntry(obj) {
 export function buildNumber(obj) {
   return NumberSchemaEntry.create(obj);
 }
-

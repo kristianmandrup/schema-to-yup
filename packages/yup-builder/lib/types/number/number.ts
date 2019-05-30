@@ -1,4 +1,6 @@
 import { MixedSchemaEntry } from "../mixed";
+import { util } from "@schema-validator/core";
+const { isNothing, isStringType } = util;
 
 export class NumberSchemaEntry extends MixedSchemaEntry {
   constructor(obj) {
@@ -37,10 +39,10 @@ export class NumberSchemaEntry extends MixedSchemaEntry {
 
   round() {
     const { round } = this.constraints;
-    if (this.isNothing(round)) {
+    if (isNothing(round)) {
       return this;
     }
-    const $round = this.isStringType(round) ? round : "round";
+    const $round = isStringType(round) ? round : "round";
     // round && this.base.round($round);
     return this;
   }

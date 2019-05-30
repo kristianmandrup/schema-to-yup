@@ -47,14 +47,14 @@ describe("createNumericConstraint", () => {
       });
     });
 
-    describe("toNumber", () => {
+    describe("transform", () => {
       test("valid number string - number", () => {
-        const val = constraint.toNumber("12");
+        const val = constraint.transform("12");
         expect(typeof val === "number").toBeTruthy();
       });
 
       test("number - number", () => {
-        expect(isNumber(constraint.toNumber(1))).toBeTruthy();
+        expect(isNumber(constraint.transform(1))).toBeTruthy();
       });
     });
 

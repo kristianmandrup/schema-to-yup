@@ -5,10 +5,10 @@ describe("isArray", () => {
     expect(isArray("array")).toBeTruthy();
   });
   test("type: integer - true", () => {
-    expect(isArray("integer")).toBeTruthy();
+    expect(isArray("integer")).toBeFalsy();
   });
 
   test("type: array - false", () => {
-    expect(isArray("array")).toBeFalsy();
+    expect(isArray("array")).toBeTruthy();
   });
 });
