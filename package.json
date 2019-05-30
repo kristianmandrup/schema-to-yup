@@ -11,13 +11,15 @@
     "eslint": "^5.16.0",
     "jest": "^24.8.0",
     "lerna": "^3.13.1",
-    "ts-jest": "^24.0.2"
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.1"
   },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run tsc",
+    "prebuild": "lerna run tsc -- -b --clean",
+    "build": "lerna run tsc -- -b --declarationMap",
     "publish": "yarn build && lerna publish",
     "test": "jest"
   }

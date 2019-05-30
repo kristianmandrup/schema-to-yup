@@ -1,12 +1,16 @@
 {
   "extends": "../../tsconfig",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "rootDir": "./lib"
   },
-  "include": [
-    "./lib",
-    "__tests__/build/build.test.ts",
-    "__tests__/build/build-properties.test.ts",
-    "__tests__/build/build-config.test.ts"
+  "include": ["./lib"],
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../yup-builder"
+    }
   ]
 }

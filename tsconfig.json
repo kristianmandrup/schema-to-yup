@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "declaration": true,
     "noImplicitAny": false,
+    "strictNullChecks": true,
     "removeComments": true,
     "noLib": false,
     "emitDecoratorMetadata": true,
@@ -12,9 +13,13 @@
     "sourceMap": true,
     "lib": ["es6"],
     "baseUrl": "packages",
-    "paths": {
-      "@schema-validator/*": ["./*/lib"]
-    }
+    "composite": true
   },
-  "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts", "**/__tests__/*.ts", "dist"]
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/__tests__/*.ts",
+    "dist"
+  ]
 }

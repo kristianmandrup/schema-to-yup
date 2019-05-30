@@ -3,5 +3,10 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "include": ["./lib"]
+  "include": ["./lib"],
+  "references": [
+    {
+      "path": "../core"
+    }
+  ]
 }
