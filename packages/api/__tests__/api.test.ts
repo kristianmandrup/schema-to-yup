@@ -1,5 +1,6 @@
-import { YupBuilder, createBuilder } from "@schema-validator/yup-builder";
+import { createBuilder } from "@schema-validator/yup-builder";
 import * as yup from "yup";
+import { build } from "../lib/build/build";
 
 interface IValidator {
   isValid: (obj?) => Promise<boolean>;
@@ -8,6 +9,7 @@ interface IValidator {
 
 const buildYup = (obj, opts = {}): IValidator => {
   const builder = createBuilder(opts);
+  const built = builder.build(obj);
   // YupBuilder
   return {
     isValid: async (): Promise<boolean> =>
