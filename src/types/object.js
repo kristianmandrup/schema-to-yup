@@ -1,7 +1,7 @@
 import { YupMixed } from "./mixed";
 // import { buildYup } from "../";
 
-class ObjectHandler {
+export class ObjectHandler {
   constructor(config) {
     this.config = config;
   }
@@ -15,12 +15,17 @@ class ObjectHandler {
   }
 }
 
-function toYupObject(obj, config = {}) {
+export function createObjectHandler(config = {}) {
+  return new ObjectHandler(config);
+}
+
+
+export function toYupObject(obj, config = {}) {
   return obj && new ObjectHandler(config).handle(obj);
 }
 
 // Allow recursive schema
-class YupObject extends YupMixed {
+export class YupObject extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "object";
@@ -67,4 +72,3 @@ class YupObject extends YupMixed {
   }
 }
 
-export { toYupObject, YupObject, ObjectHandler };
