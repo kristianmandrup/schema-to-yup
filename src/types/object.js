@@ -1,24 +1,31 @@
 import { YupMixed } from "./mixed";
 // import { buildYup } from "../";
 
+const isObject = fieldDef => fieldDef && fieldDef.type === "object";
+
 export class ObjectHandler {
-  constructor(config) {
+  constructor(config = {}) {
+    config = config || {};
+    config.isObject = config.isObject || isObject;
     this.config = config;
+    this.schema = config.schema;
   }
 
   isObject(obj) {
-    return this.config.isObject(obj);
+    return this.config.isObject(obj.value);
   }
 
   handle(obj) {
-    return this.isObject(obj) && YupObject.create(obj).createSchemaEntry();
+    return (
+      this.isObject(obj) &&
+      YupObject.create({ ...obj, config: this.config }).createSchemaEntry()
+    );
   }
 }
 
 export function createObjectHandler(config = {}) {
   return new ObjectHandler(config);
 }
-
 
 export function toYupObject(obj, config = {}) {
   return obj && new ObjectHandler(config).handle(obj);
@@ -42,10 +49,17 @@ export class YupObject extends YupMixed {
     this.noUnknown();
     this.camelCase().constantCase();
 
+    const schema = this.value;
+    const config = this.config;
+
     // recursive definition
-    if (this.value) {
-      const schema = this.config.buildYup(this.value);
-      this.base.shape(schema);
+    if (schema) {
+      if (!config.buildYup) {
+        this.error("convert", "Missing buildYup function from config", config);
+      }
+
+      const yupSchema = this.config.buildYup(schema, config);
+      this.base = yupSchema;
     }
     return this;
   }
@@ -71,4 +85,3 @@ export class YupObject extends YupMixed {
     return this;
   }
 }
-

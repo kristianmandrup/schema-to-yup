@@ -50,6 +50,7 @@ class YupMixed extends Base {
   constructor(opts = {}) {
     super(opts.config);
     let { schema, key, value, config } = opts;
+    config = config || {};
     schema = schema || {};
     this.validateOnCreate(key, value, opts);
     this.yup = yup;

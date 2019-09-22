@@ -1,4 +1,4 @@
-const { types } = require("../../src");
+const { types, buildYup } = require("../../src");
 const { createObjectHandler } = require("../../src/types/object");
 const { toYupObject } = types;
 const yup = require("yup");
@@ -45,40 +45,67 @@ describe("ObjectHandler", () => {
 
     describe("config object", () => {
       test("creates using config", () => {
-        expect(createObjectHandler({x: 2})).toBeTruthy();
+        expect(createObjectHandler({ x: 2 })).toBeTruthy();
       });
     });
   });
 
   describe("instance", () => {
     describe("handle", () => {
-      describe("recursive object schema", () => {
+      describe.only("recursive object schema", () => {
         const dogSchema = {
-          type: 'object',
-          title: 'Dog',
-          properties: {
-            name: 'age',
-            type: 'number'
-          }
-        }
-
-        const schema = {
-          type: 'object',
-          title: 'Person',
+          type: "object",
+          title: "Dog",
           properties: {
             name: {
-              type: 'string'
+              type: "string"
             },
-            dog: dogSchema            
+            age: {
+              type: "number"
+            }
           }
-        }
-        const instance = createObjectHandler({schema})
-        const result = instance.handle(dogSchema)
+        };
 
-        test("result is as expected", () => {        
-          expect(result).toBeTruthy();
-        });    
+        const schema = {
+          type: "object",
+          title: "Person",
+          properties: {
+            name: {
+              type: "string"
+            },
+            dog: dogSchema
+          },
+          required: ["name"]
+        };
+        const instance = createObjectHandler({ schema, buildYup });
+        const obj = {
+          key: "dog",
+          type: "object",
+          schema,
+          value: dogSchema
+        };
+        const dogYupSchema = instance.handle(obj);
+
+        const dog = {
+          valid: {
+            name: "Spot",
+            age: 1
+          },
+          invalid: {
+            age: "x"
+          }
+        };
+
+        test("valid dog", () => {
+          const valid = dogYupSchema.isValidSync(dog.valid);
+          expect(valid).toBeTruthy();
+        });
+
+        test("invalid dog", () => {
+          const valid = dogYupSchema.isValidSync(dog.invalid);
+          expect(valid).toBeFalsy();
+        });
       });
     });
-  })
+  });
 });
