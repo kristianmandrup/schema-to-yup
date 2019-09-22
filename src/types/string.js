@@ -1,4 +1,4 @@
-import { YupMixed } from './mixed';
+import { YupMixed } from "./mixed";
 
 class StringHandler {
   constructor(config) {
@@ -129,8 +129,4 @@ class YupString extends YupMixed {
   }
 }
 
-export {
-  toYupString,
-  YupString,
-  StringHandler
-};
+export { toYupString, YupString, StringHandler };
