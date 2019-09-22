@@ -4,7 +4,8 @@ const { toYupString } = types;
 
 const isString = fieldDef => fieldDef && fieldDef.type === "string";
 const config = { isString };
-const create = fieldDef => {
+
+export const create = fieldDef => {
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
   return toYupString(obj, config);
 };
