@@ -1,7 +1,5 @@
 import * as yup from "yup";
 
-// import { buildYup } from "../";
-
 class ConvertYupSchemaError extends Error {}
 
 const errValKeys = [
@@ -45,6 +43,7 @@ function isObjectType(obj) {
 
 import { Base } from "./base";
 import { createWhenCondition } from "../conditions";
+import { ConstraintBuilder } from "./constraint_builder";
 
 class YupMixed extends Base {
   constructor(opts = {}) {
@@ -65,9 +64,14 @@ class YupMixed extends Base {
     this.base = yup.mixed();
     this.errMessages = config.errMessages || {};
     this.constraintsAdded = {};
+    this.constraintBuilder = this.createConstraintBuilder(this);
 
     // rebind: ensure this always mapped correctly no matter context
     this.rebind("addConstraint", "addValueConstraint");
+  }
+
+  createConstraintBuilder(opts = {}) {
+    return new ConstraintBuilder(opts);
   }
 
   rebind(...methods) {

@@ -312,6 +312,10 @@ Here a more complete example of the variations currently possible
 }
 ```
 
+### Complex/Nested schemas
+
+Nested object schema properties are currently not fully supported. Work has been started on the master branch, see the `test/types/object` folder and the `types/object.js` file and help finish this. Almost there.
+
 ## Custom models
 
 This library now also supports non JSON schema models. See the `types/defaults` mappings.
@@ -738,6 +742,11 @@ On his branch:
 - more...
 
 If you would like to further improved this library or add support for more validators than Yup, please help on this branch. Cheers!
+
+### Refactoring
+
+On the `master` branch we've added a `ConstraintBuilder` class which should contain all the logic to build the constraints from a set of options in the future. Currently this logic is on the `YupMixed` class where it really doesn't belong.
+YupMixed or any other Yup type class should delegate the building of a Yup constraint to a dedicated class.
 
 ## Ideas and suggestions
 
