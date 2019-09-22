@@ -135,7 +135,7 @@ class YupMixed extends Base {
     yup = yup || this.base;
     propValue = propValue || this.constraints[propName];
 
-    if (!propValue) {
+    if (this.isNothing(propValue)) {
       this.warn("no prop value");
       return yup;
     }
@@ -147,12 +147,24 @@ class YupMixed extends Base {
       return this;
     }
 
-    const constraintFn = yup[method].bind(yup);
+    const yupConstraintFn = yup[method];
+    if (!yupConstraintFn) {
+      return this.error("No such yup constrain method", { method });
+    }
+    const constraintFn = yupConstraintFn.bind(yup);
     const errFn =
       this.valErrMessage(constraintName) ||
       (errName && this.valErrMessage(errName));
 
+    // this.log("build constraint", {
+    //   value,
+    //   propName,
+    //   constraints: this.constraints
+    // });
+
     if (!this.isPresent(value)) {
+      // this.log("constraint - value not present", value);
+
       // call yup constraint function with single value arguments (default)
       const constraintValue = value === true ? propValue : value;
 
@@ -161,21 +173,38 @@ class YupMixed extends Base {
       const newBase = constraintValue
         ? constraintFn(constraintValue, errFn)
         : constraintFn(errFn);
+
+      // this.log("built constraint", {
+      //   yup: newBase
+      // });
+
       return newBase;
     }
 
     if (this.isPresent(value)) {
+      // this.log("constraint - value present", value);
+
       // call yup constraint function with multiple arguments
       if (!Array.isArray(values)) {
-        this.warn(
-          "buildConstraint: values option must be an array of arguments"
-        );
-        return yup;
+        this.onConstraintAdded({ name: constraintName, value });
+
+        const newBase = constraintFn([value], errFn);
+        return newBase;
+
+        // this.warn(
+        //   "buildConstraint: values option must be an array of arguments"
+        // );
+        // return yup;
       }
 
       this.onConstraintAdded({ name: constraintName, value: values });
 
       const newBase = constraintFn(...values, errFn);
+
+      // this.log("built constraint", {
+      //   yup: newBase
+      // });
+
       return newBase;
     }
     this.warn("buildConstraint: missing value or values options");

@@ -1,6 +1,6 @@
 {
   "name": "schema-to-yup",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "source": "src/index.js",
   "main": "dist/index.js",
   "description": "Build a Yup schema object to validate models from a domain model schema (JSON or GraphQL)",
@@ -21,14 +21,14 @@
     "yup": "^0.26.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "jest": "^23.0.0",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "jest": "^24.9.0",
     "microbundle": "^0.11.0"
   },
   "babel": {
     "presets": [
-      "env"
+      "@babel/preset-env"
     ]
   },
   "keywords": [
@@ -48,6 +48,6 @@
   "scripts": {
     "build": "rm -rf ./dist && microbundle build -f cjs",
     "prepublishOnly": "npm run build",
-    "test": "jest"
+    "test": "npx jest"
   }
 }

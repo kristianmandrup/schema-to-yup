@@ -106,71 +106,81 @@ describe("toYupNumber", () => {
       test("negative number - ok", () => {
         expect(() => createNumEntry({ min: -1 })).not.toThrow();
       });
+
+      test("handles zero - ok", () => {
+        expect(() => createNumEntry({ min: 0 })).not.toThrow();
+      });
     });
 
-    describe("validate", () => {
-      const entry = createNumEntry({ min: 2 });
-      const schema = createSchema(entry);
+    describe("min - validate", () => {
+      describe("min: 2", () => {
+        const entry = createNumEntry({ min: 2 });
+        const schema = createSchema(entry);
 
-      test("less", () => {
-        const valid = schema.isValidSync({
-          value: 0
+        test("less: invalid", () => {
+          const valid = schema.isValidSync({
+            value: 0
+          });
+          expect(valid).toBeFalsy();
         });
-        expect(valid).toBeFalsy();
-      });
 
-      test("equal - not valid?", () => {
-        expect(schema.isValidSync({ value: 2 })).toBeTruthy();
-      });
-
-      test("more", () => {
-        const valid = schema.isValidSync({
-          value: 5
+        test("equal: valid", () => {
+          expect(schema.isValidSync({ value: 2 })).toBeTruthy();
         });
-        expect(valid).toBeTruthy();
+
+        test("more: valid", () => {
+          const valid = schema.isValidSync({
+            value: 5
+          });
+          expect(valid).toBeTruthy();
+        });
       });
-    });
-  });
 
-  describe("positive - validate", () => {
-    const entry = createNumEntry({ positive: true });
-    const schema = createSchema(entry);
+      describe("min: 0", () => {
+        const entry = createNumEntry({ min: 0 });
+        const schema = createSchema(entry);
 
-    test("negative: -1", () => {
-      const valid = schema.isValidSync({
-        value: -1
+        test("less: invalid", () => {
+          const valid = schema.isValidSync({
+            value: -1
+          });
+          expect(valid).toBeFalsy();
+        });
+
+        test("equal : valid", () => {
+          expect(schema.isValidSync({ value: 0 })).toBeTruthy();
+        });
+
+        test("more: valid", () => {
+          const valid = schema.isValidSync({
+            value: 5
+          });
+          expect(valid).toBeTruthy();
+        });
       });
-      expect(valid).toBeFalsy();
-    });
 
-    test("zero: 0", () => {
-      // expect(schema.isValidSync({ value: 0 })).toBeFalsy();
-      expect(schema.isValidSync({ value: 0 })).toBeTruthy();
-    });
+      describe("min: -1", () => {
+        const entry = createNumEntry({ min: -1 });
+        const schema = createSchema(entry);
 
-    test("positive: 2", () => {
-      expect(schema.isValidSync({ value: 2 })).toBeTruthy();
-    });
-  });
+        test("less: invalid", () => {
+          const valid = schema.isValidSync({
+            value: -2
+          });
+          expect(valid).toBeFalsy();
+        });
 
-  describe("negative - validate", () => {
-    const entry = createNumEntry({ negative: true });
-    const schema = createSchema(entry);
+        test("equal: valid", () => {
+          expect(schema.isValidSync({ value: -1 })).toBeTruthy();
+        });
 
-    test("negative: -1", () => {
-      const valid = schema.isValidSync({
-        value: -1
+        test("more: valid", () => {
+          const valid = schema.isValidSync({
+            value: 0
+          });
+          expect(valid).toBeTruthy();
+        });
       });
-      expect(valid).toBeTruthy();
-    });
-
-    test("zero: 0", () => {
-      // expect(schema.isValidSync({ value: 0 })).toBeFalsy();
-      expect(schema.isValidSync({ value: 0 })).toBeTruthy();
-    });
-
-    test("positive: 2", () => {
-      expect(schema.isValidSync({ value: 2 })).toBeFalsy();
     });
   });
 });
