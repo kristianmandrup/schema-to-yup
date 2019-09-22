@@ -8,6 +8,11 @@ Use the stable package [json-schema-to-yup](https://www.npmjs.com/package/json-s
 
 We will fix the [schema-to-yup](https://www.npmjs.com/package/schema-to-yup) package shortly (moving to TypeScript, making architecture more pluggable etc).
 
+### Update
+
+The latest release `1.9.5` of `schema-to-yup` fixes a bunch of issues. Please help fix any remaining issues ;)
+The core functionality to add constraints can be found in `types/mixed.js`, primarily in `buildConstraint` which needs some love...
+
 ## Schemas
 
 - [AJV: JSON Schema keywords](https://ajv.js.org/keywords.html)
