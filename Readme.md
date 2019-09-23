@@ -314,7 +314,9 @@ Here a more complete example of the variations currently possible
 
 ### Complex/Nested schemas
 
-Nested object schema properties are currently not fully supported. Work has been started on the master branch, see the `test/types/object` folder and the `types/object.js` file and help finish this. Almost there.
+Nested object schema properties are now finally fully supported.
+
+See `test/types/object/complex-schema.test.js`
 
 ## Custom models
 
