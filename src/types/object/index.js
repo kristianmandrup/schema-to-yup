@@ -5,3 +5,4 @@ export function toYupObject(obj, config = {}) {
 }
 
 export { ObjectHandler };
+export { YupObject } from "./object";

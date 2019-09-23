@@ -2,9 +2,7 @@ export class ConstraintBuilder {
   constructor(opts = {}) {}
 
   // TODO
-  build() {}
-
-  buildConstraint(propName, opts = {}) {
+  build(propName, opts = {}) {
     let {
       constraintName,
       constraintValue,
@@ -47,23 +45,6 @@ export class ConstraintBuilder {
     //   constraints: this.constraints
     // });
 
-    if (!this.isPresent(constraintValue)) {
-      // this.log("constraint - value not present", value);
-
-      // call yup constraint function with single value arguments (default)
-      // constraintValue = value === true ? constraintValue : value;
-
-      this.onConstraintAdded({ name: constraintName });
-
-      const newBase = constraintFn(errFn);
-
-      // this.log("built constraint", {
-      //   yup: newBase
-      // });
-
-      return newBase;
-    }
-
     if (this.isPresent(values)) {
       // this.log("constraint - values present - add Array constraint", values);
 
@@ -94,6 +75,23 @@ export class ConstraintBuilder {
       const newBase = constraintValue
         ? constraintFn(constraintValue, errFn)
         : constraintFn(errFn);
+
+      // this.log("built constraint", {
+      //   yup: newBase
+      // });
+
+      return newBase;
+    }
+
+    if (!this.isPresent(constraintValue)) {
+      // this.log("constraint - value not present", value);
+
+      // call yup constraint function with single value arguments (default)
+      // constraintValue = value === true ? constraintValue : value;
+
+      this.onConstraintAdded({ name: constraintName });
+
+      const newBase = constraintFn(errFn);
 
       // this.log("built constraint", {
       //   yup: newBase
