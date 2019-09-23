@@ -2,16 +2,10 @@
 
 Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
-## Important
-
-Use the stable package [json-schema-to-yup](https://www.npmjs.com/package/json-schema-to-yup) for now.
-
-We will fix the [schema-to-yup](https://www.npmjs.com/package/schema-to-yup) package shortly (moving to TypeScript, making architecture more pluggable etc).
-
 ### Update
 
-The latest release `1.9.5` of `schema-to-yup` fixes a bunch of issues. Please help fix any remaining issues ;)
-The core functionality to add constraints can be found in `types/mixed.js`, primarily in `buildConstraint` which needs some love...
+The latest release `1.9.8` of `schema-to-yup` fixes a bunch of issues including validation of complex nested schemas.
+It now also includes a typings file so it should work nicely with TypeScript.
 
 ## Schemas
 
