@@ -1,5 +1,5 @@
-const { types, buildYup } = require("../../../src");
-const { createObjectHandler } = require("../../../src/types/object");
+import { types, buildYup } from "../../../src";
+import { createObjectHandler } from "../../../src/types/object/handler";
 const { toYupObject } = types;
 const yup = require("yup");
 

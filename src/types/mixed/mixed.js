@@ -2,48 +2,13 @@ import * as yup from "yup";
 
 class ConvertYupSchemaError extends Error {}
 
-const errValKeys = [
-  "oneOf",
-  "enum",
-  "required",
-  "notRequired",
-  "minDate",
-  "min",
-  "maxDate",
-  "max",
-  "trim",
-  "lowercase",
-  "uppercase",
-  "email",
-  "url",
-  "minLength",
-  "maxLength",
-  "pattern",
-  "matches",
-  "regex",
-  "integer",
-  "positive",
-  "minimum",
-  "maximum"
-];
-
-const defaults = {
-  errMessages: (keys = errValKeys) =>
-    keys.reduce((acc, key) => {
-      const fn = ({ key, value }) =>
-        `${key}: invalid for ${value.name || value.title}`;
-      acc[key] = fn;
-      return acc;
-    }, {})
-};
-
 function isObjectType(obj) {
   return obj === Object(obj);
 }
 
-import { Base } from "./base";
-import { createWhenCondition } from "../conditions";
-import { ConstraintBuilder } from "./constraint_builder";
+import { Base } from "../base";
+import { createWhenCondition } from "../../conditions";
+import { ConstraintBuilder } from "../constraint_builder";
 
 class YupMixed extends Base {
   constructor(opts = {}) {
@@ -409,4 +374,4 @@ class YupMixed extends Base {
   }
 }
 
-export { defaults, errValKeys, YupMixed, ConvertYupSchemaError };
+export { YupMixed, ConvertYupSchemaError };

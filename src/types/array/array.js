@@ -1,31 +1,9 @@
 // See:
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
 
-import { YupMixed } from "./mixed";
-import { Base } from "./base";
+import { YupMixed } from "../mixed";
 
-class ArrayHandler extends Base {
-  constructor(config) {
-    super(config);
-  }
-
-  isArray(obj) {
-    if (!this.config.isArray) {
-      this.error("ArrayHandler: mising isArray in config", this.config);
-    }
-    return this.config.isArray(obj);
-  }
-
-  handle(obj) {
-    return this.isArray(obj) && YupArray.create(obj).createSchemaEntry();
-  }
-}
-
-function toYupArray(obj, config = {}) {
-  return obj && new ArrayHandler(config).handle(obj);
-}
-
-class YupArray extends YupMixed {
+export class YupArray extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "array";
@@ -163,5 +141,3 @@ class YupArray extends YupMixed {
     return this.isNumberType(num) && num >= 0;
   }
 }
-
-export { toYupArray, YupArray, ArrayHandler };

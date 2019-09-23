@@ -5,7 +5,8 @@ describe("complex nested object schema", () => {
     valid: {
       name: "Kris",
       dog: {
-        name: "Spot"
+        name: "Spot",
+        age: 7
       }
     },
     invalid: {
@@ -17,9 +18,12 @@ describe("complex nested object schema", () => {
   };
 
   const yupSchema = buildYup(schema);
+  // console.log({ yupSchema });
 
   describe("valid json", () => {
+    const obj = complexJson.valid;
     const valid = yupSchema.isValidSync(complexJson.valid);
+    yupSchema.validate(obj).catch(err => console.log(err));
 
     it("is valid", () => {
       expect(valid).toBe(true);
@@ -27,7 +31,9 @@ describe("complex nested object schema", () => {
   });
 
   describe("invalid json", () => {
-    const valid = yupSchema.isValidSync(complexJson.invalid);
+    const obj = complexJson.invalid;
+    const valid = yupSchema.isValidSync(obj);
+    yupSchema.validate(obj).catch(err => console.log(err));
 
     it("is invalid", () => {
       expect(valid).toBe(false);

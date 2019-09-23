@@ -1,24 +1,6 @@
-import { YupMixed } from './mixed';
+import { YupMixed } from "../mixed";
 
-class DateHandler {
-  constructor(config) {
-    this.config = config;
-  }
-
-  isDate(obj) {
-    return this.config.isDate(obj);
-  }
-
-  handle(obj) {
-    return this.isDate(obj) && YupDate.create(obj).createSchemaEntry();
-  }
-}
-
-function toYupDate(obj, config = {}) {
-  return obj && new DateHandler(config).handle(obj);
-}
-
-class YupDate extends YupMixed {
+export class YupDate extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "date";
@@ -103,9 +85,3 @@ class YupDate extends YupMixed {
     return this;
   }
 }
-
-export {
-  toYupDate,
-  YupDate,
-  DateHandler
-};

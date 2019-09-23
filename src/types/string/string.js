@@ -1,27 +1,6 @@
-import { YupMixed } from "./mixed";
+import { YupMixed } from "../mixed";
 
-class StringHandler {
-  constructor(config) {
-    this.config = config;
-  }
-
-  isString(obj) {
-    return this.config.isString(obj);
-  }
-
-  handle(obj) {
-    return (
-      this.isString(obj) &&
-      YupString.create({ config: this.config, ...obj }).createSchemaEntry()
-    );
-  }
-}
-
-function toYupString(obj, config = {}) {
-  return obj && new StringHandler(config).handle(obj);
-}
-
-class YupString extends YupMixed {
+export class YupString extends YupMixed {
   constructor(obj) {
     super(obj);
     this.type = "string";
@@ -128,5 +107,3 @@ class YupString extends YupMixed {
       this.constraints.minLength || this.constraints.min;
   }
 }
-
-export { toYupString, YupString, StringHandler };

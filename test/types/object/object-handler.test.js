@@ -17,7 +17,7 @@ describe("ObjectHandler", () => {
 
   describe("instance", () => {
     describe("handle", () => {
-      describe.only("recursive object schema", () => {
+      describe("recursive object schema", () => {
         const instance = createObjectHandler({ schema, buildYup });
         const obj = {
           key: "dog",
