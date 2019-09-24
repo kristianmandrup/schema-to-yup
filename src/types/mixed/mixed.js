@@ -8,7 +8,7 @@ function isObjectType(obj) {
 
 import { Base } from "../base";
 import { createWhenCondition } from "../../conditions";
-import { ConstraintBuilder } from "../constraint_builder";
+import { ConstraintBuilder } from "../constraint-builder/constraint-builder";
 
 class YupMixed extends Base {
   constructor(opts = {}) {
@@ -29,14 +29,17 @@ class YupMixed extends Base {
     this.base = yup.mixed();
     this.errMessages = config.errMessages || {};
     this.constraintsAdded = {};
-    this.constraintBuilder = this.createConstraintBuilder(this);
+    this.constraintBuilder = this.createConstraintBuilder({
+      constraints: this.constraints,
+      base: this.base
+    });
 
     // rebind: ensure this always mapped correctly no matter context
     this.rebind("addConstraint", "addValueConstraint");
   }
 
   createConstraintBuilder(opts = {}) {
-    return new ConstraintBuilder(opts);
+    return new ConstraintBuilder({ ...this.config, ...opts });
   }
 
   rebind(...methods) {
@@ -69,7 +72,7 @@ class YupMixed extends Base {
   }
 
   getConstraints() {
-    return this.config.getConstraints(this.value);
+    return this.config.getConstraints(this.value) || {};
   }
 
   createSchemaEntry() {
@@ -92,113 +95,8 @@ class YupMixed extends Base {
     });
   }
 
-  get aliasMap() {
-    return {
-      oneOf: "oneOf",
-      enum: "oneOf",
-      anyOf: "oneOf"
-      // ...
-    };
-  }
-
   buildConstraint(propName, opts = {}) {
-    let {
-      constraintName,
-      constraintValue,
-      propValue,
-      method,
-      yup,
-      value,
-      values,
-      errName
-    } = opts;
-    yup = yup || this.base;
-    constraintValue =
-      constraintValue || propValue || this.constraints[propName];
-
-    if (this.isNothing(constraintValue)) {
-      // this.log("no prop value", {
-      //   constraints: this.constraints,
-      //   propName,
-      //   constraintValue
-      // });
-      this.warn("no prop value");
-      return yup;
-    }
-    constraintName = constraintName || propName;
-    method = method || constraintName;
-
-    const yupConstraintMethodName = this.aliasMap[method] || method;
-
-    if (!yup[yupConstraintMethodName]) {
-      this.warn(`Yup has no such API method: ${yupConstraintMethodName}`);
-      return this;
-    }
-
-    const constraintFn = yup[yupConstraintMethodName].bind(yup);
-    const errFn =
-      this.valErrMessage(constraintName) ||
-      (errName && this.valErrMessage(errName));
-
-    if (this.isPresent(values)) {
-      // this.log("constraint - values present - add Array constraint", values);
-
-      // call yup constraint function with multiple arguments
-      if (!Array.isArray(values)) {
-        this.warn(
-          "buildConstraint: values option must be an array of arguments"
-        );
-        return yup;
-      }
-
-      this.onConstraintAdded({ name: constraintName, value: values });
-
-      const newBase = constraintFn(values, errFn);
-
-      // this.log("built constraint", {
-      //   yup: newBase
-      // });
-
-      return newBase;
-    }
-
-    if (this.isPresent(constraintValue)) {
-      // this.log("constraint value present", { constraintValue });
-
-      this.onConstraintAdded({ name: constraintName, value: constraintValue });
-
-      const newBase = this.isPresent(constraintValue)
-        ? constraintFn(constraintValue, errFn)
-        : constraintFn(errFn);
-
-      // this.log("built constraint", {
-      //   yup: newBase
-      // });
-
-      return newBase;
-    }
-
-    if (!this.isPresent(constraintValue)) {
-      // this.log("constraint - value not present, pass no value", {
-      //   constraintValue
-      // });
-
-      // call yup constraint function with single value arguments (default)
-      // constraintValue = value === true ? constraintValue : value;
-
-      this.onConstraintAdded({ name: constraintName });
-
-      const newBase = constraintFn(errFn);
-
-      // this.log("built constraint", {
-      //   yup: newBase
-      // });
-
-      return newBase;
-    }
-
-    this.warn("buildConstraint: missing value or values options");
-    return yup;
+    this.constraintBuilder.build(propName, opts);
   }
 
   addConstraint(propName, opts) {
