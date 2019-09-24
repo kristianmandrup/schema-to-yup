@@ -6,11 +6,11 @@ function isObjectType(obj) {
   return obj === Object(obj);
 }
 
-import { Base } from "../base";
+import { AbstractType } from "../abstract-type";
 import { createWhenCondition } from "../../conditions";
 import { ConstraintBuilder } from "../constraint-builder/constraint-builder";
 
-class YupMixed extends Base {
+class YupMixed extends AbstractType {
   constructor(opts = {}) {
     super(opts.config);
     let { schema, key, value, config } = opts;
@@ -38,31 +38,6 @@ class YupMixed extends Base {
     this.rebind("addConstraint", "addValueConstraint");
   }
 
-  createConstraintBuilder(opts = {}) {
-    return new ConstraintBuilder({ ...this.config, ...opts });
-  }
-
-  rebind(...methods) {
-    methods.map(name => {
-      const method = this[name];
-      this[name] = this.isFunctionType(method) ? method.bind(this) : method;
-    });
-  }
-
-  validateOnCreate(key, value, opts) {
-    if (!key) {
-      this.error(`create: missing key ${JSON.stringify(opts)}`);
-    }
-    if (!value) {
-      this.error(`create: missing value ${JSON.stringify(opts)}`);
-    }
-  }
-
-  // override for each type
-  get enabled() {
-    [];
-  }
-
   convertEnabled() {
     this.enabled.map(name => {
       if (this[name]) {
@@ -71,54 +46,11 @@ class YupMixed extends Base {
     });
   }
 
-  getConstraints() {
-    return this.config.getConstraints(this.value) || {};
-  }
-
-  createSchemaEntry() {
-    return this.convert().base;
-  }
-
   convert() {
     this.addMappedConstraints();
     this.oneOf().notOneOf();
     this.when();
     this.nullable().isType();
-    return this;
-  }
-
-  addValueConstraint(propName, { constraintName, errName } = {}) {
-    return this.addConstraint(propName, {
-      constraintName,
-      value: true,
-      errName
-    });
-  }
-
-  buildConstraint(propName, opts = {}) {
-    this.constraintBuilder.build(propName, opts);
-  }
-
-  addConstraint(propName, opts) {
-    // console.log("addConstraint", propName, opts);
-    const contraint = this.buildConstraint(propName, opts);
-    this.base = contraint || this.base;
-    return this;
-  }
-
-  onConstraintAdded({ name, value }) {
-    this.constraintsAdded[name] = value;
-    return this;
-  }
-
-  addMappedConstraints() {
-    const $map = this.constraintsMap;
-    const keys = Object.keys($map);
-    keys.map(key => {
-      const list = $map[key];
-      const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
-      list.map(this[fnName]);
-    });
     return this;
   }
 
@@ -150,13 +82,6 @@ class YupMixed extends Base {
     values = Array.isArray(values) ? values : [values];
     // TODO: pass value as constraintValue not value
     return this.addConstraint("notOneOf", { values });
-  }
-
-  valErrMessage(constraint) {
-    const errMsg = this.errMessages[this.key]
-      ? this.errMessages[this.key][constraint]
-      : undefined;
-    return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
   }
 
   createWhenConditionFor(when) {
@@ -237,36 +162,6 @@ class YupMixed extends Base {
     const $else = this.constraints.else;
     // TODO: use with if translated to when?
     return this;
-  }
-
-  message() {
-    return config.messages[this.key] || config.messages[this.type] || {};
-  }
-
-  errMessage(errKey = "default") {
-    return this.message[errKey] || "error";
-  }
-
-  toValidJSONSchema() {}
-
-  normalize() {}
-
-  deNormalize() {}
-
-  errorMsg(msg) {
-    //console.error(msg);
-    this.throwError(msg);
-  }
-
-  error(name, msg) {
-    const label = `[${name}]`;
-    const fullMsg = [label, msg].join(" ");
-    this.errorMsg(fullMsg);
-  }
-
-  // throw ConvertYupSchemaError(fullMsg);
-  throwError(msg) {
-    throw msg;
   }
 }
 
