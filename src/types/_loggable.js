@@ -1,6 +1,7 @@
 class Loggable {
   constructor(config = {}) {
     const { log, error } = config;
+    this.config = config;
     const enable = config.enable || {};
     this.enable = enable;
     // what type of logger to use
@@ -26,6 +27,4 @@ class Loggable {
   }
 }
 
-export {
-  Loggable
-};
+export { Loggable };

@@ -5,7 +5,7 @@ import { YupNumber, toYupNumber, toYupNumberSchemaEntry } from "./number";
 import { YupObject, toYupObject } from "./object";
 import { YupString, toYupString } from "./string";
 import { YupDate, toYupDate } from "./date";
-import { Base } from "./base";
+import { Base } from "./abstract-type";
 
 export {
   errValKeys,

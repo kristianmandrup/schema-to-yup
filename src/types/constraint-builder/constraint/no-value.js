@@ -5,9 +5,7 @@ export class NoValueConstraintBuilder extends Constraint {
     super(opts);
   }
 
-  build(constraintValue) {
-    if (!this.isPresent(constraintValue)) return;
-
+  build() {
     const { errFn, constraintFn, constraintName } = this;
 
     this.onConstraintAdded({ name: constraintName });

@@ -1,16 +1,14 @@
 import * as yup from "yup";
 
-class ConvertYupSchemaError extends Error {}
-
 function isObjectType(obj) {
   return obj === Object(obj);
 }
 
 import { AbstractType } from "../abstract-type";
 import { createWhenCondition } from "../../conditions";
-import { ConstraintBuilder } from "../constraint-builder/constraint-builder";
+import { ConstraintBuilder } from "../constraint-builder";
 
-class YupMixed extends AbstractType {
+export class YupMixed extends AbstractType {
   constructor(opts = {}) {
     super(opts.config);
     let { schema, key, value, config } = opts;
@@ -36,14 +34,6 @@ class YupMixed extends AbstractType {
 
     // rebind: ensure this always mapped correctly no matter context
     this.rebind("addConstraint", "addValueConstraint");
-  }
-
-  convertEnabled() {
-    this.enabled.map(name => {
-      if (this[name]) {
-        this[name]();
-      }
-    });
   }
 
   convert() {
@@ -164,5 +154,3 @@ class YupMixed extends AbstractType {
     return this;
   }
 }
-
-export { YupMixed, ConvertYupSchemaError };

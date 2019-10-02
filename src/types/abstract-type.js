@@ -1,6 +1,6 @@
-import defaults from "./defaults";
-// import { createYupSchemaEntry } from '../create-entry';
+import defaults from "../defaults";
 import { TypeMatcher } from "./_type-matcher";
+import { ConstraintBuilder } from "./constraint-builder";
 
 export class AbstractType extends TypeMatcher {
   constructor(config = {}) {
@@ -8,6 +8,14 @@ export class AbstractType extends TypeMatcher {
     const schemaType = config.schemaType || "json-schema";
     const $defaults = defaults[schemaType];
     this.config = { ...$defaults, ...config };
+  }
+
+  convertEnabled() {
+    this.enabled.map(name => {
+      if (this[name]) {
+        this[name]();
+      }
+    });
   }
 
   getConstraints() {

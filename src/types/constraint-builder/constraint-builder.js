@@ -6,7 +6,7 @@ import { Loggable } from "../_loggable";
 export class ConstraintBuilder extends Loggable {
   constructor(opts = {}) {
     super(opts);
-    console.log("ConstraintBuilder", { opts });
+    // console.log("ConstraintBuilder", { opts });
     this.constraints = opts.constraints || {};
     this.base = opts.base;
     this.opts = opts;
@@ -20,7 +20,6 @@ export class ConstraintBuilder extends Loggable {
     return !this.isNothing(num);
   }
 
-  // TODO
   build(propName, opts = {}) {
     let { yup } = opts;
     yup = yup || this.base;
@@ -36,7 +35,7 @@ export class ConstraintBuilder extends Loggable {
       constraintValue,
       propName
     });
-    console.log("built", { constraint });
+    // console.log("built", { constraint });
     if (constraint) return constraint;
 
     this.warn("No Yup constraint could be built", { propName, opts });
@@ -54,7 +53,7 @@ export class ConstraintBuilder extends Loggable {
     method = method || constraintName;
 
     const opts = this.createConstraintOpts({
-      ...opts,
+      ...options,
       method,
       constraintName
     });
@@ -114,13 +113,8 @@ export class ConstraintBuilder extends Loggable {
     return this.createListValueConstraintBuilder(opts).build(values);
   }
 
-  constraintWithNoValue(constraintValue, opts = {}) {
-    if (this.isPresent(constraintValue)) return;
-    return this.createNoValueConstraintBuilder(opts).build(values);
-  }
-
-  createNoValueConstraintBuilder(opts = {}) {
-    return new NoValueConstraintBuilder(this.createConstraintOpts(opts));
+  constraintWithNoValue(opts = {}) {
+    return this.createNoValueConstraintBuilder(opts).build(opts.name, opts);
   }
 
   createConstraintOpts(opts) {
@@ -129,6 +123,10 @@ export class ConstraintBuilder extends Loggable {
       ...opts,
       onConstraintAdded: this.onConstraintAdded
     };
+  }
+
+  createNoValueConstraintBuilder(opts = {}) {
+    return new NoValueConstraintBuilder(this.createConstraintOpts(opts));
   }
 
   createListValueConstraintBuilder(opts = {}) {
@@ -146,20 +144,21 @@ export class ConstraintBuilder extends Loggable {
       errName
     });
   }
+
   addConstraint(propName, opts) {
     // console.log("addConstraint", propName, opts);
-    const contraint = this.buildConstraint(propName, opts);
+    const contraint = this.build(propName, opts);
     this.base = contraint || this.base;
     return this;
   }
 
   onConstraintAdded({ name, value }) {
-    this.constraintsAdded[name] = value;
+    // this.constraintsAdded[name] = value;
     return this;
   }
 
-  addMappedConstraints() {
-    const $map = this.constraintsMap;
+  addMappedConstraints(constraintsMap) {
+    const $map = constraintsMap || this.constraintsMap;
     const keys = Object.keys($map);
     keys.map(key => {
       const list = $map[key];

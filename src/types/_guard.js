@@ -1,6 +1,6 @@
-import { Base } from './base';
+import { TypeMatcher } from "./_type-matcher";
 
-class Guard extends Base {
+class Guard extends TypeMatcher {
   constructor(obj, config) {
     super(config);
     this.obj = obj;
@@ -15,6 +15,4 @@ class Guard extends Base {
   }
 }
 
-export {
-  Guard
-};
+export { Guard };

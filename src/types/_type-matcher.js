@@ -1,6 +1,6 @@
 import { Loggable } from "./_loggable";
 
-class TypeMatcher extends Loggable {
+export class TypeMatcher extends Loggable {
   constructor(config = {}) {
     super(config);
   }
@@ -41,5 +41,3 @@ class TypeMatcher extends Loggable {
     return val instanceof Date;
   }
 }
-
-export { TypeMatcher };

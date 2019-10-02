@@ -1,4 +1,5 @@
 import { Loggable } from "./types/_loggable";
+import defaults from "./defaults";
 
 export class Base extends Loggable {
   constructor(config = {}) {
