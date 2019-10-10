@@ -45,7 +45,7 @@ export class YupString extends YupMixed {
   }
 
   email() {
-    this.isEmail && this.addConstraint("email");
+    this.isEmail && this.addConstraint("email", { constraintValue: true });
     return this;
   }
 
@@ -54,7 +54,7 @@ export class YupString extends YupMixed {
   }
 
   url() {
-    this.isUrl && this.addConstraint("url");
+    this.isUrl && this.addConstraint("url", { constraintValue: true });
     return this;
   }
 

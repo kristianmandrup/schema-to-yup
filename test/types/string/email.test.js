@@ -1,14 +1,7 @@
 import { createStr, createSchema } from "./_helpers";
 
-describe("email", () => {
-  describe("create schema", () => {
-    test("email", () => {
-      expect(createStr({ email: true, key: "email" })).toBeTruthy();
-    });
-  });
-
+const entryValidation = entry => {
   describe("validate", () => {
-    const entry = createStr({ email: true, key: "email" });
     const schema = createSchema(entry, "email");
 
     test("valid email", () => {
@@ -24,5 +17,29 @@ describe("email", () => {
       });
       expect(valid).toBeFalsy();
     });
+  });
+};
+
+describe("email", () => {
+  describe("create schema", () => {
+    test("email", () => {
+      expect(createStr({ email: true, key: "email" })).toBeTruthy();
+    });
+
+    test("format email", () => {
+      expect(createStr({ format: "email", key: "email" })).toBeTruthy();
+    });
+  });
+
+  describe("format: email", () => {
+    const entry = createStr({ format: "email", key: "email" });
+
+    entryValidation(entry);
+  });
+
+  describe("email: true", () => {
+    const entry = createStr({ email: true, key: "email" });
+
+    entryValidation(entry);
   });
 });
