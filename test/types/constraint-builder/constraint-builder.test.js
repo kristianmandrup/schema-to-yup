@@ -4,7 +4,7 @@ describe("ConstraintBuilder", () => {
   describe("instance", () => {
     const instance = new ConstraintBuilder();
 
-    describe("createConstraint", () => {
+    describe.only("createConstraint", () => {
       describe("valid opts", () => {
         const opts = {
           method: "oneOf", // method actually called
@@ -176,9 +176,66 @@ describe("ConstraintBuilder", () => {
       });
     });
 
-    describe("addMappedConstraints", () => {});
+    describe("addMappedConstraints", () => {
+      const constraintsMap = {
+        empty: {},
+        withValueKey: {
+          value: 1
+        },
+        withKeys: {
+          min: 1,
+          max: 3
+        }
+      };
+      describe("empty map", () => {
+        it("does nothing and returns instance", () => {
+          expect(instance.addMappedConstraints(constraintsMap.empty)).toBe(
+            instance
+          );
+        });
+      });
 
-    describe("constraintsMap", () => {});
+      describe("map with value key", () => {
+        it("calls addValueConstraint", () => {
+          jest.spyOn(instance, "addValueConstraint");
+          const result = instance.addMappedConstraints(constraintsMap);
+          expect(instance.addValueConstraint).toHaveBeenCalledTimes(1);
+        });
+      });
+
+      describe("map with keys", () => {
+        it("calls addValueConstraint", () => {
+          jest.spyOn(instance, "addConstraint");
+          const result = instance.addMappedConstraints(constraintsMap);
+          expect(instance.addConstraint).toHaveBeenCalledTimes(2);
+        });
+      });
+    });
+
+    describe("constraintsMap", () => {
+      const { constraintsMap } = instance;
+      describe("map keys", () => {
+        it("has: simple, value", () => {
+          expect(Object.keys(constraintsMap)).toEqual(["simple", "value"]);
+        });
+      });
+
+      describe("simple", () => {
+        it("has: required, notRequired, nullable", () => {
+          expect(constraintsMap.simple).toEqual([
+            "required",
+            "notRequired",
+            "nullable"
+          ]);
+        });
+      });
+
+      describe("value", () => {
+        it("has: default, strict", () => {
+          expect(constraintsMap.simple).toEqual(["default", "strict"]);
+        });
+      });
+    });
 
     describe("constraintValueFor", () => {
       it("gets constraint value", () => {
@@ -192,8 +249,16 @@ describe("ConstraintBuilder", () => {
     });
 
     describe("build", () => {
-      it("builds", () => {
-        expect(instance.build()).not.toThrow();
+      describe("no args", () => {
+        it("throws: missing prop name", () => {
+          expect(() => instance.build()).toThrow();
+        });
+      });
+
+      describe("prop name: age", () => {
+        it("returns yup type instance", () => {
+          expect(instance.build("age")).toBeDefined();
+        });
       });
     });
   });

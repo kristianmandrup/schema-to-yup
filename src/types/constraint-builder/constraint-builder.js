@@ -1,7 +1,10 @@
-import { SingleValueConstraintBuilder } from "./constraint/single-value";
-import { ListValueConstraintBuilder } from "./constraint/list-value";
-import { NoValueConstraintBuilder } from "./constraint/no-value";
+import {
+  NoValueConstraintBuilder,
+  SingleValueConstraintBuilder,
+  ListValueConstraintBuilder
+} from "./constraint";
 import { Loggable } from "../_loggable";
+import { yupContraintFnFor } from "./utils";
 
 export class ConstraintBuilder extends Loggable {
   constructor(opts = {}) {
@@ -23,6 +26,11 @@ export class ConstraintBuilder extends Loggable {
   build(propName, opts = {}) {
     let { yup } = opts;
     yup = yup || this.base;
+
+    if (!propName) {
+      this.error("build: missing prop name");
+    }
+
     const constraintValue = this.constraintValueFor({ ...opts, propName });
 
     if (this.isNothing(constraintValue)) {
@@ -55,6 +63,7 @@ export class ConstraintBuilder extends Loggable {
     const opts = this.createConstraintOpts({
       ...options,
       method,
+      yupTypeInst: this.base,
       constraintName
     });
 
@@ -75,12 +84,12 @@ export class ConstraintBuilder extends Loggable {
       return this;
     }
 
-    const constraintFn = yup[yupConstraintMethodName].bind(yup);
+    const constraintFn = yupContraintFnFor(yupConstraintMethodName);
     const errFn =
       this.valErrMessage(constraintName) ||
       (errName && this.valErrMessage(errName));
 
-    return { constraintFn, errFn, constraintName };
+    return { constraintFn, errFn, constraintName, yupConstraintMethodName };
   }
 
   get mixedAliasMap() {
@@ -162,8 +171,27 @@ export class ConstraintBuilder extends Loggable {
     const keys = Object.keys($map);
     keys.map(key => {
       const list = $map[key];
+      const ctx = {
+        list,
+        key
+      };
+
+      if (!list) {
+        this.error(
+          `addMappedConstraints: missing constraintsMap entry for ${key}`,
+          ctx
+        );
+      }
+      if (!Array.isArray(list)) {
+        this.error(
+          `addMappedConstraints: constraintsMap entry for ${key} is not a list`,
+          ctx
+        );
+      }
+
       const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
-      list.map(this[fnName]);
+      const fn = this[fnName];
+      list.map(fn);
     });
     return this;
   }

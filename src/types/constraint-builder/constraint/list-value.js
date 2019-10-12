@@ -6,20 +6,13 @@ export class ListValueConstraintBuilder extends Constraint {
   }
 
   build(constraintValue) {
-    if (!this.isPresent(constraintValue)) return;
+    if (!super.build(constraintValue)) return;
+    const { errFn, constraintFn } = this;
+    // new base (yup type constraint instance)
+    return constraintFn(constraintValue, errFn);
+  }
 
-    const { errFn, constraintFn, constraintName, yup } = this;
-
-    // call yup constraint function with multiple arguments
-    if (!Array.isArray(constraintValue)) {
-      this.warn("buildConstraint: values option must be an array of arguments");
-      return yup;
-    }
-
-    this.onConstraintAdded({ name: constraintName, value: constraintValue });
-
-    const newBase = constraintFn(constraintValue, errFn);
-
-    return newBase;
+  isValidValue(value) {
+    return Array.isArray(value);
   }
 }

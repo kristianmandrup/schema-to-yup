@@ -1,4 +1,4 @@
-class Loggable {
+export class Loggable {
   constructor(config = {}) {
     const { log, error } = config;
     this.config = config;
@@ -26,5 +26,3 @@ class Loggable {
     this.log && (value ? this.log(name, value) : this.log(name));
   }
 }
-
-export { Loggable };
