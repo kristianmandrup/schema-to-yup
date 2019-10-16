@@ -106,6 +106,22 @@ const schema = yup.object().shape({
 
 Note the `"required": true` for the `age` property (not natively supported by JSON schema).
 
+### Shape
+
+You can access the internal Yup shape, via `shapeConfig` on the yup schema returned by the `buildYup` schema builder function.
+This allows you to easily mix and match to suit more advanced requirements.
+
+```js
+const { buildYup } = require("json-schema-to-yup");
+const { shapeConfig } = buildYup(json, config);
+const schema = yup.object().shape({
+  ...shapeConfig,
+  ...customShapeConfig
+})
+```
+
+shapeConfig
+
 ## Types and keys
 
 ### Mixed (any type)
