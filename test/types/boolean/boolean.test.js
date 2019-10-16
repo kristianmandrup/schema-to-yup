@@ -1,4 +1,4 @@
-const { types } = require("../../src");
+const { types } = require("../../../src");
 const { toYupBoolean } = types;
 
 const isBoolean = fieldDef => fieldDef && fieldDef.type === "boolean";

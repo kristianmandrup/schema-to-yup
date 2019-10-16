@@ -1,4 +1,4 @@
-const { types } = require("../../src");
+const { types } = require("../../../src");
 const { toYupDate } = types;
 const yup = require("yup");
 

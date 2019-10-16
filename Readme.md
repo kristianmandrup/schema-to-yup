@@ -4,8 +4,10 @@ Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any o
 
 ### Update
 
-The latest release `1.9.8` of `schema-to-yup` fixes a bunch of issues including validation of complex nested schemas.
+Release `1.9.8` and later of `schema-to-yup` fixes a bunch of issues including validation of complex nested schemas.
 It now also includes a typings file so it should work nicely with TypeScript.
+
+We are nearing bversion `2.0` which will have a separate constraint builder infrastructure. This will decouple the JSON to schema to validation type rules from the instantiation of each type validator, making it trivial to support other validators and maintain/develop each separately.
 
 ## Schemas
 
@@ -22,7 +24,7 @@ According to the JSON schema specs, you are free to add extra metadata to the fi
 
 Install
 
-`npm install json-schema-to-yup -S` or `yarn add json-schema-to-yup`
+`npm install schema-to-yup -S` or `yarn add schema-to-yup`
 
 Use
 
@@ -76,7 +78,7 @@ const config = {
   }
 };
 
-const { buildYup } = require("json-schema-to-yup");
+const { buildYup } = require("schema-to-yup");
 const yupSchema = buildYup(json, config);
 // console.dir(schema)
 const valid = await yupSchema.isValid({
@@ -435,7 +437,7 @@ Use the Yup Type classes such as `types.YupArray` to act as building blocks or c
 ### Customization example
 
 ```js
-const { YupSchemaEntry, buildYup, types } = require("json-schema-to-yup");
+const { YupSchemaEntry, buildYup, types } = require("schema-to-yup");
 
 class CustomYupArray extends types.YupArray {
   // ...
@@ -466,7 +468,7 @@ You can use `extendYupApi` to extend the Yup API with extra validation methods:
 
 ```js
 const validator = require("validator");
-const { extendYupApi } = require("json-schema-to-yup/validator-bridge");
+const { extendYupApi } = require("schema-to-yup/validator-bridge");
 
 // by default extends with string format validation methods of validator
 // See https://www.npmjs.com/package/validator
@@ -483,7 +485,7 @@ const myValidator = new MyValidator();
 const constraints = ["creditCard", "currency", { name: "hash", opts: "algo" }];
 extendYupApi({ validator: myValidator, override: true, constraints });
 
-const { buildYup } = require("json-schema-to-yup");
+const { buildYup } = require("schema-to-yup");
 // type def sample schema, using credit-card format validator
 const schema = {
   name: "BankAccount",
@@ -510,7 +512,7 @@ Now the bridge includes tests. Seems to work ;)
 You can sublass `YupBuilder` or any of the internal classes to create your own custom infrastructure to suit your particular needs, expand with support for extra features etc.
 
 ```js
-const { YupBuilder } = require("json-schema-to-yup");
+const { YupBuilder } = require("schema-to-yup");
 
 class MyYupBuilder extends YupBuilder {
   // ... custom overrides etc
@@ -581,7 +583,7 @@ export const defaults = {
 ### Custom validation messages using select defaults
 
 ```js
-const { buildYup, types } = require("json-schema-to-yup");
+const { buildYup, types } = require("schema-to-yup");
 const { defaults } = types;
 
 const myErrMessages = require("./err-messages");
@@ -728,7 +730,7 @@ Uses [jest](jestjs.io/) for unit testing.
 
 ## Development
 
-Current development is taking place on [refactoring](https://github.com/kristianmandrup/json-schema-to-yup/tree/refactoring) branch.
+Current development is taking place on [refactoring](https://github.com/kristianmandrup/schema-to-yup/tree/refactoring) branch.
 
 On his branch:
 
