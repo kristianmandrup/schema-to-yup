@@ -11,7 +11,8 @@ export class ConstraintBuilder extends Loggable {
     super(opts);
     // console.log("ConstraintBuilder", { opts });
     this.constraints = opts.constraints || {};
-    this.base = opts.base;
+    this.yupTypeInst = opts.yupTypeInst;
+    this.errMessages = opts.errMessages || {};
     this.opts = opts;
   }
 
@@ -25,7 +26,7 @@ export class ConstraintBuilder extends Loggable {
 
   build(propName, opts = {}) {
     let { yup } = opts;
-    yup = yup || this.base;
+    yup = yup || this.yupTypeInst;
 
     if (!propName) {
       this.error("build: missing prop name");
@@ -63,10 +64,9 @@ export class ConstraintBuilder extends Loggable {
     const opts = this.createConstraintOpts({
       ...options,
       method,
-      yupTypeInst: this.base,
+      yupTypeInst: this.yupTypeInst,
       constraintName
     });
-
     return (
       this.constraintWithValues(constraintValue, opts) ||
       this.constraintWithSingleValue(constraintValue, opts) ||
@@ -75,21 +75,35 @@ export class ConstraintBuilder extends Loggable {
   }
 
   createConstraintOpts(opts = {}) {
-    const { method, constraintName, errName } = opts;
-    const yupConstraintMethodName = this.getYupConstraintMethodName(method);
-    const yup = opts.yup || this.base;
-
-    if (!yup[yupConstraintMethodName]) {
-      this.warn(`Yup has no such API method: ${yupConstraintMethodName}`);
-      return this;
-    }
-
-    const constraintFn = yupContraintFnFor(yupConstraintMethodName);
+    const { method, constraintName, errName, type } = opts;
+    const yupConstraintMethodName = this.getYupConstraintMethodName(
+      method || opts.yupConstraintMethodName
+    );
+    const yupTypeInst = opts.yupTypeInst || this.yupTypeInst;
+    const methodName = yupConstraintMethodName;
+    const constraintFn = yupContraintFnFor({
+      yupTypeInst,
+      methodName,
+      ...opts
+    });
     const errFn =
       this.valErrMessage(constraintName) ||
       (errName && this.valErrMessage(errName));
 
-    return { constraintFn, errFn, constraintName, yupConstraintMethodName };
+    return {
+      constraintFn,
+      errFn,
+      constraintName,
+      yupConstraintMethodName,
+      type
+    };
+  }
+
+  valErrMessage(constraint) {
+    const errMsg = this.errMessages[this.key]
+      ? this.errMessages[this.key][constraint]
+      : undefined;
+    return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
   }
 
   get mixedAliasMap() {
@@ -109,7 +123,11 @@ export class ConstraintBuilder extends Loggable {
   }
 
   getYupConstraintMethodName(name) {
-    return this.aliasMap[name] || name;
+    name = this.aliasMap[name] || name;
+    if (this.isNothing(name) || name === "") {
+      this.error("Invalid yup contraint method name", name);
+    }
+    return name;
   }
 
   constraintWithSingleValue(constraintValue, opts = {}) {
@@ -126,24 +144,19 @@ export class ConstraintBuilder extends Loggable {
     return this.createNoValueConstraintBuilder(opts).build(opts.name, opts);
   }
 
-  createConstraintOpts(opts) {
-    return {
-      ...this.opts.config,
-      ...opts,
-      onConstraintAdded: this.onConstraintAdded
-    };
-  }
-
   createNoValueConstraintBuilder(opts = {}) {
-    return new NoValueConstraintBuilder(this.createConstraintOpts(opts));
+    opts = this.createConstraintOpts(opts);
+    return new NoValueConstraintBuilder(opts);
   }
 
   createListValueConstraintBuilder(opts = {}) {
-    return new ListValueConstraintBuilder(this.createConstraintOpts(opts));
+    opts = this.createConstraintOpts(opts);
+    return new ListValueConstraintBuilder(opts);
   }
 
   createSingleValueConstraintBuilder(opts = {}) {
-    return new SingleValueConstraintBuilder(this.createConstraintOpts(opts));
+    opts = this.createConstraintOpts(opts);
+    return new SingleValueConstraintBuilder(opts);
   }
 
   addValueConstraint(propName, { constraintName, errName } = {}) {
@@ -157,7 +170,7 @@ export class ConstraintBuilder extends Loggable {
   addConstraint(propName, opts) {
     // console.log("addConstraint", propName, opts);
     const contraint = this.build(propName, opts);
-    this.base = contraint || this.base;
+    this.yupTypeInst = contraint || this.yupTypeInst;
     return this;
   }
 

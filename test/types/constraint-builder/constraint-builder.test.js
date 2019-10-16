@@ -1,8 +1,15 @@
 import { ConstraintBuilder } from "./_helpers";
 
+const { log } = console;
+
+const createInst = () => new ConstraintBuilder();
+
 describe("ConstraintBuilder", () => {
   describe("instance", () => {
-    const instance = new ConstraintBuilder();
+    let instance;
+    beforeEach(() => {
+      instance = new ConstraintBuilder();
+    });
 
     describe.only("createConstraint", () => {
       describe("valid opts", () => {
@@ -10,11 +17,13 @@ describe("ConstraintBuilder", () => {
           method: "oneOf", // method actually called
           constraintName: "enum", // what is used in config
           propName: "items",
-          constraintValue: ["x"]
+          constraintValue: ["x"],
+          type: "string"
         };
 
         it("creates a constraint", () => {
-          expect(instance.createConstraint(opts)).toEqual("x");
+          const constraint = instance.createConstraint(opts);
+          expect(constraint).toBeDefined();
         });
       });
 
@@ -27,28 +36,37 @@ describe("ConstraintBuilder", () => {
       });
     });
 
-    describe("createConstraintOpts", () => {
-      const opts = {
-        method: "oneOf", // method actually called
-        constraintName: "enum", // what is used in config
-        propName: "items",
-        constraintValue: ["x"]
-      };
+    describe.only("createConstraintOpts", () => {
+      describe("valid opts", () => {
+        const opts = {
+          method: "oneOf", // method actually called
+          constraintName: "enum", // what is used in config
+          propName: "items",
+          constraintValue: ["x"],
+          type: "string"
+        };
 
-      it("creates constraint opts", () => {
-        expect(instance.createConstraintOpts(opts)).toEqual("x");
+        const createOpts = () => instance.createConstraintOpts(opts);
+
+        it("no throw", () => {
+          expect(createOpts).not.toThrow();
+        });
+
+        it("creates constraint opts", () => {
+          const $opts = createOpts();
+          expect($opts).toBeDefined();
+        });
       });
 
       describe("invalid opts (empty)", () => {
-        const opts = {};
-
+        const createOpts = () => instance.createConstraintOpts();
         it("throws error", () => {
-          expect(() => instance.createConstraintOpts(opts)).toThrow();
+          expect(createOpts).toThrow();
         });
       });
     });
 
-    describe("getYupConstraintMethodName", () => {
+    describe.only("getYupConstraintMethodName", () => {
       describe("valid method name", () => {
         const method = "oneOf";
 
@@ -68,32 +86,46 @@ describe("ConstraintBuilder", () => {
       });
     });
 
-    describe("createConstraintOpts", () => {});
+    describe.only("constraintWithSingleValue", () => {
+      const opts = {
+        method: "min",
+        type: "number"
+      };
 
-    describe("constraintWithSingleValue", () => {
       describe("valid value and opts", () => {
-        const opts = {};
-
         it("ok", () => {
           expect(() =>
-            instance.constraintWithSingleValue("x", opts)
+            instance.constraintWithSingleValue(2, opts)
           ).not.toThrow();
         });
       });
 
-      describe("invalid value (none)", () => {
-        const method = "";
+      describe("invalid opts", () => {
+        it("throws", () => {
+          expect(() => instance.constraintWithSingleValue(2, {})).toThrow();
+        });
+      });
 
-        it("throws error", () => {
-          expect(() => instance.constraintWithSingleValue(null)).toThrow();
+      describe("null value", () => {
+        const createWNull = () =>
+          instance.constraintWithSingleValue(null, opts);
+        it("no throw", () => {
+          expect(createWNull).not.toThrow();
+        });
+
+        it("is falsy", () => {
+          expect(createWNull()).toBeFalsy();
         });
       });
     });
 
-    describe("constraintWithValues", () => {
-      describe("valid value and opts", () => {
-        const opts = {};
+    describe.only("constraintWithValues", () => {
+      const opts = {
+        method: "enum",
+        type: "string"
+      };
 
+      describe("valid value and opts", () => {
         it("ok", () => {
           expect(() =>
             instance.constraintWithValues(["x"], opts)
@@ -101,25 +133,38 @@ describe("ConstraintBuilder", () => {
         });
       });
 
-      describe("invalid value (none)", () => {
-        it("throws error", () => {
-          expect(() => instance.constraintWithValues(null)).toThrow();
+      describe("null value", () => {
+        const createWNull = () => instance.constraintWithValues(null, opts);
+        it("no throw", () => {
+          expect(createWNull).not.toThrow();
+        });
+
+        it("is falsy", () => {
+          expect(createWNull()).toBeFalsy();
         });
       });
     });
 
-    describe("constraintWithNoValue", () => {
-      describe("valid opts", () => {
-        const opts = {};
+    describe.only("constraintWithNoValue", () => {
+      const opts = {
+        method: "url",
+        type: "string"
+      };
 
+      describe("valid opts", () => {
         it("ok", () => {
           expect(() => instance.constraintWithNoValue(opts)).not.toThrow();
         });
       });
 
       describe("invalid opts", () => {
-        it("throws error", () => {
-          expect(() => instance.constraintWithNoValue(null)).toThrow();
+        const createWNull = () => instance.constraintWithNoValue(opts);
+        it("no throw", () => {
+          expect(createWNull).not.toThrow();
+        });
+
+        it("is falsy", () => {
+          expect(createWNull()).toBeFalsy();
         });
       });
     });

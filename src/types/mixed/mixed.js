@@ -25,7 +25,6 @@ export class YupMixed extends AbstractType {
     this.config = config || {};
     this.type = "mixed";
     this.base = yup.mixed();
-    this.errMessages = config.errMessages || {};
     this.constraintsAdded = {};
     this.constraintBuilder = this.createConstraintBuilder({
       constraints: this.constraints,

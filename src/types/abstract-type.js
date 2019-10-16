@@ -26,13 +26,6 @@ export class AbstractType extends TypeMatcher {
     return this.convert().base;
   }
 
-  valErrMessage(constraint) {
-    const errMsg = this.errMessages[this.key]
-      ? this.errMessages[this.key][constraint]
-      : undefined;
-    return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
-  }
-
   createConstraintBuilder(opts = {}) {
     return new ConstraintBuilder({ ...this.config, ...opts });
   }

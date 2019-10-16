@@ -8,16 +8,18 @@ export class Constraint extends Loggable {
       constraintName,
       errFn,
       yupConstraintMethodName,
+      method,
       onConstraintAdded,
       type
     } = opts;
     let { constraintFn, yupTypeInst } = opts;
     yupTypeInst = yupTypeInst || yupTypeFor(type);
+    const methodName = method || yupConstraintMethodName;
 
     constraintFn =
       constraintFn ||
       yupContraintFnFor({
-        methodName: yupConstraintMethodName,
+        methodName,
         type,
         yupTypeInst
       });
@@ -34,10 +36,7 @@ export class Constraint extends Loggable {
     const { constraintName, onConstraintAdded } = this;
     onConstraintAdded && onConstraintAdded({ name: constraintName, value });
 
-    if (
-      !this.isPresent(constraintValue) ||
-      !this.isValidValue(constraintValue)
-    ) {
+    if (!this.isPresent(value) || !this.isValidValue(value)) {
       return false;
     }
     return true;
