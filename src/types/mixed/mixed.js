@@ -108,7 +108,6 @@ class YupMixed extends Base {
       propValue,
       method,
       yup,
-      value,
       values,
       errName
     } = opts;
