@@ -1,5 +1,5 @@
 import { ArrayType } from "./array";
-import { Base } from "../abstract-type";
+import { Base } from "../type-helper";
 
 export class ArrayHandler extends Base {
   constructor(config) {

@@ -1,13 +1,13 @@
 // See:
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
 
-import { MixedType } from "../base";
+import { BaseType } from "../base";
 
 export class ArrayType extends MixedType {
   constructor(obj, config) {
     super(obj, config);
     this.type = "array";
-    this.createYupSchemaEntry = this.config.createYupSchemaEntry;
+    this.createInstanceEntry = this.config.createInstanceEntry;
   }
 
   static create(obj, config) {

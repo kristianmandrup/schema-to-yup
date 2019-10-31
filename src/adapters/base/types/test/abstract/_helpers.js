@@ -1,4 +1,4 @@
-import { AbstractType } from "../../abstract-type";
+import { AbstractType } from "../../type-helper";
 
 export const toAbstract = opts => new AbstractType(opts);
 

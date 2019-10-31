@@ -2,7 +2,7 @@ import defaults from "../defaults";
 import { TypeMatcher } from "./_type-matcher";
 import { ConstraintBuilder } from "./constraint-builder";
 
-export class AbstractType extends TypeMatcher {
+export class TypeHelper extends TypeMatcher {
   constructor(config = {}) {
     super(config);
     const schemaType = config.schemaType || "json-schema";

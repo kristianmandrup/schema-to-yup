@@ -1,11 +1,10 @@
-import { MixedType } from "../base";
-import { createRangeConstraint, RangeConstraint } from "./range-constraint";
+import { BaseType } from "../base";
+import { createRangeConstraint } from "./range-constraint";
 
-export class NumberType extends MixedType {
+export class NumberType extends BaseType {
   constructor(obj) {
     super(obj);
     this.type = this.normalizeNumType(obj.type);
-    this.base = this.yup.number();
     this.range = createRangeConstraint(this);
   }
 
