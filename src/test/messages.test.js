@@ -1,4 +1,4 @@
-const { buildYup } = require("../");
+const { buildYup } = require("../../schema-to-yup");
 
 let valid;
 test("yup inserts custom messages for required fields", () => {

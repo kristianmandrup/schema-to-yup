@@ -1,4 +1,4 @@
-const { buildYup } = require("../");
+const { buildYup } = require("../../../../schema-to-yup");
 
 describe("when", () => {
   const createTester = schema => {

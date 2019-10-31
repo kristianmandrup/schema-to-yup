@@ -20,33 +20,25 @@ export class ConstraintAdder {
   }
 
   addMappedConstraints(constraintsMap) {
-    const $map = constraintsMap || this.constraintsMap;
-    const keys = Object.keys($map);
+    constraintsMap = constraintsMap || this.constraintsMap;
+    const keys = Object.keys(constraintsMap);
     keys.map(key => {
-      const list = $map[key];
-      const ctx = {
-        list,
-        key
-      };
-
-      if (!list) {
-        this.error(
-          `addMappedConstraints: missing constraintsMap entry for ${key}`,
-          ctx
-        );
-      }
-      if (!Array.isArray(list)) {
-        this.error(
-          `addMappedConstraints: constraintsMap entry for ${key} is not a list`,
-          ctx
-        );
-      }
-
+      const constraintEntryForKey = constraintsMap[key];
+      this.validator = this.createConstraintEntryValidator({
+        key,
+        constraintEntryForKey
+      });
+      this.validate();
+      // TODO: fix this
       const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
       const fn = this[fnName];
       list.map(fn);
     });
     return this;
+  }
+
+  createConstraintEntryValidator(opts) {
+    return new ConstraintEntryValidator(opts);
   }
 
   get constraintsMap() {

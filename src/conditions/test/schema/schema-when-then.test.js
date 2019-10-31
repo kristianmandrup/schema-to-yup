@@ -1,5 +1,5 @@
 import * as yup from "yup";
-const { buildYup } = require("..");
+const { buildYup } = require("../../../../schema-to-yup");
 
 const createValidateTester = yupSchema => {
   return (json, expectedResult) => {

@@ -1,4 +1,4 @@
-class ConstraintMapper {
+export class ConstraintMapper {
   get base() {
     return {
       oneOf: "oneOf",

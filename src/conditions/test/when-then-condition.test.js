@@ -1,5 +1,5 @@
-const { createWhenCondition } = require("../../src/conditions");
-const { createYupSchemaEntry } = require("../../src/create-entry");
+const { createWhenCondition } = require("..");
+const { createYupSchemaEntry } = require("../../create-entry");
 import defaults from "../../src/types/defaults";
 import * as yup from "yup";
 
