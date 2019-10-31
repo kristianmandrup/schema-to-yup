@@ -2,7 +2,7 @@ import { Base } from "../base";
 import defaults from "./defaults";
 
 export class ResultEntryBuilder extends Base {
-  constructor({ schema, name, key, value, config }) {
+  constructor({ schema, name, key, value, config, adapterName }) {
     super(config);
     this.schema = schema;
     this.key = key;
@@ -10,7 +10,10 @@ export class ResultEntryBuilder extends Base {
     this.config = config;
     this.name = name;
     this.type = value.type;
-    this.typeBuilderMap = config.typeBuilderMap || this.typeBuilderMap;
+    this.adapterName = adapterName;
+    this.adapter = defaults.adapters[adapterName] || {};
+    this.typeBuilderMap =
+      config.typeBuilderMap || this.adapter.types || this.typeBuilderMap;
   }
 
   isValidSchema() {
@@ -49,17 +52,6 @@ export class ResultEntryBuilder extends Base {
 
   get typeOrderMap() {
     return ["string", "number", "boolean", "array", "object", "date"];
-  }
-
-  get typeBuilderMap() {
-    return {
-      string: toYupString,
-      number: toYupNumberSchemaEntry,
-      boolean: toYupBoolean,
-      array: toYupArray,
-      object: toYupObject,
-      date: toYupDate
-    };
   }
 
   buildForType(type, obj) {

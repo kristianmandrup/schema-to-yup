@@ -1,22 +1,21 @@
-import { YupMixed } from "../base";
+import { BaseType } from "../base";
 
 // Allow recursive schema
-export class YupObject extends YupMixed {
+export class ObjectType extends BaseType {
   constructor(obj) {
     super(obj);
     this.type = "object";
-    this.base = this.yup.object();
     this.properties = this.value.properties;
   }
 
-  static create(obj) {
-    return new YupObject(obj);
+  static create(obj, config) {
+    return new ObjectType(obj, config);
   }
 
   convert() {
     if (!this.properties) return this;
     this.noUnknown();
-    this.camelCase().constantCase();
+    this.camelCase().this.constantCase();
 
     const schema = this.value;
     const config = this.config;

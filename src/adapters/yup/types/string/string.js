@@ -1,23 +1,24 @@
-import { YupMixed } from "../base";
+import { BaseType } from "../base";
 
-export class YupString extends YupMixed {
+export class StringType extends BaseType {
   constructor(obj) {
     super(obj);
     this.type = "string";
-    this.base = this.yup.string();
   }
 
-  static create(obj) {
-    return new YupString(obj);
+  static create(obj, config) {
+    return new StringType(obj, config);
   }
 
   convert() {
     super.convert();
+
     this.normalize();
-    this.minLength()
-      .maxLength()
-      .pattern();
-    this.lowercase().uppercase();
+    this.minLength();
+    this.maxLength();
+    this.pattern();
+    this.lowercase();
+    this.uppercase();
     this.email();
     this.url();
     this.genericFormat();
