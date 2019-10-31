@@ -4,10 +4,10 @@ export const yupTypeFor = type => typeof type === "string" && yup[type]();
 
 const error = (msg, data) => {
   data ? console.error(msg, data) : console.error(msg);
-  throw `yupContraintFnFor: ${msg}`;
+  throw `contraintFnFor: ${msg}`;
 };
 
-export const yupContraintFnFor = (opts = {}) => {
+export const contraintFnFor = (opts = {}) => {
   const { methodName, type, yupTypeInst } = opts;
   if (!methodName) error("missing methodName", opts);
   const inst = yupTypeInst || yupTypeFor(type);

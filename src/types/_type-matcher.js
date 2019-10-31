@@ -1,4 +1,4 @@
-import { Loggable } from "./_loggable";
+import { Loggable } from "../_loggable";
 
 export class TypeMatcher extends Loggable {
   constructor(config = {}) {
