@@ -1,4 +1,4 @@
-const { buildYup } = require("../../schema-to-yup");
+const { buildYup } = require("../../../schema-to-yup");
 
 const invalidjson = {
   title: "users",

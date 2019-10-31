@@ -4,10 +4,6 @@ import { createYupSchemaEntry } from "../create-entry";
 
 import { extendYupApi } from "../validator-bridge";
 
-function buildYup(schema, config = {}) {
-  return new YupBuilder(schema, config).yupSchema;
-}
-
 import { YupBuilder } from "./yup-builder";
 
 // import { createYupSchemaEntry } from "./create-entry";
