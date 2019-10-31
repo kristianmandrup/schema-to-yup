@@ -1,4 +1,4 @@
-import { YupMixed } from "../mixed";
+import { YupMixed } from "../base";
 
 // Allow recursive schema
 export class YupObject extends YupMixed {

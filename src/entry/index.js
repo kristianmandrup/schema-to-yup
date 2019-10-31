@@ -1,2 +1,2 @@
 export class YupSchemaEntryError extends Error {}
-export { YupSchemaEntry } from "./schema-entry";
+export { YupSchemaEntry } from "./result-entry-builder";

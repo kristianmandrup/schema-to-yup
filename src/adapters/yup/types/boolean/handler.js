@@ -1,4 +1,4 @@
-import { YupBoolean } from "./boolean";
+import { BooleanType } from "./boolean";
 
 export class BooleanHandler {
   constructor(config) {
@@ -10,6 +10,6 @@ export class BooleanHandler {
   }
 
   handle(obj) {
-    return this.isBoolean(obj) && YupBoolean.create(obj).createSchemaEntry();
+    return this.isBoolean(obj) && BooleanType.create(obj).createSchemaEntry();
   }
 }

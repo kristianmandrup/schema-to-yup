@@ -1,6 +1,6 @@
-import { Guard } from '../_guard';
+import { Guard } from "../_guard";
 
-class NumberGuard extends Guard {
+export class NumberGuard extends Guard {
   constructor(obj, config) {
     super(obj, config);
   }
@@ -10,11 +10,6 @@ class NumberGuard extends Guard {
   }
 }
 
-function createNumberGuard(obj, config) {
+export function createNumberGuard(obj, config) {
   return new NumberGuard(obj, config);
 }
-
-export {
-  createNumberGuard,
-  NumberGuard
-};

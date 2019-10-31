@@ -1,28 +1,7 @@
-import { YupMixed } from "../mixed";
+import { MixedType } from "../base";
 import { createRangeConstraint, RangeConstraint } from "./range-constraint";
-import { createNumberGuard, NumberGuard } from "./guard";
 
-const proceed = (obj, config = {}) => {
-  return createNumberGuard(obj, config).verify();
-};
-
-function toYupNumber(obj, config = {}) {
-  return proceed(obj, config) && buildYupNumber(obj);
-}
-
-function toYupNumberSchemaEntry(obj, config = {}) {
-  return proceed(obj, config) && buildSchemaEntry(obj);
-}
-
-function buildSchemaEntry(obj) {
-  return YupNumber.schemaEntryFor(obj);
-}
-
-function buildYupNumber(obj) {
-  return YupNumber.create(obj);
-}
-
-class YupNumber extends YupMixed {
+export class NumberType extends MixedType {
   constructor(obj) {
     super(obj);
     this.type = this.normalizeNumType(obj.type);
@@ -112,13 +91,3 @@ class YupNumber extends YupMixed {
     this.constraints.minimum = this.constraints.minimum || this.constraints.min;
   }
 }
-
-export {
-  toYupNumber,
-  toYupNumberSchemaEntry,
-  YupNumber,
-  createNumberGuard,
-  NumberGuard,
-  RangeConstraint,
-  createRangeConstraint
-};

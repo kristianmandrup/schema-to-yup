@@ -1,10 +1,10 @@
-import { Constraint } from '../constraints/base';
+import { Constraint } from "../constraints/base";
 
-function createDateConstraint(typer, map) {
+export function createDateConstraint(typer, map) {
   return new DateConstraint(typer, map);
 }
 
-class DateConstraint extends Constraint {
+export class DateConstraint extends Constraint {
   constructor(typer, map = {}) {
     super(typer, map);
   }
@@ -51,8 +51,3 @@ class DateConstraint extends Constraint {
     return `Must be either: a Date, a number (ms) or a String in date format`;
   }
 }
-
-export {
-  createDateConstraint,
-  DateConstraint
-};

@@ -1,4 +1,4 @@
-import { YupMixed } from "../mixed";
+import { YupMixed } from "../base";
 
 export class YupString extends YupMixed {
   constructor(obj) {

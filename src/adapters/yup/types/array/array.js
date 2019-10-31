@@ -1,18 +1,17 @@
 // See:
 // http://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4
 
-import { YupMixed } from "../mixed";
+import { MixedType } from "../base";
 
-export class YupArray extends YupMixed {
-  constructor(obj) {
-    super(obj);
+export class ArrayType extends MixedType {
+  constructor(obj, config) {
+    super(obj, config);
     this.type = "array";
-    this.base = this.yup.array();
     this.createYupSchemaEntry = this.config.createYupSchemaEntry;
   }
 
-  static create(obj) {
-    return new YupArray(obj);
+  static create(obj, config) {
+    return new ArrayType(obj, config);
   }
 
   convert() {

@@ -1,10 +1,10 @@
-import { Constraint } from './base';
+import { Constraint } from "./base";
 
-function createRegExpConstraint(typer, map) {
+export function createRegExpConstraint(typer, map) {
   return new RegExpConstraint(typer, map);
 }
 
-class RegExpConstraint extends Constraint {
+export class RegExpConstraint extends Constraint {
   constructor(typer, map = {}) {
     super(typer, map);
   }
@@ -29,8 +29,3 @@ class RegExpConstraint extends Constraint {
     return `Must be either a RegExp or String`;
   }
 }
-
-export {
-  createRegExpConstraint,
-  RegExpConstraint
-};

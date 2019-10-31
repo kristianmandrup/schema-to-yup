@@ -1,10 +1,10 @@
-import { Constraint } from '../constraints/base';
+import { Constraint } from "../constraints/base";
 
-function createNumericConstraint(typer) {
+export function createNumericConstraint(typer) {
   return new NumericConstraint(typer);
 }
 
-class NumericConstraint extends Constraint {
+export class NumericConstraint extends Constraint {
   constructor(typer) {
     super(typer);
   }
@@ -21,8 +21,3 @@ class NumericConstraint extends Constraint {
     return `Must be a number or convertible to a number`;
   }
 }
-
-export {
-  createNumericConstraint,
-  NumericConstraint
-};

@@ -1,6 +1,6 @@
-import { TypeMatcher } from '../_type-matcher';
+import { TypeMatcher } from "../_type-matcher";
 
-class Constraint extends TypeMatcher {
+export class Constraint extends TypeMatcher {
   constructor(typer, map) {
     super(typer.config);
     this.map = map || this.$map || {};
@@ -90,7 +90,3 @@ class Constraint extends TypeMatcher {
     return this;
   }
 }
-
-export {
-  Constraint
-};

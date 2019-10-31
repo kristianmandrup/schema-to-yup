@@ -1,4 +1,4 @@
-import { YupArray } from "./array";
+import { ArrayType } from "./array";
 import { Base } from "../abstract-type";
 
 export class ArrayHandler extends Base {
@@ -14,6 +14,6 @@ export class ArrayHandler extends Base {
   }
 
   handle(obj) {
-    return this.isArray(obj) && YupArray.create(obj).createSchemaEntry();
+    return this.isArray(obj) && ArrayType.create(obj).createSchemaEntry();
   }
 }

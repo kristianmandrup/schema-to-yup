@@ -1,14 +1,7 @@
-import {
-  toYupString,
-  toYupNumberSchemaEntry,
-  toYupBoolean,
-  toYupArray,
-  toYupObject,
-  toYupDate
-} from "../types";
 import { Base } from "../base";
+import defaults from "./defaults";
 
-export class YupSchemaEntry extends Base {
+export class ResultEntryBuilder extends Base {
   constructor({ schema, name, key, value, config }) {
     super(config);
     this.schema = schema;

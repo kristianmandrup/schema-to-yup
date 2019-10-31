@@ -1,21 +1,20 @@
-import * as yup from "yup";
-
 function isObjectType(obj) {
   return obj === Object(obj);
 }
 
 import { AbstractType } from "../abstract-type";
 import { createWhenCondition } from "../../conditions";
-import { ConstraintBuilder } from "../constraint-builder";
 
-export class YupMixed extends AbstractType {
+export class BaseType extends AbstractType {
   constructor(opts = {}) {
     super(opts.config);
     let { schema, key, value, config } = opts;
     config = config || {};
     schema = schema || {};
+
     this.validateOnCreate(key, value, opts);
-    this.yup = yup;
+
+    this.typeInst = opts.typeInst;
     this.key = key;
     this.schema = schema;
     this.properties = schema.properties || {};
@@ -24,8 +23,10 @@ export class YupMixed extends AbstractType {
     this.format = value.format || this.constraints.format;
     this.config = config || {};
     this.type = "mixed";
-    this.base = yup.mixed();
+
     this.constraintsAdded = {};
+
+    // from abstract
     this.constraintBuilder = this.createConstraintBuilder({
       constraints: this.constraints,
       base: this.base
@@ -35,11 +36,17 @@ export class YupMixed extends AbstractType {
     this.rebind("addConstraint", "addValueConstraint");
   }
 
+  get typeInst() {
+    return this.yup[this.type]();
+  }
+
   convert() {
     this.addMappedConstraints();
-    this.oneOf().notOneOf();
+    this.oneOf();
+    this.notOneOf();
     this.when();
-    this.nullable().isType();
+    this.nullable();
+    this.isType();
     return this;
   }
 
@@ -59,7 +66,6 @@ export class YupMixed extends AbstractType {
     const alias = ["oneOf", "enum", "anyOf"].find(key => {
       return this.constraints[key];
     });
-    // TODO: pass value as constraintValue not value
 
     return this.addConstraint(alias, { values });
   }
@@ -69,7 +75,7 @@ export class YupMixed extends AbstractType {
     let values = notOneOf || (not && (not.enum || not.oneOf));
     if (this.isNothing(values)) return this;
     values = Array.isArray(values) ? values : [values];
-    // TODO: pass value as constraintValue not value
+
     return this.addConstraint("notOneOf", { values });
   }
 

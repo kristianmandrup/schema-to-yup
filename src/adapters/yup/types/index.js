@@ -1,4 +1,4 @@
-import { YupMixed, ConvertYupSchemaError, errValKeys, defaults } from "./mixed";
+import { YupMixed, ConvertYupSchemaError, errValKeys, defaults } from "./base";
 import { YupArray, toYupArray } from "./array";
 import { YupBoolean, toYupBoolean } from "./boolean";
 import { YupNumber, toYupNumber, toYupNumberSchemaEntry } from "./number";

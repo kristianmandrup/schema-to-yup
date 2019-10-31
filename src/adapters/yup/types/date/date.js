@@ -1,18 +1,18 @@
-import { YupMixed } from "../mixed";
+import { MixedType } from "../base";
 
-export class YupDate extends YupMixed {
-  constructor(obj) {
-    super(obj);
+export class DateType extends MixedType {
+  constructor(obj, config) {
+    super(obj, config);
     this.type = "date";
-    this.base = this.yup.date();
   }
 
-  static create(obj) {
-    return new YupDate(obj);
+  static create(obj, config) {
+    return new YupDate(obj, config);
   }
 
   convert() {
-    this.minDate().maxDate();
+    this.minDate();
+    this.maxDate();
     super.convert();
     return this;
   }

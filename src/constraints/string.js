@@ -1,10 +1,10 @@
-import { Constraint } from './base';
+import { Constraint } from "./base";
 
-function createStringConstraint(typer, map) {
+export function createStringConstraint(typer, map) {
   return new StringConstraint(typer, map);
 }
 
-class StringConstraint extends Constraint {
+export class StringConstraint extends Constraint {
   constructor(typer, map = {}) {
     super(typer, map);
   }
@@ -17,8 +17,3 @@ class StringConstraint extends Constraint {
     return `Must be a String`;
   }
 }
-
-export {
-  createStringConstraint,
-  StringConstraint
-};
