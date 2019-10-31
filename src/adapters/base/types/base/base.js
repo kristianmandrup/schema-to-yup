@@ -42,6 +42,16 @@ export class BaseType extends AbstractType {
     visitor.notify(this);
   }
 
+  applyToTypeInstance(instance) {
+    this.typeInstance = instance;
+  }
+
+  applyMatchingErrMsg(...names) {
+    for (let name of names) {
+      if (this.valErrMessage(name)) return;
+    }
+  }
+
   get typeInst() {
     throw "Not implemented";
   }

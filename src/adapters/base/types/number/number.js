@@ -12,14 +12,6 @@ export class NumberType extends BaseType {
     return type === "int" ? "integer" : type;
   }
 
-  static create(obj) {
-    return new YupNumber(obj);
-  }
-
-  static schemaEntryFor(obj) {
-    return YupNumber.create(obj).createSchemaEntry();
-  }
-
   get enabled() {
     return ["range", "posNeg", "integer"];
   }
