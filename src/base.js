@@ -1,8 +1,7 @@
+import { Loggable } from "./types/_loggable";
 import defaults from "./defaults";
-// import { createYupSchemaEntry } from '../create-entry';
-import { TypeMatcher } from "./_type-matcher";
 
-class Base extends TypeMatcher {
+export class Base extends Loggable {
   constructor(config = {}) {
     super(config);
     // config = {
@@ -14,5 +13,3 @@ class Base extends TypeMatcher {
     this.config = { ...$defaults, ...config };
   }
 }
-
-export { Base };

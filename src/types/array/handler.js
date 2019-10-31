@@ -1,5 +1,5 @@
 import { YupArray } from "./array";
-import { Base } from "../base";
+import { Base } from "../abstract-type";
 
 export class ArrayHandler extends Base {
   constructor(config) {

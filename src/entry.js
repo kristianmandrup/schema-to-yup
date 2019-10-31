@@ -1,5 +1,4 @@
 import {
-  Base,
   toYupString,
   toYupNumberSchemaEntry,
   toYupBoolean,
@@ -7,6 +6,7 @@ import {
   toYupObject,
   toYupDate
 } from "./types";
+import { Base } from "./base";
 
 class YupSchemaEntryError extends Error {}
 
