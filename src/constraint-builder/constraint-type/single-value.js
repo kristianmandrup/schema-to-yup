@@ -1,4 +1,4 @@
-import { Constraint } from "./base";
+import { Constraint } from "./constraint";
 
 export class SingleValueConstraintBuilder extends Constraint {
   constructor(opts = {}) {

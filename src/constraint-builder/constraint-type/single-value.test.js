@@ -1,4 +1,4 @@
-import { createOpts, yup, SingleValueConstraintBuilder } from "./_helpers";
+import { createOpts, yup, SingleValueConstraintBuilder } from "./test/_helpers";
 
 describe("SingleValueConstraintBuilder", () => {
   const yupConstraintMethodName = "min";

@@ -1,4 +1,4 @@
-import { Constraint } from "./_helpers";
+import { Constraint } from "./test/_helpers";
 
 describe("Constraint", () => {
   describe("create", () => {

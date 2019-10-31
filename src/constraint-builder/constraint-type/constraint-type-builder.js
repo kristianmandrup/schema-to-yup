@@ -2,7 +2,7 @@ import {
   NoValueConstraintBuilder,
   SingleValueConstraintBuilder,
   ListValueConstraintBuilder
-} from "../constraint-type";
+} from ".";
 
 export class ConstraintTypeBuilder {
   constraintWithSingleValue(constraintValue, opts = {}) {

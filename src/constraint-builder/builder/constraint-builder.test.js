@@ -1,4 +1,4 @@
-import { ConstraintBuilder } from "./_helpers";
+import { ConstraintBuilder } from "../test/_helpers";
 
 const { log } = console;
 

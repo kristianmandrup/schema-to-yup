@@ -1,4 +1,4 @@
-import { createOpts, yup, NoValueConstraintBuilder } from "./_helpers";
+import { createOpts, yup, NoValueConstraintBuilder } from "./test/_helpers";
 
 describe("NoValueConstraintBuilder", () => {
   const yupConstraintMethodName = "email";

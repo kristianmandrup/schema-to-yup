@@ -1,4 +1,4 @@
-import { createOpts, yup, ListValueConstraintBuilder } from "./_helpers";
+import { createOpts, yup, ListValueConstraintBuilder } from "./test/_helpers";
 
 describe("ListValueConstraintBuilder", () => {
   const yupConstraintMethodName = "oneOf";
