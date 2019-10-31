@@ -25,16 +25,8 @@ export class StringType extends BaseType {
     return this;
   }
 
-  trim() {
-    return this.addConstraint("trim");
-  }
-
-  lowercase() {
-    return this.addConstraint("lowercase");
-  }
-
-  uppercase() {
-    return this.addConstraint("uppercase");
+  get constraintNames() {
+    return ["trim", "lowercase", "uppercase"];
   }
 
   genericFormat() {
@@ -87,11 +79,7 @@ export class StringType extends BaseType {
       return this;
     }
     const regex = new RegExp(pattern);
-    const errMsg =
-      this.valErrMessage("pattern") ||
-      this.valErrMessage("matches") ||
-      this.valErrMessage("regex");
-
+    const errMsg = this.errorMessageOneOf("pattern", "matches", "regex");
     const newBase = regex && this.base.matches(regex, errMsg);
     this.base = newBase || this.base;
     return this;

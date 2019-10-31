@@ -42,6 +42,10 @@ export class BaseType extends AbstractType {
     visitor.notify(this);
   }
 
+  applyConstraints() {
+    this.constraintNames.map(name => this.addConstraint(name));
+  }
+
   applyToTypeInstance(instance) {
     this.typeInstance = instance;
   }

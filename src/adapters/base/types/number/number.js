@@ -27,10 +27,6 @@ export class NumberType extends BaseType {
     fn && typeof fn === "function" ? fn.bind(this)() : fn.add();
   }
 
-  truncate() {
-    return this.addConstraint("truncate");
-  }
-
   round() {
     const { round } = this.constraints;
     if (this.isNothing(round)) {
@@ -55,12 +51,8 @@ export class NumberType extends BaseType {
     return this.config.isInteger(this.type);
   }
 
-  positive() {
-    return this.addConstraint("positive");
-  }
-
-  negative() {
-    return this.addConstraint("negative");
+  get constraintNames() {
+    return ["truncate", "positive", "negative"];
   }
 
   get isNegative() {
