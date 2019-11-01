@@ -1,3 +1,4 @@
+export * from "./constraint-alias-mapper";
 export * from "./constraint-mapper";
 import { stringType, numberType } from "./types";
 

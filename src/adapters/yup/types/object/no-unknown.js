@@ -1,4 +1,10 @@
+export const createNoUnknown = typeHandler => new NoUnknown(typeHandler);
+
 export class NoUnknown {
+  constructor(typeHandler) {
+    this.typeHandler = typeHandler;
+  }
+
   apply() {
     const { noUnknown, propertyNames } = this.value;
     const names = noUnknown || propertyNames;

@@ -1,4 +1,4 @@
-export class ItemsOf {
+export class ItemsOf extends BasicConstraint {
   constructor() {}
 
   itemsOf() {

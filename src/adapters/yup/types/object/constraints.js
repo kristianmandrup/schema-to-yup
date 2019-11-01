@@ -1,5 +1,6 @@
+import { constraintsFor } from "../../base";
 import { NoUnknown } from "./no-unknown";
 
-export const constraints = {
-  unknown: NoUnknown
-};
+export const constraints = constraintsFor({
+  NoUnknown
+});

@@ -5,9 +5,10 @@ Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any o
 ### Update
 
 Release `1.9.8` and later of `schema-to-yup` fixes a bunch of issues including validation of complex nested schemas.
+
 It now also includes a typings file so it should work nicely with TypeScript.
 
-We are nearing bversion `2.0` which will have a separate constraint builder infrastructure. This will decouple the JSON to schema to validation type rules from the instantiation of each type validator, making it trivial to support other validators and maintain/develop each separately.
+We are nearing version `2.0` which will have a separate constraint builder infrastructure. This will decouple the JSON to schema to validation type rules from the instantiation of each type validator, making it trivial to support other validators and maintain/develop each separately.
 
 ## Schemas
 
@@ -117,7 +118,7 @@ const { shapeConfig } = buildYup(json, config);
 const schema = yup.object().shape({
   ...shapeConfig,
   ...customShapeConfig
-})
+});
 ```
 
 shapeConfig

@@ -10,8 +10,27 @@ export class ObjectType extends BaseObjectType {
     return ["camelCase", "constantCase"];
   }
 
-  noUnknown() {
-    const clazz = constraints["noUnknown"];
-    new clazz(this).apply();
+  get constraintsToApply() {
+    return ["noUnknown"];
+  }
+
+  get defaultConstraints() {
+    return constraints;
+  }
+
+  // move to base
+  applyConstraints() {
+    this.constraintsToApply.map(name => this.constraints[name]());
+  }
+
+  get constraints() {
+    return {
+      ...this.defaultConstraints,
+      ...this.customConstraints
+    };
+  }
+
+  get customConstraints() {
+    return this.constraintsFor(this.type);
   }
 }

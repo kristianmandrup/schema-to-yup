@@ -1,18 +1,14 @@
-export class ConstraintMapper {
-  get base() {
-    return {
-      oneOf: "oneOf",
-      enum: "oneOf",
-      anyOf: "oneOf"
-      // ... TODO: add more to cover all mixed aliases
-    };
-  }
+import camelcase from "camelcase";
 
-  get string() {
-    return {};
-  }
+const constraintsFor = constraintClassesMap => {
+  const constraintClassNames = Object.keys(constraintClassesMap);
 
-  get number() {
-    return {};
-  }
-}
+  // export const createNoUnknown =
+
+  return constraintClassNames.reduce((acc, name) => {
+    const key = camelcase(name);
+    const clazz = constraintClasses[name];
+    acc[key] = typeHandler => new clazz(typeHandler).apply();
+    return acc;
+  }, {});
+};
