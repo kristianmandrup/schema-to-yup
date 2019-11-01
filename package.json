@@ -19,12 +19,12 @@
   "dependencies": {
     "dashify": "^2.0.0",
     "uppercamelcase": "^3.0.0",
-    "yup": "^0.26.0"
+    "yup": "^0.27.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/node": "^7.6.3",
-    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-env": "^7.6.3",
     "jest": "^24.9.0",
     "microbundle": "^0.11.0"
   },
