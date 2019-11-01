@@ -7,7 +7,13 @@ describe("complex nested object schema", () => {
       dog: {
         name: "Spot",
         age: 7
-      }
+      },
+      pets: [
+        {
+          name: 'Harpua',
+          age: 12
+        }
+      ]
     },
     invalid: {
       name: "Mike",

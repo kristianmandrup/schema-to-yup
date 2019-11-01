@@ -43,7 +43,11 @@ export const schema = {
     name: {
       type: "string"
     },
-    dog: dogSchema
+    dog: dogSchema,
+    pets: {
+      type: "array",
+      items: dogSchema
+    }
   },
   required: ["name"]
 };
