@@ -47,8 +47,13 @@ class YupNumber extends YupMixed {
   }
 
   convert() {
-    this.enabled.map(name => this.processConstraint(name));
     super.convert();
+    if (this.onlyHasTypeConstraint) {
+      // throw "Has no real constraints";
+      return this;
+    }
+    this.enabled.map(name => this.processConstraint(name));
+
     super.postConvert();
     return this;
   }

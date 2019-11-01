@@ -13,6 +13,7 @@ import { ConstraintBuilder } from "../constraint_builder";
 class YupMixed extends Base {
   constructor(opts = {}) {
     super(opts.config);
+    console.log({ opts });
     let { schema, key, value, config } = opts;
     config = config || {};
     schema = schema || {};
@@ -21,6 +22,9 @@ class YupMixed extends Base {
     this.key = key;
     this.schema = schema;
     this.properties = schema.properties || {};
+
+    console.log({ value });
+
     this.value = value;
     this.constraints = this.getConstraints();
     this.format = value.format || this.constraints.format;
@@ -78,6 +82,10 @@ class YupMixed extends Base {
 
   convert() {
     this.cleanConstraints();
+    if (this.onlyHasTypeConstraint) {
+      return this;
+    }
+
     this.addMappedConstraints();
     this.oneOf().notOneOf();
     this.when();
@@ -92,9 +100,24 @@ class YupMixed extends Base {
     }
   }
 
-  onlyHasTypeConstraint() {
+  get onlyHasTypeConstraint() {
     const constraintKeys = Object.keys(this.constraints);
-    return constraintKeys.length === 1 && constraintKeys["type"];
+    let cloned = [...constraintKeys];
+
+    const removeElem = (array, elem) => {
+      var index = array.indexOf(elem);
+      if (index > -1) {
+        array.splice(index, 1);
+      }
+      return array;
+    };
+
+    cloned = removeElem(cloned, "key");
+    cloned = removeElem(cloned, "type");
+
+    const only = cloned.length === 0;
+    console.log({ only, cloned, constraintKeys, value: this.value });
+    return only;
   }
 
   cleanConstraints() {
@@ -284,7 +307,7 @@ class YupMixed extends Base {
         const constraintValue = obj[constraintName];
         const propName = obj.key;
         console.log({ constraintName, propName, constraintValue, fnName });
-        if (!constraintValue) {
+        if (constraintValue === false) {
           if (constraintName === "required") {
             console.log("notRequired", {
               propName,
