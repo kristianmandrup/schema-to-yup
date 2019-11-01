@@ -35,6 +35,58 @@ class YupMixed extends Base {
     this.rebind("addConstraint", "addValueConstraint");
   }
 
+  isRequired(value) {
+    value = value || this.value;
+    return value.required === true;
+  }
+
+  get mode() {
+    return this.config.mode || {};
+  }
+
+  get disableFlags() {
+    return [false, "disabled", "no", "off"];
+  }
+
+  get enableFlags() {
+    return [true, "enabled", "yes", "on"];
+  }
+
+  disabledMode(modeName) {
+    const modeEntry = this.mode[modeName];
+    return !!this.disableFlags.find(disable => modeEntry === disable);
+  }
+
+  enabledMode(modeName) {
+    const modeEntry = this.mode[modeName];
+    return !!this.enableFlags.find(disable => modeEntry === disable);
+  }
+
+  get shouldPreProcessValue() {
+    return !this.disabledMode("notRequired");
+  }
+
+  preProcessedConstraintValue(value) {
+    if (!this.shouldPreProcessValue) return value;
+
+    if (!this.isRequired(value)) {
+      // console.log("adding notRequired since not explicitly required");
+      return {
+        ...value,
+        notRequired: true
+      };
+    }
+    return value;
+  }
+
+  set value(value) {
+    this._value = this.preProcessedConstraintValue(value);
+  }
+
+  get value() {
+    return this._value;
+  }
+
   createConstraintBuilder(opts = {}) {
     return new ConstraintBuilder(opts);
   }
@@ -116,6 +168,8 @@ class YupMixed extends Base {
     constraintValue =
       constraintValue || propValue || this.constraints[propName];
 
+    // console.log("build constraint", opts);
+
     if (this.isNothing(constraintValue)) {
       // this.log("no prop value", {
       //   constraints: this.constraints,
@@ -153,6 +207,7 @@ class YupMixed extends Base {
 
       this.onConstraintAdded({ name: constraintName, value: values });
 
+      // console.log("adding values constraint", constraintName);
       const newBase = constraintFn(values, errFn);
 
       // this.log("built constraint", {
@@ -162,11 +217,21 @@ class YupMixed extends Base {
       return newBase;
     }
 
+    const isNoValue = this.isNoValueConstraint(constraintName);
+    // console.log({ isNoValue });
+
     if (this.isPresent(constraintValue)) {
-      // this.log("constraint value present", { constraintValue });
+      // this.log("constraint value present", { constraintValue, constraintName });
 
       this.onConstraintAdded({ name: constraintName, value: constraintValue });
 
+      if (this.isNoValueConstraint(constraintName)) {
+        // console.log("adding special no value constraint", constraintName);
+        let specialNewBase = constraintFn(errFn);
+        return specialNewBase;
+      }
+
+      // console.log("adding value constraint", constraintName);
       const newBase = this.isPresent(constraintValue)
         ? constraintFn(constraintValue, errFn)
         : constraintFn(errFn);
@@ -188,6 +253,7 @@ class YupMixed extends Base {
 
       this.onConstraintAdded({ name: constraintName });
 
+      // console.log("adding no value constraint", constraintName);
       const newBase = constraintFn(errFn);
 
       // this.log("built constraint", {
@@ -199,6 +265,14 @@ class YupMixed extends Base {
 
     this.warn("buildConstraint: missing value or values options");
     return yup;
+  }
+
+  isNoValueConstraint(constraintName) {
+    return this.noValueConstraints.includes(constraintName);
+  }
+
+  get noValueConstraints() {
+    return ["required"];
   }
 
   addConstraint(propName, opts) {
@@ -214,12 +288,17 @@ class YupMixed extends Base {
   }
 
   addMappedConstraints() {
+    // contains different types of constraints (ie. name -> yup constraint function calls)
     const $map = this.constraintsMap;
     const keys = Object.keys($map);
     keys.map(key => {
-      const list = $map[key];
+      const constraintNames = $map[key];
       const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
-      list.map(this[fnName]);
+      const fn = this[fnName];
+      constraintNames.map(constraintName => {
+        // console.log("mapped", { constraintName });
+        fn(constraintName);
+      });
     });
     return this;
   }

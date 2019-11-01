@@ -2,12 +2,13 @@
 
 Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
-### Update
+## Update
 
-Release `1.9.8` and later of `schema-to-yup` fixes a bunch of issues including validation of complex nested schemas.
-It now also includes a typings file so it should work nicely with TypeScript.
+Release `1.9.10` and later of `schema-to-yup` fixes a bunch of issues including validation of complex nested schemas and proper handling of `required` vs `notRequired` including passing a `mode` configuration for fine control. It also fixes certain related error message issues for certain constraints (such as `required`).
 
-We are nearing bversion `2.0` which will have a separate constraint builder infrastructure. This will decouple the JSON to schema to validation type rules from the instantiation of each type validator, making it trivial to support other validators and maintain/develop each separately.
+The library now also includes a typings file so it should work nicely with TypeScript.
+
+In the near future (`2.0.0` release) we will include a separate constraint builder infrastructure and more flexible/configurable infastructure in general. This will decouple the JSON to schema to validation type rules from the instantiation of each type validator, making it trivial to support other validators and maintain/develop each separately.
 
 ## Schemas
 
@@ -105,6 +106,57 @@ const schema = yup.object().shape({
 ```
 
 Note the `"required": true` for the `age` property (not natively supported by JSON schema).
+
+### Mode
+
+By default, any property will be explicitly `notRequired` unless set to be required, either via `required: true` in the property constraint object or via the `required` list of properties of the `object` schema definition (of the property).
+
+You can override the `notRequired` behavior by setting it on the new `mode` object of the configuration which can be used to control and fine-tune runtime behaviour.
+
+```js
+const jsonSchema = {
+  title: "users",
+  type: "object",
+  properties: {
+    username: { type: "string" }
+  }
+};
+```
+
+```js
+const yupSchema = buildYup(jsonSchema, {
+  mode: {
+    notRequired: true // default setting
+  },
+});
+
+// will be valid since username is not required by default
+const valid = yupSchema.validateSync({
+  foo: "dfds"
+});
+```
+
+```js
+const yupSchema = buildYup(jsonSchema, {
+  mode: {
+    notRequired: true // default setting
+  },
+});
+// will be invalid since username is required by default when notRequired mode is disabled
+const valid = yupSchema.validateSync({
+  foo: "dfds"
+});
+```
+
+The new run time mode settings are demonstrated under `sample-runs/mode`
+
+No validation error (prop not required unless explicitly specified):
+
+`$ npx babel-node sample-runs/modes/not-required-on.js`
+
+Validation error if not valid type:
+
+`$ npx babel-node sample-runs/modes/not-required-on.js`
 
 ### Shape
 
@@ -358,7 +410,7 @@ module.exports {
 
 To support another model, such as GraphQL schema (type definitions) via [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson)
 
-_Person_
+Person:
 
 ```js
 {
@@ -773,7 +825,3 @@ Please feel free to come with ideas and suggestions on how to further improve th
 ## License
 
 MIT
-
-```
-
-```

@@ -1,4 +1,4 @@
-const { buildYup } = require("../");
+const { buildYup } = require("../src");
 
 let valid;
 test("yup inserts custom messages for required fields", () => {
@@ -24,6 +24,7 @@ test("yup inserts custom messages for required fields", () => {
       foo: "dfds"
     });
   } catch (e) {
+    console.log(e.errors);
     valid = e.errors[0];
   }
   expect(valid).toBe("User is required");

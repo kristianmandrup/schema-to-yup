@@ -13,6 +13,9 @@ export class ConstraintBuilder {
       values,
       errName
     } = opts;
+
+    // console.log("builder: build constraint", opts);
+
     yup = yup || this.base;
     constraintValue =
       constraintValue || propValue || this.constraints[propName];
