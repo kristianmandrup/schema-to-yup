@@ -77,10 +77,10 @@ class YupMixed extends Base {
   }
 
   convert() {
-    this.addMappedConstraints();
-    this.oneOf().notOneOf();
-    this.when();
-    this.nullable().isType();
+    // this.addMappedConstraints();
+    // this.oneOf().notOneOf();
+    // this.when();
+    // this.nullable().isType();
     return this;
   }
 
@@ -216,20 +216,58 @@ class YupMixed extends Base {
   addMappedConstraints() {
     const $map = this.constraintsMap;
     const keys = Object.keys($map);
+    const obj = this.value;
     keys.map(key => {
       const list = $map[key];
       const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
-      list.map(this[fnName]);
+      console.log("addMappedConstraints", { key, fnName });
+      const fn = this[fnName];
+      console.log("add property constraint for", {
+        key: this.key,
+        constraintValue: this.value,
+        list
+      });
+      // iterate all constraints in constraintsMap for key such as simple or value
+      list.map(constraintName => {
+        const constraintValue = obj[constraintName];
+        const propName = obj.key;
+        console.log({ constraintName, propName, constraintValue, fnName });
+        console.log({ constraintName, propName, constraintValue, fnName });
+        if (!constraintValue) {
+          if (constraintName === "required") {
+            console.log("notRequired", {
+              propName,
+              constraintName,
+              constraintValue
+            });
+            console.log(`adding constraint notRequired for ${propName}`);
+            this[fnName]("notRequired");
+            return;
+          }
+          console.log(
+            `not adding constraint ${constraintName} for ${propName}`
+          );
+          return;
+        }
+        console.log(`adding constraint ${constraintName} for ${propName}`);
+        this[fnName](constraintName);
+      });
     });
     return this;
   }
 
   get constraintsMap() {
     return {
-      simple: ["required", "notRequired", "nullable"],
-      value: ["default", "strict"]
+      // simple: ["nullable", "required", "notRequired"],
+      // value: ["default", "strict"]
     };
   }
+
+  nullable() {}
+
+  required() {}
+
+  notRequired() {}
 
   oneOf() {
     let values =
@@ -301,25 +339,6 @@ class YupMixed extends Base {
     const { nullable, isNullable } = this.constraints;
     const value = nullable || isNullable;
     this.addConstraint("nullable", { value, errName: "notOneOf" });
-    return this;
-  }
-
-  $const() {
-    return this;
-  }
-
-  // boolean https: //ajv.js.org/keywords.html#allof
-  $allOf() {
-    return this;
-  }
-
-  // https://ajv.js.org/keywords.html#anyof
-  $anyOf() {
-    return this;
-  }
-
-  // https: //ajv.js.org/keywords.html#oneof
-  $oneOf() {
     return this;
   }
 

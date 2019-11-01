@@ -13,14 +13,14 @@ export class YupString extends YupMixed {
 
   convert() {
     super.convert();
-    this.normalize();
-    this.minLength()
-      .maxLength()
-      .pattern();
-    this.lowercase().uppercase();
-    this.email();
-    this.url();
-    this.genericFormat();
+    // this.normalize();
+    // this.minLength()
+    //   .maxLength()
+    //   .pattern();
+    // this.lowercase().uppercase();
+    // this.email();
+    // this.url();
+    // this.genericFormat();
     return this;
   }
 

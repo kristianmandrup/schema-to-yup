@@ -13,6 +13,7 @@ class YupSchemaEntryError extends Error {}
 class YupSchemaEntry extends Base {
   constructor({ schema, name, key, value, config }) {
     super(config);
+    console.log("entry", name);
     this.schema = schema;
     this.key = key;
     this.value = value;

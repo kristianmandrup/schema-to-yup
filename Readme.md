@@ -2,7 +2,7 @@
 
 Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
-### Update
+## Update
 
 Release `1.9.8` and later of `schema-to-yup` fixes a bunch of issues including validation of complex nested schemas.
 It now also includes a typings file so it should work nicely with TypeScript.
@@ -358,7 +358,7 @@ module.exports {
 
 To support another model, such as GraphQL schema (type definitions) via [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson)
 
-_Person_
+Person
 
 ```js
 {
@@ -773,7 +773,3 @@ Please feel free to come with ideas and suggestions on how to further improve th
 ## License
 
 MIT
-
-```
-
-```
