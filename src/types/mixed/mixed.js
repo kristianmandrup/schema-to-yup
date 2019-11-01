@@ -272,7 +272,7 @@ class YupMixed extends Base {
   }
 
   get noValueConstraints() {
-    return ["required"];
+    return ["required", "email", "url"];
   }
 
   addConstraint(propName, opts) {
