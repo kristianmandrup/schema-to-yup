@@ -77,11 +77,34 @@ class YupMixed extends Base {
   }
 
   convert() {
-    // this.addMappedConstraints();
-    // this.oneOf().notOneOf();
-    // this.when();
-    // this.nullable().isType();
+    this.cleanConstraints();
+    this.addMappedConstraints();
+    this.oneOf().notOneOf();
+    this.when();
+    this.nullable();
+    this.isType();
     return this;
+  }
+
+  postConvert() {
+    if (this.onlyHasTypeConstraint) {
+      this.cleanConstraints();
+    }
+  }
+
+  onlyHasTypeConstraint() {
+    const constraintKeys = Object.keys(this.constraints);
+    return constraintKeys.length === 1 && constraintKeys["type"];
+  }
+
+  cleanConstraints() {
+    const propName = this.value.key;
+    const opts = {
+      constraintName: "notRequired",
+      value: true
+    };
+    console.log(propName, opts);
+    this.addConstraint(propName, opts);
   }
 
   addValueConstraint(propName, { constraintName, errName } = {}) {
@@ -158,7 +181,11 @@ class YupMixed extends Base {
       // this.log("built constraint", {
       //   yup: newBase
       // });
-
+      console.log("list constraint was built", newBase, {
+        propName,
+        constraintName,
+        value
+      });
       return newBase;
     }
 
@@ -167,13 +194,30 @@ class YupMixed extends Base {
 
       this.onConstraintAdded({ name: constraintName, value: constraintValue });
 
-      const newBase = this.isPresent(constraintValue)
+      let newBase;
+
+      if (this.noValueConstraints.includes(constraintName)) {
+        newBase = constraintFn(errFn);
+        console.log("no value constraint was built", newBase, {
+          propName,
+          constraintName
+        });
+        return newBase;
+      }
+
+      newBase = this.isPresent(constraintValue)
         ? constraintFn(constraintValue, errFn)
         : constraintFn(errFn);
 
       // this.log("built constraint", {
       //   yup: newBase
       // });
+      newBase &&
+        console.log("value constraint was built", newBase, {
+          propName,
+          constraintName,
+          constraintValue
+        });
 
       return newBase;
     }
@@ -193,6 +237,10 @@ class YupMixed extends Base {
       // this.log("built constraint", {
       //   yup: newBase
       // });
+      console.log("constraint with no value was built", newBase, {
+        propName,
+        constraint
+      });
 
       return newBase;
     }
@@ -201,10 +249,14 @@ class YupMixed extends Base {
     return yup;
   }
 
+  get noValueConstraints() {
+    return ["required"];
+  }
+
   addConstraint(propName, opts) {
     // console.log("addConstraint", propName, opts);
-    const contraint = this.buildConstraint(propName, opts);
-    this.base = contraint || this.base;
+    const constraint = this.buildConstraint(propName, opts);
+    this.base = constraint || this.base;
     return this;
   }
 
@@ -232,7 +284,6 @@ class YupMixed extends Base {
         const constraintValue = obj[constraintName];
         const propName = obj.key;
         console.log({ constraintName, propName, constraintValue, fnName });
-        console.log({ constraintName, propName, constraintValue, fnName });
         if (!constraintValue) {
           if (constraintName === "required") {
             console.log("notRequired", {
@@ -258,8 +309,8 @@ class YupMixed extends Base {
 
   get constraintsMap() {
     return {
-      // simple: ["nullable", "required", "notRequired"],
-      // value: ["default", "strict"]
+      simple: ["nullable", "required", "notRequired"],
+      value: ["default", "strict"]
     };
   }
 

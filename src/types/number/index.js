@@ -49,6 +49,7 @@ class YupNumber extends YupMixed {
   convert() {
     this.enabled.map(name => this.processConstraint(name));
     super.convert();
+    super.postConvert();
     return this;
   }
 

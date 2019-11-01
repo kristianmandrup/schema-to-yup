@@ -5,7 +5,8 @@ import {
   toYupBoolean,
   toYupArray,
   toYupObject,
-  toYupDate
+  toYupDate,
+  toYupMixed
 } from "./types";
 
 class YupSchemaEntryError extends Error {}
@@ -13,7 +14,6 @@ class YupSchemaEntryError extends Error {}
 class YupSchemaEntry extends Base {
   constructor({ schema, name, key, value, config }) {
     super(config);
-    console.log("entry", name);
     this.schema = schema;
     this.key = key;
     this.value = value;
@@ -31,7 +31,7 @@ class YupSchemaEntry extends Base {
   }
 
   isValidSchema() {
-    return typeof this.type === "string";
+    return !typeof this.type === "string";
   }
 
   error(msg) {
@@ -60,7 +60,6 @@ class YupSchemaEntry extends Base {
   }
 
   defaultType(config) {
-    // return this.mixed(config)
     this.error("toEntry: unknown type", config);
   }
 
