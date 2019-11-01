@@ -172,9 +172,39 @@ const schema = yup.object().shape({
 })
 ```
 
-shapeConfig
+## Types
 
-## Types and keys
+Currently the following schema types are supported:
+
+- `array`
+- `boolean`
+- `date`
+- `number`
+- `object`
+- `string`
+
+### Custom type handlers
+
+You can pass any custom typehandlers in a `typeHandlers` object as part of the `config` object passes. See `setTypeHandlers()` in `entry.js` for how this works internally.
+
+```js
+function myCustomStringHandler = (obj, config) => {
+  // ... custom handler
+  // return yup type schema such as yup.string()
+  // with one or more constraints added
+}
+
+const yupSchema = buildYup(jsonSchema, {
+  typeHandlers: {
+    string: myCustomStringHandler
+  },
+});
+```
+
+This can be used to support special cases, to circumvent a bug or unexpected/unwarranted behaviour for one or more of the built-in type handlers etc.
+You can then use the built in classes as building blocks.
+
+Release `2.0` will likely include a much improved infrastructure of suitable building blocks to easily customize behavior and extend the functionality etc.
 
 ### Mixed (any type)
 

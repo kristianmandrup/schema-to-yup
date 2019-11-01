@@ -15,17 +15,28 @@ class YupSchemaEntry extends Base {
     super(config);
     this.schema = schema;
     this.key = key;
-    this.value = value;
-    this.config = config;
+    this.value = value || {};
+    this.config = config || {};
     this.name = name;
     this.type = value.type;
-    this.types = {
+    this.setTypeHandlers();
+  }
+
+  get defaultTypeHandlerMap() {
+    return {
       string: toYupString,
       number: toYupNumberSchemaEntry,
       boolean: toYupBoolean,
       array: toYupArray,
       object: toYupObject,
       date: toYupDate
+    };
+  }
+
+  setTypeHandlers() {
+    this.types = {
+      ...this.defaultTypeHandlerMap,
+      ...(this.config.typeHandlers || {})
     };
   }
 
@@ -46,16 +57,15 @@ class YupSchemaEntry extends Base {
         } must be a string, was ${typeof this.type} ${schema}`
       );
     }
-    const config = this.obj;
-    return (
-      this.string(config) ||
-      this.number(config) ||
-      this.boolean(config) ||
-      this.array(config) ||
-      this.object(config) ||
-      this.date(config) ||
-      this.defaultType(config)
-    );
+    const { obj, config } = this;
+    const typeHandlerNames = Object.keys(this.types);
+    // TODO: iterate all registered type handlers in this.types
+    for (let typeName of typeHandlerNames) {
+      const typeFn = this.types[typeName];
+      const result = typeFn(obj, config);
+      if (result) return result;
+    }
+    return this.defaultType(config);
   }
 
   defaultType(config) {
@@ -71,30 +81,6 @@ class YupSchemaEntry extends Base {
       type: this.type,
       config: this.config
     };
-  }
-
-  string(obj) {
-    return toYupString(obj || this.obj, this.config);
-  }
-
-  number(obj) {
-    return toYupNumberSchemaEntry(obj || this.obj, this.config);
-  }
-
-  boolean(obj) {
-    return toYupBoolean(obj || this.obj, this.config);
-  }
-
-  array(obj) {
-    return toYupArray(obj || this.obj, this.config);
-  }
-
-  object(obj) {
-    return toYupObject(obj || this.obj, this.config);
-  }
-
-  date(obj) {
-    return toYupDate(obj || this.obj, this.config);
   }
 }
 
