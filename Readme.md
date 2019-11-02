@@ -326,6 +326,26 @@ Support for `if` `then` and `else` [conditional JSON schema constraints](https:/
 
 See also [json-schema-spec](https://github.com/json-schema-org/json-schema-spec/issues/180)
 
+### Customizing conditional logic
+
+You can now also override, extend or customize the `when` condition logic by passing in your own factory method for the config object entry `createWhenCondition`
+
+```js
+const myWhenConditionFactoryFn = (opts = {}) => {
+  const { type, key, value, when, schema, properties, config } = opts;
+  // ...
+}
+
+const config = {
+  createWhenCondition: myWhenConditionFactoryFn
+}
+const schema = buildYup(nameJsonSchema, config)
+```
+
+The best and easiest way to do this is to extend the `WhenCondition` class which contains most of the necessary infrastructure you can further build on.
+
+See the `src/conditions/legacy` folder for the legacy `1.9.0` logic that works but has limited functionality.
+
 ## Complex example
 
 Here a more complete example of the variations currently possible

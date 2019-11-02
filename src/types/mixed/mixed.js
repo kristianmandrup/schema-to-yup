@@ -368,7 +368,11 @@ class YupMixed extends Base {
       config: this.config,
       when
     };
-    return createWhenCondition(opts);
+
+    const $createWhenCondition =
+      this.config.createWhenCondition || createWhenCondition;
+
+    return $createWhenCondition(opts);
   }
 
   when() {
