@@ -17,7 +17,8 @@ export class YupString extends YupMixed {
     this.minLength()
       .maxLength()
       .pattern();
-    this.lowercase().uppercase();
+    this.lowercase();
+    this.uppercase();
     this.email();
     this.url();
     this.genericFormat();

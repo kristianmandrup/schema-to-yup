@@ -1,4 +1,4 @@
-const { buildYup } = require("../");
+const { buildYup } = require("../src");
 
 const invalidjson = {
   title: "users",
@@ -21,15 +21,14 @@ test("yup validates invalid json to return false", () => {
   expect(valid).toBe(false);
 });
 
-
 const email = {
   title: "users",
   type: "object",
   required: ["email"],
   properties: {
-    email_address: { type: "string", "email": true }
+    email_address: { type: "string", email: true }
   }
-}
+};
 test("yup validates valid email to return true", () => {
   const yupSchema = buildYup(email);
   const valid = yupSchema.isValidSync({
@@ -50,9 +49,9 @@ const regex = {
   type: "object",
   required: ["amazon"],
   properties: {
-    amazon: { type: "string", "pattern": /(foo|bar)/ }
+    amazon: { type: "string", pattern: /(foo|bar)/ }
   }
-}
+};
 test("yup validates pattern to return true", () => {
   const yupSchema = buildYup(regex);
   const valid = yupSchema.isValidSync({
@@ -72,9 +71,9 @@ const misnamed_regex = {
   type: "object",
   required: ["amazon"],
   properties: {
-    amazon: { type: "string", "matches": /(foo|bar)/ }
+    amazon: { type: "string", matches: /(foo|bar)/ }
   }
-}
+};
 test("yup validates normalised pattern name to return false", () => {
   const yupSchema = buildYup(misnamed_regex);
   const valid = yupSchema.isValidSync({
@@ -87,9 +86,9 @@ const misnamed_regex2 = {
   type: "object",
   required: ["amazon"],
   properties: {
-    amazon: { type: "string", "regex": /(foo|bar)/ }
+    amazon: { type: "string", regex: /(foo|bar)/ }
   }
-}
+};
 test("yup validates normalised pattern name to return false", () => {
   const yupSchema = buildYup(misnamed_regex2);
   const valid = yupSchema.isValidSync({
@@ -103,9 +102,9 @@ const url = {
   type: "object",
   required: ["email"],
   properties: {
-    linkedin: { type: "string", "url": true }
+    linkedin: { type: "string", url: true }
   }
-}
+};
 test("yup validates valid url to return true", () => {
   const yupSchema = buildYup(url);
   const valid = yupSchema.isValidSync({
@@ -120,4 +119,3 @@ test("yup validates invalid url to return false", () => {
   });
   expect(valid).toBe(false);
 });
-

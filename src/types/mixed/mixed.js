@@ -29,7 +29,7 @@ class YupMixed extends Base {
     this.base = yup.mixed();
     this.errMessages = config.errMessages || {};
     this.constraintsAdded = {};
-    this.constraintBuilder = this.createConstraintBuilder(this);
+    this.constraintBuilder = this.createConstraintBuilder(this, opts);
 
     // rebind: ensure this always mapped correctly no matter context
     this.rebind("addConstraint", "addValueConstraint");
@@ -137,172 +137,15 @@ class YupMixed extends Base {
   }
 
   addValueConstraint(propName, { constraintName, errName } = {}) {
-    return this.addConstraint(propName, {
+    return this.constraintBuilder.addConstraint(propName, {
       constraintName,
       value: true,
       errName
     });
   }
 
-  get aliasMap() {
-    return {
-      oneOf: "oneOf",
-      enum: "oneOf",
-      anyOf: "oneOf"
-      // ...
-    };
-  }
-
-  buildConstraint(propName, opts = {}) {
-    let {
-      constraintName,
-      constraintValue,
-      propValue,
-      method,
-      yup,
-      values,
-      errName
-    } = opts;
-    yup = yup || this.base;
-    constraintValue =
-      constraintValue || propValue || this.constraints[propName];
-
-    // console.log("build constraint", opts);
-
-    if (this.isNothing(constraintValue)) {
-      // this.log("no prop value", {
-      //   constraints: this.constraints,
-      //   propName,
-      //   constraintValue
-      // });
-      this.warn("no prop value");
-      return yup;
-    }
-    constraintName = constraintName || propName;
-    method = method || constraintName;
-
-    const yupConstraintMethodName = this.aliasMap[method] || method;
-
-    if (!yup[yupConstraintMethodName]) {
-      this.warn(`Yup has no such API method: ${yupConstraintMethodName}`);
-      return this;
-    }
-
-    const constraintFn = yup[yupConstraintMethodName].bind(yup);
-    const errFn =
-      this.valErrMessage(constraintName) ||
-      (errName && this.valErrMessage(errName));
-
-    const constrOpts = {
-      constraintName,
-      yup,
-      constraintFn,
-      errFn
-    };
-
-    const newBase =
-      this.multiValueConstraint(values, constrOpts) ||
-      this.presentConstraintValue(constraintValue, constrOpts) ||
-      this.nonPresentConstraintValue(constraintValue, constrOpts);
-
-    if (newBase) return newBase;
-
-    this.warn("buildConstraint: missing value or values options");
-    return yup;
-  }
-
-  nonPresentConstraintValue(
-    constraintValue,
-    { constraintName, constraintFn },
-    errFn
-  ) {
-    if (this.isPresent(constraintValue)) return;
-    // this.log("constraint - value not present, pass no value", {
-    //   constraintValue
-    // });
-
-    // call yup constraint function with single value arguments (default)
-    // constraintValue = value === true ? constraintValue : value;
-
-    this.onConstraintAdded({ name: constraintName });
-
-    // console.log("adding no value constraint", constraintName);
-    const newBase = constraintFn(errFn);
-
-    // this.log("built constraint", {
-    //   yup: newBase
-    // });
-
-    return newBase;
-  }
-
-  presentConstraintValue(
-    constraintValue,
-    { constraintName, constraintFn, errFn }
-  ) {
-    if (!this.isPresent(constraintValue)) return;
-    // this.log("constraint value present", { constraintValue, constraintName });
-
-    this.onConstraintAdded({ name: constraintName, value: constraintValue });
-
-    if (this.isNoValueConstraint(constraintName)) {
-      // console.log("adding special no value constraint", constraintName);
-      let specialNewBase = constraintFn(errFn);
-      return specialNewBase;
-    }
-
-    // console.log("adding value constraint", constraintName);
-    const newBase = this.isPresent(constraintValue)
-      ? constraintFn(constraintValue, errFn)
-      : constraintFn(errFn);
-
-    // this.log("built constraint", {
-    //   yup: newBase
-    // });
-
-    return newBase;
-  }
-
-  multiValueConstraint(values, { constraintName, yup, errFn }) {
-    if (!this.isPresent(values)) return;
-    // this.log("constraint - values present - add Array constraint", values);
-
-    // call yup constraint function with multiple arguments
-    if (!Array.isArray(values)) {
-      this.warn("buildConstraint: values option must be an array of arguments");
-      return yup;
-    }
-
-    this.onConstraintAdded({ name: constraintName, value: values });
-
-    // console.log("adding values constraint", constraintName);
-    const newBase = constraintFn(values, errFn);
-
-    // this.log("built constraint", {
-    //   yup: newBase
-    // });
-
-    return newBase;
-  }
-
-  isNoValueConstraint(constraintName) {
-    return this.noValueConstraints.includes(constraintName);
-  }
-
-  get noValueConstraints() {
-    return ["required", "email", "url"];
-  }
-
   addConstraint(propName, opts) {
-    // console.log("addConstraint", propName, opts);
-    const contraint = this.buildConstraint(propName, opts);
-    this.base = contraint || this.base;
-    return this;
-  }
-
-  onConstraintAdded({ name, value }) {
-    this.constraintsAdded[name] = value;
-    return this;
+    return this.constraintBuilder.addConstraint(propName, opts);
   }
 
   addMappedConstraints() {
@@ -314,7 +157,6 @@ class YupMixed extends Base {
       const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
       const fn = this[fnName];
       constraintNames.map(constraintName => {
-        // console.log("mapped", { constraintName });
         fn(constraintName);
       });
     });

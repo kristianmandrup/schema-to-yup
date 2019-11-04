@@ -1,7 +1,19 @@
-export class ConstraintBuilder {
-  constructor(opts = {}) {}
+import { TypeMatcher } from "./_type-matcher";
 
-  // TODO
+export class ConstraintBuilder extends TypeMatcher {
+  constructor(typeHandler, opts = {}) {
+    super(opts);
+    this.typeHandler = typeHandler;
+    this.constraintsAdded = {};
+    this.delegators.map(name => {
+      this[name] = typeHandler[name];
+    });
+  }
+
+  get delegators() {
+    return ["errMessages", "base", "key", "constraints"];
+  }
+
   build(propName, opts = {}) {
     let {
       constraintName,
@@ -9,19 +21,16 @@ export class ConstraintBuilder {
       propValue,
       method,
       yup,
-      value,
       values,
       errName
     } = opts;
-
-    // console.log("builder: build constraint", opts);
-
     yup = yup || this.base;
     constraintValue =
       constraintValue || propValue || this.constraints[propName];
 
+    console.log(propName, opts);
+
     if (this.isNothing(constraintValue)) {
-      // console.log("no prop value", { constraints: this.constraints, propName });
       this.warn("no prop value");
       return yup;
     }
@@ -31,9 +40,8 @@ export class ConstraintBuilder {
     const yupConstraintMethodName = this.aliasMap[method] || method;
 
     if (!yup[yupConstraintMethodName]) {
-      // console.log("no yup method", yupConstraintMethodName);
       this.warn(`Yup has no such API method: ${yupConstraintMethodName}`);
-      return this;
+      return this.typeHandler;
     }
 
     const constraintFn = yup[yupConstraintMethodName].bind(yup);
@@ -41,70 +49,76 @@ export class ConstraintBuilder {
       this.valErrMessage(constraintName) ||
       (errName && this.valErrMessage(errName));
 
-    // console.log("build constraint", {
-    //   value,
-    //   values,
-    //   propName,
-    //   constraints: this.constraints
-    // });
+    const constrOpts = {
+      constraintName,
+      yup,
+      constraintFn,
+      errFn
+    };
 
-    if (this.isPresent(values)) {
-      // this.log("constraint - values present - add Array constraint", values);
+    const newBase =
+      this.multiValueConstraint(values, constrOpts) ||
+      this.presentConstraintValue(constraintValue, constrOpts) ||
+      this.nonPresentConstraintValue(constraintValue, constrOpts);
 
-      // call yup constraint function with multiple arguments
-      if (!Array.isArray(values)) {
-        this.warn(
-          "buildConstraint: values option must be an array of arguments"
-        );
-        return yup;
-      }
-
-      this.onConstraintAdded({ name: constraintName, value: values });
-
-      const newBase = constraintFn(values, errFn);
-
-      // this.log("built constraint", {
-      //   yup: newBase
-      // });
-
-      return newBase;
-    }
-
-    if (this.isPresent(constraintValue)) {
-      // this.log("constraint - value not present", value);
-
-      this.onConstraintAdded({ name: constraintName, value: constraintValue });
-
-      const newBase = constraintValue
-        ? constraintFn(constraintValue, errFn)
-        : constraintFn(errFn);
-
-      // this.log("built constraint", {
-      //   yup: newBase
-      // });
-
-      return newBase;
-    }
-
-    if (!this.isPresent(constraintValue)) {
-      // this.log("constraint - value not present", value);
-
-      // call yup constraint function with single value arguments (default)
-      // constraintValue = value === true ? constraintValue : value;
-
-      this.onConstraintAdded({ name: constraintName });
-
-      const newBase = constraintFn(errFn);
-
-      // this.log("built constraint", {
-      //   yup: newBase
-      // });
-
-      return newBase;
-    }
+    if (newBase) return newBase;
 
     this.warn("buildConstraint: missing value or values options");
     return yup;
+  }
+
+  nonPresentConstraintValue(
+    constraintValue,
+    { constraintName, constraintFn },
+    errFn
+  ) {
+    if (this.isPresent(constraintValue)) return;
+    // call yup constraint function with single value arguments (default)
+
+    this.onConstraintAdded({ name: constraintName });
+
+    const newBase = constraintFn(errFn);
+
+    return newBase;
+  }
+
+  presentConstraintValue(
+    constraintValue,
+    { constraintName, constraintFn, errFn }
+  ) {
+    if (!this.isPresent(constraintValue)) return;
+    this.onConstraintAdded({ name: constraintName, value: constraintValue });
+
+    if (this.isNoValueConstraint(constraintName)) {
+      let specialNewBase = constraintFn(errFn);
+      return specialNewBase;
+    }
+    const newBase = this.isPresent(constraintValue)
+      ? constraintFn(constraintValue, errFn)
+      : constraintFn(errFn);
+
+    return newBase;
+  }
+
+  multiValueConstraint(values, { constraintName, yup, errFn }) {
+    if (!this.isPresent(values)) return;
+    // call yup constraint function with multiple arguments
+    if (!Array.isArray(values)) {
+      this.warn("buildConstraint: values option must be an array of arguments");
+      return yup;
+    }
+
+    this.onConstraintAdded({ name: constraintName, value: values });
+    const newBase = constraintFn(values, errFn);
+    return newBase;
+  }
+
+  isNoValueConstraint(constraintName) {
+    return this.noValueConstraints.includes(constraintName);
+  }
+
+  get noValueConstraints() {
+    return ["required", "email", "url"];
   }
 
   addValueConstraint(propName, { constraintName, errName } = {}) {
@@ -114,33 +128,39 @@ export class ConstraintBuilder {
       errName
     });
   }
+
   addConstraint(propName, opts) {
     // console.log("addConstraint", propName, opts);
-    const contraint = this.buildConstraint(propName, opts);
-    this.base = contraint || this.base;
-    return this;
+    const constraint = this.build(propName, opts);
+    this.base = constraint || this.base;
+    return this.typeHandler;
   }
 
   onConstraintAdded({ name, value }) {
     this.constraintsAdded[name] = value;
-    return this;
-  }
-
-  addMappedConstraints() {
-    const $map = this.constraintsMap;
-    const keys = Object.keys($map);
-    keys.map(key => {
-      const list = $map[key];
-      const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
-      list.map(this[fnName]);
-    });
-    return this;
+    return this.typeHandler;
   }
 
   get constraintsMap() {
     return {
       simple: ["required", "notRequired", "nullable"],
       value: ["default", "strict"]
+    };
+  }
+
+  valErrMessage(constraint) {
+    const errMsg = this.errMessages[this.key]
+      ? this.errMessages[this.key][constraint]
+      : undefined;
+    return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
+  }
+
+  get aliasMap() {
+    return {
+      oneOf: "oneOf",
+      enum: "oneOf",
+      anyOf: "oneOf"
+      // ...
     };
   }
 }
