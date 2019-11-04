@@ -29,7 +29,9 @@ class YupMixed extends Base {
     this.base = yup.mixed();
     this.errMessages = config.errMessages || {};
     this.constraintsAdded = {};
-    this.constraintBuilder = this.createConstraintBuilder(this, opts);
+    const constraintBuilderFactoryFn =
+      this.config.createConstraintBuilder || this.createConstraintBuilder;
+    this.constraintBuilder = constraintBuilderFactoryFn(this, opts);
 
     // rebind: ensure this always mapped correctly no matter context
     this.rebind("addConstraint", "addValueConstraint");
@@ -70,7 +72,6 @@ class YupMixed extends Base {
     if (!this.shouldPreProcessValue) return value;
 
     if (!this.isRequired(value)) {
-      // console.log("adding notRequired since not explicitly required");
       return {
         ...value,
         notRequired: true

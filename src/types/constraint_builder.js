@@ -28,8 +28,6 @@ export class ConstraintBuilder extends TypeMatcher {
     constraintValue =
       constraintValue || propValue || this.constraints[propName];
 
-    console.log(propName, opts);
-
     if (this.isNothing(constraintValue)) {
       this.warn("no prop value");
       return yup;

@@ -206,6 +206,46 @@ You can then use the built in classes as building blocks.
 
 Release `2.0` will likely include a much improved infrastructure of suitable building blocks to easily customize behavior and extend the functionality etc.
 
+### Custom constraint builder
+
+Version `1.9.13` and higher supports using a custom constraint builder to add and build constraints.
+
+```js
+class MyConstraintBuilder extends ConstraintBuilder {
+  constructor(typeHandler, opts = {}) {
+    super(typeHandler, opts);
+    // custom instance configuration
+  }
+
+  build(propName, opts) {
+    /// custom build logic
+
+    // returns new type validation handler (base) with built constraint added
+    return newBase
+  }
+
+  addConstraint(propName, opts) {
+    // custom add constraint logic
+    return this.typeHandler
+  }
+
+  // custom event handler
+  onConstraintAdded({ name, value }) {
+    // ...
+    return this.typeHandler;
+  }
+}
+
+const createConstraintBuilder = (typeHandler, opts) => {
+  // custom builder logic
+  return new MyConstraintBuilder(typeHandler, opts)
+}
+
+buildYup(jsonSchema, {
+  createConstraintBuilder
+})
+```
+
 ### Mixed (any type)
 
 - `strict`
