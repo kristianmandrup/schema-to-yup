@@ -1,29 +1,10 @@
 import * as yup from "yup";
+import { createWhenCondition } from "./custom-when";
 const { buildYup } = require("..");
-
-const createValidateTester = yupSchema => {
-  return (json, expectedResult) => {
-    let valid;
-    try {
-      valid = yupSchema.validateSync(json);
-    } catch (ex) {
-      console.error("validation exception", { ex });
-    }
-
-    // console.log("Validate result", { yupSchema, json, valid, expectedResult });
-
-    if (expectedResult) {
-      expect(valid).toEqual(json);
-    } else {
-      expect(valid).not.toEqual(json);
-    }
-  };
-};
 
 const createValidTester = schema => {
   return (json, expectedResult) => {
     const valid = schema.isValidSync(json);
-    // console.log("Tester", { json, valid, expectedResult });
     expect(valid).toBe(expectedResult);
   };
 };
@@ -63,14 +44,6 @@ describe("when", () => {
   });
 
   describe("isBig", () => {
-    // yup.object({
-    //   isBig: yup.boolean(),
-    //   count: yup.number().when("isBig", {
-    //     is: true, // alternatively: (val) => val == true
-    //     then: yup.number().min(5)
-    //   })
-    // });
-
     const biggyjson = {
       title: "biggy",
       type: "object",
@@ -104,7 +77,41 @@ describe("when", () => {
     });
   });
 
-  describe.skip("nameCountjson", () => {
+  describe("should work with legacy when method", () => {
+    const biggyjson = {
+      title: "biggy",
+      type: "object",
+      properties: {
+        isBig: {
+          type: "boolean"
+        },
+        count: {
+          type: "number",
+          when: {
+            isBig: {
+              is: true,
+              then: {
+                min: 5
+              }
+            }
+          }
+        }
+      }
+    };
+
+    const yupSchema = buildYup(biggyjson, createWhenCondition);
+    const tester = createValidTester(yupSchema);
+
+    test("valid", () => {
+      tester(bigJson.valid, true);
+    });
+
+    test("invalid", () => {
+      tester(bigJson.invalid, false);
+    });
+  });
+
+  describe("nameCountjson", () => {
     const nameCountjson = {
       title: "user",
       type: "object",
@@ -141,7 +148,7 @@ describe("when", () => {
       tester(json.valid, true);
     });
 
-    test("invalid", () => {
+    test.skip("invalid", () => {
       tester(json.invalid, false);
     });
   });
