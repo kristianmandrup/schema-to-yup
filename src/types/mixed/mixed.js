@@ -70,7 +70,6 @@ class YupMixed extends Base {
     if (!this.shouldPreProcessValue) return value;
 
     if (!this.isRequired(value)) {
-      // console.log("adding notRequired since not explicitly required");
       return {
         ...value,
         notRequired: true
@@ -167,8 +166,6 @@ class YupMixed extends Base {
     constraintValue =
       constraintValue || propValue || this.constraints[propName];
 
-    // console.log("build constraint", opts);
-
     if (this.isNothing(constraintValue)) {
       // this.log("no prop value", {
       //   constraints: this.constraints,
@@ -226,13 +223,7 @@ class YupMixed extends Base {
 
     this.onConstraintAdded({ name: constraintName });
 
-    // console.log("adding no value constraint", constraintName);
     const newBase = constraintFn(errFn);
-
-    // this.log("built constraint", {
-    //   yup: newBase
-    // });
-
     return newBase;
   }
 
@@ -241,31 +232,22 @@ class YupMixed extends Base {
     { constraintName, constraintFn, errFn }
   ) {
     if (!this.isPresent(constraintValue)) return;
-    // this.log("constraint value present", { constraintValue, constraintName });
 
     this.onConstraintAdded({ name: constraintName, value: constraintValue });
 
     if (this.isNoValueConstraint(constraintName)) {
-      // console.log("adding special no value constraint", constraintName);
       let specialNewBase = constraintFn(errFn);
       return specialNewBase;
     }
 
-    // console.log("adding value constraint", constraintName);
     const newBase = this.isPresent(constraintValue)
       ? constraintFn(constraintValue, errFn)
       : constraintFn(errFn);
-
-    // this.log("built constraint", {
-    //   yup: newBase
-    // });
-
     return newBase;
   }
 
-  multiValueConstraint(values, { constraintName, yup, errFn }) {
+  multiValueConstraint(values, { constraintFn, constraintName, yup, errFn }) {
     if (!this.isPresent(values)) return;
-    // this.log("constraint - values present - add Array constraint", values);
 
     // call yup constraint function with multiple arguments
     if (!Array.isArray(values)) {
@@ -275,13 +257,7 @@ class YupMixed extends Base {
 
     this.onConstraintAdded({ name: constraintName, value: values });
 
-    // console.log("adding values constraint", constraintName);
-    const newBase = constraintFn(values, errFn);
-
-    // this.log("built constraint", {
-    //   yup: newBase
-    // });
-
+    const newBase = constraintFn(...values, errFn);
     return newBase;
   }
 
@@ -294,7 +270,6 @@ class YupMixed extends Base {
   }
 
   addConstraint(propName, opts) {
-    // console.log("addConstraint", propName, opts);
     const contraint = this.buildConstraint(propName, opts);
     this.base = contraint || this.base;
     return this;
@@ -314,7 +289,6 @@ class YupMixed extends Base {
       const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
       const fn = this[fnName];
       constraintNames.map(constraintName => {
-        // console.log("mapped", { constraintName });
         fn(constraintName);
       });
     });
@@ -457,7 +431,6 @@ class YupMixed extends Base {
   deNormalize() {}
 
   errorMsg(msg) {
-    //console.error(msg);
     this.throwError(msg);
   }
 
