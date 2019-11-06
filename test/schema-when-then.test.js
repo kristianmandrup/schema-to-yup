@@ -99,7 +99,7 @@ describe("when", () => {
       }
     };
 
-    const yupSchema = buildYup(biggyjson, createWhenCondition);
+    const yupSchema = buildYup(biggyjson, { createWhenCondition });
     const tester = createValidTester(yupSchema);
 
     test("valid", () => {
