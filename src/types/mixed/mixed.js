@@ -145,8 +145,146 @@ class YupMixed extends Base {
     });
   }
 
+<<<<<<< HEAD
   addConstraint(propName, opts) {
     return this.constraintBuilder.addConstraint(propName, opts);
+=======
+  get aliasMap() {
+    return {
+      oneOf: "oneOf",
+      enum: "oneOf",
+      anyOf: "oneOf"
+      // ...
+    };
+  }
+
+  buildConstraint(propName, opts = {}) {
+    let {
+      constraintName,
+      constraintValue,
+      propValue,
+      method,
+      yup,
+      values,
+      errName
+    } = opts;
+    yup = yup || this.base;
+    constraintValue =
+      constraintValue || propValue || this.constraints[propName];
+
+    if (this.isNothing(constraintValue)) {
+      // this.log("no prop value", {
+      //   constraints: this.constraints,
+      //   propName,
+      //   constraintValue
+      // });
+      this.warn("no prop value");
+      return yup;
+    }
+    constraintName = constraintName || propName;
+    method = method || constraintName;
+
+    const yupConstraintMethodName = this.aliasMap[method] || method;
+
+    if (!yup[yupConstraintMethodName]) {
+      this.warn(`Yup has no such API method: ${yupConstraintMethodName}`);
+      return this;
+    }
+
+    const constraintFn = yup[yupConstraintMethodName].bind(yup);
+    const errFn =
+      this.valErrMessage(constraintName) ||
+      (errName && this.valErrMessage(errName));
+
+    const constrOpts = {
+      constraintName,
+      yup,
+      constraintFn,
+      errFn
+    };
+
+    const newBase =
+      this.multiValueConstraint(values, constrOpts) ||
+      this.presentConstraintValue(constraintValue, constrOpts) ||
+      this.nonPresentConstraintValue(constraintValue, constrOpts);
+
+    if (newBase) return newBase;
+
+    this.warn("buildConstraint: missing value or values options");
+    return yup;
+  }
+
+  nonPresentConstraintValue(
+    constraintValue,
+    { constraintName, constraintFn },
+    errFn
+  ) {
+    if (this.isPresent(constraintValue)) return;
+    // this.log("constraint - value not present, pass no value", {
+    //   constraintValue
+    // });
+
+    // call yup constraint function with single value arguments (default)
+    // constraintValue = value === true ? constraintValue : value;
+
+    this.onConstraintAdded({ name: constraintName });
+
+    const newBase = constraintFn(errFn);
+    return newBase;
+  }
+
+  presentConstraintValue(
+    constraintValue,
+    { constraintName, constraintFn, errFn }
+  ) {
+    if (!this.isPresent(constraintValue)) return;
+
+    this.onConstraintAdded({ name: constraintName, value: constraintValue });
+
+    if (this.isNoValueConstraint(constraintName)) {
+      let specialNewBase = constraintFn(errFn);
+      return specialNewBase;
+    }
+
+    const newBase = this.isPresent(constraintValue)
+      ? constraintFn(constraintValue, errFn)
+      : constraintFn(errFn);
+    return newBase;
+  }
+
+  multiValueConstraint(values, { constraintFn, constraintName, yup, errFn }) {
+    if (!this.isPresent(values)) return;
+
+    // call yup constraint function with multiple arguments
+    if (!Array.isArray(values)) {
+      this.warn("buildConstraint: values option must be an array of arguments");
+      return yup;
+    }
+
+    this.onConstraintAdded({ name: constraintName, value: values });
+
+    const newBase = constraintFn(...values, errFn);
+    return newBase;
+  }
+
+  isNoValueConstraint(constraintName) {
+    return this.noValueConstraints.includes(constraintName);
+  }
+
+  get noValueConstraints() {
+    return ["required", "email", "url"];
+  }
+
+  addConstraint(propName, opts) {
+    const contraint = this.buildConstraint(propName, opts);
+    this.base = contraint || this.base;
+    return this;
+  }
+
+  onConstraintAdded({ name, value }) {
+    this.constraintsAdded[name] = value;
+    return this;
+>>>>>>> e4e96f817c0243214eeef1ef194dea28db4c4872
   }
 
   addMappedConstraints() {
@@ -300,7 +438,6 @@ class YupMixed extends Base {
   deNormalize() {}
 
   errorMsg(msg) {
-    //console.error(msg);
     this.throwError(msg);
   }
 
