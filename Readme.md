@@ -2,14 +2,6 @@
 
 Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
-## Update
-
-Release `1.9.10` and later of `schema-to-yup` fixes a bunch of issues including validation of complex nested schemas and proper handling of `required` vs `notRequired` including passing a `mode` configuration for fine control. It also fixes certain related error message issues for certain constraints (such as `required`).
-
-The library now also includes a typings file so it should work nicely with TypeScript.
-
-In the near future (`2.0.0` release) we will include a separate constraint builder infrastructure and more flexible/configurable infastructure in general. This will decouple the JSON to schema to validation type rules from the instantiation of each type validator, making it trivial to support other validators and maintain/develop each separately.
-
 ## Schemas
 
 - [AJV: JSON Schema keywords](https://ajv.js.org/keywords.html)
@@ -107,6 +99,15 @@ const schema = yup.object().shape({
 
 Note the `"required": true` for the `age` property (not natively supported by JSON schema).
 
+### Refs
+
+Please note that this library does not currently resolve `$ref` (JSON Pointers) out of the box. You can use another library for that.
+
+You could f.ex use [json-schema-ref-parser](https://www.npmjs.com/package/json-schema-ref-parser) to preprocess your schema. Also see:
+
+- [schema-deref](https://www.npmjs.com/package/schema-deref)
+- [jsonref](https://www.npmjs.com/package/jsonref)
+
 ### Mode
 
 By default, any property will be explicitly `notRequired` unless set to be required, either via `required: true` in the property constraint object or via the `required` list of properties of the `object` schema definition (of the property).
@@ -127,7 +128,7 @@ const jsonSchema = {
 const yupSchema = buildYup(jsonSchema, {
   mode: {
     notRequired: true // default setting
-  },
+  }
 });
 
 // will be valid since username is not required by default
@@ -140,7 +141,7 @@ const valid = yupSchema.validateSync({
 const yupSchema = buildYup(jsonSchema, {
   mode: {
     notRequired: true // default setting
-  },
+  }
 });
 // will be invalid since username is required by default when notRequired mode is disabled
 const valid = yupSchema.validateSync({
@@ -169,7 +170,7 @@ const { shapeConfig } = buildYup(json, config);
 const schema = yup.object().shape({
   ...shapeConfig,
   ...customShapeConfig
-})
+});
 ```
 
 ## Types
@@ -221,12 +222,12 @@ class MyConstraintBuilder extends ConstraintBuilder {
     /// custom build logic
 
     // returns new type validation handler (base) with built constraint added
-    return newBase
+    return newBase;
   }
 
   addConstraint(propName, opts) {
     // custom add constraint logic
-    return this.typeHandler
+    return this.typeHandler;
   }
 
   // custom event handler
@@ -238,12 +239,12 @@ class MyConstraintBuilder extends ConstraintBuilder {
 
 const createConstraintBuilder = (typeHandler, opts) => {
   // custom builder logic
-  return new MyConstraintBuilder(typeHandler, opts)
-}
+  return new MyConstraintBuilder(typeHandler, opts);
+};
 
 buildYup(jsonSchema, {
   createConstraintBuilder
-})
+});
 ```
 
 ### Mixed (any type)
@@ -374,12 +375,12 @@ You can now also override, extend or customize the `when` condition logic by pas
 const myWhenConditionFactoryFn = (opts = {}) => {
   const { type, key, value, when, schema, properties, config } = opts;
   // ...
-}
+};
 
 const config = {
   createWhenCondition: myWhenConditionFactoryFn
-}
-const schema = buildYup(nameJsonSchema, config)
+};
+const schema = buildYup(nameJsonSchema, config);
 ```
 
 The best and easiest way to do this is to extend the `WhenCondition` class which contains most of the necessary infrastructure you can further build on.
