@@ -1,6 +1,8 @@
 const yup = require("yup");
-const { types } = require("../../../src");
+const { types, buildYup } = require("../../../src");
 const { toYupString } = types;
+
+export { buildYup };
 
 const isString = fieldDef => fieldDef && fieldDef.type === "string";
 const config = { isString };
