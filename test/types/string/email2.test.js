@@ -14,9 +14,7 @@ describe("string: email", () => {
   };
   let config = {
     errMessages: {
-      email: {
-        format: "Email format incorrect"
-      }
+      email: "Email format incorrect"
     }
   };
 
@@ -30,6 +28,6 @@ describe("string: email", () => {
       // console.log(e);
       valid = e.errors[0];
     }
-    expect(valid).toBe(config.errMessages.email.format);
+    expect(valid).toBe(config.errMessages.email);
   });
 });

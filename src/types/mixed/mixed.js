@@ -328,10 +328,16 @@ class YupMixed extends Base {
   }
 
   valErrMessage(constraint) {
-    const errMsg = this.errMessages[this.key]
-      ? this.errMessages[this.key][constraint]
-      : undefined;
-    return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
+    const { constraints } = this;
+    const errMsg = this.errMessageFor(constraint);
+    return typeof errMsg === "function" ? errMsg(constraints) : errMsg;
+  }
+
+  errMessageFor(constraint) {
+    const { errMessages, key } = this;
+    const errMsg = errMessages[key];
+    if (!errMsg) return;
+    return errMsg[constraint] || errMsg;
   }
 
   createWhenConditionFor(when) {
