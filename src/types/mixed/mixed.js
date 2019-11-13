@@ -145,10 +145,6 @@ class YupMixed extends Base {
     });
   }
 
-<<<<<<< HEAD
-  addConstraint(propName, opts) {
-    return this.constraintBuilder.addConstraint(propName, opts);
-=======
   get aliasMap() {
     return {
       oneOf: "oneOf",
@@ -284,7 +280,6 @@ class YupMixed extends Base {
   onConstraintAdded({ name, value }) {
     this.constraintsAdded[name] = value;
     return this;
->>>>>>> e4e96f817c0243214eeef1ef194dea28db4c4872
   }
 
   addMappedConstraints() {
