@@ -220,7 +220,7 @@ This can also be used to add custom handlers as described in the next section.
 You can also add custom custraint handler functions directly via the `config` object as follows:
 This can be used to override built in constraints or extend with your own.
 
-A custom handler to validate a string formatted as a valid `ip` address might look something like this (presuming such a method is available on `yup` string). You can also use this with the yup plugin/extension feature.
+A custom handler to validate a string formatted as a valid `ip` address might look something like this (presuming such a method is available on `yup` string). You can also use this with [yup schema type extensions](https://github.com/jquense/yup#extending-schema-types).
 
 ```js
 // takes the typehandler (such as YupString) instance as argument
@@ -239,7 +239,20 @@ const config = {
   string: {
     convert: {
       ip: ipHandler
-    }
+    },
+    enabled: [
+      "ip", // custom
+      // built in
+      "normalize",
+      "minLength",
+      "maxLength",
+      "pattern",
+      "lowercase",
+      "uppercase",
+      "email",
+      "url",
+      "genericFormat"
+    ]
   }
   // ... more configuration
 };
