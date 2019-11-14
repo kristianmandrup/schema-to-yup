@@ -699,6 +699,23 @@ Internally the validator error messages are resolved with the instance method `v
   }
 ```
 
+You can pass the `errMessages` as follows. Note that you can define error messages specific to a property such as `emailAdr.format` and generic messages prefixed with `$` such as `$email`
+
+```js
+  let config = {
+    errMessages: {
+      emailAdr: {
+        // note: would also work with email as the key
+        format: "emailAdr must be a valid email"
+      },
+      // generic fallback message for any email format validation
+      // note: if not present uses yup default validation message
+      $email: "Email format incorrect"
+    }
+  };
+```
+
+
 The key entries can be either a function, taking a `value` argument or a static string.
 Here are some of the defaults that you can override as needed.
 

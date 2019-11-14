@@ -6,15 +6,19 @@ describe("string: email", () => {
     title: "email",
     type: "object",
     properties: {
-      email: {
+      emailAdr: {
         type: "string",
         format: "email"
       }
     }
   };
+  const errMsg = "Email format incorrect";
+
   let config = {
     errMessages: {
-      email: "Email format incorrect"
+      emailAdr: {
+        format: errMsg
+      }
     }
   };
 
@@ -23,11 +27,11 @@ describe("string: email", () => {
   it("yup inserts custom messages for email format", () => {
     try {
       const yupSchema = buildYup(message, config);
-      valid = yupSchema.validateSync({ email: "as" });
+      valid = yupSchema.validateSync({ emailAdr: "xx" });
     } catch (e) {
       // console.log(e);
       valid = e.errors[0];
     }
-    expect(valid).toBe(config.errMessages.email);
+    expect(valid).toBe(errMsg);
   });
 });

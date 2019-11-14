@@ -268,7 +268,7 @@ class YupMixed extends Base {
   }
 
   get noValueConstraints() {
-    return ["required", "email", "url"];
+    return ["required", "email", "url", "format"];
   }
 
   addConstraint(propName, opts) {
@@ -327,17 +327,16 @@ class YupMixed extends Base {
     return this.addConstraint("notOneOf", { values });
   }
 
-  valErrMessage(constraint) {
+  valErrMessage(msgName) {
     const { constraints } = this;
-    const errMsg = this.errMessageFor(constraint);
+    const errMsg = this.errMessageFor(msgName);
     return typeof errMsg === "function" ? errMsg(constraints) : errMsg;
   }
 
-  errMessageFor(constraint) {
+  errMessageFor(msgName) {
     const { errMessages, key } = this;
     const errMsg = errMessages[key];
-    if (!errMsg) return;
-    return errMsg[constraint] || errMsg;
+    return errMsg ? errMsg[msgName] : errMessages[`$${msgName}`];
   }
 
   createWhenConditionFor(when) {

@@ -46,8 +46,20 @@ export class YupString extends YupMixed {
   }
 
   email() {
-    this.isEmail && this.addConstraint("email", { constraintValue: true });
+    if (!this.isEmail) return this;
+    const constraintName = this.constraintNameFor("email", "format");
+    const method = "email";
+    this.addConstraint("email", {
+      constraintValue: true,
+      constraintName,
+      method,
+      errName: method
+    });
     return this;
+  }
+
+  constraintNameFor(...names) {
+    return names.find(name => this.constraints[name]);
   }
 
   get isEmail() {
@@ -55,7 +67,15 @@ export class YupString extends YupMixed {
   }
 
   url() {
-    this.isUrl && this.addConstraint("url", { constraintValue: true });
+    if (!this.isUrl) return this;
+    const constraintName = this.constraintNameFor("url", "format");
+    const method = "url";
+    this.addConstraint("email", {
+      constraintValue: true,
+      constraintName,
+      method,
+      errName: method
+    });
     return this;
   }
 
