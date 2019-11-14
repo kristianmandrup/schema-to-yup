@@ -1,6 +1,6 @@
 {
   "name": "schema-to-yup",
-  "version": "1.9.16",
+  "version": "1.9.17",
   "source": "src/index.js",
   "main": "dist/index.js",
   "description": "Build a Yup schema object to validate models from a domain model schema (JSON or GraphQL)",
