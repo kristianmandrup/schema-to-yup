@@ -16,19 +16,12 @@ export class YupArray extends YupMixed {
   }
 
   convert() {
-    this.maxItems();
-    this.minItems();
-    this.ensureItems();
-    this.compact();
-    // this.$uniqueItems()
-    //   .$contains()
-    //   .$additionalItems()
-    //   .$items();
-
-    this.itemsOf();
-
     super.convert();
     return this;
+  }
+
+  get typeEnabled() {
+    return ["maxItems", "minItems", "ensureItems", "compact", "itemsOf"];
   }
 
   ensureItems() {

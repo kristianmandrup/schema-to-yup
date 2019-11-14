@@ -205,7 +205,49 @@ const yupSchema = buildYup(jsonSchema, {
 This can be used to support special cases, to circumvent a bug or unexpected/unwarranted behaviour for one or more of the built-in type handlers etc.
 You can then use the built in classes as building blocks.
 
-Release `2.0` will likely include a much improved infrastructure of suitable building blocks to easily customize behavior and extend the functionality etc.
+To control which constraints are enabled (executed), simply edit the `typeEnabled` getter on your type handler class. Here is the default `typeEnabled` getter for the `YupDate` (Date) type handler, which is configured to execute constraint handler functions: `minDate` and `maxDate`.
+
+```js
+  get typeEnabled() {
+    return ["minDate", "maxDate"];
+  }
+```
+
+This can also be used to add custom handlers as described in the next section.
+
+### Custom constraint handler functions
+
+You can also add custom custraint handler functions directly via the `config` object as follows:
+This can be used to override built in constraints or extend with your own.
+
+A custom handler to validate a string formatted as a valid `ip` address might look something like this (presuming such a method is available on `yup` string). You can also use this with the yup plugin/extension feature.
+
+```js
+// takes the typehandler (such as YupString) instance as argument
+const ipHandler = th => {
+  const constraintName = th.constraintNameFor("ip", "format");
+  const method = "ip";
+  th.addConstraint("ip", {
+    constraintValue: true,
+    constraintName,
+    method,
+    errName: method
+  });
+};
+
+const config = {
+  string: {
+    convert: {
+      ip: ipHandler
+    }
+  }
+  // ... more configuration
+};
+
+buildYup(jsonSchema, config);
+```
+
+We welcome feedback on how to better structure the `config` object to make it easy and intuitive to add run-time configuration to suit your needs.
 
 ### Custom constraint builder
 

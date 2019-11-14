@@ -27,6 +27,8 @@ class YupMixed extends Base {
     this.format = value.format || this.constraints.format;
     this.config = config || {};
     this.type = "mixed";
+    this.mixedConfig = this.config.mixed || {};
+    this.typeConfig = this.config[this.type] || {};
     this.base = yup.mixed();
     this.errMessages = config.errMessages || {};
     this.constraintsAdded = {};
@@ -123,16 +125,52 @@ class YupMixed extends Base {
   }
 
   // override for each type
+
+  get mixedEnabled() {
+    return (
+      this.mixedConfig.enabled || [
+        "oneOf",
+        "notOneOf",
+        "when",
+        "nullable",
+        "isType"
+      ]
+    );
+  }
+
+  // override for each type
+  get typeEnabled() {
+    return [];
+  }
+
+  get $typeEnabled() {
+    return this.typeConfig.enabled || this.typeEnabled;
+  }
+
   get enabled() {
-    [];
+    return [...this.mixedEnabled, ...this.$typeEnabled];
   }
 
   convertEnabled() {
     this.enabled.map(name => {
-      if (this[name]) {
-        this[name]();
+      const convertFn = this.convertFnFor(name);
+      if (convertFn) {
+        convertFn(this);
       }
     });
+  }
+
+  convertFnFor(name) {
+    return this.customConvertFnFor(name) || this.builtInConvertFnFor(name);
+  }
+
+  customConvertFnFor(name) {
+    const typeConvertMap = this.typeConfig.convert || {};
+    return typeConvertMap[name];
+  }
+
+  builtInConvertFnFor(name) {
+    return this[name].bind(this);
   }
 
   getConstraints() {
@@ -146,9 +184,7 @@ class YupMixed extends Base {
   convert() {
     this.initHelpers();
     this.addMappedConstraints();
-    this.oneOf().notOneOf();
-    this.when();
-    this.nullable().isType();
+    this.convertEnabled();
     return this;
   }
 
@@ -186,17 +222,20 @@ class YupMixed extends Base {
 
   addMappedConstraints() {
     // contains different types of constraints (ie. name -> yup constraint function calls)
-    const $map = this.constraintsMap;
-    const keys = Object.keys($map);
-    keys.map(key => {
-      const constraintNames = $map[key];
-      const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
-      const fn = this[fnName];
-      constraintNames.map(constraintName => {
-        fn(constraintName);
-      });
-    });
+    const keys = Object.keys(this.constraintsMap);
+    const fn = this.addMappedConstraint.bind(this);
+    keys.map(fn);
     return this;
+  }
+
+  addMappedConstraint(key) {
+    const { constraintsMap } = this;
+    const constraintNames = constraintsMap[key];
+    const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
+    const fn = this[fnName];
+    constraintNames.map(constraintName => {
+      fn(constraintName);
+    });
   }
 
   get constraintsMap() {
@@ -277,43 +316,6 @@ class YupMixed extends Base {
     const { nullable, isNullable } = this.constraints;
     const value = nullable || isNullable;
     this.addConstraint("nullable", { value, errName: "notOneOf" });
-    return this;
-  }
-
-  $const() {
-    return this;
-  }
-
-  // boolean https: //ajv.js.org/keywords.html#allof
-  $allOf() {
-    return this;
-  }
-
-  // https://ajv.js.org/keywords.html#anyof
-  $anyOf() {
-    return this;
-  }
-
-  // https: //ajv.js.org/keywords.html#oneof
-  $oneOf() {
-    return this;
-  }
-
-  $if() {
-    const $if = this.constraints.if;
-    // TODO: translate to when?
-    return this;
-  }
-
-  $then() {
-    const $then = this.constraints.then;
-    // TODO: use with if translated to when?
-    return this;
-  }
-
-  $else() {
-    const $else = this.constraints.else;
-    // TODO: use with if translated to when?
     return this;
   }
 

@@ -13,16 +13,21 @@ export class YupString extends YupMixed {
 
   convert() {
     super.convert();
-    this.normalize();
-    this.minLength()
-      .maxLength()
-      .pattern();
-    this.lowercase();
-    this.uppercase();
-    this.email();
-    this.url();
-    this.genericFormat();
     return this;
+  }
+
+  get typeEnabled() {
+    return [
+      "normalize",
+      "minLength",
+      "maxLength",
+      "pattern",
+      "lowercase",
+      "uppercase",
+      "email",
+      "url",
+      "genericFormat"
+    ];
   }
 
   trim() {
@@ -70,7 +75,7 @@ export class YupString extends YupMixed {
     if (!this.isUrl) return this;
     const constraintName = this.constraintNameFor("url", "format");
     const method = "url";
-    this.addConstraint("email", {
+    this.addConstraint("url", {
       constraintValue: true,
       constraintName,
       method,
