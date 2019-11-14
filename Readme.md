@@ -209,7 +209,7 @@ Release `2.0` will likely include a much improved infrastructure of suitable bui
 
 ### Custom constraint builder
 
-Version `1.9.13` and higher supports using a custom constraint builder to add and build constraints.
+Version `1.9.18` and higher supports using a custom constraint builder to add and build constraints. All factories are initialised in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
 
 ```js
 class MyConstraintBuilder extends ConstraintBuilder {
@@ -236,15 +236,21 @@ class MyConstraintBuilder extends ConstraintBuilder {
     return this.typeHandler;
   }
 }
+```
 
-const createConstraintBuilder = (typeHandler, opts) => {
-  // custom builder logic
-  return new MyConstraintBuilder(typeHandler, opts);
+To use a custom constraint builder we recommend subclassing the `ConstraintBuilder` class that comes with the library. Then create a factory method thart can instanciate it.
+
+```js
+const createConstraintBuilder = (typeHandler, config) => {
+  return new MyConstraintBuilder(typeHandler, config);
 };
 
-buildYup(jsonSchema, {
+const config = {
   createConstraintBuilder
-});
+  // ... more configuration
+};
+
+buildYup(jsonSchema, config);
 ```
 
 ### Mixed (any type)
@@ -686,7 +692,7 @@ const { yupSchema } = builder;
 
 You can pass an `errMessages` object in the optional `config` object argument with key mappings for your custom validation error messages.
 
-Internally the validator error messages are resolved with the instance method `valErrMessage` (from `Mixed` class)
+Internally the validator error messages are resolved via an instance of the `ErrorMessageHandler` calling the `valErrMessage` method.
 
 ```js
   notOneOf() {
@@ -699,22 +705,66 @@ Internally the validator error messages are resolved with the instance method `v
   }
 ```
 
-You can pass the `errMessages` as follows. Note that you can define error messages specific to a property such as `emailAdr.format` and generic messages prefixed with `$` such as `$email`
+#### Use a custom error message handler
+
+We recommend you subclass the existing `ErrorMessageHandler` as follow
 
 ```js
-  let config = {
-    errMessages: {
-      emailAdr: {
-        // note: would also work with email as the key
-        format: "emailAdr must be a valid email"
-      },
-      // generic fallback message for any email format validation
-      // note: if not present uses yup default validation message
-      $email: "Email format incorrect"
-    }
-  };
+class MyErrorMessageHandler extends ErrorMessageHandler {
+  // ...
+}
+
+const createErrorMessageHandler = (typeHandler, config = {}) => {
+  return new MyErrorMessageHandler(typeHandler, config);
+};
 ```
 
+You could f.ex override `errMessageFor` as follows, using the `type`
+
+```js
+  errMessageFor(name) {
+    return this.propertyErrMessageFor(name) || this.genericErrMessageFor(name)
+  }
+
+  propertyErrMessageFor(name) {
+    const { errMessages, key } = this;
+    const errMsg = errMessages[key];
+    if (!errMsg) return
+    return errMsg[name]
+  }
+
+  genericErrMessageFor(name) {
+    const { errMessages, type } = this;
+    const genricErrMsgMap = errMessages['_generic_'];
+    const fullName = `${type}.${name}`
+    return genricErrMsgMap[fullName] || genricErrMsgMap[name];
+  }
+```
+
+Then pass in your factory function in `config` as follows.
+
+```js
+const config = {
+  createErrorMessageHandler
+};
+```
+
+You can pass the `errMessages` as follows. Note that you can define error messages specific to a property such as `emailAdr.format` and generic messages prefixed with `$` such as `$email`.
+Note: This convention might well change in future releases.
+
+```js
+let config = {
+  errMessages: {
+    emailAdr: {
+      // note: would also work with email as the key
+      format: "emailAdr must be a valid email"
+    },
+    // generic fallback message for any email format validation
+    // note: if not present uses yup default validation message
+    $email: "Email format incorrect"
+  }
+};
+```
 
 The key entries can be either a function, taking a `value` argument or a static string.
 Here are some of the defaults that you can override as needed.
@@ -916,11 +966,6 @@ On his branch:
 - more...
 
 If you would like to further improved this library or add support for more validators than Yup, please help on this branch. Cheers!
-
-### Refactoring
-
-On the `master` branch we've added a `ConstraintBuilder` class which should contain all the logic to build the constraints from a set of options in the future. Currently this logic is on the `YupMixed` class where it really doesn't belong.
-YupMixed or any other Yup type class should delegate the building of a Yup constraint to a dedicated class.
 
 ## Ideas and suggestions
 

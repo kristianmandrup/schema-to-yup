@@ -1,8 +1,8 @@
 import { TypeMatcher } from "./_type-matcher";
 
 export class ConstraintBuilder extends TypeMatcher {
-  constructor(typeHandler, opts = {}) {
-    super(opts);
+  constructor(typeHandler, config = {}) {
+    super(config);
     this.typeHandler = typeHandler;
     this.constraintsAdded = {};
     this.delegators.map(name => {
@@ -11,7 +11,7 @@ export class ConstraintBuilder extends TypeMatcher {
   }
 
   get delegators() {
-    return ["errMessages", "base", "key", "constraints"];
+    return ["errMessages", "base", "key", "constraints", "errorMessageHandler"];
   }
 
   build(propName, opts = {}) {
@@ -25,6 +25,7 @@ export class ConstraintBuilder extends TypeMatcher {
       errName
     } = opts;
     yup = yup || this.base;
+
     constraintValue =
       constraintValue || propValue || this.constraints[propName];
 
@@ -39,13 +40,15 @@ export class ConstraintBuilder extends TypeMatcher {
 
     if (!yup[yupConstraintMethodName]) {
       this.warn(`Yup has no such API method: ${yupConstraintMethodName}`);
-      return this.typeHandler;
+      return this;
     }
 
     const constraintFn = yup[yupConstraintMethodName].bind(yup);
-    const errFn =
-      this.valErrMessage(constraintName) ||
-      (errName && this.valErrMessage(errName));
+
+    const constraintErrMsg = this.valErrMessage(constraintName);
+    const errErrMsg = errName && this.valErrMessage(errName);
+
+    const errFn = constraintErrMsg || errErrMsg;
 
     const constrOpts = {
       constraintName,
@@ -67,16 +70,13 @@ export class ConstraintBuilder extends TypeMatcher {
 
   nonPresentConstraintValue(
     constraintValue,
-    { constraintName, constraintFn },
-    errFn
+    { constraintName, constraintFn, errFn }
   ) {
     if (this.isPresent(constraintValue)) return;
-    // call yup constraint function with single value arguments (default)
 
     this.onConstraintAdded({ name: constraintName });
 
     const newBase = constraintFn(errFn);
-
     return newBase;
   }
 
@@ -85,21 +85,21 @@ export class ConstraintBuilder extends TypeMatcher {
     { constraintName, constraintFn, errFn }
   ) {
     if (!this.isPresent(constraintValue)) return;
+
     this.onConstraintAdded({ name: constraintName, value: constraintValue });
 
     if (this.isNoValueConstraint(constraintName)) {
       let specialNewBase = constraintFn(errFn);
       return specialNewBase;
     }
-    const newBase = this.isPresent(constraintValue)
-      ? constraintFn(constraintValue, errFn)
-      : constraintFn(errFn);
 
+    const newBase = constraintFn(constraintValue, errFn);
     return newBase;
   }
 
-  multiValueConstraint(values, { constraintName, yup, errFn }) {
+  multiValueConstraint(values, { constraintFn, constraintName, yup, errFn }) {
     if (!this.isPresent(values)) return;
+
     // call yup constraint function with multiple arguments
     if (!Array.isArray(values)) {
       this.warn("buildConstraint: values option must be an array of arguments");
@@ -107,7 +107,8 @@ export class ConstraintBuilder extends TypeMatcher {
     }
 
     this.onConstraintAdded({ name: constraintName, value: values });
-    const newBase = constraintFn(values, errFn);
+
+    const newBase = constraintFn(...values, errFn);
     return newBase;
   }
 
@@ -116,7 +117,7 @@ export class ConstraintBuilder extends TypeMatcher {
   }
 
   get noValueConstraints() {
-    return ["required", "email", "url"];
+    return ["required", "email", "url", "format"];
   }
 
   addValueConstraint(propName, { constraintName, errName } = {}) {
@@ -146,11 +147,8 @@ export class ConstraintBuilder extends TypeMatcher {
     };
   }
 
-  valErrMessage(constraint) {
-    const errMsg = this.errMessages[this.key]
-      ? this.errMessages[this.key][constraint]
-      : undefined;
-    return typeof errMsg === "function" ? errMsg(this.constraints) : errMsg;
+  valErrMessage(msgName) {
+    return this.errorMessageHandler.valErrMessage(msgName);
   }
 
   get aliasMap() {
