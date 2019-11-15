@@ -29,7 +29,7 @@ describe("string: email", () => {
       const yupSchema = buildYup(message, config);
       valid = yupSchema.validateSync({ emailAdr: "xx" });
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       valid = e.errors[0];
     }
     expect(valid).toBe(errMsg);

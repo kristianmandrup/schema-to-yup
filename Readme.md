@@ -260,6 +260,16 @@ const config = {
 buildYup(jsonSchema, config);
 ```
 
+Instead of using enabled with the full list, you can also use `extends`
+
+```js
+    extends: [
+      // custom additions
+      "ip",
+      // built in handlers all included automatically
+    ]
+```
+
 We welcome feedback on how to better structure the `config` object to make it easy and intuitive to add run-time configuration to suit your needs.
 
 ### Custom constraint builder

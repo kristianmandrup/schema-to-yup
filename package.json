@@ -18,6 +18,7 @@
   "typings": "schema-to-yup.d.ts",
   "dependencies": {
     "dashify": "^2.0.0",
+    "uniq": "^1.0.1",
     "uppercamelcase": "^3.0.0",
     "yup": "^0.27.0"
   },

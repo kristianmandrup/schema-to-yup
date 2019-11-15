@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import uniq from "uniq";
 
 class ConvertYupSchemaError extends Error {}
 
@@ -143,8 +144,19 @@ class YupMixed extends Base {
     return [];
   }
 
+  get $typeExtends() {
+    if (!Array.isArray(this.typeConfig.extends)) return;
+    return uniq([...this.typeConfig.extends, ...this.typeEnabled]);
+  }
+
+  get configuredTypeEnabled() {
+    return Array.isArray(this.typeConfig.enabled)
+      ? this.typeConfig.enabled
+      : this.typeEnabled;
+  }
+
   get $typeEnabled() {
-    return this.typeConfig.enabled || this.typeEnabled;
+    return this.$typeExtends || this.configuredTypeEnabled;
   }
 
   get enabled() {
