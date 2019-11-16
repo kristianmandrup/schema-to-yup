@@ -1,4 +1,4 @@
-import { TypeMatcher } from "../_type-matcher";
+import { TypeMatcher } from "./types/_type-matcher";
 
 export class ErrorMessageHandler extends TypeMatcher {
   constructor(typeHandler, config = {}) {

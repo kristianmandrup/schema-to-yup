@@ -270,6 +270,8 @@ Instead of using enabled with the full list, you can also use `extends`
     ]
 ```
 
+Note that if `convert` has entries and `extends` for the type configuration is not set (and no `enabled` list of constraints defined either) it will use all the entries in `convert` by default (ie. `extends` set to all keys).
+
 We welcome feedback on how to better structure the `config` object to make it easy and intuitive to add run-time configuration to suit your needs.
 
 ### Custom constraint builder
@@ -277,6 +279,8 @@ We welcome feedback on how to better structure the `config` object to make it ea
 Version `1.9.18` and higher supports using a custom constraint builder to add and build constraints. All factories are initialised in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
 
 ```js
+import { ConstraintBuilder } from "schema-to-yup";
+
 class MyConstraintBuilder extends ConstraintBuilder {
   constructor(typeHandler, opts = {}) {
     super(typeHandler, opts);
@@ -775,6 +779,8 @@ Internally the validator error messages are resolved via an instance of the `Err
 We recommend you subclass the existing `ErrorMessageHandler` as follow
 
 ```js
+import { ErrorMessageHandler } from "schema-to-yup";
+
 class MyErrorMessageHandler extends ErrorMessageHandler {
   // ...
 }

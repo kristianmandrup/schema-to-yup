@@ -150,7 +150,8 @@ class YupBuilder extends Base {
 }
 
 import * as types from "./types";
-// import { createYupSchemaEntry } from "./create-entry";
+export { ErrorMessageHandler } from "./error-message-handler";
+export { ConstraintBuilder } from "./constraint-builder";
 
 export {
   buildYup,

@@ -9,8 +9,8 @@ function isObjectType(obj) {
 
 import { Base } from "../base";
 import { createWhenCondition } from "../../conditions";
-import { ConstraintBuilder } from "../constraint_builder";
-import { ErrorMessageHandler } from "./error-message-handler";
+import { ConstraintBuilder } from "../../constraint-builder";
+import { ErrorMessageHandler } from "../../error-message-handler";
 
 class YupMixed extends Base {
   constructor(opts = {}) {
@@ -32,7 +32,14 @@ class YupMixed extends Base {
     this.typeConfig = this.config[this.type] || {};
     this.base = yup.mixed();
     this.errMessages = config.errMessages || {};
+    this.configureTypeConfig();
     this.constraintsAdded = {};
+  }
+
+  configureTypeConfig() {
+    if (this.typeConfig.enabled || this.typeConfig.extends) return;
+    if (!this.typeConfig.convert) return;
+    this.typeConfig.extends = Object.keys(this.typeConfig.convert);
   }
 
   isRequired(value) {
