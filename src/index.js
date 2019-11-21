@@ -125,9 +125,7 @@ class YupBuilder extends Base {
   }
 
   propToYupSchemaEntry({ name, key, value = {} }) {
-    const entryBuilder =
-      this.createYupSchemaEntry || this.config.createYupSchemaEntry;
-    return entryBuilder({
+    return this.createYupSchemaEntry({
       schema: this.schema,
       name,
       key,

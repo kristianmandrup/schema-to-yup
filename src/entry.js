@@ -57,15 +57,40 @@ class YupSchemaEntry extends Base {
         } must be a string, was ${typeof this.type} ${schema}`
       );
     }
+    return this.defaultType(config);
+  }
+
+  toMultiType() {
+    const { obj, config, value } = this;
+    if (!Array.isArray(value)) return;
+    const toMultiType = this.config.toMultiType;
+    if (toMultiType) {
+      return toMultiType(this);
+    }
+    // TODO
+    return;
+  }
+
+  toSingleType() {
+    if (Array.isArray(value)) return;
+    const toSingleType = this.config.toSingleType;
+    if (toSingleType) {
+      return toSingleType(this);
+    }
     const { obj, config } = this;
     const typeHandlerNames = Object.keys(this.types);
+    let result;
     // TODO: iterate all registered type handlers in this.types
     for (let typeName of typeHandlerNames) {
       const typeFn = this.types[typeName];
       const result = typeFn(obj, config);
-      if (result) return result;
+      if (result) break;
     }
-    return this.defaultType(config);
+    return result;
+  }
+
+  toDefaultEntry() {
+    return this.defaultType(this.config);
   }
 
   defaultType(config) {
