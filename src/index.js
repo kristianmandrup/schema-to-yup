@@ -109,9 +109,6 @@ class YupBuilder extends Base {
     };
     const keys = Object.keys(properties);
     return keys.reduce((acc, key) => {
-      // this.logInfo("propsToShape", {
-      //   key
-      // });
       const value = properties[key];
       const yupSchemaEntry = this.propToYupSchemaEntry({
         name,

@@ -184,6 +184,32 @@ Currently the following schema types are supported:
 - `object`
 - `string`
 
+## Custom entry buildrs
+
+You can pass in custom functions for the followin kinds of type entry values
+
+- object value, such as `{type: 'string'}`
+- list value, such as `["string", "integer"]`
+
+The custom functions are:
+
+- `toSingleType(yupSchemaEntryBuilder)`
+- `toMultiType(yupSchemaEntryBuilder)`
+
+Each takes an instance `yupSchemaEntryBuilder` of `YupSchemaEntry`, which primarily holds the following properties of interest, that you can leverage in your custom handler logic
+
+```js
+{
+  schema,
+  key,
+  name,
+  value,
+  type,
+  obj,
+  config
+}
+```
+
 ### Custom type handlers
 
 You can pass any custom typehandlers in a `typeHandlers` object as part of the `config` object passes. See `setTypeHandlers()` in `entry.js` for how this works internally.

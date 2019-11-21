@@ -18,7 +18,7 @@ class YupSchemaEntry extends Base {
     this.value = value || {};
     this.config = config || {};
     this.name = name;
-    this.type = value.type;
+    this.type = Array.isArray(value) ? "array" : value.type;
     this.setTypeHandlers();
   }
 
@@ -57,11 +57,11 @@ class YupSchemaEntry extends Base {
         } must be a string, was ${typeof this.type} ${schema}`
       );
     }
-    return this.defaultType(config);
+    return this.toMultiType() || this.toSingleType() || this.toDefaultType();
   }
 
   toMultiType() {
-    const { obj, config, value } = this;
+    const { value } = this;
     if (!Array.isArray(value)) return;
     const toMultiType = this.config.toMultiType;
     if (toMultiType) {
@@ -72,15 +72,17 @@ class YupSchemaEntry extends Base {
   }
 
   toSingleType() {
+    const { value } = this;
     if (Array.isArray(value)) return;
     const toSingleType = this.config.toSingleType;
     if (toSingleType) {
       return toSingleType(this);
     }
+
     const { obj, config } = this;
     const typeHandlerNames = Object.keys(this.types);
     let result;
-    // TODO: iterate all registered type handlers in this.types
+    // iterate all registered type handlers in this.types
     for (let typeName of typeHandlerNames) {
       const typeFn = this.types[typeName];
       const result = typeFn(obj, config);
