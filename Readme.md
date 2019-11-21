@@ -184,7 +184,7 @@ Currently the following schema types are supported:
 - `object`
 - `string`
 
-## Custom entry buildrs
+## Custom entry builders
 
 You can pass in custom functions for the followin kinds of type entry values
 
