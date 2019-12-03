@@ -108,7 +108,7 @@ export class ConstraintBuilder extends TypeMatcher {
 
     this.onConstraintAdded({ name: constraintName, value: values });
 
-    const newBase = constraintFn(...values, errFn);
+    const newBase = constraintFn(values, errFn);
     return newBase;
   }
 

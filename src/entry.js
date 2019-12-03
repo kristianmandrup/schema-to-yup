@@ -11,8 +11,10 @@ import {
 class YupSchemaEntryError extends Error {}
 
 class YupSchemaEntry extends Base {
-  constructor({ schema, name, key, value, config }) {
-    super(config);
+  constructor(opts) {
+    super(opts.config);
+    const { schema, name, key, value, config } = opts;
+    this.opts = opts;
     this.schema = schema;
     this.key = key;
     this.value = value || {};
@@ -45,7 +47,9 @@ class YupSchemaEntry extends Base {
   }
 
   error(msg, data) {
-    data ? console.error(msg, data) : console.error(msg);
+    data
+      ? console.error(msg, data, ...this.opts)
+      : console.error(msg, ...this.opts);
     throw new YupSchemaEntryError(msg);
   }
 
@@ -95,12 +99,12 @@ class YupSchemaEntry extends Base {
   }
 
   toDefaultEntry() {
-    return this.defaultType(this.config);
+    return this.defaultType();
   }
 
-  defaultType(config) {
+  defaultType() {
     // return this.mixed(config)
-    this.error("toEntry: unknown type", config);
+    this.error("toEntry: unknown type", this.type);
   }
 
   get obj() {
