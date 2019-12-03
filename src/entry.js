@@ -44,7 +44,8 @@ class YupSchemaEntry extends Base {
     return typeof this.type === "string";
   }
 
-  error(msg) {
+  error(msg, data) {
+    data ? console.error(msg, data) : console.error(msg);
     throw new YupSchemaEntryError(msg);
   }
 
@@ -57,7 +58,7 @@ class YupSchemaEntry extends Base {
         } must be a string, was ${typeof this.type} ${schema}`
       );
     }
-    return this.toMultiType() || this.toSingleType() || this.toDefaultType();
+    return this.toMultiType() || this.toSingleType() || this.toDefaultEntry();
   }
 
   toMultiType() {
@@ -85,7 +86,9 @@ class YupSchemaEntry extends Base {
     // iterate all registered type handlers in this.types
     for (let typeName of typeHandlerNames) {
       const typeFn = this.types[typeName];
-      const result = typeFn(obj, config);
+      if (typeFn) {
+        result = typeFn(obj, config);
+      }
       if (result) break;
     }
     return result;
