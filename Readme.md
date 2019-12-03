@@ -13,6 +13,18 @@ It also supports some extra convenience schema properties that make it more "smo
 
 According to the JSON schema specs, you are free to add extra metadata to the field schema definitions beyond those supported "natively".
 
+## Usage notes
+
+Please be aware that this library might contain bugs or be incomplete.
+To circumvent this, use the one of the customisation hooks or use an earlier more stable version such as `1.9.14` (or thereabouts).
+
+Customisation hooks:
+
+- [entry builders](#Custom-entry-builders)
+- [type handlers](#Custom-type-handlers)
+- [constraint handler functions](#Custom-constraint-handler-functions)
+- [constraint builder](#Custom-constraint-builder)
+
 ## Quick start
 
 Install
@@ -200,13 +212,7 @@ Each takes an instance `yupSchemaEntryBuilder` of `YupSchemaEntry`, which primar
 
 ```js
 {
-  schema,
-  key,
-  name,
-  value,
-  type,
-  obj,
-  config
+  schema, key, name, value, type, obj, config;
 }
 ```
 
