@@ -62,7 +62,12 @@ export class ConstraintBuilder extends TypeMatcher {
       this.presentConstraintValue(constraintValue, constrOpts) ||
       this.nonPresentConstraintValue(constraintValue, constrOpts);
 
-    if (newBase) return newBase;
+    if (newBase) {
+      const { _whitelist } = newBase;
+      const list = _whitelist && _whitelist.list;
+      console.log({ newBase, whitelist: list });
+      return newBase;
+    }
 
     this.warn("buildConstraint: missing value or values options");
     return yup;
@@ -103,12 +108,13 @@ export class ConstraintBuilder extends TypeMatcher {
     // call yup constraint function with multiple arguments
     if (!Array.isArray(values)) {
       this.warn("buildConstraint: values option must be an array of arguments");
-      return yup;
+      return;
     }
 
     this.onConstraintAdded({ name: constraintName, value: values });
-
+    console.log("multiValueConstraint", values, errFn);
     const newBase = constraintFn(values, errFn);
+    console.log("multiValueConstraint", newBase);
     return newBase;
   }
 
