@@ -207,39 +207,12 @@ class YupMixed extends Base {
     return this;
   }
 
-  addValueConstraint(propName, { constraintName, errName } = {}) {
-    return this.constraintBuilder.addConstraint(propName, {
-      constraintName,
-      value: true,
-      errName
-    });
-  }
-
-  get aliasMap() {
-    return {
-      oneOf: "oneOf",
-      enum: "oneOf",
-      anyOf: "oneOf"
-      // ...
-    };
-  }
-
-  buildConstraint(propName, opts = {}) {
-    return this.constraintBuilder.build(propName, opts);
+  addValueConstraint(propName, opts) {
+    return this.constraintBuilder.addConstraint(propName, opts);
   }
 
   addConstraint(propName, opts) {
-    const constraint = this.buildConstraint(propName, opts);
-    if (constraint) {
-      console.log("addConstraint", constraint);
-      this.base = constraint;
-    }
-    return this;
-  }
-
-  onConstraintAdded({ name, value }) {
-    this.constraintsAdded[name] = value;
-    return this;
+    return this.constraintBuilder.addConstraint(propName, opts);
   }
 
   addMappedConstraints() {

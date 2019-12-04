@@ -102,7 +102,7 @@ export class ConstraintBuilder extends TypeMatcher {
     return newBase;
   }
 
-  multiValueConstraint(values, { constraintFn, constraintName, yup, errFn }) {
+  multiValueConstraint(values, { constraintFn, constraintName, errFn }) {
     if (!this.isPresent(values)) return;
 
     // call yup constraint function with multiple arguments
@@ -135,9 +135,14 @@ export class ConstraintBuilder extends TypeMatcher {
   }
 
   addConstraint(propName, opts) {
-    // console.log("addConstraint", propName, opts);
     const constraint = this.build(propName, opts);
-    this.base = constraint || this.base;
+    if (constraint) {
+      console.log("addConstraint", propName, constraint);
+      this.typeHandler.base = constraint;
+      const { _whitelist } = constraint;
+      const list = _whitelist && _whitelist.list;
+      console.log({ list });
+    }
     return this.typeHandler;
   }
 
