@@ -232,6 +232,18 @@ Currently the following schema types are supported:
 - `object`
 - `string`
 
+## Multi-type constraints
+
+This library currently does not come with built-in support for multi valued (list/array) type constraints such as `['string', 'null']`
+
+See [Issue 52](https://github.com/kristianmandrup/schema-to-yup/issues/52#issuecomment-561720235) for a discussion and current state.
+
+The key is to add your own logic for the `toMultiType` function/method of `YupSchemaEntry`.
+
+You can either extend the `YupSchemaEntry` class and implement a custom `toMultiType` method, then pass (on `config` object) in a custom factory method `createYupSchemaEntry`.
+
+A simpler approach is to pass in a custom `toMultiType` function add your own logic as described in the issue. Start simple and gradually support more scenarios. You can leverage the built in infrastructure of this library.
+
 ## Custom entry builders
 
 You can pass in custom functions for the followin kinds of type entry values
