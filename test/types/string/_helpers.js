@@ -14,7 +14,6 @@ export const create = fieldDef => {
 
 export const createStr = (value, key = "x") => {
   const obj = { value, config, key, type: "string" };
-  console.log("createStr", obj);
   return toYupString(obj, config);
 };
 
@@ -24,10 +23,8 @@ export const createStrNoKey = value => {
 };
 
 export const createSchema = (schemaEntry, label = "value") => {
-  console.log({ schemaEntry });
   const { _whitelist } = schemaEntry;
   const list = _whitelist && _whitelist.list;
-  console.log({ list });
 
   return yup.object().shape({
     [label]: schemaEntry

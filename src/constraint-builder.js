@@ -31,7 +31,7 @@ export class ConstraintBuilder extends TypeMatcher {
 
     if (this.isNothing(constraintValue)) {
       this.warn("no prop value");
-      return yup;
+      return false;
     }
     constraintName = constraintName || propName;
     method = method || constraintName;
@@ -39,8 +39,9 @@ export class ConstraintBuilder extends TypeMatcher {
     const yupConstraintMethodName = this.aliasMap[method] || method;
 
     if (!yup[yupConstraintMethodName]) {
-      this.warn(`Yup has no such API method: ${yupConstraintMethodName}`);
-      return this;
+      const msg = `Yup has no such API method: ${yupConstraintMethodName}`;
+      this.warn(msg);
+      return false;
     }
 
     const constraintFn = yup[yupConstraintMethodName].bind(yup);
@@ -57,20 +58,23 @@ export class ConstraintBuilder extends TypeMatcher {
       errFn
     };
 
-    const newBase =
-      this.multiValueConstraint(values, constrOpts) ||
-      this.presentConstraintValue(constraintValue, constrOpts) ||
-      this.nonPresentConstraintValue(constraintValue, constrOpts);
+    const multi = this.multiValueConstraint(values, constrOpts);
+    const present = this.presentConstraintValue(constraintValue, constrOpts);
+    const nonPresent = this.nonPresentConstraintValue(
+      constraintValue,
+      constrOpts
+    );
 
+    const newBase = multi || present || nonPresent;
     if (newBase) {
       const { _whitelist } = newBase;
       const list = _whitelist && _whitelist.list;
-      console.log({ newBase, whitelist: list });
+      this.base = newBase;
       return newBase;
     }
 
     this.warn("buildConstraint: missing value or values options");
-    return yup;
+    return false;
   }
 
   nonPresentConstraintValue(
@@ -112,9 +116,7 @@ export class ConstraintBuilder extends TypeMatcher {
     }
 
     this.onConstraintAdded({ name: constraintName, value: values });
-    console.log("multiValueConstraint", values, errFn);
     const newBase = constraintFn(values, errFn);
-    console.log("multiValueConstraint", newBase);
     return newBase;
   }
 
@@ -137,13 +139,12 @@ export class ConstraintBuilder extends TypeMatcher {
   addConstraint(propName, opts) {
     const constraint = this.build(propName, opts);
     if (constraint) {
-      console.log("addConstraint", propName, constraint);
       this.typeHandler.base = constraint;
       const { _whitelist } = constraint;
       const list = _whitelist && _whitelist.list;
-      console.log({ list });
+      return constraint;
     }
-    return this.typeHandler;
+    return false;
   }
 
   onConstraintAdded({ name, value }) {
