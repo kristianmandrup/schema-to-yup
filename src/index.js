@@ -30,6 +30,7 @@ class YupBuilder extends Base {
     const props = this.getProps(schema);
     this.type = type;
     this.properties = props;
+    this.additionalProps = this.getAdditionalProperties(schema);
     this.required = this.getRequired(schema);
 
     if (!isObject(type)) {
@@ -49,6 +50,10 @@ class YupBuilder extends Base {
 
     this.shapeConfig = shapeConfig;
     this.validSchema = true;
+  }
+
+  getAdditionalProperties(schema) {
+    return schema.additionalProperties;
   }
 
   getRequired(obj) {
@@ -103,7 +108,18 @@ class YupBuilder extends Base {
     return this.config.isRequired(value);
   }
 
-  propsToShape({ name }) {
+  propsToShape(opts = {}) {
+    const shape = this.objPropsToShape(opts);
+    this.objPropsShape = shape;
+    this.addPropsShape = this.additionalPropsToShape(opts, shape);
+    return shape;
+  }
+
+  additionalPropsToShape(opts, shape) {
+    return shape;
+  }
+
+  objPropsToShape({ name }) {
     const properties = {
       ...this.properties
     };
