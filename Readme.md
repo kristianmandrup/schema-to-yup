@@ -185,6 +185,42 @@ const schema = yup.object().shape({
 });
 ```
 
+## Additional properties
+
+Currently this library does not have built-in support for the `additionalProperties` feature of JSON schema as described [here](https://json-schema.org/understanding-json-schema/reference/object.html)
+
+```js
+{
+  "type": "object",
+  "properties": {
+    "number":      { "type": "number" },
+    "street_name": { "type": "string" },
+    "street_type": { "type": "string",
+                     "enum": ["Street", "Avenue", "Boulevard"]
+                   }
+  },
+  "additionalProperties": { "type": "string" }
+}
+```
+
+See [issue 55](https://github.com/kristianmandrup/schema-to-yup/issues/55#issuecomment-561127144)
+
+Yup does not directly support this, so it would require some "hacking" to make it work.
+
+You can extend `YupBuilder` to include custom logic to support `additionalProperties`
+
+```js
+class YupBuilderWithSupportForAdditionalProperties extends YupBuilder {
+  additionalPropsToShape(opts, shape) {
+    // do your magic here using this.additionalProps
+    // make new yup constraint function calls on the incoming yup shape object
+    return shape;
+  }
+}
+```
+
+See the issue for hints on how to achieve this.
+
 ## Types
 
 Currently the following schema types are supported:
