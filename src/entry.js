@@ -8,6 +8,8 @@ import {
   toYupDate
 } from "./types";
 
+import { createPropertyValueResolver } from "./property-value-resolver";
+
 class YupSchemaEntryError extends Error {}
 
 class YupSchemaEntry extends Base {
@@ -22,6 +24,26 @@ class YupSchemaEntry extends Base {
     this.name = name;
     this.type = Array.isArray(value) ? "array" : value.type;
     this.setTypeHandlers();
+    this.setPropertyHandler();
+  }
+
+  setPropertyHandler() {
+    const { config, types, value, name, key, type, schema } = this;
+    const opts = {
+      type,
+      types,
+      value,
+      name,
+      key,
+      schema
+    };
+    const createPropertyValueHandlerFn =
+      config.createPropertyValueHandler || this.createPropertyValueHandler;
+    this.propertyValueHandler = createPropertyValueHandlerFn(opts, config);
+  }
+
+  createPropertyValueHandler(opts, config) {
+    return createPropertyValueResolver(opts, config);
   }
 
   get defaultTypeHandlerMap() {
@@ -43,7 +65,8 @@ class YupSchemaEntry extends Base {
   }
 
   isValidSchema() {
-    return typeof this.type === "string";
+    const { type } = this;
+    return this.isStringType(type);
   }
 
   error(msg, data) {
@@ -62,59 +85,7 @@ class YupSchemaEntry extends Base {
         } must be a string, was ${typeof this.type} ${schema}`
       );
     }
-    return this.toMultiType() || this.toSingleType() || this.toDefaultEntry();
-  }
-
-  toMultiType() {
-    const { value } = this;
-    if (!Array.isArray(value)) return;
-    const toMultiType = this.config.toMultiType;
-    if (toMultiType) {
-      return toMultiType(this);
-    }
-    // TODO
-    return;
-  }
-
-  toSingleType() {
-    const { value } = this;
-    if (Array.isArray(value)) return;
-    const toSingleType = this.config.toSingleType;
-    if (toSingleType) {
-      return toSingleType(this);
-    }
-
-    const { obj, config } = this;
-    const typeHandlerNames = Object.keys(this.types);
-    let result;
-    // iterate all registered type handlers in this.types
-    for (let typeName of typeHandlerNames) {
-      const typeFn = this.types[typeName];
-      if (typeFn) {
-        result = typeFn(obj, config);
-      }
-      if (result) break;
-    }
-    return result;
-  }
-
-  toDefaultEntry() {
-    return this.defaultType();
-  }
-
-  defaultType() {
-    // return this.mixed(config)
-    this.error("toEntry: unknown type", this.type);
-  }
-
-  get obj() {
-    return {
-      schema: this.schema,
-      key: this.key,
-      value: this.value,
-      type: this.type,
-      config: this.config
-    };
+    return this.propertyValueHandler.resolve(opts, config);
   }
 }
 

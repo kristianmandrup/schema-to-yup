@@ -2,7 +2,10 @@ import * as yup from "yup";
 import { Base, YupSchemaEntry, YupSchemaEntryError } from "./entry";
 
 import { createYupSchemaEntry } from "./create-entry";
-
+export {
+  PropertyValueResolver,
+  createPropertyValueResolver
+} from "./property-value-resolver";
 import { extendYupApi } from "./validator-bridge";
 
 function isObject(type) {

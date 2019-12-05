@@ -40,10 +40,5 @@ describe("enum", () => {
       });
       expect(valid).toBeFalsy();
     });
-
-    test("invalid email - not present", () => {
-      const valid = schema.isValidSync({});
-      expect(valid).toBeFalsy();
-    });
   });
 });

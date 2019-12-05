@@ -25,6 +25,10 @@ class TypeMatcher extends Loggable {
     return obj === Object(obj);
   }
 
+  isArrayType(value) {
+    return Array.isArray(value);
+  }
+
   isNumberType(num) {
     return !isNaN(num);
   }

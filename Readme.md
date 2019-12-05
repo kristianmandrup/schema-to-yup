@@ -240,9 +240,67 @@ See [Issue 52](https://github.com/kristianmandrup/schema-to-yup/issues/52#issuec
 
 The key is to add your own logic for the `toMultiType` function/method of `YupSchemaEntry`.
 
-You can either extend the `YupSchemaEntry` class and implement a custom `toMultiType` method, then pass (on `config` object) in a custom factory method `createYupSchemaEntry`.
+You can pass a custom factory method `createMultiTypeValueResolver` on the `config` object.
 
-A simpler approach is to pass in a custom `toMultiType` function add your own logic as described in the issue. Start simple and gradually support more scenarios. You can leverage the built in infrastructure of this library.
+A more direct approach is to pass in a custom `toMultiType` function with your own logic as described in the issue. Start simple and gradually support more complex scenarios.
+
+You can leverage the built in infrastructure of this library in many ways to extend it or customize it as needed. Use the library infrastructure as building blocks.
+
+Sample (untested):
+
+```js
+export const createPropertyValueHandler = (opts, config) => {
+  return new PropertyValueResolver(opts, config);
+};
+
+export class MyMultiTypeValueResolver extends MultiTypeValueResolver {
+  constructor(opts, config) {
+    this.propertyHandler = createPropertyValueHandler(opts, config);
+  }
+
+  resolve() {
+    const { value, name } = this;
+    let constraintListValue = this.normalizeValue(value); // ['string', 'null']
+    const multiTypePropSchema = constraintListValue.reduce(
+      (accSchema, constraintValue) => {
+        return this.resolvePropertyValue(constraintValue, accSchema);
+      },
+      null
+    );
+
+    return yup.mixed().test({
+      name,
+      exclusive: true,
+      params: {},
+      message: "${path} does not conform to all constraints defined",
+      test: val => {
+        return multiTypePropSchema.validateSync(val);
+      }
+    });
+  }
+
+  resolvePropertyValue(constraintValue, accSchema) {
+    const opts = {
+      ...this.opts,
+      constraintValue
+    };
+    return this.propertyHandler.resolve(opts, this.config);
+  }
+
+  // expand/normalize to list of objects each with a valid type entry
+  normalizeList(multiTypeList) {
+    return multiTypeList.reduce((acc, entry) => {
+      acc.push(normalizedEntry);
+      return acc;
+    }, []);
+  }
+
+  normalizeTypeEntry(entry) {
+    if (!this.isStringType(entry)) return entry;
+    return { type: entry };
+  }
+}
+```
 
 ## Custom entry builders
 

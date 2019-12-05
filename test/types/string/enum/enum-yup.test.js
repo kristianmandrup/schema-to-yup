@@ -6,12 +6,6 @@ describe.only("yup schema validation", () => {
   const shapeConfig = {
     name
   };
-  console.log({ name });
-
-  const { _whitelist } = name;
-  const list = _whitelist && _whitelist.list;
-  console.log({ list });
-
   const schema = yup.object().shape(shapeConfig);
   test("valid json is valid", () => {
     const valid = schema.isValidSync({ name: "a" });
