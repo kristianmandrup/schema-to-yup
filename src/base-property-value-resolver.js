@@ -5,7 +5,8 @@ export class PropertyValueResolverError extends Error {}
 export class BasePropertyValueResolver extends Base {
   constructor(opts, config) {
     super(config);
-    const { value, type, name, key, schema, types } = opts;
+    const { value, type, kind, name, key, schema, types } = opts;
+    this.kind = kind;
     this.value = value;
     this.schema = schema;
     this.key = key;
@@ -32,6 +33,7 @@ export class BasePropertyValueResolver extends Base {
       key: this.key,
       value: this.value,
       type: this.type,
+      kind: this.kind,
       config: this.config
     };
   }

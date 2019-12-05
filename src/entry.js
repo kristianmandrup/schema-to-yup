@@ -22,15 +22,18 @@ class YupSchemaEntry extends Base {
     this.value = value || {};
     this.config = config || {};
     this.name = name;
-    this.type = Array.isArray(value) ? "array" : value.type;
+    const type = Array.isArray(value) ? "array" : value.type;
+    this.kind = type === "array" ? "multi" : single;
+    this.type = type;
     this.setTypeHandlers();
     this.setPropertyHandler();
   }
 
   setPropertyHandler() {
-    const { config, types, value, name, key, type, schema } = this;
+    const { config, types, value, name, key, type, kind, schema } = this;
     const opts = {
       type,
+      kind,
       types,
       value,
       name,
