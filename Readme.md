@@ -520,6 +520,9 @@ No keys
 - `uppercase`
 - `trim`
 
+For pattern (RegExp) you can additionally provide a flags property, such as `flags: 'i'`.
+Will be converted to a regexp using `new RegExp(pattern, flags)`
+
 ## Conditional logic
 
 Basic support for [when conditions](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) as requested and outlined in [this issue](https://github.com/kristianmandrup/schema-to-yup/issues/14) is now included.
