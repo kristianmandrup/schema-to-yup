@@ -107,11 +107,11 @@ export class YupString extends YupMixed {
   }
 
   pattern() {
-    const { pattern } = this.constraints;
+    const { pattern, flags } = this.constraints;
     if (!pattern) {
       return this;
     }
-    const regex = new RegExp(pattern);
+    const regex = new RegExp(pattern, flags);
     const errMsg =
       this.valErrMessage("pattern") ||
       this.valErrMessage("matches") ||
