@@ -6,8 +6,8 @@ describe("oneOf", () => {
       expect(() => createStr({ oneOf: ["2"] })).not.toThrow();
     });
 
-    test.only("negative - ok", () => {
-      expect(() => createStr({ oneOf: -1 })).not.toThrow();
+    test("negative - ok", () => {
+      expect(() => createStr({ oneOf: [-2] })).not.toThrow();
     });
   });
 

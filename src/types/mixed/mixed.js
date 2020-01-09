@@ -259,10 +259,9 @@ class YupMixed extends Base {
     values = Array.isArray(values) ? values : [values];
     // using alias
     const alias = ["oneOf", "enum", "anyOf"].find(key => {
-      return this.constraints[key];
+      return this.constraints[key] !== undefined;
     });
     // TODO: pass value as constraintValue not value
-
     return this.addConstraint(alias, { values });
   }
 
