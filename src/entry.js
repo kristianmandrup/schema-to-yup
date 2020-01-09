@@ -23,7 +23,7 @@ class YupSchemaEntry extends Base {
     this.config = config || {};
     this.name = name;
     const type = Array.isArray(value) ? "array" : value.type;
-    this.kind = type === "array" ? "multi" : single;
+    this.kind = type === "array" ? "multi" : "single";
     this.type = type;
     this.setTypeHandlers();
     this.setPropertyHandler();
