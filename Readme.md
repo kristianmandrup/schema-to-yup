@@ -13,12 +13,10 @@ It also supports some extra convenience schema properties that make it more "smo
 
 According to the JSON schema specs, you are free to add extra metadata to the field schema definitions beyond those supported "natively".
 
-## Usage notes
+## Customisation hooks
 
-Please be aware that this library might contain bugs or be incomplete.
-To circumvent this, use the one of the customisation hooks or use an earlier more stable version such as `1.9.14` (or thereabouts).
-
-Customisation hooks:
+This library is built to be easy to customise or extend to suit individual developer needs.
+|Use any of the following customisation hooks to add custom features, circumvent missing functionality or bugs or extend any way you see fit. You can even use these hooks to support a different validator library, leveraging the generic schema validator builder infrastructure.
 
 - [entry builders](#Custom-entry-builders)
 - [type handlers](#Custom-type-handlers)
@@ -185,42 +183,6 @@ const schema = yup.object().shape({
 });
 ```
 
-## Additional properties
-
-Currently this library does not have built-in support for the `additionalProperties` feature of JSON schema as described [here](https://json-schema.org/understanding-json-schema/reference/object.html)
-
-```js
-{
-  "type": "object",
-  "properties": {
-    "number":      { "type": "number" },
-    "street_name": { "type": "string" },
-    "street_type": { "type": "string",
-                     "enum": ["Street", "Avenue", "Boulevard"]
-                   }
-  },
-  "additionalProperties": { "type": "string" }
-}
-```
-
-See [issue 55](https://github.com/kristianmandrup/schema-to-yup/issues/55#issuecomment-561127144)
-
-Yup does not directly support this, so it would require some "hacking" to make it work.
-
-You can extend `YupBuilder` to include custom logic to support `additionalProperties`
-
-```js
-class YupBuilderWithSupportForAdditionalProperties extends YupBuilder {
-  additionalPropsToShape(opts, shape) {
-    // do your magic here using this.additionalProps
-    // make new yup constraint function calls on the incoming yup shape object
-    return shape;
-  }
-}
-```
-
-See the issue for hints on how to achieve this.
-
 ## Types
 
 Currently the following schema types are supported:
@@ -232,21 +194,78 @@ Currently the following schema types are supported:
 - `object`
 - `string`
 
+### Mixed (any type)
+
+- `strict`
+- `default`
+- `nullable`
+- `required`
+- `notRequired`
+- `oneOf` (`enum`, `anyOf`)
+- `notOneOf`
+- `when` _NEW_
+- `isType` _NEW_
+- `nullable` (`isNullable`) _NEW_
+
+### Array
+
+- `ensure`
+- `compact`
+- `items` (`of`)
+- `maxItems` (`max`)
+- `minItems` (`min`)
+- `itemsOf` (`of`) _NEW_
+
+### Boolean
+
+No keys
+
+### Date
+
+- `maxDate` (`max`)
+- `minDate` (`min`)
+
+### Number
+
+- `integer`
+- `moreThan` (`exclusiveMinimum`)
+- `lessThan` (`exclusiveMaximum`)
+- `positive`
+- `negative`
+- `min` (`minimum`)
+- `max` (`maximum`)
+- `truncate`
+- `round`
+
+### Object
+
+- `camelCase`
+- `constantCase`
+- `noUnknown` (`propertyNames`)
+
+### String
+
+- `minLength` (`min`)
+- `maxLength` (`max`)
+- `pattern` (`matches` or `regex`)
+- `email` (`format: 'email'`)
+- `url` (`format: 'url'`)
+- `lowercase`
+- `uppercase`
+- `trim`
+
+For pattern (RegExp) you can additionally provide a flags property, such as `flags: 'i'`.
+Will be converted to a regexp using `new RegExp(pattern, flags)`
+
 ## Multi-type constraints
 
 This library currently does not come with built-in support for multi valued (list/array) type constraints such as `['string', 'null']`
 
 See [Issue 52](https://github.com/kristianmandrup/schema-to-yup/issues/52#issuecomment-561720235) for a discussion and current state.
 
-The key is to add your own logic for the `toMultiType` function/method of `YupSchemaEntry`.
+To support this, you can either add your own logic for the `toMultiType` function/method of `YupSchemaEntry` or pass a custom factory method `createMultiTypeValueResolver` on the `config` object.
 
-You can pass a custom factory method `createMultiTypeValueResolver` on the `config` object.
-
-A more direct approach is to pass in a custom `toMultiType` function with your own logic as described in the issue. Start simple and gradually support more complex scenarios.
-
-You can leverage the built in infrastructure of this library in many ways to extend it or customize it as needed. Use the library infrastructure as building blocks.
-
-Sample (untested):
+Sample code for multi type support (untested):
 
 ```js
 export const createPropertyValueHandler = (opts, config) => {
@@ -304,7 +323,7 @@ export class MyMultiTypeValueResolver extends MultiTypeValueResolver {
 
 ## Custom entry builders
 
-You can pass in custom functions for the followin kinds of type entry values
+You can pass in custom functions for the following kinds of type entry values
 
 - object value, such as `{type: 'string'}`
 - list value, such as `["string", "integer"]`
@@ -414,7 +433,7 @@ We welcome feedback on how to better structure the `config` object to make it ea
 
 ### Custom constraint builder
 
-Version `1.9.18` and higher supports using a custom constraint builder to add and build constraints. All factories are initialised in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
+ This library supports using a custom constraint builder to add and build constraints. All factories are initialised in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
 
 ```js
 import { ConstraintBuilder } from "schema-to-yup";
@@ -459,69 +478,6 @@ const config = {
 
 buildYup(jsonSchema, config);
 ```
-
-### Mixed (any type)
-
-- `strict`
-- `default`
-- `nullable`
-- `required`
-- `notRequired`
-- `oneOf` (`enum`, `anyOf`)
-- `notOneOf`
-- `when` _NEW_
-- `isType` _NEW_
-- `nullable` (`isNullable`) _NEW_
-
-### Array
-
-- `ensure`
-- `compact`
-- `items` (`of`)
-- `maxItems` (`max`)
-- `minItems` (`min`)
-- `itemsOf` (`of`) _NEW_
-
-### Boolean
-
-No keys
-
-### Date
-
-- `maxDate` (`max`)
-- `minDate` (`min`)
-
-### Number
-
-- `integer`
-- `moreThan` (`exclusiveMinimum`)
-- `lessThan` (`exclusiveMaximum`)
-- `positive`
-- `negative`
-- `min` (`minimum`)
-- `max` (`maximum`)
-- `truncate`
-- `round`
-
-### Object
-
-- `camelCase`
-- `constantCase`
-- `noUnknown` (`propertyNames`)
-
-### String
-
-- `minLength` (`min`)
-- `maxLength` (`max`)
-- `pattern` (`matches` or `regex`)
-- `email` (`format: 'email'`)
-- `url` (`format: 'url'`)
-- `lowercase`
-- `uppercase`
-- `trim`
-
-For pattern (RegExp) you can additionally provide a flags property, such as `flags: 'i'`.
-Will be converted to a regexp using `new RegExp(pattern, flags)`
 
 ## Conditional logic
 
@@ -603,6 +559,42 @@ The best and easiest way to do this is to extend the `WhenCondition` class which
 
 See the `src/conditions/legacy` folder for the legacy `1.9.0` logic that works but has limited functionality.
 
+## Additional properties
+
+Currently this library does not have built-in support for the `additionalProperties` feature of JSON schema as described [here](https://json-schema.org/understanding-json-schema/reference/object.html)
+
+```js
+{
+  "type": "object",
+  "properties": {
+    "number":      { "type": "number" },
+    "street_name": { "type": "string" },
+    "street_type": { "type": "string",
+                     "enum": ["Street", "Avenue", "Boulevard"]
+                   }
+  },
+  "additionalProperties": { "type": "string" }
+}
+```
+
+See [issue 55](https://github.com/kristianmandrup/schema-to-yup/issues/55#issuecomment-561127144)
+
+Yup does not directly support this, so it would require some "hacking" to make it work.
+
+You can extend `YupBuilder` to include custom logic to support `additionalProperties`
+
+```js
+class YupBuilderWithSupportForAdditionalProperties extends YupBuilder {
+  additionalPropsToShape(opts, shape) {
+    // do your magic here using this.additionalProps
+    // make new yup constraint function calls on the incoming yup shape object
+    return shape;
+  }
+}
+```
+
+See the issue for ideas and hints on how to achieve support for this.
+
 ## Complex example
 
 Here a more complete example of the variations currently possible
@@ -618,7 +610,7 @@ Here a more complete example of the variations currently possible
       "type": "string",
       "required": true,
       "matches": "[a-zA-Z- ]+",
-      "mix": 3,
+      "min": 3,
       "maxLength": 40,
     },
     "age": {
@@ -685,7 +677,7 @@ Here a more complete example of the variations currently possible
 
 ### Complex/Nested schemas
 
-Nested object schema properties are now finally fully supported.
+Nested object schema properties are supported.
 
 See `test/types/object/complex-schema.test.js`
 
@@ -712,6 +704,8 @@ module.exports {
   isRequired: obj => obj.required
 };
 ```
+
+This can be used to support any kind of schema, including JSN schema and GraphQL type definition schemas etc.
 
 ### GraphQL schema
 
@@ -880,11 +874,11 @@ const valid = await yupSchema.isValid({
 });
 ```
 
-Now the bridge includes tests. Seems to work ;)
+Now the bridge includes tests and seems to work ;)
 
 ### Subclassing
 
-You can sublass `YupBuilder` or any of the internal classes to create your own custom infrastructure to suit your particular needs, expand with support for extra features etc.
+You can sublass `YupBuilder` or any of the internal classes to create your own custom infrastructure to suit your particular needs, extend with extra features etc.
 
 ```js
 const { YupBuilder } = require("schema-to-yup");
