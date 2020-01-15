@@ -1,4 +1,6 @@
 import { BasePropertyValueResolver } from "./base-property-value-resolver";
+import { MultiPropertyValueResolver } from "./multi-property-value-resolver";
+import { SinglePropertyValueResolver } from "./single-property-value-resolver";
 
 export const createPropertyValueResolver = (opts, config) => {
   return new PropertyValueResolver(opts, config);
@@ -11,12 +13,24 @@ export class PropertyValueResolver extends BasePropertyValueResolver {
   }
 
   initResolvers() {
+    const { opts, config } = this;
     const createMultiTypeResolverFn =
-      config.createMultiTypeResolver || this.createMultiTypeResolver;
+      config.createMultiTypeResolver || this.createMultiTypeResolver.bind(this);
     this.multiTypeResolver = createMultiTypeResolverFn(opts, config);
     const createSingleTypeResolverFn =
-      config.createSingleTypeResolver || this.createSingleTypeResolver;
+      config.createSingleTypeResolver ||
+      this.createSingleTypeResolver.bind(this);
     this.singleTypeResolver = createSingleTypeResolverFn(opts, config);
+  }
+
+  createMultiTypeResolver() {
+    const { opts, config } = this;
+    return new MultiPropertyValueResolver(opts, config);
+  }
+
+  createSingleTypeResolver() {
+    const { opts, config } = this;
+    return new SinglePropertyValueResolver(opts, config);
   }
 
   resolve() {
@@ -24,12 +38,16 @@ export class PropertyValueResolver extends BasePropertyValueResolver {
   }
 
   toMultiType() {
-    const resolve = this.config.toMultiType || this.singleTypeResolver.resolve;
+    const resolve =
+      this.config.toMultiType ||
+      this.singleTypeResolver.resolve.bind(this.singleTypeResolver);
     return resolve(this);
   }
 
   toSingleType() {
-    const resolve = this.config.toSingleType || this.singleTypeResolver.resolve;
+    const resolve =
+      this.config.toSingleType ||
+      this.singleTypeResolver.resolve.bind(this.singleTypeResolver);
     return resolve(this);
   }
 

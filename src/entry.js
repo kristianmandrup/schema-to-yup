@@ -73,9 +73,8 @@ class YupSchemaEntry extends Base {
   }
 
   error(msg, data) {
-    data
-      ? console.error(msg, data, ...this.opts)
-      : console.error(msg, ...this.opts);
+    const { opts } = this;
+    data ? console.error(msg, data, ...opts) : console.error(msg, ...opts);
     throw new YupSchemaEntryError(msg);
   }
 
@@ -88,6 +87,7 @@ class YupSchemaEntry extends Base {
         } must be a string, was ${typeof this.type} ${schema}`
       );
     }
+    const { opts, config } = this;
     return this.propertyValueHandler.resolve(opts, config);
   }
 }

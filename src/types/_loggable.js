@@ -26,6 +26,4 @@ class Loggable {
   }
 }
 
-export {
-  Loggable
-};
+export { Loggable };
