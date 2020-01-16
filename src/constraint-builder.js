@@ -67,8 +67,8 @@ export class ConstraintBuilder extends TypeMatcher {
 
     const newBase = multi || present || nonPresent;
     if (newBase) {
-      const { _whitelist } = newBase;
-      const list = _whitelist && _whitelist.list;
+      // const { _whitelist } = newBase;
+      // const list = _whitelist && _whitelist.list;
       this.base = newBase;
       return newBase;
     }
@@ -140,8 +140,8 @@ export class ConstraintBuilder extends TypeMatcher {
     const constraint = this.build(propName, opts);
     if (constraint) {
       this.typeHandler.base = constraint;
-      const { _whitelist } = constraint;
-      const list = _whitelist && _whitelist.list;
+      // const { _whitelist } = constraint;
+      // const list = _whitelist && _whitelist.list;
       return constraint;
     }
     return false;

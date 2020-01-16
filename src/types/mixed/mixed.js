@@ -94,6 +94,7 @@ class YupMixed extends Base {
   }
 
   initHelpers() {
+    console.log("initHelpers");
     const { config } = this;
     const errorMessageHandlerFactoryFn =
       this.config.createErrorMessageHandler || this.createErrorMessageHandler;

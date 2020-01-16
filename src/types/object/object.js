@@ -19,7 +19,9 @@ export class YupObject extends YupMixed {
 
   convert() {
     if (!this.properties) return this;
-    this.convertEnabled();
+    super.convert();
+    // this.initHelpers();
+    // this.convertEnabled();
 
     const schema = this.value;
     const config = this.config;
