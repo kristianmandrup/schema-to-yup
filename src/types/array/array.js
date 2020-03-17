@@ -33,8 +33,11 @@ export class YupArray extends YupMixed {
   }
 
   itemsOf() {
-    const { items, itemsOf } = this.constraints;
-    const $of = items || itemsOf || this.constraints.of;
+    const { constraints } = this
+    const { items, itemsOf } = constraints;
+    const $of = items || itemsOf || constraints.of;
+
+    console.log({constraints, items, itemsOf, $of })
 
     if (this.isNothing($of)) return;
 
@@ -61,8 +64,10 @@ export class YupArray extends YupMixed {
         value: $of,
         config: this.config
       };
+      console.log({schemaConf})
 
       const schemaEntry = this.createYupSchemaEntry(schemaConf);
+      console.log({schemaEntry})
 
       return this.addConstraint("of", {
         constraintValue: schemaEntry,
