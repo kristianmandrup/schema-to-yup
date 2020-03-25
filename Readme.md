@@ -82,7 +82,7 @@ const config = {
 };
 
 const { buildYup } = require("schema-to-yup");
-const yupSchema = buildYup(json, config);
+const yupSchema = buildYup(schema, config);
 // console.dir(schema)
 const valid = await yupSchema.isValid({
   name: "jimmy",
