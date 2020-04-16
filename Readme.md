@@ -23,6 +23,11 @@ This library is built to be easy to customise or extend to suit individual devel
 - [constraint handler functions](#Custom-constraint-handler-functions)
 - [constraint builder](#Custom-constraint-builder)
 
+## Stability
+
+The most recent versions have more functionality but are still a bit unstable in some areas. 
+For a solid/stable version, try `1.9.16`.
+
 ## Quick start
 
 Install
