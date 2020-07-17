@@ -27,7 +27,7 @@
     "@babel/node": "^7.6.3",
     "@babel/preset-env": "^7.6.3",
     "jest": "^24.9.0",
-    "microbundle": "^0.11.0"
+    "microbundle": "^0.12.3"
   },
   "babel": {
     "presets": [
