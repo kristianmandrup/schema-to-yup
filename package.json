@@ -20,13 +20,13 @@
     "dashify": "^2.0.0",
     "uniq": "^1.0.1",
     "uppercamelcase": "^3.0.0",
-    "yup": "^0.27.0"
+    "yup": "^0.29.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/node": "^7.6.3",
-    "@babel/preset-env": "^7.6.3",
-    "jest": "^24.9.0",
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "jest": "^26.1.0",
     "microbundle": "^0.12.3"
   },
   "babel": {
