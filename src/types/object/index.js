@@ -1,3 +1,4 @@
+import { MixedConstraints } from "../mixed";
 import { ObjectHandler } from "./handler";
 
 export function toYupObject(obj, config = {}) {
@@ -6,3 +7,4 @@ export function toYupObject(obj, config = {}) {
 
 export { ObjectHandler };
 export { YupObject } from "./object";
+export * as ObjectConstraints from './constraints'

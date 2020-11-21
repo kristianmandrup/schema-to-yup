@@ -46,7 +46,8 @@ class YupBaseType extends Base {
   init() {
     this.setYupType()
     this.mixed = this.createMixed()
-    this.converter = this.createConverter()    
+    this.converter = this.createConverter()  
+    this.constraintsProcessor = this.createConstraintsProcessor()  
     return this
   }
 

@@ -1,6 +1,7 @@
 import uniq from "uniq";
 import { Base } from "./base";
 import { ConstraintsAdder } from './constraints-adder'
+import { constraintsMap } from './constraints-map'
 
 const defaults = {
   classMap: {
@@ -13,6 +14,13 @@ export class Converter extends Base {
     super(opts.config)
     this.constraintsAdder = this.createConstraintsAdder(opts)
     this.init(config)
+  }
+
+  get constraintsMap() {
+    return {
+      ...constraintsMap,
+      ...this.config.constraintsMap || {}
+    }
   }
 
   init(config) {
@@ -66,8 +74,13 @@ export class Converter extends Base {
   }
 
   builtInConvertFnFor(name) {
-    return this[name].bind(this);
+    return this.constraintsProcessor.process(name)
   }  
+
+  get constraintsProcessor() {
+    const Clazz = this.constraintsMap[this.type].Processor
+    return new Clazz(this.handler, this.opts)
+  }
 
   convert() {
     this.initHelpers();

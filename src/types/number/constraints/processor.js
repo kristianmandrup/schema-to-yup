@@ -2,7 +2,7 @@
 import { BaseTypeConstraintsProcessor } from '../../base-type-constraints-processor'
 import { factories, classMap, constraints } from './maps'
 
-export class MixedConstraintsProcessor extends BaseTypeConstraintsProcessor {
+export class Processor extends BaseTypeConstraintsProcessor {
   constructor(opts = {}) {
     super(opts)
   }
