@@ -8,19 +8,23 @@ export class MinDate extends BaseTypeConstraint {
   }
 
   process() {
-    const minDate = this.constraints.minDate || this.constraints.min;
+    const { helper, constraints, errorHandler } = this
+    const minDate = constraints.minDate || constraints.min;
+    const { toDate, transformToDate, isValidDateType, handleInvalidDate } = helper
+    const { valErrMessage } = errorHandler
+
     if (typeMatcher.isNothing(minDate)) {
       return this;
     }
-    const $minDate = this.transformToDate(minDate);
-    if (!this.isValidDateType($minDate)) {
-      return this.handleInvalidDate("minDate", $minDate);
+    const $minDate = transformToDate(minDate);
+    if (!isValidDateType($minDate)) {
+      return handleInvalidDate("minDate", $minDate);
     }
     const newBase =
       $minDate &&
       this.base.min(
-        this.toDate($minDate),
-        this.valErrMessage("minDate") || this.valErrMessage("min")
+        toDate($minDate),
+        valErrMessage("minDate") || valErrMessage("min")
       );
     this.base = newBase || this.base;
     return this;

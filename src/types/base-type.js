@@ -1,4 +1,6 @@
 import { Converter } from './converter'
+import { TypeModeSelector } from './type-mode-selector'
+import { TypeValueProcessor } from './type-value-processor'
 import { YupMixed } from './mixed'
 
 const defaults = {
@@ -48,7 +50,17 @@ class YupBaseType extends Base {
     this.mixed = this.createMixed()
     this.converter = this.createConverter()  
     this.constraintsProcessor = this.createConstraintsProcessor()  
+    this.typeModeSelector = this.createTypeModeSelector()
+    this.typeValueProcessor = this.createTypeValueProcessor()
     return this
+  }
+
+  createValueProcessor() {
+    return new TypeValueProcessor(this, this.config);
+  }
+
+  createTypeModeSelector() {
+    return new TypeModeSelector(this, this.config);
   }
 
   get constraintsAdder() {

@@ -1,6 +1,6 @@
-import { TypeMatcher } from "./types/_type-matcher";
+import { Loggable } from "./types/_loggable";
 
-export class ErrorMessageHandler extends TypeMatcher {
+export class ErrorMessageHandler extends Loggable {
   constructor(typeHandler, config = {}) {
     super(config);
     this.typeHandler = typeHandler;

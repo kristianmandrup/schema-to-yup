@@ -28,7 +28,7 @@ export class MaxDate extends BaseTypeConstraint {
       $maxDate &&
       this.base.max(
         toDate($maxDate),
-        this.valErrMessage("maxDate") || this.valErrMessage("max")
+        valErrMessage("maxDate") || valErrMessage("max")
       );
     this.base = newBase || this.base;
     return this;

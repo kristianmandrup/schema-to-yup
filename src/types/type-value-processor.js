@@ -1,6 +1,25 @@
-export class TypeValueProcessor {
-  constructor(opts = {}) {
-    
+import { Loggable } from "./_loggable";
+
+export class TypeValueProcessor extends Loggable {
+  constructor(handler, opts = {}) {
+    super(opts.config)    
+    this.handler = handler
+  }
+
+  get modeSelector() {
+    return this.handler.typeModeSelector
+  }
+
+  get mixed() {
+    return this.handler.mixed
+  }
+
+  get disabledMode(mode) {
+    return this.typeModeSelector.disabledMode(mode)
+  }
+
+  get isRequired(value) {
+    return this.mixed.isRequired(value)
   }
 
   get shouldPreProcessValue() {
