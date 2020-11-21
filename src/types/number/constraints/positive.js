@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const positive = (opts) => new Positive(opts)
+
 export class Positive extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

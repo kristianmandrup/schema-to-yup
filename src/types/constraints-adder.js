@@ -1,4 +1,11 @@
 import { Loggable } from "./_loggable";
+import { ConstraintBuilder } from '../constraint-builder'
+
+const defaults = {
+  classMap: {
+    ConstraintBuilder
+  }
+}
 
 export class ConstraintsAdder extends Loggable {
   constructor(opts = {}) {
@@ -8,6 +15,7 @@ export class ConstraintsAdder extends Loggable {
   }
 
   init() {
+    setClassMap(defaults)
     const constraintBuilderFactoryFn =
       this.config.createConstraintBuilder || this.createConstraintBuilder;
     this.constraintBuilder = constraintBuilderFactoryFn(this, config);
@@ -18,7 +26,7 @@ export class ConstraintsAdder extends Loggable {
   }
 
   createConstraintBuilder(typeHandler, config = {}) {
-    return new ConstraintBuilder(typeHandler, config);
+    return new this.classMap.ConstraintBuilder(typeHandler, config);
   }
 
   addValueConstraint(propName, opts) {

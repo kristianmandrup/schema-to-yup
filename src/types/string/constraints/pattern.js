@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const pattern = (opts) => new Pattern(opts)
+
 export class Pattern extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

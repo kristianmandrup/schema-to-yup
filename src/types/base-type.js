@@ -11,14 +11,18 @@ const defaults = {
 class YupBaseType extends Base {
   constructor(opts = {}) {
     super(opts.config);
-
-    const classMap = opts.config && opts.config.classMap
-
-    this.classMap = {
-      ...defaults.classMap,
-      ...classMap || {}
-    }
     this.init()
+  }
+
+  setYupTypeInstance(inst) {
+    this.base = inst
+    return this
+  }
+
+  setYupType(name = this.yupType) {
+    this.type = name;    
+    const inst = this.yup[name]()
+    return this.setYupTypeInstance(inst)
   }
 
   addConstraint(alias, opts) {
@@ -35,12 +39,23 @@ class YupBaseType extends Base {
   }
 
   init() {
+    this.setYupType()
     this.mixed = this.createMixed()
-    this.converter = this.createConverter({typeEnabled: this.typeEnabled})    
+    this.converter = this.createConverter()    
+    return this
   }
 
   get constraintsAdder() {
     return this.converter.constraintsAdder
+  }
+
+  convert() {
+    this.converter.convert();
+    return this;
+  }
+
+  get converterConfig() {
+    return { typeEnabled: this.typeEnabled, type: this.type }
   }
 
   createConverter(config) {

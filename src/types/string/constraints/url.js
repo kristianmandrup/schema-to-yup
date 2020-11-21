@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const url = (opts) => new Url(opts)
+
 export class Url extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

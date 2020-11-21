@@ -25,14 +25,17 @@ class YupMixed extends YupBaseType {
     this.format = value.format || this.constraints.format;
     this.config = config || {};
     this.type = "mixed";
-    this.mixedConfig = this.config.mixed || {};
-    this.typeConfig = this.config[this.type] || {};
-    this.base = yup.mixed();
+    
+    this.setYupType('mixed')
     this.errMessages = config.errMessages || {};
     this.configureTypeConfig();
     this.constraintsAdded = {};
   }
 
+  get mixedConfig() {
+    return this.config.mixed || {};
+  }
+  
   configureTypeConfig() {
     if (this.typeConfig.enabled || this.typeConfig.extends) return;
     if (!this.typeConfig.convert) return;

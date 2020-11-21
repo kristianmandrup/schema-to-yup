@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const email = (opts) => new Email(opts)
+
 export class Email extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

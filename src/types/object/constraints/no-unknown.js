@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const noUnknown = (opts) => new NoUnknown(opts)
+
 export class NoUnknown extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

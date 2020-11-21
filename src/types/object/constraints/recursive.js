@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const recursive = (opts) => new Recursive(opts)
+
 export class Recursive extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

@@ -1,4 +1,4 @@
-import { NumericConstraint } from '../constraints/numeric';
+import { NumericConstraint } from '../../../constraints/numeric';
 
 function createRangeConstraint(typer) {
   return new RangeConstraint(typer);

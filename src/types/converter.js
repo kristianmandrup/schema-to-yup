@@ -1,34 +1,50 @@
 import uniq from "uniq";
-import { Loggable } from "./_loggable";
+import { Base } from "./base";
+import { ConstraintsAdder } from './constraints-adder'
 
-export class Converter extends Loggable {
-  constructor(opts = {}) {
-    super(opts)
+const defaults = {
+  classMap: {
+    ConstraintsAdder
+  }
+}
+
+export class Converter extends Base {
+  constructor(opts = {}, config) {
+    super(opts.config)
     this.constraintsAdder = this.createConstraintsAdder(opts)
+    this.init(config)
   }
 
-  // override for each type
-  get typeEnabled() {
-    return this._typeEnabled || [];
+  init(config) {
+    this.setClassMap(defaults)
+    const { typeEnabled, type } = config
+    this.typeEnabled = typeEnabled
+    this.type = type
   }
 
-  get $typeExtends() {
-    if (!Array.isArray(this.typeConfig.extends)) return;
-    return uniq([...this.typeConfig.extends, ...this.typeEnabled]);
+  get typeConfig() {
+    return this.config[this.type] || {};
+  }
+
+  calcTypeExtends() {
+    const { typeConfig, typeEnabled } = this
+    if (!Array.isArray(typeConfig.extends)) return;
+    return uniq([...typeConfig.extends, ...typeEnabled]);
   }
 
   get configuredTypeEnabled() {
-    return Array.isArray(this.typeConfig.enabled)
-      ? this.typeConfig.enabled
-      : this.typeEnabled;
+    const { typeConfig, typeEnabled } = this    
+    return Array.isArray(typeConfig.enabled)
+      ? typeConfig.enabled
+      : typeEnabled;
   }
 
-  get $typeEnabled() {
-    return this.$typeExtends || this.configuredTypeEnabled;
+  calcTypeEnabled() {
+    return this.calcTypeExtends() || this.configuredTypeEnabled;
   }
 
   get enabled() {
-    return [...this.mixedEnabled, ...this.$typeEnabled];
+    return [...this.mixedEnabled, ...this.calcTypeEnabled()];
   }
 
   convertEnabled() {

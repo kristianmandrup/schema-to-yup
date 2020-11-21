@@ -1,19 +1,16 @@
-import { YupMixed } from "../mixed";
+import { YupBaseType } from "../base-type";
 
-export class YupString extends YupMixed {
+export class YupString extends YupBaseType {
   constructor(obj) {
-    super(obj);
-    this.type = "string";
-    this.base = this.yup.string();
+    super(obj);    
+  }
+
+  get yupType() {
+    return 'string'
   }
 
   static create(obj) {
     return new YupString(obj);
-  }
-
-  convert() {
-    super.convert();
-    return this;
   }
 
   get typeEnabled() {
@@ -26,11 +23,10 @@ export class YupString extends YupMixed {
       "uppercase",
       "email",
       "url",
-      "genericFormat"
+      "format"
     ];
   }
-  
-  
+    
   constraintNameFor(...names) {
     return names.find(name => this.constraints[name]);
   }
