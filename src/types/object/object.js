@@ -1,7 +1,7 @@
-import { YupMixed } from "../mixed";
+import { YupBaseType } from "../base-type";
 
 // Allow recursive schema
-export class YupObject extends YupMixed {
+export class YupObject extends YupBaseType {
   constructor(obj) {
     super(obj);
     this.type = "object";
@@ -19,43 +19,8 @@ export class YupObject extends YupMixed {
 
   convert() {
     if (!this.properties) return this;
+
     super.convert();
-    // this.initHelpers();
-    // this.convertEnabled();
-
-    const schema = this.value;
-    const config = this.config;
-
-    // recursive definition
-    if (schema) {
-      if (!config.buildYup) {
-        this.error("convert", "Missing buildYup function from config", config);
-      }
-
-      const yupSchema = this.config.buildYup(schema, config);
-      this.base = yupSchema;
-    }
-    return this;
-  }
-
-  camelCase() {
-    return this.addConstraint("camelCase");
-  }
-
-  constantCase() {
-    return this.addConstraint("constantCase");
-  }
-
-  noUnknown() {
-    const { noUnknown, propertyNames } = this.value;
-    const $names = noUnknown || propertyNames;
-    const newBase =
-      $names &&
-      this.base.noUnknown(
-        $names,
-        this.valErrMessage("propertyNames") || this.valErrMessage("noUnknown")
-      );
-    this.base = newBase || this.base;
     return this;
   }
 }

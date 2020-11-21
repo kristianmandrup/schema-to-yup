@@ -10,24 +10,35 @@ export class SinglePropertyValueResolver extends BasePropertyValueResolver {
   }
 
   resolve() {
-    const { value } = this;
+    const { toSingleType, value, resolveTypeHandler, typeHandlerNames } = this;
     if (Array.isArray(value)) return;
+    return toSingleType() || resolveTypeHandler(typeHandlerNames);
+  }
+
+  toSingleType() {
     const toSingleType = this.config.toSingleType;
     if (toSingleType) {
       return toSingleType(this);
     }
+  }
 
-    const { obj, config } = this;
-    const typeHandlerNames = Object.keys(this.types);
+  get typeHandlerNames() {
+    return this.config.typeHandlerNames || Object.keys(this.types);
+  }
+  
+  resolveTypeHandlers(typeHandlerNames) {
+    const { obj, config, resolveTypeHandler, types } = this;    
     let result;
     // iterate all registered type handlers in this.types
     for (let typeName of typeHandlerNames) {
-      const typeFn = this.types[typeName];
-      if (typeFn) {
-        result = typeFn(obj, config);
-      }
+      const typeHandler = types[typeName];
+      result = resolveTypeHandler(typeHandler, obj, config)
       if (result) break;
     }
-    return result;
+    return result
+  }
+
+  resolveTypeHandler(typeHandler, obj, config) {
+    return typeHandler && typeHandler(obj, config)
   }
 }

@@ -10,13 +10,16 @@ export class MultiPropertyValueResolver extends BasePropertyValueResolver {
   }
 
   resolve() {
-    const { value } = this;
+    const { value, toMultiType } = this;
     if (!Array.isArray(value)) return;
+    // TODO
+    return toMultiType();
+  }
+
+  toMultiType() {
     const toMultiType = this.config.toMultiType;
     if (toMultiType) {
       return toMultiType(this);
-    }
-    // TODO
-    return;
+    }  
   }
 }

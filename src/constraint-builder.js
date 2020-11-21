@@ -1,4 +1,5 @@
-import { TypeMatcher } from "./types/_type-matcher";
+import { typeMatcher } from "./types/_type-matcher";
+const { isNothing } = typeMatcher
 
 export class ConstraintBuilder extends TypeMatcher {
   constructor(typeHandler, config = {}) {
@@ -14,6 +15,7 @@ export class ConstraintBuilder extends TypeMatcher {
     return ["errMessages", "base", "key", "constraints", "errorMessageHandler"];
   }
 
+  // TODO: refactor into smaller methods!
   build(propName, opts = {}) {
     let {
       constraintName,
@@ -29,7 +31,7 @@ export class ConstraintBuilder extends TypeMatcher {
     constraintValue =
       constraintValue || propValue || this.constraints[propName];
 
-    if (this.isNothing(constraintValue)) {
+    if (isNothing(constraintValue)) {
       this.warn("no prop value");
       return false;
     }
@@ -58,11 +60,8 @@ export class ConstraintBuilder extends TypeMatcher {
       errFn
     };
 
-    const constrainFnNames = [
-      "multiValueConstraint",
-      "presentConstraintValue",
-      "nonPresentConstraintValue"
-    ];
+    const constrainFnNames = this.constrainFnNames || this.config.constraintFnNames
+
     let newBase;
     for (let name of constrainFnNames) {
       newBase = this[name](values, constrOpts);
@@ -78,6 +77,14 @@ export class ConstraintBuilder extends TypeMatcher {
 
     this.warn("buildConstraint: missing value or values options");
     return false;
+  }
+
+  get constrainFnNames() {
+    return [
+      "multiValueConstraint",
+      "presentConstraintValue",
+      "nonPresentConstraintValue"
+    ];
   }
 
   nonPresentConstraintValue(

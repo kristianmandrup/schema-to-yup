@@ -1,8 +1,7 @@
 import defaults from "./defaults";
-// import { createYupSchemaEntry } from '../create-entry';
-import { TypeMatcher } from "./_type-matcher";
+import { Loggable } from "./_loggable";
 
-class Base extends TypeMatcher {
+class Base extends Loggable {
   constructor(config = {}) {
     super(config);
     const schemaType = config.schemaType || "json-schema";

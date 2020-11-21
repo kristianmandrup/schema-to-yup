@@ -1,5 +1,3 @@
-import { YupMixed } from "../mixed";
-import { createRangeConstraint, RangeConstraint } from "./range-constraint";
 import { createNumberGuard, NumberGuard } from "./guard";
 
 const proceed = (obj, config = {}) => {
@@ -22,12 +20,13 @@ function buildYupNumber(obj) {
   return YupNumber.create(obj);
 }
 
-class YupNumber extends YupMixed {
+import { YupBaseType } from '../base-type'
+
+class YupNumber extends YupBaseType {
   constructor(obj) {
     super(obj);
     this.type = this.normalizeNumType(obj.type);
     this.base = this.yup.number();
-    this.rangeConstraint = createRangeConstraint(this);
   }
 
   normalizeNumType(type) {
@@ -43,66 +42,12 @@ class YupNumber extends YupMixed {
   }
 
   get typeEnabled() {
-    return ["range", "posNeg", "integer"];
+    return ["range", "positive", "negative", "integer"];
   }
 
   convert() {
     super.convert();
     return this;
-  }
-
-  range() {
-    this.rangeConstraint.add();
-  }
-
-  truncate() {
-    return this.addConstraint("truncate");
-  }
-
-  round() {
-    const { round } = this.constraints;
-    if (this.isNothing(round)) {
-      return this;
-    }
-    const $round = this.isStringType(round) ? round : "round";
-    round && this.base.round($round);
-    return this;
-  }
-
-  posNeg() {
-    this.positive();
-    this.negative();
-  }
-
-  integer() {
-    this.isInteger && this.addConstraint("integer");
-    return this;
-  }
-
-  get isInteger() {
-    return this.config.isInteger(this.type);
-  }
-
-  positive() {
-    return this.addConstraint("positive");
-  }
-
-  negative() {
-    return this.addConstraint("negative");
-  }
-
-  get isNegative() {
-    const { exclusiveMaximum, negative } = this.constraints;
-    if (negative) return true;
-    if (exclusiveMaximum === undefined) return false;
-    return exclusiveMaximum === 0;
-  }
-
-  get isPositive() {
-    const { exclusiveMinimum, positive } = this.constraints;
-    if (positive) return true;
-    if (exclusiveMinimum === undefined) return false;
-    return exclusiveMinimum === 0;
   }
 
   normalize() {
@@ -117,6 +62,5 @@ export {
   YupNumber,
   createNumberGuard,
   NumberGuard,
-  RangeConstraint,
   createRangeConstraint
 };

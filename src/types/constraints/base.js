@@ -1,6 +1,6 @@
-import { TypeMatcher } from '../_type-matcher';
+import { typeMatcher } from '../_type-matcher';
 
-class Constraint extends TypeMatcher {
+class Constraint {
   constructor(typer, map) {
     super(typer.config);
     this.map = map || this.$map || {};
@@ -67,7 +67,7 @@ class Constraint extends TypeMatcher {
   }
 
   validate(cv) {
-    if (this.isNothing(cv)) {
+    if (typeMatcher.isNothing(cv)) {
       return this;
     }
     if (!this.isValidConstraint(cv)) {
