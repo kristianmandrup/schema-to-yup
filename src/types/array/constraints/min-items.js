@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const minItems = (opts) => new MinItems(opts)
+
 export class MinItems extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

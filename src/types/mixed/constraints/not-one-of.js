@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const notOneOf = (opts) => new NotOneOf(opts)
+
 export class NotOneOf extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

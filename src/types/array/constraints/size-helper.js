@@ -1,5 +1,7 @@
 import { typeMatcher } from "../../_type-matcher";
 
+export const arraySizeHelper = (opts) => new ArraySizeHelper(opts)
+
 export class ArraySizeHelper {
   constructor(opts = {}) {
     

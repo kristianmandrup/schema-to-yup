@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const maxItems = (opts) => new MaxItems(opts)
+
 export class MaxItems extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

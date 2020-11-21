@@ -1,5 +1,7 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const label = (opts) => new Label(opts)
+
 export class Label extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)

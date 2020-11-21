@@ -1,6 +1,8 @@
 import { typeMatcher } from "../../../_type-matcher";
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
+export const itemsOf = (opts) => new ItemsOf(opts)
+
 export class ItemsOf extends BaseTypeConstraint {
   constructor(opts = {}) {
     super(opts)
