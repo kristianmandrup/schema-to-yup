@@ -7,11 +7,11 @@ import { BaseTypeConstraintsProcessor } from '../../base-type-constraints-proces
 
 export const constraints = {
   classMap: {
-    ItemsOf,
-    Compact,
-    EnsureItems,
-    MaxItems,
-    MinItems
+    itemOf: ItemsOf,
+    compact: Compact,
+    ensureItems: EnsureItems,
+    maxItems: MaxItems,
+    minItems: MinItems
   }
 }
 

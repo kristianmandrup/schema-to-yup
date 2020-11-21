@@ -1,4 +1,12 @@
-export class TypeErrorHandler {
+import { ErrorMessageHandler } from "../../error-message-handler";
+import { Loggable } from "./_loggable";
+
+export class TypeErrorHandler extends Loggable {
+  constructor(opts = {}) {
+    super(opts)
+    this.init()
+  }
+
   init() {
     const { config } = this;
     const errorMessageHandlerFactoryFn =

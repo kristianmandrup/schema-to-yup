@@ -14,7 +14,7 @@ export class YupObject extends YupBaseType {
   }
 
   get typeEnabled() {
-    return ["noUnknown", "camelCase", "constantCase"];
+    return ["noUnknown", "camelCase", "constantCase", "recursive"];
   }
 
   convert() {

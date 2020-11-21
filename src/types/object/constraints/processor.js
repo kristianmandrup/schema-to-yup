@@ -7,10 +7,10 @@ import { BaseTypeConstraintsProcessor } from '../../base-type-constraints-proces
 
 export const constraints = {
   classMap: {
-    CamelCase,
-    ConstantCase,
-    NoUnknown,
-    Recursive
+    camelCase: CamelCase,
+    constantCase: ConstantCase,
+    noUnknown: NoUnknown,
+    recursive: Recursive
   }
 }
 

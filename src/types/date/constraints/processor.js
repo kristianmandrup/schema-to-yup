@@ -4,8 +4,8 @@ import { BaseTypeConstraintsProcessor } from '../../base-type-constraints-proces
 
 export const constraints = {
   classMap: {
-    MinDate,
-    MaxDate
+    minDate: MinDate,
+    maxDate: MaxDate
   }
 }
 

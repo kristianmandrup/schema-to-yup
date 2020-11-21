@@ -9,12 +9,12 @@ import { BaseTypeConstraintsProcessor } from '../../base-type-constraints-proces
 
 export const constraints = {
   classMap: {
-    IsType,
-    Label,    
-    OneOf,
-    NotOneOf,
-    Nullable,
-    When
+    isType: IsType,
+    label: Label,    
+    oneOf: OneOf,
+    notOneOf: NotOneOf,
+    nullable: Nullable,
+    when: When
   }
 }
 

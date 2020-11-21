@@ -8,12 +8,12 @@ import { BaseTypeConstraintsProcessor } from '../../base-type-constraints-proces
 
 export const constraints = {
   classMap: {
-    Integer,
-    Positive,
-    Negative,
-    Round,
-    Range,
-    Truncate
+    integer: Integer,
+    positive: Positive,
+    negative: Negative,
+    round: Round,
+    range: Range,
+    truncate: Truncate
   }
 }
 

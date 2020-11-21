@@ -12,15 +12,15 @@ import { BaseTypeConstraintsProcessor } from '../../base-type-constraints-proces
 
 export const constraints = {
   classMap: {
-    Email,
-    Format,
-    Lowercase,
-    MaxLength,
-    MinLength,
-    Pattern,
-    Trim,
-    Uppercase,
-    Url
+    email: Email,
+    format: Format,
+    lowercase: Lowercase,
+    maxLength: MaxLength,
+    minLength: MinLength,
+    pattern: Pattern,
+    trim: Trim,
+    uppercase: Uppercase,
+    url: Url
   }
 }
 

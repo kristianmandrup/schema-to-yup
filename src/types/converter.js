@@ -1,5 +1,9 @@
-export class Converter {
+import uniq from "uniq";
+import { Loggable } from "./_loggable";
+
+export class Converter extends Loggable {
   constructor(opts = {}) {
+    super(opts)
     this.constraintsAdder = this.createConstraintsAdder(opts)
   }
 

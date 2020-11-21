@@ -1,102 +1,8 @@
-// - `alpha-numeric`
-// - `alpha`
-// - `ascii`
-// - `byte`
-// - `credit-card`
-// - `currency-amount`
-// - `data-uri`
-// - `date-time`
-// - `date`
-// - `domain-name`
-// - `email`
-// - `hash`
-// - `hex-color`
-// - `ipv4`
-// - `ipv6`
-// - `isbn`
-// - `magnet-uri`
-// - `mime-type`
-// - `mobile-phone`
-// - `mongo-id`
-// - `postal-code`
-// - `uri`
-// - `uuid`
-
-// const validator = require("validator");
 import dashify from 'dashify';
-
-//const camelCase = require("camelcase");
 import camelCase from 'uppercamelcase';
 
 import { addMethod, string } from 'yup';
-
-const toConstraintsMap = (values, opts = {}) => {
-  return values.reduce((acc, value) => {
-    if (typeof value !== "string" && !(value instanceof Object)) {
-      if (opts.throws !== false) {
-        throw `toConstraintsMap: invalid entry ${value}`;
-      } else {
-        return acc;
-      }
-    }
-    if (typeof value === "string") {
-      acc[name] = {};
-    } else {
-      if (!value.name) {
-        if (opts.throws !== false) {
-          throw `toConstraintsMap: invalid entry ${value} missing name`;
-        } else {
-          return acc;
-        }
-      }
-      acc[value.name] = value;
-    }
-    return acc;
-  }, {});
-};
-
-// const defaultConstraints = [
-//   'ascii',
-//   {
-//     name: alphanumeric,
-//     optsKey: "locale"
-//   },
-//   // ...
-// ]
-
-const defaultConstraints = {
-  alphanumeric: {
-    optsKey: "locale"
-  },
-  alpha: {
-    optsKey: "locale"
-  },
-  ascii: {},
-  byte: {},
-  creditCard: {},
-  currency: {
-    opts: "currencyOpts"
-  },
-  dataUri: {},
-  dateTime: {},
-  date: {},
-  domainName: {
-    opts: "domainOpts"
-  },
-  hash: {
-    opts: "hashAlgo"
-  },
-  hexColor: {},
-  ipv4: {},
-  ipv6: {},
-  isbn: {},
-  magnetUri: {},
-  mimeType: {},
-  mobilePhone: {},
-  mongoId: {},
-  postalCode: {},
-  uuid: {}
-};
+import { constraintsFor, fallBackFnMap, defaults } from './utils';
 
 // Template:
 // Yup.addMethod(Yup.string, "isHexColor", function(args) {
@@ -110,22 +16,8 @@ const defaultConstraints = {
 //   });
 // });
 
-const defaults = {
-  createValidatorName: (validatorName, key) => {
-    const name = validatorName || key;
-    validatorName = camelCase(name);
-    validatorName = validatorName.replace(/Uri$/, "URI");
-    validatorName = validatorName.replace(/Id$/, "ID");
-    return `is${validatorName}`;
-  },
-  createTestName: (testName, key) => (testName = dashify(testName || key))
-};
 
-const fallBackFnMap = {
-  isMagnetURI: (value, isMagnetUri) => {
-    return /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i.test(value);
-  }
-};
+
 
 function extendYupApi({
   constraints,
@@ -138,19 +30,8 @@ function extendYupApi({
     throw "extendYupApi: missing validator option";
   }
 
-  if (Array.isArray(constraints)) {
-    constraints = toConstraintsMap(constraints);
-  }
 
-  if (!override) {
-    constraints = {
-      ...defaultConstraints,
-      ...(constraints || {})
-    };
-  } else {
-    constraints = constraints || defaultConstraints;
-  }
-
+  constraints = constraintsFor(constraints)
   createValidatorName = createValidatorName || defaults.createValidatorName;
   createTestName = createTestName || defaults.createTestName;
 

@@ -1,16 +1,8 @@
 import * as yup from "yup";
-import uniq from "uniq";
 
 class ConvertYupSchemaError extends Error {}
 
-function isObjectType(obj) {
-  return obj === Object(obj);
-}
-
 import { YupBaseType } from "../base-type";
-import { createWhenCondition } from "../../conditions";
-import { ErrorMessageHandler } from "../../error-message-handler";
-import { typeMatcher } from '../_type-matcher'
 
 class YupMixed extends YupBaseType {
   constructor(opts = {}) {
@@ -70,11 +62,12 @@ class YupMixed extends YupBaseType {
   get mixedEnabled() {
     return (
       this.mixedConfig.enabled || [
+        "label",
         "oneOf",
         "notOneOf",
         "when",
         "nullable",
-        "isType"
+        "isType",        
       ]
     );
   }

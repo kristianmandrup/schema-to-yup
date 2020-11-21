@@ -1,12 +1,6 @@
+import { typeMatcher } from "../../types/_type-matcher";
+const { isObjectType, isStringType } = typeMatcher
 import { createWhenEntry } from "./when-entry";
-
-function isObjectType(obj) {
-  return obj === Object(obj);
-}
-
-function isStringType(val) {
-  return typeof val === "string";
-}
 
 class WhenCondition {
   constructor(opts = {}) {
