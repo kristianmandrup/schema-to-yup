@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const url = (opts) => new Url(opts)
+export const url = (handler, opts) => new Url(handler, opts)
 
 export class Url extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

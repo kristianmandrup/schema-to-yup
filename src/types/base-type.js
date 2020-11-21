@@ -19,6 +19,11 @@ class YupBaseType extends Base {
     return this
   }
 
+  chainYup(cb) {
+    this.base = cb(this.base)
+    return this
+  }
+
   setYupType(name = this.yupType) {
     this.type = name;    
     const inst = this.yup[name]()

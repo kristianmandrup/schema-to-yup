@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const lowercase = (opts) => new Lowercase(opts)
+export const lowercase = (handler, opts) => new Lowercase(handler, opts)
 
 export class Lowercase extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

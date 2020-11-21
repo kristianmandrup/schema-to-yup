@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const pattern = (opts) => new Pattern(opts)
+export const pattern = (handler, opts) => new Pattern(handler, opts)
 
 export class Pattern extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

@@ -1,11 +1,11 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 import { typeMatcher } from '../../_type-matcher'
 
-export const round = (opts) => new Round(opts)
+export const round = (handler, opts) => new Round(handler, opts)
 
 export class Round extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

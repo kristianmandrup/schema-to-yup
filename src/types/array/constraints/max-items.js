@@ -1,20 +1,24 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
+import { typeMatcher } from "../../_type-matcher";
+import { ArraySizeHelper } from "./size-helper";
 
-export const maxItems = (opts) => new MaxItems(opts)
+export const maxItems = (handler, opts) => new MaxItems(handler, opts)
 
 export class MaxItems extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
+    this.sizeHelper = new ArraySizeHelper(handler, opts)
   }
 
   process() {
     const { maxItems, max } = this.constraints;
+    const { handleInvalidSize, isValidSize } = this.sizeHelper
     const $max = maxItems || max;
-    if (!this.isNumberType($max)) {
+    if (!typeMatcher.isNumberType($max)) {
       return this;
     }
-    if (!this.isValidSize($max)) {
-      return this.handleInvalidSize("maxItems", $max);
+    if (!isValidSize($max)) {
+      return handleInvalidSize("maxItems", $max);
     }
     const newBase = $max && this.base.max($max);
     this.base = newBase || this.base;

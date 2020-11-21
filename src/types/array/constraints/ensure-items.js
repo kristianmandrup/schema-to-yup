@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const ensureItems = (opts) => new EnsureItems(opts)
+export const ensureItems = (handler, opts) => new EnsureItems(handler, opts)
 
 export class EnsureItems extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

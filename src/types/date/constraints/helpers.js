@@ -3,6 +3,7 @@ import { typeMatcher } from "../../_type-matcher";
 
 export class DateHelpers extends Loggable {
   constructor(opts = {}) {
+    super(opts)
   }
 
   toDate(date) {

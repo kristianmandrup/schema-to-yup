@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const nullable = (opts) => new Nullable(opts)
+export const nullable = (handler, opts) => new Nullable(handler, opts)
 
 export class Nullable extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

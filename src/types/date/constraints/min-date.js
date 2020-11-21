@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const minDate = (opts) => new MinDate(opts)
+export const minDate = (handler, opts) => new MinDate(handler, opts)
 
 export class MinDate extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

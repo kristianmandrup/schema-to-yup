@@ -1,25 +1,33 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const maxDate = (opts) => new MaxDate(opts)
+export const maxDate = (handler, opts) => new MaxDate(handler, opts)
 
 export class MaxDate extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)    
+    this.init()
+  }
+
+  init() {
+    super.init()
+    this.helper = new DateHelpers(this.opts)
   }
 
   process() {
+    const { toDate, transformToDate, isValidDateType, handleInvalidDate } = this.helper
+    const { valErrMessage } = this.errorHandler
     const maxDate = this.constraints.maxDate || this.constraints.max;
     if (typeMatcher.isNothing(maxDate)) {
       return this;
     }
-    const $maxDate = this.transformToDate(maxDate);
-    if (!this.isValidDateType($maxDate)) {
-      return this.handleInvalidDate("maxDate", $maxDate);
+    const $maxDate = transformToDate(maxDate);
+    if (!isValidDateType($maxDate)) {
+      return handleInvalidDate("maxDate", $maxDate);
     }
     const newBase =
       $maxDate &&
       this.base.max(
-        this.toDate($maxDate),
+        toDate($maxDate),
         this.valErrMessage("maxDate") || this.valErrMessage("max")
       );
     this.base = newBase || this.base;

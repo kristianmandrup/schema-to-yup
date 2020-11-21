@@ -1,20 +1,24 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
+import { typeMatcher } from "../../_type-matcher";
+import { ArraySizeHelper } from "./size-helper";
 
-export const minItems = (opts) => new MinItems(opts)
+export const minItems = (handler, opts) => new MinItems(handler, opts)
 
 export class MinItems extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
+    this.sizeHelper = new ArraySizeHelper(handler, opts)
   }
 
   process() {
     const { minItems, min } = this.constraints;
+    const { handleInvalidSize, isValidSize } = this.sizeHelper
     const $min = minItems || min;
-    if (!this.isNumberType($min)) {
+    if (!typeMatcher.isNumberType($min)) {
       return this;
     }
-    if (!this.isValidSize($min)) {
-      return this.handleInvalidSize("minItems", $min);
+    if (!isValidSize($min)) {
+      return handleInvalidSize("minItems", $min);
     }
     const newBase = $min && this.base.min($min);
     this.base = newBase || this.base;

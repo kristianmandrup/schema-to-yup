@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const notOneOf = (opts) => new NotOneOf(opts)
+export const notOneOf = (handler, opts) => new NotOneOf(handler, opts)
 
 export class NotOneOf extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

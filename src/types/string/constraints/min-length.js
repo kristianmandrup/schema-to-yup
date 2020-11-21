@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const minLength = (opts) => new MinLength(opts)
+export const minLength = (handler, opts) => new MinLength(handler, opts)
 
 export class MinLength extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

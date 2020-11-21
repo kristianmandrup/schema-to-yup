@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const truncate = (opts) => new Truncate(opts)
+export const truncate = (handler, opts) => new Truncate(handler, opts)
 
 export class Truncate extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

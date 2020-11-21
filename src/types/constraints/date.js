@@ -1,4 +1,5 @@
 import { Constraint } from '../constraints/base';
+import { typeMatcher } from '../_type-matcher';
 
 function createDateConstraint(typer, map) {
   return new DateConstraint(typer, map);
@@ -44,7 +45,7 @@ class DateConstraint extends Constraint {
 
   // optionally transform millisecs to Date date?
   transformToDate(date) {
-    return this.isNumberType(date) ? this.toDate(date) : date;
+    return typeMatcher.isNumberType(date) ? this.toDate(date) : date;
   }
 
   get explainConstraintValidMsg() {

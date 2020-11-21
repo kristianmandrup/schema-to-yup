@@ -1,11 +1,11 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 import { createWhenCondition } from "../../conditions";
 
-export const when = (opts) => new When(opts)
+export const when = (handler, opts) => new When(handler, opts)
 
 export class When extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

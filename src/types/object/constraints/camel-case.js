@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const camelCase = (opts) => new CamelCase(opts)
+export const camelCase = (handler, opts) => new CamelCase(handler, opts)
 
 export class CamelCase extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

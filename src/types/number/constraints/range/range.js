@@ -1,11 +1,11 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 import { createRangeConstraint } from "./range-constraint";
 
-export const range = (opts) => new Range(opts)
+export const range = (handler, opts) => new Range(handler, opts)
 
 export class Range extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
     this.rangeConstraint = createRangeConstraint(this);
   }
 

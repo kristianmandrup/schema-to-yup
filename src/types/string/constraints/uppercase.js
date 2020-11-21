@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const uppercase = (opts) => new Uppercase(opts)
+export const uppercase = (handler, opts) => new Uppercase(handler, opts)
 
 export class Uppercase extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

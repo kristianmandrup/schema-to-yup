@@ -1,10 +1,10 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const maxLength = (opts) => new maxLength(opts)
+export const maxLength = (handler, opts) => new maxLength(handler, opts)
 
 export class MaxLength extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {

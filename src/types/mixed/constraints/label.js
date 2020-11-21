@@ -1,16 +1,15 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
 
-export const label = (opts) => new Label(opts)
+export const label = (handler, opts) => new Label(handler, opts)
 
 export class Label extends BaseTypeConstraint {
-  constructor(opts = {}) {
-    super(opts)
+  constructor(handler, opts = {}) {
+    super(handler, opts)
   }
 
   process() {
     if (!this.title) return this
-    this.base = this.base.label(this.title)
-    return this
+    this.chainYup(x => x.label(this.title))
   }
 
   get title() {
