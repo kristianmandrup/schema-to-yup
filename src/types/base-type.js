@@ -6,7 +6,9 @@ import { YupMixed } from './mixed'
 const defaults = {
   classMap: {
     Converter,
-    YupMixed
+    YupMixed,
+    TypeModeSelector,
+    TypeValueProcessor
   }
 }
 
@@ -16,20 +18,27 @@ class YupBaseType extends Base {
     this.init()
   }
 
-  setYupTypeInstance(inst) {
-    this.base = inst
+  setTypeInstance(inst) {
+    this.base = inst || this.base
     return this
   }
 
-  chainYup(cb) {
-    this.base = cb(this.base)
-    return this
+  chain(cb) {
+    return this.setTypeInstance(cb(this.base))
   }
 
-  setYupType(name = this.yupType) {
+  setInstType(name = this.yupType) {
     this.type = name;    
     const inst = this.yup[name]()
     return this.setYupTypeInstance(inst)
+  }
+
+  valErrMessage(msgName) {
+    return this.typeErrorHandler.valErrMessage(msgName)
+  }
+
+  valErrMessageOr(...msgNames) {
+    return this.typeErrorHandler.valErrMessageOr(...msgNames)
   }
 
   addConstraint(alias, opts) {
@@ -38,10 +47,10 @@ class YupBaseType extends Base {
 
   validateOnCreate(key, value, opts) {
     if (!key) {
-      this.error(`create: missing key ${JSON.stringify(opts)}`);
+      this.error(`create: missing key ${this.stringify(opts)}`);
     }
     if (!value) {
-      this.error(`create: missing value ${JSON.stringify(opts)}`);
+      this.error(`create: missing value ${this.stringify(opts)}`);
     }
   }
 
@@ -52,15 +61,28 @@ class YupBaseType extends Base {
     this.constraintsProcessor = this.createConstraintsProcessor()  
     this.typeModeSelector = this.createTypeModeSelector()
     this.typeValueProcessor = this.createTypeValueProcessor()
+    this.typeErrorHandler = this.createTypeErrorHandler()
     return this
   }
 
+  setClassMap() {
+    const { config } = this
+    this.classMap = {
+      ...defaults.classMap,
+      ...config.classMap || {}
+    }
+  }
+
   createValueProcessor() {
-    return new TypeValueProcessor(this, this.config);
+    return new this.classMap.TypeValueProcessor(this, this.config);
   }
 
   createTypeModeSelector() {
-    return new TypeModeSelector(this, this.config);
+    return new this.classMap.TypeModeSelector(this, this.config);
+  }
+
+  createTypeErrorHandler() {
+    return new this.classMap.TypeErrorHandler(this, this.config);
   }
 
   get constraintsAdder() {
@@ -76,8 +98,8 @@ class YupBaseType extends Base {
     return { typeEnabled: this.typeEnabled, type: this.type }
   }
 
-  createConverter(config) {
-    return new this.classMap.Converter(this.opts, config)
+  createConverter(config = this.converterConfig()) {
+    return new this.classMap.Converter(this, this.opts, config)
   }
 
   createMixed() {

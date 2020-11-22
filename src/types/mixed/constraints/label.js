@@ -8,8 +8,10 @@ export class Label extends BaseTypeConstraint {
   }
 
   process() {
-    if (!this.title) return this
-    this.chainYup(x => x.label(this.title))
+    if (typeMatcher.isNothing(this.title) || typeMatcher.isEmpty(this.title)) {
+      return this;
+    }
+    this.chain(x => x.label(this.title))
   }
 
   get title() {

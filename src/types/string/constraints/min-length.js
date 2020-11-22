@@ -8,10 +8,9 @@ export class MinLength extends BaseTypeConstraint {
   }
 
   process() {
-    const { minLength } = this.constraints;
-    const errMsg = this.valErrMessage("minLength") || this.valErrMessage("min");
-    const newBase = minLength && this.base.min(minLength, errMsg);
-    this.base = newBase || this.base;
-    return this;
+    const { constraints, valErrMessageOr } = this
+    const { minLength } = constraints;
+    const errMsg = valErrMessageOr("minLength", "min");
+    return this.chain(x => minLength && x.min(minLength, errMsg));
   }
 }

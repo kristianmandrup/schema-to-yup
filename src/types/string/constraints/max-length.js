@@ -8,10 +8,9 @@ export class MaxLength extends BaseTypeConstraint {
   }
 
   process() {
-    const { maxLength } = this.constraints;
-    const errMsg = this.valErrMessage("maxLength") || this.valErrMessage("max");
-    const newBase = maxLength && this.base.max(maxLength, errMsg);
-    this.base = newBase || this.base;
-    return this;
+    const { constraints, valErrMessageOr } = this
+    const { maxLength } = constraints;
+    const errMsg = valErrMessage("maxLength", "max");
+    return this.chain(x => maxLength && x.max(maxLength, errMsg))
   }
 }

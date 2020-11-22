@@ -8,7 +8,7 @@ export class Negative extends BaseTypeConstraint {
   }
 
   process() {
-    return this.addConstraint("negative");
+    return this.isNegative && this.addConstraint("negative");
   }
 
   get isNegative() {

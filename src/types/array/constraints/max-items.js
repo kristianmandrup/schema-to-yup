@@ -11,8 +11,9 @@ export class MaxItems extends BaseTypeConstraint {
   }
 
   process() {
-    const { maxItems, max } = this.constraints;
-    const { handleInvalidSize, isValidSize } = this.sizeHelper
+    const { constraints, sizeHelper } = this
+    const { maxItems, max } = constraints;
+    const { handleInvalidSize, isValidSize } = sizeHelper
     const $max = maxItems || max;
     if (!typeMatcher.isNumberType($max)) {
       return this;
@@ -20,8 +21,6 @@ export class MaxItems extends BaseTypeConstraint {
     if (!isValidSize($max)) {
       return handleInvalidSize("maxItems", $max);
     }
-    const newBase = $max && this.base.max($max);
-    this.base = newBase || this.base;
-    return this;
+    return this.chain(x => $max && x.max($max));
   }
 }

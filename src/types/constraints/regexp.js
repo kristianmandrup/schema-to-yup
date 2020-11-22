@@ -1,3 +1,4 @@
+import { typeMatcher } from '../_type-matcher';
 import { Constraint } from './base';
 
 function createRegExpConstraint(typer, map) {
@@ -10,11 +11,11 @@ class RegExpConstraint extends Constraint {
   }
 
   transform(value) {
-    return this.toRegExp(value);
+    return typeMatcher.toRegExp(value);
   }
 
   isValidConstraint(value) {
-    return this.isRegExpLike(value);
+    return typeMatcher.isRegExpLike(value);
   }
 
   toRegExp(value) {

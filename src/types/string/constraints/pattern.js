@@ -1,4 +1,5 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
+import { typeMatcher } from "../../_type-matcher";
 
 export const pattern = (handler, opts) => new Pattern(handler, opts)
 
@@ -8,18 +9,13 @@ export class Pattern extends BaseTypeConstraint {
   }
 
   process() {
-    const { pattern, flags } = this.constraints;
-    if (!pattern) {
+    const { constraints, valErrMessageOr } = this
+    const { pattern, flags } = constraints;
+    if (typeMatcher.isEmpty(pattern)) {
       return this;
     }
     const regex = new RegExp(pattern, flags);
-    const errMsg =
-      this.valErrMessage("pattern") ||
-      this.valErrMessage("matches") ||
-      this.valErrMessage("regex");
-
-    const newBase = regex && this.base.matches(regex, errMsg);
-    this.base = newBase || this.base;
-    return this;
+    const errMsg = valErrMessageOr("pattern", "matches", "regex")    
+    return this.chain(x => regex && x.matches(regex, errMsg))
   }
 }

@@ -9,14 +9,8 @@ export class NoUnknown extends BaseTypeConstraint {
 
   process() {
     const { noUnknown, propertyNames } = this.value;
-    const $names = noUnknown || propertyNames;
-    const newBase =
-      $names &&
-      this.base.noUnknown(
-        $names,
-        this.valErrMessage("propertyNames") || this.valErrMessage("noUnknown")
-      );
-    this.base = newBase || this.base;
-    return this;
+    const names = noUnknown || propertyNames;
+    const errMsg = this.valErrMessageOr("propertyNames", "noUnknown")
+    return this.chain(x => names && x.noUnknown(names,errMsg))
   }
 }

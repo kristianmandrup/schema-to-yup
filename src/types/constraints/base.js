@@ -12,14 +12,10 @@ class Constraint {
           typer
         });
       }
-      this[name] = this.isFunctionType(delegate)
+      this[name] = typeMatcher.isFunctionType(delegate)
         ? delegate.bind(typer)
         : delegate;
     });
-  }
-
-  isStringType(val) {
-    return typeof val === "string";
   }
 
   get delegates() {

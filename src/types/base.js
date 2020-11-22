@@ -11,10 +11,9 @@ class Base extends Loggable {
 
   setClassMap(defaults) {
     const { config } = this
-    const classMap = config && config.classMap
     this.classMap = {
       ...defaults.classMap,
-      ...classMap || {}
+      ...config.classMap || {}
     }
   }
 }

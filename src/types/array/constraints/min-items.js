@@ -11,8 +11,9 @@ export class MinItems extends BaseTypeConstraint {
   }
 
   process() {
-    const { minItems, min } = this.constraints;
-    const { handleInvalidSize, isValidSize } = this.sizeHelper
+    const { constraints, sizeHelper } = this
+    const { minItems, min } = constraints;
+    const { handleInvalidSize, isValidSize } = sizeHelper
     const $min = minItems || min;
     if (!typeMatcher.isNumberType($min)) {
       return this;
@@ -20,8 +21,6 @@ export class MinItems extends BaseTypeConstraint {
     if (!isValidSize($min)) {
       return handleInvalidSize("minItems", $min);
     }
-    const newBase = $min && this.base.min($min);
-    this.base = newBase || this.base;
-    return this;
+    return this.chain(x => $min && this.base.min($min));
   }
 }

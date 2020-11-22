@@ -1,3 +1,4 @@
+import { typeMatcher } from '../_type-matcher';
 import { Constraint } from './base';
 
 function createStringConstraint(typer, map) {
@@ -10,7 +11,7 @@ class StringConstraint extends Constraint {
   }
 
   isValidConstraint(value) {
-    return this.typer.isStringType(value);
+    return typeMatcher.isStringType(value);
   }
 
   get explainConstraintValidMsg() {

@@ -1,4 +1,5 @@
 import { BaseTypeConstraint } from "../../base-type-constraint";
+import { typeMatcher } from "../../_type-matcher";
 
 export const email = (handler, opts) => new Email(handler, opts)
 

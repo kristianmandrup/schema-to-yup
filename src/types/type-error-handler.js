@@ -2,8 +2,9 @@ import { ErrorMessageHandler } from "../../error-message-handler";
 import { Loggable } from "./_loggable";
 
 export class TypeErrorHandler extends Loggable {
-  constructor(opts = {}) {
+  constructor(handler, opts = {}) {
     super(opts)
+    this.handler = handler
     this.init()
   }
 
@@ -21,6 +22,13 @@ export class TypeErrorHandler extends Loggable {
 
   valErrMessage(msgName) {
     return this.errorMessageHandler.valErrMessage(msgName);
+  }
+
+  valErrMessageOr(...msgNames) {
+    for (name of msgNames) {
+      const errMsg = this.valErrMessage(msgName)
+      if (errMsg) return errMsg
+    }
   }
 
   message() {

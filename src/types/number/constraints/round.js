@@ -13,8 +13,7 @@ export class Round extends BaseTypeConstraint {
     if (typeMatcher.isNothing(round)) {
       return this;
     }
-    const $round = typeMatcher.isStringType(round) ? round : "round";
-    round && this.base.round($round);
-    return this;
+    const roundLabel = typeMatcher.isStringType(round) ? round : "round";
+    return this.chain(x => roundLabel && x.round(roundLabel));
   }
 }

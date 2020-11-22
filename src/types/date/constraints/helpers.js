@@ -7,23 +7,27 @@ export class DateHelpers extends Loggable {
   }
 
   toDate(date) {
-    return new Date(date);
+    return typeMatcher.toDate(date)
   }
 
   // Yup supports string | Date
   // allow int (number of milliseconds from 1970) via transformToDate
   isValidDateType(date) {
-    return typeMatcher.isStringType(date) || this.isDateType(date);
+    return typeMatcher.isStringType(date) || typeMatcher.isDateType(date);
+  }
+
+  isDateParseable(date) {
+    return Boolean(Date.parse(date));
   }
 
   isValidDate(date) {
     if (!this.isValidDateType(date)) return false;
-    return typeMatcher.isStringType(date) ? Boolean(Date.parse(date)) : true;
+    return typeMatcher.isStringType(date) ? this.isDateParseable(date) : true;
   }
 
   // optionally transform millisecs to Date value?
   transformToDate(date) {
-    return typeMatcher.isNumberType(date) ? new Date(date) : date;
+    return typeMatcher.isNumberType(date) ? this.toDate(date) : date;
   }
 
   handleInvalidDate(name, value) {

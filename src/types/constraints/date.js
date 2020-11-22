@@ -1,4 +1,5 @@
 import { Constraint } from '../constraints/base';
+import { DateHelpers } from '../date/constraints';
 import { typeMatcher } from '../_type-matcher';
 
 function createDateConstraint(typer, map) {
@@ -8,10 +9,11 @@ function createDateConstraint(typer, map) {
 class DateConstraint extends Constraint {
   constructor(typer, map = {}) {
     super(typer, map);
+    this.helper = new DateHelpers(typer.opts)
   }
 
   transform(date) {
-    return this.toDate(date);
+    return this.helper.toDate(date);
   }
 
   isValidConstraint(date) {
@@ -23,29 +25,29 @@ class DateConstraint extends Constraint {
   }
 
   toDate(date) {
-    return new Date(date);
+    return typeMatcher.toDate(date);
   }
 
   isValidDateType(date) {
-    return this.isStringType(date) || this.isDateType(date);
+    return typeMatcher.isStringType(date) || typeMatcher.isDateType(date);
   }
 
   isValidDate(date) {
     if (!this.isValidDateType(date)) return false;
-    return this.isStringType(date) ? isDateParseable(date) : true;
+    return typeMatcher.isStringType(date) ? this.isDateParseable(date) : true;
   }
 
   isDateParseable(date) {
-    return Boolean(Date.parse(date));
+    return this.helper.isDateParseable(date)
   }
 
   isDateType(date) {
-    return date instanceof Date;
+    return typeMatcher.isDateType(date)
   }
 
   // optionally transform millisecs to Date date?
   transformToDate(date) {
-    return typeMatcher.isNumberType(date) ? this.toDate(date) : date;
+    return typeMatcher.isNumberType(date) ? typeMatcher.toDate(date) : date;
   }
 
   get explainConstraintValidMsg() {

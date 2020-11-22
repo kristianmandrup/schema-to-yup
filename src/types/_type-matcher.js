@@ -1,3 +1,24 @@
+export const numberTypeMatcher = {
+  toNumber(num) {
+    return Number(num);
+  },
+  isNumberLike(num) {
+    return !isNaN(typeMatcher.toNumber(num));
+  },
+  isNumberType(num) {
+    return !isNaN(num);
+  },
+}
+
+export const dateTypeMatcher = {
+  toDate(date) {
+    return new Date(date);
+  },
+  isDateType(val) {
+    return val instanceof Date;
+  }
+}
+
 export const typeMatcher = {
   isNothing(val) {
     return val === undefined || val === null;
@@ -5,29 +26,22 @@ export const typeMatcher = {
   isPresent(num) {
     return !typeMatcher.isNothing(num);
   },
-  toNumber(num) {
-    return Number(num);
+  isEmpty(str) {
+    return typeMatcher.isNothing(str) || str.trim() === ''
   },
-  isNumberLike(num) {
-    return !isNaN(typeMatcher.toNumber(num));
-  },
+  ...numberTypeMatcher,
+  ...dateTypeMatcher,
   isObjectType(obj) {
     return obj === Object(obj);
   },
   isArrayType(value) {
     return Array.isArray(value);
   },
-  isNumberType(num) {
-    return !isNaN(num);
-  },
   isStringType(val) {
     return typeof val === "string";
   },
   isFunctionType(val) {
     return typeof val === "function";
-  },
-  isDateType(val) {
-    return val instanceof Date;
   }
 }
 

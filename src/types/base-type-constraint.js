@@ -20,9 +20,16 @@ export class BaseTypeConstraint extends Loggable {
     this.handler.base = base
   } 
 
-  chainYup(cb) {
-    this.handler.base = cb(this.base)
-    return this
+  chain(cb) {
+    return this.handler.chain(cb)
+  }
+
+  valErrMessage(msg) {
+    return this.handler.valErrMessage(msg)
+  }
+
+  valErrMessageOr(...msgNames) {
+    return this.handler.valErrMessageOr(...msgNames)
   }
 
   get addConstraint() {

@@ -10,8 +10,9 @@ const defaults = {
 }
 
 export class Converter extends Base {
-  constructor(opts = {}, config) {
+  constructor(handler, opts = {}, config) {
     super(opts.config)
+    this.handler = handler
     this.constraintsAdder = this.createConstraintsAdder(opts)
     this.init(config)
   }

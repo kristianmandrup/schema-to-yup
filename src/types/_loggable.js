@@ -9,6 +9,11 @@ class Loggable {
     this.err = typeof error === "function" ? error : console.error;
   }
 
+  stringify(data) {
+    return JSON.stringify(data)
+  }
+  
+
   error(errMsg, value) {
     // only disable if directly disabled
     if (this.enable.error === false) return;
