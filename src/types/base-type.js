@@ -1,6 +1,7 @@
 import { Converter } from './converter'
 import { TypeModeSelector } from './type-mode-selector'
 import { TypeValueProcessor } from './type-value-processor'
+import { TypeErrorHandler } from './type-error-handler'
 import { YupMixed } from './mixed'
 
 const defaults = {
@@ -8,7 +9,8 @@ const defaults = {
     Converter,
     YupMixed,
     TypeModeSelector,
-    TypeValueProcessor
+    TypeValueProcessor,
+    TypeErrorHandler
   }
 }
 
