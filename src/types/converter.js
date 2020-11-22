@@ -10,11 +10,11 @@ const defaults = {
 }
 
 export class Converter extends Base {
-  constructor(handler, opts = {}, config) {
+  constructor(handler, opts = {}) {
     super(opts.config)
     this.handler = handler
     this.constraintsAdder = this.createConstraintsAdder(opts)
-    this.init(config)
+    this.init()
   }
 
   get constraintsMap() {
@@ -24,11 +24,16 @@ export class Converter extends Base {
     }
   }
 
-  init(config) {
+  get typeEnabled() {
+    return this.handler.typeEnabled
+  }
+
+  get type() {
+    return this.handler.type
+  }
+
+  init() {
     this.setClassMap(defaults)
-    const { typeEnabled, type } = config
-    this.typeEnabled = typeEnabled
-    this.type = type
   }
 
   get typeConfig() {

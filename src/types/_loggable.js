@@ -1,4 +1,4 @@
-class Loggable {
+export class Loggable {
   constructor(config = {}) {
     this.config = config;
     const { log, error } = config;
@@ -32,4 +32,4 @@ class Loggable {
   }
 }
 
-export { Loggable };
+

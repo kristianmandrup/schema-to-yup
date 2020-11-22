@@ -1,7 +1,8 @@
+import { Loggable } from "./types/_loggable";
 import { typeMatcher } from "./types/_type-matcher";
 const { isNothing } = typeMatcher
 
-export class ConstraintBuilder extends TypeMatcher {
+export class ConstraintBuilder extends Loggable {
   constructor(typeHandler, config = {}) {
     super(config);
     this.typeHandler = typeHandler;

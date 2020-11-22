@@ -14,7 +14,7 @@ const defaults = {
   }
 }
 
-class YupBaseType extends Base {
+export class YupBaseType extends Base {
   constructor(opts = {}) {
     super(opts.config);
     this.init()
@@ -32,7 +32,7 @@ class YupBaseType extends Base {
   setInstType(name = this.yupType) {
     this.type = name;    
     const inst = this.yup[name]()
-    return this.setYupTypeInstance(inst)
+    return this.setTypeInstance(inst)
   }
 
   valErrMessage(msgName) {
@@ -47,13 +47,23 @@ class YupBaseType extends Base {
     this.constraintsAdder.addConstraint(alias, opts)
   }
 
-  validateOnCreate(key, value, opts) {
+  validateKey(key, opts) {
     if (!key) {
       this.error(`create: missing key ${this.stringify(opts)}`);
     }
+    return this
+  }
+
+  validateValue(value, opts) {
     if (!value) {
       this.error(`create: missing value ${this.stringify(opts)}`);
     }
+    return this
+  }
+
+  validateOnCreate(key, value, opts) {
+    this.validateKey(key, opts)
+    this.validateValue(value, opts)
   }
 
   init() {
@@ -96,17 +106,11 @@ class YupBaseType extends Base {
     return this;
   }
 
-  get converterConfig() {
-    return { typeEnabled: this.typeEnabled, type: this.type }
-  }
-
-  createConverter(config = this.converterConfig()) {
-    return new this.classMap.Converter(this, this.opts, config)
+  createConverter() {
+    return new this.classMap.Converter(this, this.opts)
   }
 
   createMixed() {
     return new this.classMap.YupMixed(this.opts)
   }
 }
-
-export { YupBaseType }

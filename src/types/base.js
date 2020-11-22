@@ -1,7 +1,7 @@
 import defaults from "./defaults";
 import { Loggable } from "./_loggable";
 
-class Base extends Loggable {
+export class Base extends Loggable {
   constructor(config = {}) {
     super(config);
     const schemaType = config.schemaType || "json-schema";
@@ -18,4 +18,3 @@ class Base extends Loggable {
   }
 }
 
-export { Base };

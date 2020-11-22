@@ -1,26 +1,27 @@
 import * as yup from "yup";
-import { Base, YupSchemaEntry, YupSchemaEntryError } from "./entry";
+import { typeMatcher, Base } from './types'
 
-import { createYupSchemaEntry } from "./create-entry";
-export {
-  PropertyValueResolver,
-  createPropertyValueResolver
-} from "./property-value-resolver";
-import { extendYupApi } from "./validator-bridge";
+export * as types from "./types";
+export * from "./validator-bridge";
+
+export * from "./base-property-value-resolver";
+export * from "./constraint-builder";
+export * from "./create-entry";
+export * from "./entry";
+export * from "./error-message-handler";
+export * from "./multi-property-value-resolver";
+export * from "./property-value-resolver";
+export * from "./single-property-value-resolver";
 
 function isObject(type) {
   return type && type === "object";
 }
 
-function buildYup(schema, config = {}) {
+export function buildYup(schema, config = {}) {
   return new YupBuilder(schema, config).yupSchema;
 }
 
-function isObjectType(obj) {
-  return obj === Object(obj);
-}
-
-class YupBuilder extends Base {
+export class YupBuilder extends Base {
   constructor(schema, config = {}) {
     super(config);
     config.buildYup = buildYup;
@@ -41,7 +42,7 @@ class YupBuilder extends Base {
       return;
     }
 
-    if (!isObjectType(props)) {
+    if (!typeMatcher.isObjectType(props)) {
       const props = JSON.stringify(properties);
       this.error(`invalid schema: must have a properties object: ${props}`);
       return;
@@ -162,17 +163,3 @@ class YupBuilder extends Base {
     return yupEntry; // .toEntry();
   }
 }
-
-import * as types from "./types";
-export { ErrorMessageHandler } from "./error-message-handler";
-export { ConstraintBuilder } from "./constraint-builder";
-
-export {
-  buildYup,
-  YupBuilder,
-  YupSchemaEntry,
-  YupSchemaEntryError,
-  types,
-  createYupSchemaEntry,
-  extendYupApi
-};
