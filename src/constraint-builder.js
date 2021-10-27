@@ -21,6 +21,7 @@ export class ConstraintBuilder extends TypeMatcher {
       propValue,
       method,
       yup,
+      value,
       values,
       errName
     } = opts;
@@ -65,7 +66,7 @@ export class ConstraintBuilder extends TypeMatcher {
     ];
     let newBase;
     for (let name of constrainFnNames) {
-      newBase = this[name](values, constrOpts);
+      newBase = this[name](value || values, constrOpts);
       if (newBase) break;
     }
 
