@@ -1,19 +1,19 @@
 {
-  "name": "schema-to-yup",
-  "version": "1.10.2",
+  "name": "@gabrielburich/schema-to-yup",
+  "version": "1.10.3",
   "source": "src/index.js",
   "main": "dist/index.js",
-  "description": "Build a Yup schema object to validate models from a domain model schema (JSON or GraphQL)",
+  "description": "Build a Yup schema object to validate models from a domain model schema (JSON or GraphQL) - Bugs fixed",
   "license": "MIT",
-  "author": "Kristian Mandrup <kmandrup@gmail.com>",
-  "homepage": "https://github.com/kristianmandrup/json-schema-to-yup#readme",
+  "author": "Kristian Mandrup <kmandrup@gmail.com>, Gabriel Burich <gabrielburich@gmail.com>",
+  "homepage": "https://github.com/gabrielburich/schema-to-yup#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kristianmandrup/json-schema-to-yup.git"
+    "url": "https://github.com/gabrielburich/schema-to-yup.git"
   },
   "bugs": {
-    "url": "https://github.com/kristianmandrup/json-schema-to-yup/issues",
-    "email": "kmandrup@gmail.com"
+    "url": "https://github.com/gabrielburich/schema-to-yup/issues",
+    "email": "gabrielburich@gmail.com"
   },
   "typings": "schema-to-yup.d.ts",
   "dependencies": {
