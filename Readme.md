@@ -2,6 +2,51 @@
 
 Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
+[@gabrielburich/schema-to-yup](https://github.com/gabrielburich/schema-to-yup) is a [schema-to-yup fork](https://github.com/kristianmandrup/schema-to-yup), this lib was very important for some of my projects and was no longer being updated. That's why I took the liberty of publishing an updated version on npm.
+If the schema-to-yup lib is updated again I intend to stop this project.
+
+## Content
+
+* [Schemas](#schemas)
+* [Customisation hooks](#customisation-hooks)
+* [Quick start](#quick-start)
+* [Refs](#refs)
+* [Mode](#mode)
+* [Shape](#shape)
+* [Types](#types)
+    * [Mixed (any type)](#mixed-any-type)
+    * [Array](#array)
+    * [Boolean](#boolean)
+    * [Date](#date)
+    * [Number](#number)
+    * [Object](#object)
+    * [string](#string)
+* [Multi-type constraints](#multi-type-constraints)
+* [Custom entry builders](#custom-entry-builders)
+* [Custom type handlers](#custom-type-handlers)
+* [Custom constraint handler functions](#custom-constraint-handler-functions)
+* [Custom constraint builder](#custom-constraint-builder)
+* [Conditional logic](#conditional-logic)
+* [Customizing conditional logic](#customizing-conditional-logic)
+* [Additional properties](#additional-properties)
+* [Complex example](#complex-example)
+* [Complex/Nested schemas](#complexnested-schemas)
+* [Custom models](#custom-models)
+* [GraphQL schema](#graphql-schema)
+* [Custom logs and error handling](#custom-logs-and-error-handling)
+* [Customization](#customization)
+  * [Customization example](#customization-example)
+  * [Extend Yup API to bridge other validators](#extend-yup-api-to-bridge-other-validators)
+  * [Subclassing](#subclassing)
+  * [Error messages](#error-messages)
+  * [Use a custom error message handler](#use-a-custom-error-message-handler)
+  * [Custom validation messages using select defaults](#custom-validation-messages-using-select-defaults)
+  * [Adding custom constraints](#adding-custom-constraints)
+* [Custom Yup Locale](#custom-yup-locale)
+* [Similar projects](#similar-projects)
+* [Testing](#testing)
+* [License](#license)
+
 ## Schemas
 
 - [AJV: JSON Schema keywords](https://ajv.js.org/keywords.html)
@@ -25,14 +70,13 @@ This library is built to be easy to customise or extend to suit individual devel
 
 ## Stability
 
-The most recent versions have more functionality but are still a bit unstable in some areas. 
-For a solid/stable version, try `1.9.16`.
+For a solid/stable version, try `1.10.3`.
 
 ## Quick start
 
 Install
 
-`npm install schema-to-yup -S` or `yarn add schema-to-yup`
+`npm install @gabrielburich/schema-to-yup -S` or `yarn add @gabrielburich/schema-to-yup`
 
 Use
 
@@ -438,7 +482,7 @@ We welcome feedback on how to better structure the `config` object to make it ea
 
 ### Custom constraint builder
 
- This library supports using a custom constraint builder to add and build constraints. All factories are initialised in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
+This library supports using a custom constraint builder to add and build constraints. All factories are initialised in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
 
 ```js
 import { ConstraintBuilder } from "schema-to-yup";
@@ -777,7 +821,7 @@ const schema = buildYup(nameJsonSchema, { schemaType: "type-def", log: true });
 
 Feel free to make PRs to make more common schema models conveniently available!
 
-### Custom logs and error handling
+## Custom logs and error handling
 
 You can enable logging py passing a `log` option in the `config` argument. If set to true, it will by default assign the internal log function to `console.log`
 
@@ -1145,8 +1189,24 @@ Currently only `YupNumber` has been (partly) refactored to take advantage of thi
 
 `YupNumber` also has the most unit test coverage, used to test the current infrastructure!
 
+## Custom Yup Locale
+
+```javascript
+  const locale = {
+      array: {
+          min: 'É necessário ${min} valores',
+      },
+      mixed: {
+          required: 'Campo Obrigatório',
+      }
+  }
+
+  const schema = buildYup(jsonSchema, { locale: locale });
+```
+
 ## Similar projects
 
+- [Original Project](https://github.com/kristianmandrup/schema-to-yup)
 - [JSON schema to Elastic Search mapping](https://github.com/kristianmandrup/json-schema-to-es-mapping)
 - [JSON Schema to GraphQL types with decorators/directives](https://github.com/kristianmandrup/json-schema-to-graphql-types-decorated)
 - [JSON Schema to Mongoose schema](https://github.com/kristianmandrup/convert-json-schema-to-mongoose)
@@ -1164,27 +1224,6 @@ Uses [jest](jestjs.io/) for unit testing.
 - Have unit tests that cover most of the constraints supported.
 - Could use some refactoring using the latest infrastructure (see `NumericConstraint`)
 - Please help add more test coverage and help refactor to make this lib even more awesome :)
-
-## Development
-
-Current development is taking place on [refactoring](https://github.com/kristianmandrup/schema-to-yup/tree/refactoring) branch.
-
-On his branch:
-
-- all the code has been converted to TypeScript
-- constraint classes for String, Numeric, RegExp etc.
-- Validator building has been extracted so you can add support for any Validator, such as Forg
-- more...
-
-If you would like to further improved this library or add support for more validators than Yup, please help on this branch. Cheers!
-
-## Ideas and suggestions
-
-Please feel free to come with ideas and suggestions on how to further improve this library.
-
-## Author
-
-2018 Kristian Mandrup (CTO@Tecla5)
 
 ## License
 
