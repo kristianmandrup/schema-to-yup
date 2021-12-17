@@ -2,10 +2,7 @@ import * as yup from "yup";
 import { Base, YupSchemaEntry, YupSchemaEntryError } from "./entry";
 
 import { createYupSchemaEntry } from "./create-entry";
-export {
-  PropertyValueResolver,
-  createPropertyValueResolver
-} from "./property-value-resolver";
+
 import { extendYupApi } from "./validator-bridge";
 
 function isObject(type) {
@@ -35,7 +32,6 @@ class YupBuilder extends Base {
     const props = this.getProps(schema);
     this.type = type;
     this.properties = props;
-    this.additionalProps = this.getAdditionalProperties(schema);
     this.required = this.getRequired(schema);
 
     if (!isObject(type)) {
@@ -55,10 +51,6 @@ class YupBuilder extends Base {
 
     this.shapeConfig = shapeConfig;
     this.validSchema = true;
-  }
-
-  getAdditionalProperties(schema) {
-    return schema.additionalProperties;
   }
 
   getRequired(obj) {
@@ -113,23 +105,15 @@ class YupBuilder extends Base {
     return this.config.isRequired(value);
   }
 
-  propsToShape(opts = {}) {
-    const shape = this.objPropsToShape(opts);
-    this.objPropsShape = shape;
-    this.addPropsShape = this.additionalPropsToShape(opts, shape);
-    return shape;
-  }
-
-  additionalPropsToShape(opts, shape) {
-    return shape;
-  }
-
-  objPropsToShape({ name }) {
+  propsToShape({ name }) {
     const properties = {
       ...this.properties
     };
     const keys = Object.keys(properties);
     return keys.reduce((acc, key) => {
+      // this.logInfo("propsToShape", {
+      //   key
+      // });
       const value = properties[key];
       const yupSchemaEntry = this.propToYupSchemaEntry({
         name,
@@ -143,7 +127,9 @@ class YupBuilder extends Base {
   }
 
   propToYupSchemaEntry({ name, key, value = {} }) {
-    return this.createYupSchemaEntry({
+    const entryBuilder =
+      this.createYupSchemaEntry || this.config.createYupSchemaEntry;
+    return entryBuilder({
       schema: this.schema,
       name,
       key,
@@ -166,8 +152,7 @@ class YupBuilder extends Base {
 }
 
 import * as types from "./types";
-export { ErrorMessageHandler } from "./error-message-handler";
-export { ConstraintBuilder } from "./constraint-builder";
+// import { createYupSchemaEntry } from "./create-entry";
 
 export {
   buildYup,

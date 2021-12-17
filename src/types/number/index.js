@@ -27,7 +27,7 @@ class YupNumber extends YupMixed {
     super(obj);
     this.type = this.normalizeNumType(obj.type);
     this.base = this.yup.number();
-    this.rangeConstraint = createRangeConstraint(this);
+    this.range = createRangeConstraint(this);
   }
 
   normalizeNumType(type) {
@@ -42,17 +42,19 @@ class YupNumber extends YupMixed {
     return YupNumber.create(obj).createSchemaEntry();
   }
 
-  get typeEnabled() {
+  get enabled() {
     return ["range", "posNeg", "integer"];
   }
 
   convert() {
+    this.enabled.map(name => this.processConstraint(name));
     super.convert();
     return this;
   }
 
-  range() {
-    this.rangeConstraint.add();
+  processConstraint(name) {
+    const fn = this[name];
+    fn && typeof fn === "function" ? fn.bind(this)() : fn.add();
   }
 
   truncate() {

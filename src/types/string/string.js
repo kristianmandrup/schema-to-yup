@@ -13,21 +13,16 @@ export class YupString extends YupMixed {
 
   convert() {
     super.convert();
+    this.normalize();
+    this.minLength()
+      .maxLength()
+      .pattern();
+    this.lowercase();
+    this.uppercase();
+    this.email();
+    this.url();
+    this.genericFormat();
     return this;
-  }
-
-  get typeEnabled() {
-    return [
-      "normalize",
-      "minLength",
-      "maxLength",
-      "pattern",
-      "lowercase",
-      "uppercase",
-      "email",
-      "url",
-      "genericFormat"
-    ];
   }
 
   trim() {
@@ -75,7 +70,7 @@ export class YupString extends YupMixed {
     if (!this.isUrl) return this;
     const constraintName = this.constraintNameFor("url", "format");
     const method = "url";
-    this.addConstraint("url", {
+    this.addConstraint("email", {
       constraintValue: true,
       constraintName,
       method,
@@ -107,11 +102,11 @@ export class YupString extends YupMixed {
   }
 
   pattern() {
-    const { pattern, flags } = this.constraints;
+    const { pattern } = this.constraints;
     if (!pattern) {
       return this;
     }
-    const regex = new RegExp(pattern, flags);
+    const regex = new RegExp(pattern);
     const errMsg =
       this.valErrMessage("pattern") ||
       this.valErrMessage("matches") ||

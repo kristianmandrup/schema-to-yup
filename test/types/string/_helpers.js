@@ -23,12 +23,6 @@ export const createStrNoKey = value => {
 };
 
 export const createSchema = (schemaEntry, label = "value") => {
-  if (!schemaEntry) {
-    console.error("createSchema: missing schemaEntry", label);
-  }
-  // const { _whitelist } = schemaEntry || {};
-  // const list = (_whitelist && _whitelist.list) || [];
-
   return yup.object().shape({
     [label]: schemaEntry
   });

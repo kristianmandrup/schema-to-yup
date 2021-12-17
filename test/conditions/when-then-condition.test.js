@@ -162,7 +162,7 @@ describe("WhenCondition", () => {
       count
     });
 
-    test.only("validate", () => {
+    test("validate", () => {
       // Runs validatations synchronously if possible and returns the resulting value, or throws a ValidationError.
       // https://github.com/jquense/yup#mixedvalidatesyncvalue-any-options-object-any
       const value = {
@@ -170,7 +170,6 @@ describe("WhenCondition", () => {
         count: 10
       };
       const result = inst.validateSync(value);
-      // console.log({ result });
       expect(result).toEqual(value);
     });
   });

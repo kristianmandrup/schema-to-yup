@@ -70,7 +70,7 @@ This library is built to be easy to customise or extend to suit individual devel
 
 ## Stability
 
-For a solid/stable version, try `1.10.3`.
+For a solid/stable version, try `1.9.16`.
 
 ## Quick start
 

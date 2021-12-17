@@ -13,15 +13,10 @@ export class YupObject extends YupMixed {
     return new YupObject(obj);
   }
 
-  get typeEnabled() {
-    return ["noUnknown", "camelCase", "constantCase"];
-  }
-
   convert() {
     if (!this.properties) return this;
-    super.convert();
-    // this.initHelpers();
-    // this.convertEnabled();
+    this.noUnknown();
+    this.camelCase().constantCase();
 
     const schema = this.value;
     const config = this.config;

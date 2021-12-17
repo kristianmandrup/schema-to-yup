@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { createWhenCondition } from "./custom-when";
-const { buildYup } = require("../src");
+const { buildYup } = require("..");
 
 const createValidTester = schema => {
   return (json, expectedResult) => {

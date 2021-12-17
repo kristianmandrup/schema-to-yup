@@ -11,11 +11,8 @@ export class YupDate extends YupMixed {
     return new YupDate(obj);
   }
 
-  get typeEnabled() {
-    return ["minDate", "maxDate"];
-  }
-
   convert() {
+    this.minDate().maxDate();
     super.convert();
     return this;
   }

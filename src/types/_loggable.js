@@ -1,6 +1,5 @@
 class Loggable {
   constructor(config = {}) {
-    this.config = config;
     const { log, error } = config;
     const enable = config.enable || {};
     this.enable = enable;
@@ -27,4 +26,6 @@ class Loggable {
   }
 }
 
-export { Loggable };
+export {
+  Loggable
+};
