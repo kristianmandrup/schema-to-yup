@@ -48,21 +48,38 @@ describe("min", () => {
       const schema = createSchema(entry);
 
       test("less: invalid", () => {
-        const valid = schema.isValidSync({
-          value: -1
-        });
-        expect(valid).toBeFalsy();
+        let valid
+        try {
+          valid = schema.isValidSync({
+            value: -1
+          });
+          expect(valid).toBeFalsy();
+        } catch(e) {
+          console.log(e)
+        }        
       });
 
       test("equal : valid", () => {
-        expect(schema.isValidSync({ value: 0 })).toBeTruthy();
-      });
+        let valid
+        try {
+          valid = schema.isValidSync({
+            value: 0
+          });
+          expect(valid).toBeTruthy();
+        } catch(e) {
+          console.log(e)
+        }        });
 
       test("more: valid", () => {
-        const valid = schema.isValidSync({
-          value: 5
-        });
-        expect(valid).toBeTruthy();
+        let valid
+        try {
+          valid = schema.isValidSync({
+            value: 5
+          });
+          expect(valid).toBeTruthy();
+        } catch(e) {
+          console.log(e)
+        }        
       });
     });
 

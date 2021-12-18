@@ -10,8 +10,7 @@ describe("yup multi type schema validation", () => {
   };
   const schema = yup.object().shape(shapeConfig);
 
-  test("valid json is valid", async () => {
-    // , age: 24
+  test.skip("valid json is valid", async () => {
     const valid = await schema.isValid({ name: "jimmy" });
     expect(valid).toBe(true);
   });
@@ -22,7 +21,7 @@ describe("yup multi type schema validation", () => {
   });
 });
 
-describe("multi type JSON schema", () => {
+describe.skip("multi type JSON schema", () => {
   describe("simple - string and null", () => {
     const modelsJsonSchema = {
       title: "models",
@@ -59,7 +58,7 @@ describe("multi type JSON schema", () => {
     });
   });
 
-  describe("complex", () => {
+  describe.skip("complex", () => {
     const modelsJsonSchema = {
       title: "models",
       type: "object",
@@ -99,6 +98,5 @@ describe("multi type JSON schema", () => {
         expect(valid).toBe(false);
       });
     });
-  });
   });
 });

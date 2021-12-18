@@ -220,6 +220,9 @@ class YupMixed extends Base {
   }
 
   addConstraint(propName, opts) {
+    if (!this.constraintBuilder) {
+      throw new Error(`[YupMixed] addConstraint: Missing constraintBuilder in ${this.constructor.name}`);
+    }
     const constraint = this.constraintBuilder.addConstraint(propName, opts);
     if (constraint) {
       this.base = constraint;
