@@ -1168,16 +1168,7 @@ Uses [jest](jestjs.io/) for unit testing.
 
 ## Development
 
-Current development is taking place on [refactoring](https://github.com/kristianmandrup/schema-to-yup/tree/refactoring) branch.
-
-On his branch:
-
-- all the code has been converted to TypeScript
-- constraint classes for String, Numeric, RegExp etc.
-- Validator building has been extracted so you can add support for any Validator, such as Forg
-- more...
-
-If you would like to further improved this library or add support for more validators than Yup, please help on this branch. Cheers!
+A new version is under development at [schema-to-yup-mono](https://github.com/kristianmandrup/schema-to-yup-mono) which is this code ported to a lerna monorepo with a cleaner, mode modular structyure. More work needs to be done in terms of TDD and unit testing. Ideally this repo should be ported to [Nx](https://nx.dev/)
 
 ## Ideas and suggestions
 
