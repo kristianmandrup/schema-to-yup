@@ -687,9 +687,9 @@ See `test/types/object/complex-schema.test.js`
 
 ## Custom models
 
-This library now also supports non JSON schema models. See the `types/defaults` mappings.
+This library now also supports non JSON schema models. See the `types/schema-parser-maps` mappings.
 
-`types/defaults/json-schema.js`
+`types/schema-parser-maps/json-schema.js`
 
 ```js
 module.exports {
@@ -801,6 +801,20 @@ const schema = buildYup(nameJsonSchema, {
 });
 ```
 
+You can eaven extend and override an existing entry in the map as follows, using the special `extends` key
+
+````js
+const mySchemaParserMap = {
+  "my-schema": {
+    extends: "avro",
+    isArray: (obj) => obj && obj.type === "list",
+    // ...
+  },
+};
+```
+
+You can supply a custom `createSchemaParserBuilder` entry in the `config` object to further customize the building of a `SchemaParser` using this map.
+
 Feel free to make PRs to make more common schema models available!
 
 ### Custom logs and error handling
@@ -809,7 +823,7 @@ You can enable logging py passing a `log` option in the `config` argument. If se
 
 ```js
 const schema = buildYup(nameJsonSchema, { log: true });
-```
+````
 
 You can also pass a log function in the `log` option to handle log messages and an `err` option with a custom error handler function.
 

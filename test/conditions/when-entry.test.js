@@ -1,7 +1,7 @@
 const { createWhenEntry } = require("../../src/conditions/when/when-entry");
 
 const { createYupSchemaEntry } = require("../../src/create-entry");
-import defaults from "../../src/types/defaults";
+import schemaParserMaps from "../../src/types/schema-parser-maps";
 import * as yup from "yup";
 
 function expectYupSchemaEntry(obj) {
@@ -34,7 +34,7 @@ describe("WhenEntry", () => {
 
   const config = {
     createYupSchemaEntry,
-    ...defaults["json-schema"]
+    ...schemaParserMaps["json-schema"]
   };
 
   const type = "number";

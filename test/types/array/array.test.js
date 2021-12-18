@@ -1,10 +1,10 @@
 const { types } = require("../../../src");
 const { toYupArray } = types;
 const { createYupSchemaEntry } = require("../../../src/create-entry");
-const defaults = require("../../../src/types/defaults/json-schema").default;
+import schemaParserMaps from "../../src/types/schema-parser-maps";
 
 const yup = require("yup");
-const defaultConfig = { ...defaults, createYupSchemaEntry };
+const defaultConfig = { ...schemaParserMaps, createYupSchemaEntry };
 
 const create = (fieldDef, config = {}) => {
   config = Object.assign(defaultConfig, config);
