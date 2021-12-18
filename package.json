@@ -1,6 +1,6 @@
 {
   "name": "schema-to-yup",
-  "version": "1.10.5",
+  "version": "1.10.6",
   "publishConfig": {
     "access": "public"
   },
@@ -49,7 +49,8 @@
     "build",
     "builder",
     "graphql",
-    "typedef"
+    "typedef",
+    "avro"
   ],
   "scripts": {
     "build": "rm -rf ./dist && microbundle build -f cjs",

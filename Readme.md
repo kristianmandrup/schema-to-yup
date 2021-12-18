@@ -9,7 +9,9 @@ Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any o
 
 The builder currently supports the most commonly used [JSON Schema layout](https://json-schema.org/) and GraphQL type definition exports using [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson) (see [GraphQL schema](#graphql-schema)).
 
-It also supports some extra convenience schema properties that make it more "smooth" to define validation requirements declaratively (see below).
+Recently basic [Avro](https://avro.apache.org/docs/current/spec.html) schema support has been added as well. You can easily add support for your own custom schema formats.
+
+We also supports some extra convenience schema properties that make it more "smooth" to define validation requirements declaratively (see below).
 
 According to the JSON schema specs, you are free to add extra metadata to the field schema definitions beyond those supported "natively".
 
