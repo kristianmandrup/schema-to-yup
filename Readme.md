@@ -772,7 +772,34 @@ To switch the schema type, pass `schemaType` in config as follows.
 const schema = buildYup(nameJsonSchema, { schemaType: "type-def", log: true });
 ```
 
-Feel free to make PRs to make more common schema models conveniently available!
+## Avro schema
+
+Simply use `schemaType: "avro"` in the config object.
+
+```js
+const schema = buildYup(nameJsonSchema, { schemaType: "avro", log: true });
+```
+
+## Other/custom schema format support
+
+You can supply a `config.schemaParserMap` object with parser entries for any specific schema formats you wish to support.
+
+```js
+const mySchemaParserMap = {
+  "my-schema": {
+    // ...
+    isArray: (obj) => obj && obj.type === "list",
+    // ...
+  },
+};
+
+const schema = buildYup(nameJsonSchema, {
+  schemaType: "my-schema",
+  mySchemaParserMap,
+});
+```
+
+Feel free to make PRs to make more common schema models available!
 
 ### Custom logs and error handling
 
