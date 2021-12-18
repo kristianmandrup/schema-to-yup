@@ -25,7 +25,7 @@ This library is built to be easy to customise or extend to suit individual devel
 
 ## Stability
 
-The most recent versions have more functionality but are still a bit unstable in some areas. 
+The most recent versions have more functionality but are still a bit unstable in some areas.
 For a solid/stable version, try `1.9.16`.
 
 ## Quick start
@@ -46,44 +46,44 @@ const schema = {
   properties: {
     name: {
       description: "Name of the person",
-      type: "string"
+      type: "string",
     },
     email: {
       type: "string",
-      format: "email"
+      format: "email",
     },
     fooorbar: {
       type: "string",
-      matches: "(foo|bar)"
+      matches: "(foo|bar)",
     },
     age: {
       description: "Age of person",
       type: "number",
       exclusiveMinimum: 0,
-      required: true
+      required: true,
     },
     characterType: {
       enum: ["good", "bad"],
       enum_titles: ["Good", "Bad"],
       type: "string",
       title: "Type of people",
-      propertyOrder: 3
-    }
+      propertyOrder: 3,
+    },
   },
-  required: ["name", "email"]
+  required: ["name", "email"],
 };
 
 const config = {
   // for error messages...
   errMessages: {
     age: {
-      required: "A person must have an age"
+      required: "A person must have an age",
     },
     email: {
       required: "You must enter an email address",
-      format: "Not a valid email address"
-    }
-  }
+      format: "Not a valid email address",
+    },
+  },
 };
 
 const { buildYup } = require("schema-to-yup");
@@ -91,11 +91,11 @@ const yupSchema = buildYup(schema, config);
 // console.dir(schema)
 const valid = await yupSchema.isValid({
   name: "jimmy",
-  age: 24
+  age: 24,
 });
 
 console.log({
-  valid
+  valid,
 });
 // => {valid: true}
 ```
@@ -105,10 +105,7 @@ This would generate the following Yup validation schema:
 ```js
 const schema = yup.object().shape({
   name: yup.string().required(),
-  age: yup
-    .number()
-    .required()
-    .positive()
+  age: yup.number().required().positive(),
 });
 ```
 
@@ -134,33 +131,33 @@ const jsonSchema = {
   title: "users",
   type: "object",
   properties: {
-    username: { type: "string" }
-  }
+    username: { type: "string" },
+  },
 };
 ```
 
 ```js
 const yupSchema = buildYup(jsonSchema, {
   mode: {
-    notRequired: true // default setting
-  }
+    notRequired: true, // default setting
+  },
 });
 
 // will be valid since username is not required by default
 const valid = yupSchema.validateSync({
-  foo: "dfds"
+  foo: "dfds",
 });
 ```
 
 ```js
 const yupSchema = buildYup(jsonSchema, {
   mode: {
-    notRequired: true // default setting
-  }
+    notRequired: true, // default setting
+  },
 });
 // will be invalid since username is required by default when notRequired mode is disabled
 const valid = yupSchema.validateSync({
-  foo: "dfds"
+  foo: "dfds",
 });
 ```
 
@@ -184,7 +181,7 @@ const { buildYup } = require("json-schema-to-yup");
 const { shapeConfig } = buildYup(json, config);
 const schema = yup.object().shape({
   ...shapeConfig,
-  ...customShapeConfig
+  ...customShapeConfig,
 });
 ```
 
@@ -297,16 +294,16 @@ export class MyMultiTypeValueResolver extends MultiTypeValueResolver {
       exclusive: true,
       params: {},
       message: "${path} does not conform to all constraints defined",
-      test: val => {
+      test: (val) => {
         return multiTypePropSchema.validateSync(val);
-      }
+      },
     });
   }
 
   resolvePropertyValue(constraintValue, accSchema) {
     const opts = {
       ...this.opts,
-      constraintValue
+      constraintValue,
     };
     return this.propertyHandler.resolve(opts, this.config);
   }
@@ -386,21 +383,21 @@ A custom handler to validate a string formatted as a valid `ip` address might lo
 
 ```js
 // takes the typehandler (such as YupString) instance as argument
-const ipHandler = th => {
+const ipHandler = (th) => {
   const constraintName = th.constraintNameFor("ip", "format");
   const method = "ip";
   th.addConstraint("ip", {
     constraintValue: true,
     constraintName,
     method,
-    errName: method
+    errName: method,
   });
 };
 
 const config = {
   string: {
     convert: {
-      ip: ipHandler
+      ip: ipHandler,
     },
     enabled: [
       "ip", // custom
@@ -413,9 +410,9 @@ const config = {
       "uppercase",
       "email",
       "url",
-      "genericFormat"
-    ]
-  }
+      "genericFormat",
+    ],
+  },
   // ... more configuration
 };
 
@@ -438,7 +435,7 @@ We welcome feedback on how to better structure the `config` object to make it ea
 
 ### Custom constraint builder
 
- This library supports using a custom constraint builder to add and build constraints. All factories are initialised in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
+This library supports using a custom constraint builder to add and build constraints. All factories are initialised in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
 
 ```js
 import { ConstraintBuilder } from "schema-to-yup";
@@ -477,7 +474,7 @@ const createConstraintBuilder = (typeHandler, config) => {
 };
 
 const config = {
-  createConstraintBuilder
+  createConstraintBuilder,
   // ... more configuration
 };
 
@@ -498,7 +495,7 @@ const biggyJson = {
   type: "object",
   properties: {
     isBig: {
-      type: "boolean"
+      type: "boolean",
     },
     count: {
       type: "number",
@@ -506,12 +503,12 @@ const biggyJson = {
         isBig: {
           is: true,
           then: {
-            min: 5
-          }
-        }
-      }
-    }
-  }
+            min: 5,
+          },
+        },
+      },
+    },
+  },
 };
 ```
 
@@ -521,12 +518,12 @@ Sample valid and invalid values with respect to `biggyJson` schema
 const bigJson = {
   valid: {
     isBig: true,
-    count: 5 // since isBig is set, must be >= 5
+    count: 5, // since isBig is set, must be >= 5
   },
   invalid: {
     isBig: true,
-    count: 4 // since isBig is set, must be >= 5
-  }
+    count: 4, // since isBig is set, must be >= 5
+  },
 };
 ```
 
@@ -555,7 +552,7 @@ const myWhenConditionFactoryFn = (opts = {}) => {
 };
 
 const config = {
-  createWhenCondition: myWhenConditionFactoryFn
+  createWhenCondition: myWhenConditionFactoryFn,
 };
 const schema = buildYup(nameJsonSchema, config);
 ```
@@ -745,18 +742,18 @@ Create a map of methods to match your model layout:
 
 ```js
 const typeDefConf = {
-  getProps: obj => obj.fields,
-  getType: obj => obj.type,
-  getName: obj => obj.name,
-  getConstraints: obj => (obj.directives || {}).constraints || {},
-  isString: obj => obj.type === "String",
-  isArray: obj => obj.isList,
-  isInteger: obj => obj.type === "Int",
-  isBoolean: obj => obj.type === "Boolean",
-  isDate: obj => obj.type === "Date" || obj.directives.date,
-  isNumber: obj => obj.type === "Int" || obj.type === "Float",
-  isObject: obj => obj.type === "Object",
-  isRequired: obj => !obj.isNullable
+  getProps: (obj) => obj.fields,
+  getType: (obj) => obj.type,
+  getName: (obj) => obj.name,
+  getConstraints: (obj) => (obj.directives || {}).constraints || {},
+  isString: (obj) => obj.type === "String",
+  isArray: (obj) => obj.isList,
+  isInteger: (obj) => obj.type === "Int",
+  isBoolean: (obj) => obj.type === "Boolean",
+  isDate: (obj) => obj.type === "Date" || obj.directives.date,
+  isNumber: (obj) => obj.type === "Int" || obj.type === "Float",
+  isObject: (obj) => obj.type === "Object",
+  isRequired: (obj) => !obj.isNullable,
 };
 ```
 
@@ -801,6 +798,13 @@ const schema = buildYup(nameJsonSchema, {
 });
 ```
 
+## Localised error messages
+
+You can specify the locale to use in the `config` object.
+Internally the builder will use the following `yup` call: `yup.setLocale(config.locale)`
+
+Thanks [@gabrielburich](https://github.com/gabrielburich)
+
 ## Customization
 
 You can supply a `createYupSchemaEntry` function as an entry in the `config` object.
@@ -823,7 +827,7 @@ class CustomYupSchemaEntry extends YupSchemaEntry {
 
 function createYupSchemaEntry(key, value, config) {
   const builder = new CustomYupSchemaEntryBuilder(key, value, config);
-  builder.types.array = config => createYupArray(config);
+  builder.types.array = (config) => createYupArray(config);
   return builder.toEntry();
 }
 
@@ -832,7 +836,7 @@ const messages = i18n.locale(LOCALE);
 
 const yupSchema = buildYup(json, {
   createYupSchemaEntry,
-  messages
+  messages,
 });
 ```
 
@@ -866,16 +870,16 @@ const schema = {
   fields: {
     accountNumber: {
       type: "String",
-      format: "credit-card"
-    }
-  }
+      format: "credit-card",
+    },
+  },
 };
 
 // opt in to use generic string format validation, via format: true config option
 const yupSchema = buildYup(schema, { format: true, schemaType: "type-def" });
 // ...do your validation
 const valid = await yupSchema.isValid({
-  accountNumber: "123-4567-1828-2929"
+  accountNumber: "123-4567-1828-2929",
 });
 ```
 
@@ -956,7 +960,7 @@ Then pass in your factory function in `config` as follows.
 
 ```js
 const config = {
-  createErrorMessageHandler
+  createErrorMessageHandler,
 };
 ```
 
@@ -968,13 +972,13 @@ let config = {
   errMessages: {
     emailAdr: {
       // note: would also work with email as the key
-      format: "emailAdr must be a valid email"
+      format: "emailAdr must be a valid email",
     },
     // generic fallback message for any email format validation and required fields
     // note: if not present uses yup default validation message
     $email: "Email format incorrect",
-    $required: "Required field"
-  }
+    $required: "Required field",
+  },
 };
 ```
 
@@ -1004,7 +1008,7 @@ export const errValKeys = [
   "integer",
   "positive",
   "minimum",
-  "maximum"
+  "maximum",
 ];
 
 export const defaults = {
@@ -1014,7 +1018,7 @@ export const defaults = {
         `${key}: invalid for ${value.name || value.title}`;
       acc[key] = fn;
       return acc;
-    }, {})
+    }, {}),
 };
 ```
 
@@ -1030,11 +1034,11 @@ const valKeys = ["lowercase", "integer"];
 // by default Yup built-in validation error messages will be used if not overridden here
 const errMessages = {
   ...defaults.errMessages(valKeys),
-  myErrMessages
+  myErrMessages,
 };
 
 const yupSchema = buildYup(json, {
-  errMessages
+  errMessages,
 });
 ```
 
@@ -1105,7 +1109,7 @@ class RangeConstraint extends NumericConstraint {
       moreThan: ["exclusiveMinimum", "moreThan"],
       lessThan: ["exclusiveMaximum", "lessThan"],
       max: ["maximum", "max"],
-      min: ["minimum", "min"]
+      min: ["minimum", "min"],
     };
   }
 }

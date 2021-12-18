@@ -27,7 +27,7 @@ class YupBuilder extends Base {
     config.createYupSchemaEntry =
       config.createYupSchemaEntry || createYupSchemaEntry;
     this.config = Object.assign(this.config, config);
-
+    if (config.locale) yup.setLocale(config.locale);
     this.schema = schema;
     const type = this.getType(schema);
     const props = this.getProps(schema);

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.10.4
+
+Add support for yup `setLocale` API (by `@gabrielburich`)
+
 ## 1.6.4
 
 List similar JSON schema -> model projects
