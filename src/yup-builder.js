@@ -7,7 +7,7 @@ function isObject(type) {
 }
 
 export function buildYup(schema, config = {}) {
-  return new YupBuilder(schema, config).yupSchema;
+  return new YupBuilder(schema, {...config}).yupSchema;
 }
 
 function isObjectType(obj) {
