@@ -757,7 +757,7 @@ Here a more complete example of the variations currently possible
       "required": true,
       "matches": "[a-zA-Z- ]+",
       "min": 3,
-      "maxLength": 40,
+      "maxLength": 40
     },
     "age": {
       "description": "Age of person",
@@ -778,9 +778,7 @@ Here a more complete example of the variations currently possible
     },
     "boss": {
       "type": "object",
-      "noUnknown": [
-        "name"
-      ],
+      "noUnknown": ["name"],
       "properties": {
         "name": {
           "type": "string",
@@ -792,9 +790,7 @@ Here a more complete example of the variations currently possible
       "type": "array",
       "items": {
         "type": "object",
-        "propertyNames": [
-          "name"
-        ],
+        "propertyNames": ["name"],
         "properties": {
           "name": {
             "type": "string"
@@ -803,17 +799,16 @@ Here a more complete example of the variations currently possible
       }
     },
     "programming": {
-        "type": "object",
-        "properties": {
-          "languages": {
-            "type": "array",
-            "of": {
-              "type": "string",
-              "enum": ["javascript", "java", "C#"]
-            },
-            "min": 1,
-            "max": 3
-          }
+      "type": "object",
+      "properties": {
+        "languages": {
+          "type": "array",
+          "of": {
+            "type": "string",
+            "enum": ["javascript", "java", "C#"]
+          },
+          "min": 1,
+          "max": 3
         }
       }
     }
