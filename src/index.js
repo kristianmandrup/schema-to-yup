@@ -1,23 +1,15 @@
-import { YupSchemaEntry, YupSchemaEntryError } from "./entry";
-
-import { createYupSchemaEntry } from "./create-entry";
-
+export { YupSchemaEntry, YupSchemaEntryError } from "./entry";
 export { buildYup, YupBuilder } from "./yup-builder";
-
+export { createYupSchemaEntry } from "./create-entry";
 export {
   PropertyValueResolver,
   createPropertyValueResolver
 } from "./property-value-resolver";
-import { extendYupApi } from "./validator-bridge";
-
-import * as types from "./types";
+export { extendYupApi } from "./validator-bridge";
 export { ErrorMessageHandler } from "./error-message-handler";
 export { ConstraintBuilder } from "./constraint-builder";
+import * as types from "./types";
 
 export {
-  YupSchemaEntry,
-  YupSchemaEntryError,
-  types,
-  createYupSchemaEntry,
-  extendYupApi
+  types
 };

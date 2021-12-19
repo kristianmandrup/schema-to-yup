@@ -1,11 +1,12 @@
 import * as yup from "yup";
 import { Base } from "./entry";
+import { createYupSchemaEntry } from "./create-entry";
 
 function isObject(type) {
   return type && type === "object";
 }
 
-function buildYup(schema, config = {}) {
+export function buildYup(schema, config = {}) {
   return new YupBuilder(schema, config).yupSchema;
 }
 
