@@ -463,11 +463,10 @@ const mixed = {
     "my-custom-label" // enabled
   },
   convert: {
-    "my-custom-label": (typeInst) =>
-      const value = typeInst.value;
+    "my-custom-label": (th) =>
+      const value = th.value;
       const label = value.title || value.label || value.description;
-      typeInst.base = (label && this.base.label(label)) || this.base;
-      return typeInst;
+      return th.apply('label', label)
     }
   }
 }

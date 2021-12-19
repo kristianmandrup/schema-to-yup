@@ -208,6 +208,14 @@ class YupMixed extends Base {
     return this;
   }
 
+  apply(fnName, ...fnArgs) {
+    if (typeof fnName !== 'string') {
+      throw new TypeError(`[Mixed] apply must take a method name available on the validator instance as first argument`)
+    }
+    this.base = (fnArgs && fnArgs.length && this.base[fnName](...fnArgs)) || this.base;
+    return this
+  }
+
   addValueConstraint(propName, opts) {
     const constraint = this.constraintBuilder.addValueConstraint(
       propName,
