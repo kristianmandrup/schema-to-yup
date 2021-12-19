@@ -389,7 +389,7 @@ This can also be used to add custom handlers as described in the next section.
 
 ### Custom constraint handler functions
 
-You can also add custom custraint handler functions directly via the `config` object as follows:
+You can add custom custraint handler functions directly via the `config` object.
 This can be used to override built in constraints or extend with your own.
 
 A custom handler to validate a string formatted as a valid `ip` address might look something like this (presuming such a method is available on `yup` string). You can also use this with [yup schema type extensions](https://github.com/jquense/yup#extending-schema-types).
@@ -445,6 +445,35 @@ Instead of using enabled with the full list, you can also use `extends`
 Note that if `convert` has entries and `extends` for the type configuration is not set (and no `enabled` list of constraints defined either) it will use all the entries in `convert` by default (ie. `extends` set to all keys).
 
 We welcome feedback on how to better structure the `config` object to make it easy and intuitive to add run-time configuration to suit your needs.
+
+You can use this approach to add base level entry handlers via `mixed` which is the base handler for any specific type handler such as for `string` and `number`.
+
+Here we are replacing the `label` handler with our custom handler implementation which uses `description` if available.
+
+```js
+const mixed = {
+  enabled: [
+    "oneOf",
+    "notOneOf",
+    "when",
+    "nullable",
+    "isType",
+    // "label", not enabled
+    // custom
+    "my-custom-label" // enabled
+  },
+  convert: {
+    "my-custom-label": (typeInst) =>
+      const value = typeInst.value;
+      const label = value.title || value.label || value.description;
+      typeInst.base = (label && this.base.label(label)) || this.base;
+      return typeInst;
+    }
+  }
+}
+
+const yupSchema = buildYup(jsonSchema, { mixedEnabled }
+```
 
 ### Custom constraint builder
 
@@ -814,7 +843,7 @@ const schema = buildYup(nameJsonSchema, {
 
 You can eaven extend and override an existing entry in the map as follows, using the special `extends` key
 
-````js
+```js
 const mySchemaParserMap = {
   "my-schema": {
     extends: "avro",
@@ -834,7 +863,7 @@ You can enable logging py passing a `log` option in the `config` argument. If se
 
 ```js
 const schema = buildYup(nameJsonSchema, { log: true });
-````
+```
 
 You can also pass a log function in the `log` option to handle log messages and an `err` option with a custom error handler function.
 
@@ -1239,3 +1268,7 @@ Please feel free to come with ideas and suggestions on how to further improve th
 ## License
 
 MIT
+
+```
+
+```

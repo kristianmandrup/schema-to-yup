@@ -28,7 +28,7 @@ class YupMixed extends Base {
     this.format = value.format || this.constraints.format;
     this.config = config || {};
     this.type = "mixed";
-    this.mixedConfig = this.config.mixed || {};
+    this.mixedConfig = this.config.mixedEnabled || {};
     this.typeConfig = this.config[this.type] || {};
     this.base = yup.mixed();
     this.errMessages = config.errMessages || {};
@@ -141,7 +141,8 @@ class YupMixed extends Base {
         "notOneOf",
         "when",
         "nullable",
-        "isType"
+        "isType",
+        "label"
       ]
     );
   }
@@ -180,7 +181,7 @@ class YupMixed extends Base {
   }
 
   convertFnFor(name) {
-    return this.customConvertFnFor(name) || this.builtInConvertFnFor(name);
+    return this.customConvertFnFor(name, this) || this.builtInConvertFnFor(name);
   }
 
   customConvertFnFor(name) {
@@ -297,6 +298,13 @@ class YupMixed extends Base {
 
     return $createWhenCondition(opts);
   }
+
+  label() {
+    const value = this.value
+    const label = value.title || value.label
+    this.base = (label && this.base.label(label)) || this.base
+    return this
+  }  
 
   when() {
     const when = this.constraints.when;
