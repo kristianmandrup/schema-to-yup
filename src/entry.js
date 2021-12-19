@@ -15,7 +15,8 @@ class YupSchemaEntryError extends Error {}
 class YupSchemaEntry extends Base {
   constructor(opts) {
     super(opts.config);
-    const { schema, name, key, value, config } = opts;
+    const { schema, name, key, value, config, builder } = opts;
+    this.builder = builder
     this.opts = opts;
     this.schema = schema;
     this.key = key;
@@ -30,19 +31,25 @@ class YupSchemaEntry extends Base {
   }
 
   setPropertyHandler() {
-    const { config, types, value, name, key, type, kind, schema } = this;
-    const opts = {
+    const { config } = this
+    const opts = this.propertyHandlerOpts
+    const createPropertyValueHandlerFn =
+      config.createPropertyValueHandler || this.createPropertyValueHandler;
+    this.propertyValueHandler = createPropertyValueHandlerFn(opts, config);
+  }
+
+  get propertyHandlerOpts() {
+    const { types, value, name, key, type, kind, schema } = this;
+    return {
       type,
       kind,
       types,
       value,
       name,
       key,
-      schema
+      schema,
+      entryHandler: this
     };
-    const createPropertyValueHandlerFn =
-      config.createPropertyValueHandler || this.createPropertyValueHandler;
-    this.propertyValueHandler = createPropertyValueHandlerFn(opts, config);
   }
 
   createPropertyValueHandler(opts, config) {
@@ -61,7 +68,11 @@ class YupSchemaEntry extends Base {
   }
 
   setTypeHandlers() {
-    this.types = {
+    this.types = this.config.types || this.typeHandlers
+  }
+
+  get typeHandlers() {
+    return {
       ...this.defaultTypeHandlerMap,
       ...(this.config.typeHandlers || {})
     };

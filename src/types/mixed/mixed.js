@@ -15,11 +15,17 @@ import { ErrorMessageHandler } from "../../error-message-handler";
 class YupMixed extends Base {
   constructor(opts = {}) {
     super(opts.config);
-    let { schema, key, value, config } = opts;
+    this.init(opts)
+  }
+
+  init(opts) {
+    let { schema, key, value, config, validator, entryHandler } = opts;
     config = config || {};
     schema = schema || {};
     this.validateOnCreate(key, value, opts);
-    this.yup = yup;
+    this.opts = opts
+    this.entryHandler = entryHandler
+    this.validator = this.getValidator()
     this.key = key;
     this.schema = schema;
     this.properties = schema.properties || {};
@@ -27,13 +33,33 @@ class YupMixed extends Base {
     this.constraints = this.getConstraints();
     this.format = value.format || this.constraints.format;
     this.config = config || {};
-    this.type = "mixed";
+    this.type = this.baseType;
     this.mixedConfig = this.config.mixedEnabled || {};
-    this.typeConfig = this.config[this.type] || {};
-    this.base = yup.mixed();
+    this.typeConfig = this.config[this.type] || {};    
     this.errMessages = config.errMessages || {};
     this.configureTypeConfig();
     this.constraintsAdded = {};
+    this.base = this.getBase()
+  }
+
+  getBase() {
+    return this.customBaseValidator || this.validatorInstance;
+  }
+  
+  get customBaseValidator() {
+    return this.config.validatorFor && this.config.validatorFor(this.type)
+  }
+
+  getValidator() {
+    return this.opts.validator || this.config.validator || (this.entryHandler && this.entryHandler.validator) || yup;
+  }  
+
+  get baseType() {
+    return "mixed";
+  }
+
+  get validatorInstance() {
+    return this.validator.mixed();
   }
 
   configureTypeConfig() {

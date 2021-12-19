@@ -3,8 +3,16 @@ import { YupMixed } from "../mixed";
 export class YupDate extends YupMixed {
   constructor(obj) {
     super(obj);
-    this.type = "date";
-    this.base = this.yup.date();
+    this.type = this.baseType;
+    this.base = this.validatorInstance;
+  }
+
+  get baseType() {
+    return "date";
+  }
+
+  get validatorInstance() {
+    return this.validator.date();
   }
 
   static create(obj) {

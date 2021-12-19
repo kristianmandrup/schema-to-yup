@@ -24,8 +24,7 @@ export class YupBuilder extends Base {
     config.buildYup = buildYup;
     config.createYupSchemaEntry =
       config.createYupSchemaEntry || createYupSchemaEntry;
-    this.config = Object.assign(this.config, config);
-    if (config.locale) yup.setLocale(config.locale);
+    this.config = Object.assign(this.config, config);    
     this.schema = schema;
     const type = this.getType(schema);
     const props = this.getProps(schema);
@@ -33,6 +32,8 @@ export class YupBuilder extends Base {
     this.properties = props;
     this.additionalProps = this.getAdditionalProperties(schema);
     this.required = this.getRequired(schema);
+
+    this.setLocale()
 
     const customInitFn = typeof config.init === 'function' ? config.init : () => {}
     const customInit = customInitFn.bind(this) 
@@ -55,6 +56,10 @@ export class YupBuilder extends Base {
 
     this.shapeConfig = shapeConfig;
     this.validSchema = true;
+  }
+
+  setLocale() {
+    this.config.locale && yup.setLocale(this.config.locale);
   }
 
   getAdditionalProperties(schema) {
@@ -148,19 +153,12 @@ export class YupBuilder extends Base {
       name,
       key,
       value,
-      config: this.config
+      config: this.config,
+      builder: this
     });
   }
 
-  createYupSchemaEntry({ schema, name, key, value, config }) {
-    // return createYupSchemaEntry({ name, key, value, config });
-    const yupEntry = config.createYupSchemaEntry({
-      schema,
-      name,
-      key,
-      value,
-      config
-    });
-    return yupEntry; // .toEntry();
+  createYupSchemaEntry(opts = {}) {
+    return config.createYupSchemaEntry(opts);
   }
 }

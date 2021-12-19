@@ -25,9 +25,17 @@ function buildYupNumber(obj) {
 class YupNumber extends YupMixed {
   constructor(obj) {
     super(obj);
-    this.type = this.normalizeNumType(obj.type);
-    this.base = this.yup.number();
+    this.type = this.baseType;
+    this.base = this.validatorInstance;
     this.rangeConstraint = createRangeConstraint(this);
+  }
+
+  get baseType() {
+    return this.normalizeNumType(this.opts.type);
+  }
+
+  get validatorInstance() {
+    return this.validator.number();
   }
 
   normalizeNumType(type) {

@@ -15,6 +15,8 @@ We also supports some extra convenience schema properties that make it more "smo
 
 According to the JSON schema specs, you are free to add extra metadata to the field schema definitions beyond those supported "natively".
 
+You can use the building blocks of this library to support alternative validators other than Yup. See [Supporting alternative validators](#supporting-alternative-validators)
+
 ## Customisation hooks
 
 This library is built to be easy to customise or extend to suit individual developer needs.
@@ -358,7 +360,7 @@ Each takes an instance `yupSchemaEntryBuilder` of `YupSchemaEntry`, which primar
 
 ### Custom type handlers
 
-You can pass any custom typehandlers in a `typeHandlers` object as part of the `config` object passes. See `setTypeHandlers()` in `entry.js` for how this works internally.
+You can pass any custom typehandlers in a `typeHandlers` object as part of the `config` object passes. See `setTypeHandlers()` and `get typeHandlers()` in `entry.js` for how this works internally.
 
 ```js
 function myCustomStringHandler = (obj, config) => {
@@ -374,8 +376,25 @@ const yupSchema = buildYup(jsonSchema, {
 });
 ```
 
-This can be used to support special cases, to circumvent a bug or unexpected/unwarranted behaviour for one or more of the built-in type handlers etc.
-You can then use the built in classes as building blocks.
+This can be used to support special cases:
+
+- to circumvent a bug
+- add or override with custom functionality
+- extend to add additional type handlers, such as for Avro schema
+- add support for validators other than Yup
+
+In order to pass a a type handler map that does not rely on any built in type handlers, pass in a `types` object
+
+```js
+const yupSchema = buildYup(jsonSchema, {
+  types: {
+    bytes: myCustomBytesHandler,
+    // more handlers
+  },
+});
+```
+
+You can use the built in type handler classes as building blocks.
 
 To control which constraints are enabled (executed), simply edit the `typeEnabled` getter on your type handler class. Here is the default `typeEnabled` getter for the `YupDate` (Date) type handler, which is configured to execute constraint handler functions: `minDate` and `maxDate`.
 
@@ -385,7 +404,7 @@ To control which constraints are enabled (executed), simply edit the `typeEnable
   }
 ```
 
-This can also be used to add custom handlers as described in the next section.
+A simpler alternative is to add custom constraint functions to the handlers as described in the next section.
 
 ### Custom constraint handler functions
 
@@ -522,6 +541,90 @@ const config = {
 buildYup(jsonSchema, config);
 ```
 
+## Supporting alternative validators
+
+Supply a `validator` instance (or getter function) on the `config` object which returns an instance of the validator you wish to use.
+
+Optionally supply a `validatorFor` function on the config that returns a specific validator to be used for a given type handler.
+
+```js
+  init(...) {
+    this.validator = this.getValidator()
+    //
+    this.base = this.getBase()
+  }
+
+  getBase() {
+    return this.customBaseValidator || this.validatorInstance;
+  }
+
+  getValidator() {
+    return this.opts.validator || (this.entryHandler && this.entryHandler.validator) || yup;
+  }
+```
+
+Subclass all the built-in type handlers, such as `YupString` and override the following key methods:
+
+```js
+  get baseType() {
+    return "string";
+  }
+
+  get validatorInstance() {
+    return this.validator.string();
+  }
+```
+
+Then create a new `types` type handler mapping object and pass it via the `types` entry on the `config` object
+
+```js
+class MyCustomValidatorStringHandler extends YupString {
+  get validatorInstance() {
+    return this.validator.fieldHandlerFor("string");
+  }
+}
+
+buildYup(jsonSchema, {
+  types: {
+    string: MyCustomValidatorStringHandler,
+    // ...
+  },
+});
+```
+
+Subclass `YupBuilder` and override the `yupSchema` getter method and optionally the `setLocale` method as well
+
+```js
+  get yupSchema() {
+    return yup.object().shape(this.shapeConfig);
+  }
+
+  setLocale() {
+    this.config.locale && yup.setLocale(this.config.locale);
+  }
+```
+
+Something like this
+
+```js
+class MyCustomBuilder extends YupBuilder {
+  init(schema, config)
+    super.init(schema, config)
+    this.validator = new MyValidator()
+  }
+
+  get yupSchema() {
+    return this.validator.buildSchema();
+  }
+}
+```
+
+You can access the `entryHandler` and from there the `builder` from within a type handler via `this.entryHandler.builder`
+
+So you can access a `validator` instance set in the builder via `this.entryHandler.builder.validator` (note: the validator should normally be a singleton instance)
+
+Then do futher customisations as needed.
+
 ## Conditional logic
 
 Basic support for [when conditions](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) as requested and outlined in [this issue](https://github.com/kristianmandrup/schema-to-yup/issues/14) is now included.
@@ -568,7 +671,7 @@ const bigJson = {
 };
 ```
 
-Currently basic support is included in `schema-to-yup@1.9.0` on [npmjs](https://www.npmjs.com)
+Currently basic support is included in `1.10.x` on [npmjs](https://www.npmjs.com)
 
 More advanced conditionals support will likely be included the next major release: `2.0`.
 

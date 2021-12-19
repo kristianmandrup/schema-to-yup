@@ -2,8 +2,8 @@ import { BasePropertyValueResolver } from "./base-property-value-resolver";
 import { MultiPropertyValueResolver } from "./multi-property-value-resolver";
 import { SinglePropertyValueResolver } from "./single-property-value-resolver";
 
-export const createPropertyValueResolver = (opts, config) => {
-  return new PropertyValueResolver(opts, config);
+export const createPropertyValueResolver = (opts, config, entryHandler) => {
+  return new PropertyValueResolver(opts, config, entryHandler);
 };
 
 export class PropertyValueResolver extends BasePropertyValueResolver {

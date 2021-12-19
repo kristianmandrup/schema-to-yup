@@ -3,9 +3,18 @@ import { YupMixed } from "../mixed";
 export class YupString extends YupMixed {
   constructor(obj) {
     super(obj);
-    this.type = "string";
-    this.base = this.yup.string();
+    this.type = this.baseType;
+    this.base = this.validatorInstance;
   }
+
+  get baseType() {
+    return "string";
+  }
+
+  get validatorInstance() {
+    return this.validator.string();
+  }
+
 
   static create(obj) {
     return new YupString(obj);
@@ -45,7 +54,7 @@ export class YupString extends YupMixed {
   genericFormat() {
     if (!this.config.format === true) return;
     const format = this.format;
-    if (this.yup.prototype[format]) {
+    if (this.validator.prototype[format]) {
       this.addConstraint(this.format);
     }
   }

@@ -6,9 +6,17 @@ import { YupMixed } from "../mixed";
 export class YupArray extends YupMixed {
   constructor(obj) {
     super(obj);
-    this.type = "array";
-    this.base = this.yup.array();
+    this.type = this.baseType;
+    this.base = this.validatorInstance;
     this.createYupSchemaEntry = this.config.createYupSchemaEntry;
+  }
+
+  get baseType() {
+    return "array";
+  }
+
+  get validatorInstance() {
+    return this.validator.array();
   }
 
   static create(obj) {

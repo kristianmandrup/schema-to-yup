@@ -1,6 +1,6 @@
 {
   "name": "schema-to-yup",
-  "version": "1.10.10",
+  "version": "1.11.0",
   "publishConfig": {
     "access": "public"
   },
@@ -9,13 +9,13 @@
   "description": "Build a Yup schema object to validate models from a domain model schema (JSON or GraphQL)",
   "license": "MIT",
   "author": "Kristian Mandrup <kmandrup@gmail.com>",
-  "homepage": "https://github.com/kristianmandrup/json-schema-to-yup#readme",
+  "homepage": "https://github.com/kristianmandrup/schema-to-yup#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kristianmandrup/json-schema-to-yup.git"
+    "url": "https://github.com/kristianmandrup/schema-to-yup.git"
   },
   "bugs": {
-    "url": "https://github.com/kristianmandrup/json-schema-to-yup/issues",
+    "url": "https://github.com/kristianmandrup/schema-to-yup/issues",
     "email": "kmandrup@gmail.com"
   },
   "typings": "schema-to-yup.d.ts",
@@ -23,14 +23,14 @@
     "dashify": "^2.0.0",
     "uniq": "^1.0.1",
     "uppercamelcase": "^3.0.0",
-    "yup": "^0.30.0"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.7",
-    "@babel/node": "^7.12.6",
-    "@babel/preset-env": "^7.12.7",
-    "jest": "^26.6.3",
-    "microbundle": "^0.12.4"
+    "@babel/core": "^7.16.5",
+    "@babel/node": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "jest": "^27.4.5",
+    "microbundle": "^0.14.2"
   },
   "babel": {
     "presets": [

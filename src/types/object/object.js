@@ -4,9 +4,17 @@ import { YupMixed } from "../mixed";
 export class YupObject extends YupMixed {
   constructor(obj) {
     super(obj);
-    this.type = "object";
-    this.base = this.yup.object();
+    this.type = this.baseType;
+    this.base = this.validatorInstance;
     this.properties = this.value.properties;
+  }
+
+  get baseType() {
+    return "object";
+  }
+
+  get validatorInstance() {
+    return this.validator.object();
   }
 
   static create(obj) {
