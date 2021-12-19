@@ -20,15 +20,11 @@ According to the JSON schema specs, you are free to add extra metadata to the fi
 This library is built to be easy to customise or extend to suit individual developer needs.
 |Use any of the following customisation hooks to add custom features, circumvent missing functionality or bugs or extend any way you see fit. You can even use these hooks to support a different validator library, leveraging the generic schema validator builder infrastructure.
 
-- [entry builders](#Custom-entry-builders)
-- [type handlers](#Custom-type-handlers)
-- [constraint handler functions](#Custom-constraint-handler-functions)
-- [constraint builder](#Custom-constraint-builder)
-
-## Stability
-
-The most recent versions have more functionality but are still a bit unstable in some areas.
-For a solid/stable version, try `1.9.16`.
+- [Custom builder init](#custom-builder-init)
+- [entry builders](#custom-entry-builders)
+- [type handlers](#custom-type-handlers)
+- [constraint handler functions](#custom-constraint-handler-functions)
+- [constraint builder](#custom-constraint-builder)
 
 ## Quick start
 
@@ -323,6 +319,21 @@ export class MyMultiTypeValueResolver extends MultiTypeValueResolver {
     return { type: entry };
   }
 }
+```
+
+## Custom builder init
+
+You can supply a custom `init` function on the `config` object to do custom initialisation.The `init` function will be bound to the `YupBuilder` instance so that `this` returns the builder instance.
+
+```js
+import * as yup from "yup";
+
+const yupSchema = buildYup(jsonSchema, {
+  init: (schema, config) {
+    if (config.locale) yup.setLocale(config.locale);
+    console.log({properties: this.properties})
+  },
+});
 ```
 
 ## Custom entry builders
