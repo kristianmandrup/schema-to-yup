@@ -30,6 +30,10 @@ class YupSchemaEntry extends Base {
     this.setPropertyHandler();
   }
 
+  get validator() {
+    return this.builder && this.builder.validator
+  }
+
   setPropertyHandler() {
     const { config } = this
     const opts = this.propertyHandlerOpts

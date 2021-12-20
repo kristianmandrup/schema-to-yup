@@ -607,10 +607,15 @@ Subclass `YupBuilder` and override the `yupSchema` getter method and optionally 
 Something like this
 
 ```js
+const validatorSingleton = new MyValidator()
+
 class MyCustomBuilder extends YupBuilder {
   init(schema, config)
     super.init(schema, config)
-    this.validator = new MyValidator()
+  }
+
+  get validator() {
+    return validatorSingleton
   }
 
   get yupSchema() {
@@ -621,7 +626,7 @@ class MyCustomBuilder extends YupBuilder {
 
 You can access the `entryHandler` and from there the `builder` from within a type handler via `this.entryHandler.builder`
 
-So you can access a `validator` instance set in the builder via `this.entryHandler.builder.validator` (note: the validator should normally be a singleton instance)
+So you can access a `validator` instance set in the builder via `this.entryHandler.validator` (note: should normally be a singleton instance)
 
 Then do futher customisations as needed.
 

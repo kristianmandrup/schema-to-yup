@@ -58,6 +58,10 @@ export class YupBuilder extends Base {
     this.validSchema = true;
   }
 
+  get validator() {
+    return yup
+  }
+
   setLocale() {
     this.config.locale && yup.setLocale(this.config.locale);
   }
@@ -159,6 +163,6 @@ export class YupBuilder extends Base {
   }
 
   createYupSchemaEntry(opts = {}) {
-    return config.createYupSchemaEntry(opts);
+    return this.config.createYupSchemaEntry(opts);
   }
 }
