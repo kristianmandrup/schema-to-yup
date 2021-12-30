@@ -19,7 +19,7 @@ class YupMixed extends Base {
   }
 
   init(opts) {
-    let { schema, key, value, config, validator, entryHandler } = opts;
+    let { schema, key, value, config, entryHandler } = opts;
     config = config || {};
     schema = schema || {};
     this.validateOnCreate(key, value, opts);
@@ -42,6 +42,10 @@ class YupMixed extends Base {
     this.base = this.getBase()
   }
 
+  get builder() {
+    return this.entryHandler && this.entryHandler.builder
+  }
+
   getBase() {
     return this.customBaseValidator || this.validatorInstance;
   }
@@ -51,7 +55,7 @@ class YupMixed extends Base {
   }
 
   getValidator() {
-    return this.opts.validator || this.config.validator || (this.entryHandler && this.entryHandler.validator) || yup;
+    return this.opts.validator || this.config.validator || (this.builder && this.builder.validator) || yup;
   }  
 
   get baseType() {

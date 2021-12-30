@@ -4,16 +4,35 @@ Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any o
 
 ## Schemas
 
+- JSON
+- GraphQL
+- Avro
+- Custom
+
+### JSON schema
+
 - [AJV: JSON Schema keywords](https://ajv.js.org/keywords.html)
 - [Learn JsonSchema](https://cswr.github.io/JsonSchema/)
 
-The builder currently supports the most commonly used [JSON Schema layout](https://json-schema.org/) and GraphQL type definition exports using [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson) (see [GraphQL schema](#graphql-schema)).
+The builder currently supports the most commonly used [JSON Schema layout](https://json-schema.org/)
 
-Recently basic [Avro](https://avro.apache.org/docs/current/spec.html) schema support has been added as well. You can easily add support for your own custom schema formats.
+### GraphQL schema
+
+GraphQL type definition exports using [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson) (see [GraphQL schema](#graphql-schema)).
+
+### Avro schema
+
+Recently basic [Avro](https://avro.apache.org/docs/current/spec.html) schema support has been added as well.
+
+### Custom/Alternative schemas
+
+You can easily add support for your own custom schema formats.
 
 We also supports some extra convenience schema properties that make it more "smooth" to define validation requirements declaratively (see below).
 
 According to the JSON schema specs, you are free to add extra metadata to the field schema definitions beyond those supported "natively".
+
+## Custom/Alternative validators
 
 You can use the building blocks of this library to support alternative validators other than Yup. See [Supporting alternative validators](#supporting-alternative-validators)
 
@@ -559,7 +578,7 @@ Optionally supply a `validatorFor` function on the config that returns a specifi
   }
 
   getValidator() {
-    return this.opts.validator || (this.entryHandler && this.entryHandler.validator) || yup;
+    return this.opts.validator || this.builder.validator || yup;
   }
 ```
 
