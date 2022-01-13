@@ -5,12 +5,12 @@ function createStringConstraint(typer, map) {
 }
 
 class StringConstraint extends Constraint {
-  constructor(typer, map = {}) {
-    super(typer, map);
+  constructor(typeHandler, map = {}) {
+    super(typeHandler, map);
   }
 
   isValidConstraint(value) {
-    return this.typer.isStringType(value);
+    return this.typeHandler.isStringType(value);
   }
 
   get explainConstraintValidMsg() {

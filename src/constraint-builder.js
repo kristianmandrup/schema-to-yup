@@ -4,6 +4,8 @@ export class ConstraintBuilder extends TypeMatcher {
   constructor(typeHandler, config = {}) {
     super(config);
     this.typeHandler = typeHandler;
+    this.type = typeHandler.type
+    this.builder = typeHandler.builder
     this.constraintsAdded = {};
     this.delegators.map(name => {
       this[name] = typeHandler[name];
@@ -178,6 +180,7 @@ export class ConstraintBuilder extends TypeMatcher {
 
   onConstraintAdded({ name, value }) {
     this.constraintsAdded[name] = value;
+    this.builder && this.builder.onConstraintAdded({ type: this.type, name, value })
     return this.typeHandler;
   }
 

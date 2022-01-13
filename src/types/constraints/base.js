@@ -1,19 +1,19 @@
 import { TypeMatcher } from '../_type-matcher';
 
 class Constraint extends TypeMatcher {
-  constructor(typer, map) {
-    super(typer.config);
+  constructor(typeHandler, map) {
+    super(typeHandler.config);
     this.map = map || this.$map || {};
-    this.typer = typer;
+    this.typeHandler = typeHandler;
     this.delegates.map(name => {
-      const delegate = typer[name];
+      const delegate = typeHandler[name];
       if (!delegate) {
         this.error(`missing delegate: ${name}`, {
-          typer
+          typeHandler
         });
       }
       this[name] = this.isFunctionType(delegate)
-        ? delegate.bind(typer)
+        ? delegate.bind(typeHandler)
         : delegate;
     });
   }

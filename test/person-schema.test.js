@@ -1,6 +1,6 @@
 const { buildYup } = require("../src");
 
-test("converts JSON schema to Yup Schema and validates", async () => {
+test("converts person JSON schema to Yup Schema and validates", async () => {
   const personSchema = {
     $schema: "http://json-schema.org/draft-07/schema#",
     $id: "http://example.com/person.schema.json",

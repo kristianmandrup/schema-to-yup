@@ -165,4 +165,8 @@ export class YupBuilder extends Base {
   createYupSchemaEntry(opts = {}) {
     return this.config.createYupSchemaEntry(opts);
   }
+
+  onConstraintAdded(constraint) {
+    this.log('Constraint Added', constraint)
+  }
 }

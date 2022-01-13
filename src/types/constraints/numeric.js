@@ -5,16 +5,16 @@ function createNumericConstraint(typer) {
 }
 
 class NumericConstraint extends Constraint {
-  constructor(typer) {
-    super(typer);
+  constructor(typeHandler) {
+    super(typeHandler);
   }
 
   transform(value) {
-    return this.typer.toNumber(value);
+    return this.typeHandler.toNumber(value);
   }
 
   isValidConstraint(value) {
-    return this.typer.isNumberLike(value);
+    return this.typeHandler.isNumberLike(value);
   }
 
   get explainConstraintValidMsg() {
