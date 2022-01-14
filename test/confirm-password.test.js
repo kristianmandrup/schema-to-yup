@@ -14,7 +14,7 @@ const innerSchema = {
       "type": "string"
     },
     "confirmPassword": {
-      "refValue": "password",
+      "refValueFor": "password",
       "type": "string"
     }
   },

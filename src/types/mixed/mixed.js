@@ -299,8 +299,9 @@ class YupMixed extends Base {
     let propRefName =
       this.constraints.refValueFor
     if (this.isNothing(propRefName)) return this;
-    this.apply('when', (propRefName, (refValueFor, field) =>
-      refValueFor ? field.required().oneOf([Yup.ref(propRefName)]) : field
+    this.logInfo("refValueFor", { propRefName })
+    return this.apply('when', (propRefName, (refValueFor, field) =>
+      refValueFor ? field.required().oneOf([yup.ref(propRefName)]) : field
     ))
   }
 
