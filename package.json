@@ -32,11 +32,6 @@
     "jest": "^27.4.5",
     "microbundle": "^0.14.2"
   },
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
-  },
   "keywords": [
     "yup",
     "json",
