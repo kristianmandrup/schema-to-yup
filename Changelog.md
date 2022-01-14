@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.11.3
+
+Fixed bug when constraint value is 0 (such as in Person schema example!)
+Added better and more detailed logging and logging options
+
 ## 1.10.4
 
 Add support for yup `setLocale` API (by `@gabrielburich`)
