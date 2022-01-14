@@ -47,6 +47,26 @@ This library is built to be easy to customise or extend to suit individual devel
 - [constraint handler functions](#custom-constraint-handler-functions)
 - [constraint builder](#custom-constraint-builder)
 
+## Build and Sample run
+
+`$ yarn run build`
+
+Sample runs (uses built file in `dist`)
+
+`node sample-runs/person-schema.mjs`
+
+This sample run is configured with detailed logging in the `config` object:
+
+```js
+{
+  logging: true,
+  logDetailed: [{
+    propName: 'exclusiveMinimum',
+    key: 'age'
+  }],
+}
+```
+
 ## Quick start
 
 Install
@@ -980,10 +1000,11 @@ Feel free to make PRs to make more common schema models available!
 
 ### Custom logs and error handling
 
-You can enable logging py passing a `log` option in the `config` argument. If set to true, it will by default assign the internal log function to `console.log`
+You can enable logging py passing a `log` option in the `config.enable` object. If set to `true`, it will by default assign the internal log function to `console.log`
+You can enable/disable warnings in a similar fashion with `enable.warn`
 
 ```js
-const schema = buildYup(nameJsonSchema, { log: true });
+const schema = buildYup(nameJsonSchema, { enable: { log: true, warn: true } });
 ```
 
 You can also pass a log function in the `log` option to handle log messages and an `err` option with a custom error handler function.
@@ -1000,6 +1021,19 @@ const schema = buildYup(nameJsonSchema, {
     throw new ValidationError(msg)
   })
 });
+```
+
+Logging can also be enabled simply by passing `logging:true`. In addition, detailed logging can be enabled for specific matches, such as whenever a combination of a specific `key`, `propName` and `method` are encountered by the `ConstraintBuilder`
+
+```js
+{
+  logging: true,
+  logDetailed: [{
+    propName: 'exclusiveMinimum', // property name in JSON schema
+    key: 'age' // key in JSON schema
+  }, {
+    method: 'lessThan' // method that propName is resolved to
+  }],
 ```
 
 ## Localised error messages

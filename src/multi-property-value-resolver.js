@@ -5,8 +5,8 @@ export const createMultiPropertyValueResolver = (opts, config) => {
 };
 
 export class MultiPropertyValueResolver extends BasePropertyValueResolver {
-  constructor(opts, config) {
-    super(opts, config);
+  constructor(opts, config, entryHandler) {
+    super(opts, config, entryHandler);
   }
 
   resolve() {

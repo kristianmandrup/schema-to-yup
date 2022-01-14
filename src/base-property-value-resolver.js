@@ -3,9 +3,11 @@ import { Base } from "./types";
 export class PropertyValueResolverError extends Error {}
 
 export class BasePropertyValueResolver extends Base {
-  constructor(opts, config) {
+  constructor(opts, config, entryHandler) {
     super(config);
     const { value, type, kind, name, key, schema, types } = opts;
+    // this.logInfo('BasePropertyValueResolver', opts)
+    this.entryHandler = entryHandler || opts.entryHandler
     this.opts = opts;
     this.kind = kind;
     this.value = value;
@@ -28,14 +30,15 @@ export class BasePropertyValueResolver extends Base {
   }
 
   get obj() {
-    const { schema, key, value, type, kind, config } = this;
+    const { schema, key, value, type, kind, config, entryHandler } = this;
     return {
       schema,
       key,
       value,
       type,
       kind,
-      config
+      config,
+      entryHandler
     };
   }
 }

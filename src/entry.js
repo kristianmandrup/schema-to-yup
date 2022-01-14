@@ -57,7 +57,7 @@ class YupSchemaEntry extends Base {
   }
 
   createPropertyValueHandler(opts, config) {
-    return createPropertyValueResolver(opts, config);
+    return createPropertyValueResolver(opts, config, this);
   }
 
   get defaultTypeHandlerMap() {

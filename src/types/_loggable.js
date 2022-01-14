@@ -1,29 +1,37 @@
 class Loggable {
   constructor(config = {}) {
     this.config = config;
-    const { log, error } = config;
+    const { log, error } = config;    
     const enable = config.enable || {};
+    if (config.logging === true) {
+      enable.log = true
+    }
+    if (config.logging === false) {
+      enable.log = false
+    }
     this.enable = enable;
     // what type of logger to use
     this.log = typeof log === "function" ? log : console.log;
     this.err = typeof error === "function" ? error : console.error;
   }
 
-  error(errMsg, value) {
+  error(errMsg, ...values) {
     // only disable if directly disabled
     if (this.enable.error === false) return;
-    this.err && (value ? this.err(errMsg, value) : this.err(errMsg));
+    if (!this.err) return
+    values && values.length ? this.err(errMsg, ...values) : this.err(errMsg);
     throw errMsg;
   }
 
-  warn(warnMsg, value) {
+  warn(warnMsg, ...values) {
     if (!this.enable.warn) return;
-    this.logInfo("WARNING: " + warnMsg, value);
+    this.logInfo("WARNING: " + warnMsg, ...values);
   }
 
-  logInfo(name, value) {
+  logInfo(name, ...values) {
     if (!this.enable.log) return;
-    this.log && (value ? this.log(name, value) : this.log(name));
+    if (!this.log) return
+    values && values.length ? this.log(name, ...values) : this.log(name);
   }
 }
 

@@ -7,30 +7,30 @@ export const createPropertyValueResolver = (opts, config, entryHandler) => {
 };
 
 export class PropertyValueResolver extends BasePropertyValueResolver {
-  constructor(opts, config) {
-    super(opts, config);
+  constructor(opts, config, entryHandler) {
+    super(opts, config, entryHandler);
     this.initResolvers();
   }
 
   initResolvers() {
-    const { opts, config } = this;
+    const { opts, config, entryHandler } = this;
     const createMultiTypeResolverFn =
       config.createMultiTypeResolver || this.createMultiTypeResolver.bind(this);
-    this.multiTypeResolver = createMultiTypeResolverFn(opts, config);
+    this.multiTypeResolver = createMultiTypeResolverFn(opts, config, entryHandler);
     const createSingleTypeResolverFn =
       config.createSingleTypeResolver ||
       this.createSingleTypeResolver.bind(this);
-    this.singleTypeResolver = createSingleTypeResolverFn(opts, config);
+    this.singleTypeResolver = createSingleTypeResolverFn(opts, config, entryHandler);
   }
 
   createMultiTypeResolver() {
-    const { opts, config } = this;
-    return new MultiPropertyValueResolver(opts, config);
+    const { opts, config, entryHandler } = this;
+    return new MultiPropertyValueResolver(opts, config, entryHandler);
   }
 
   createSingleTypeResolver() {
-    const { opts, config } = this;
-    return new SinglePropertyValueResolver(opts, config);
+    const { opts, config, entryHandler } = this;
+    return new SinglePropertyValueResolver(opts, config, entryHandler);
   }
 
   resolve() {

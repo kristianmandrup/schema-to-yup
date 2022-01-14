@@ -3,8 +3,7 @@ import { TypeMatcher } from "./types/_type-matcher";
 export class ConstraintBuilder extends TypeMatcher {
   constructor(typeHandler, config = {}) {
     super(config);
-    this.typeHandler = typeHandler;
-    this.type = typeHandler.type
+    this.typeHandler = typeHandler
     this.builder = typeHandler.builder
     this.constraintsAdded = {};
     this.delegators.map(name => {
@@ -13,7 +12,7 @@ export class ConstraintBuilder extends TypeMatcher {
   }
 
   get delegators() {
-    return ["errMessages", "base", "key", "constraints", "errorMessageHandler"];
+    return ["errMessages", "base", "key", "type", "constraints", "errorMessageHandler", "logInfo", "warn"];
   }
 
   build(propName, opts = {}) {
@@ -27,17 +26,24 @@ export class ConstraintBuilder extends TypeMatcher {
       values,
       errName
     } = opts;
-    yup = yup || this.base;
+    yup = yup || this.base; 
 
-    constraintValue =
-      constraintValue || propValue || this.constraints[propName];
-
-    if (this.isNothing(constraintValue)) {
-      this.warn("no prop value");
-      return false;
-    }
+    // find the first value that is present (must not be undefined or null)   
+    const potentialValues = [constraintValue, propValue, this.constraints[propName]];
+    constraintValue = this.getFirstValue(potentialValues)
+      
     constraintName = constraintName || propName;
     method = method || constraintName;
+    this.idObj = {propName, method, key: this.key}
+
+    this.logDetailed("build", opts, { resolved: { constraintValue, constraintName}})
+  
+    // this.logInfo("build", { opts, constraintValue })
+
+    if (this.isNothing(constraintValue)) {
+      this.warn("no prop value", { constraintValue });
+      return false;
+    }
 
     const yupConstraintMethodName = this.aliasMap[method] || method;
 
@@ -68,7 +74,9 @@ export class ConstraintBuilder extends TypeMatcher {
     ];
     let newBase;
     for (let name of constrainFnNames) {
-      newBase = this[name](value || values, constrOpts);
+      const fnName = this[name].bind(this)
+      const constrValue = this.getFirstValue([value, values])
+      newBase = fnName(constrValue, constrOpts);
       if (newBase) break;
     }
 
@@ -83,13 +91,20 @@ export class ConstraintBuilder extends TypeMatcher {
     return false;
   }
 
+  getFirstValue(potentialValues) {
+    const isDefined = this.isPresent.bind(this)
+    return potentialValues.filter(isDefined)[0]
+  }
+
+
   nonPresentConstraintValue(
     constraintValue,
     { constraintName, constraintFn, errFn }
   ) {
     if (this.isPresent(constraintValue)) return;
+    this.logInfo("nonPresentConstraintValue", { constraintValue })
 
-    this.onConstraintAdded({ name: constraintName });
+    this.onConstraintAdded({ method: 'nonPresentConstraintValue', name: constraintName });
 
     const newBase = constraintFn(errFn);
     return newBase;
@@ -99,16 +114,20 @@ export class ConstraintBuilder extends TypeMatcher {
     constraintValue,
     { constraintName, constraintFn, errFn }
   ) {
-    if (!this.isPresent(constraintValue)) return;
+    if (!this.isPresent(constraintValue)) {
+      this.logInfo("presentConstraintValue: value not present", { constraintName, constraintValue })
+      return;
+    }
+    this.logInfo("presentConstraintValue", { constraintName, constraintValue })
 
-    this.onConstraintAdded({ name: constraintName, value: constraintValue });
+    this.onConstraintAdded({ method: 'presentConstraintValue', name: constraintName, value: constraintValue });
 
     if (this.isNoValueConstraint(constraintName)) {
+      this.logInfo("isNoValueConstraint", { constraintName })
       let specialNewBase = constraintFn(errFn);
       return specialNewBase;
     }
-
-    // console.log("presentConstraintValue", { constraintName, constraintValue });
+    this.logInfo("presentConstraintValue: apply validator function", { constraintName, constraintValue })
     const newBase = constraintFn(constraintValue, errFn);
     return newBase;
   }
@@ -116,14 +135,16 @@ export class ConstraintBuilder extends TypeMatcher {
   multiValueConstraint(values, { constraintFn, constraintName, errFn }) {
     if (!this.isPresent(values)) return;
 
+    this.logInfo("multiValueConstraint", { constraintName, values })    
     // call yup constraint function with multiple arguments
     if (!Array.isArray(values)) {
       this.warn("buildConstraint: values option must be an array of arguments");
       return;
     }
 
-    this.onConstraintAdded({ name: constraintName, value: values });
+    this.onConstraintAdded({ method: 'multiValueConstraint', name: constraintName, value: values });
     // console.log(constraintFn, { constraintName, values });
+    this.logInfo("multiValueConstraint: apply validator function", { constraintName, value: values })
 
     return this.callConstraintFn(constraintFn, constraintName, values, errFn);
   }
@@ -178,9 +199,13 @@ export class ConstraintBuilder extends TypeMatcher {
     return false;
   }
 
-  onConstraintAdded({ name, value }) {
+  onConstraintAdded({ method, name, value }) {
     this.constraintsAdded[name] = value;
-    this.builder && this.builder.onConstraintAdded({ type: this.type, name, value })
+    if (!this.builder) {
+      this.logInfo('no builder set to notify in ConstraintBuilder')
+      return
+    }
+    this.builder.onConstraintAdded({ type: this.type, method, name, value })
     return this.typeHandler;
   }
 
@@ -189,6 +214,19 @@ export class ConstraintBuilder extends TypeMatcher {
       simple: ["required", "notRequired", "nullable"],
       value: ["default", "strict"]
     };
+  }
+
+  // propName, method, key
+  logDetailed(label, ...values) {
+    const idObj = this.idObj 
+    const matchIdList = this.config.logDetailed
+    const found = matchIdList.find(matchIds => {
+      if (matchIds.key && idObj.key !== matchIds.key) return false
+      if (matchIds.propName && idObj.propName !== matchIds.propName) return false
+      if (matchIds.method && idObj.method !== matchIds.method) return false
+      return true
+    })    
+    found && this.logInfo(label, idObj, ...values)
   }
 
   valErrMessage(msgName) {

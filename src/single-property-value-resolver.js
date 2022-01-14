@@ -5,8 +5,8 @@ export const createSinglePropertyValueResolver = (opts, config) => {
 };
 
 export class SinglePropertyValueResolver extends BasePropertyValueResolver {
-  constructor(opts, config) {
-    super(opts, config);
+  constructor(opts, config, entryHandler) {
+    super(opts, config, entryHandler);
   }
 
   resolve() {
@@ -17,14 +17,14 @@ export class SinglePropertyValueResolver extends BasePropertyValueResolver {
       return toSingleType(this);
     }
 
-    const { obj, config } = this;
+    const { obj, config, entryHandler } = this;
     const typeHandlerNames = Object.keys(this.types);
     let result;
     // iterate all registered type handlers in this.types
     for (let typeName of typeHandlerNames) {
       const typeFn = this.types[typeName];
       if (typeFn) {
-        result = typeFn(obj, config);
+        result = typeFn(obj, config, entryHandler);
       }
       if (result) break;
     }

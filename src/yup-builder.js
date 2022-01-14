@@ -167,6 +167,6 @@ export class YupBuilder extends Base {
   }
 
   onConstraintAdded(constraint) {
-    this.log('Constraint Added', constraint)
+    this.logInfo('Constraint Added', constraint)
   }
 }
