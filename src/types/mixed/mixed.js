@@ -172,7 +172,8 @@ class YupMixed extends Base {
         "when",
         "nullable",
         "isType",
-        "label"
+        "label",
+        "refValueFor"
       ]
     );
   }
@@ -292,6 +293,15 @@ class YupMixed extends Base {
       simple: ["required", "notRequired", "nullable"],
       value: ["default", "strict"]
     };
+  }
+
+  refValueFor() {
+    let propRefName =
+      this.constraints.refValueFor
+    if (this.isNothing(propRefName)) return this;
+    this.apply('when', (propRefName, (refValueFor, field) =>
+      refValueFor ? field.required().oneOf([Yup.ref(propRefName)]) : field
+    ))
   }
 
   oneOf() {

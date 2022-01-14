@@ -96,7 +96,6 @@ export class ConstraintBuilder extends TypeMatcher {
     return potentialValues.filter(isDefined)[0]
   }
 
-
   nonPresentConstraintValue(
     constraintValue,
     { constraintName, constraintFn, errFn }
@@ -219,7 +218,8 @@ export class ConstraintBuilder extends TypeMatcher {
   // propName, method, key
   logDetailed(label, ...values) {
     const idObj = this.idObj 
-    const matchIdList = this.config.logDetailed
+    const matchIdList = this.config.logDetailed || []
+    if (!matchIdList.length) return
     const found = matchIdList.find(matchIds => {
       if (matchIds.key && idObj.key !== matchIds.key) return false
       if (matchIds.propName && idObj.propName !== matchIds.propName) return false

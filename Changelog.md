@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.11.4
+
+Added new `refValue` field to allow validating via previous property value
+
 ## 1.11.3
 
 Fixed bug when constraint value is 0 (such as in Person schema example!)

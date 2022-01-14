@@ -244,9 +244,10 @@ Currently the following schema types are supported:
 - `notRequired`
 - `oneOf` (`enum`, `anyOf`)
 - `notOneOf`
-- `when` _NEW_
-- `isType` _NEW_
-- `nullable` (`isNullable`) _NEW_
+- `refValue` for confirm password scenario
+- `when`
+- `isType`
+- `nullable` (`isNullable`)
 
 ### Array
 
@@ -297,6 +298,23 @@ No keys
 
 For pattern (RegExp) you can additionally provide a flags property, such as `flags: 'i'`.
 Will be converted to a regexp using `new RegExp(pattern, flags)`
+
+## Confirm password
+
+You can use the special `refValue` constraint for password confirmation scenarios.
+
+```js
+  "password": {
+    "minLength": 6,
+    "type": "string"
+  },
+  "confirmPassword": {
+    "refValue": "password",
+    "type": "string"
+  }
+```
+
+See the sample test case in `test/confirm-password.test.js`
 
 ## Multi-type constraints
 
