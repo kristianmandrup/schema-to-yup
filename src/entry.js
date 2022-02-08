@@ -22,10 +22,22 @@ class YupSchemaEntry extends Base {
     this.key = key;
     this.value = value || {};
     this.config = config || {};
-    this.name = name;
-    const type = Array.isArray(value) ? "array" : value.type;
-    this.kind = type === "array" ? "multi" : "single";
-    this.type = type;
+    this.name = name;    
+    this.init()
+  }
+
+  get calcType() {
+    const { value } = this
+    return Array.isArray(value) ? "array" : value.type;
+  }
+
+  get calcKind() {
+    return this.type === "array" ? "multi" : "single";
+  }
+
+  init() {
+    this.type = this.calcType;    
+    this.kind = this.calcKind;
     this.setTypeHandlers();
     this.setPropertyHandler();
   }

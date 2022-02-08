@@ -16,7 +16,20 @@ export class MultiPropertyValueResolver extends BasePropertyValueResolver {
     if (toMultiType) {
       return toMultiType(this);
     }
-    // TODO
-    return;
+    return this.oneOf();
+  }
+
+  oneOf() {
+    const schemaValues = this.value
+    const { createYupSchemaEntry } = this.config
+    const resolvedValidatorSchemas = schemaValues.map(value => {
+      const opts = { schema: this.schema, key: this.key, value, config: this.config }
+      return createYupSchemaEntry(opts)
+    })
+    return this.mixed().oneOf(resolvedValidatorSchemas)
+  }
+
+  mixed() {
+    return this.validator.mixed()
   }
 }
