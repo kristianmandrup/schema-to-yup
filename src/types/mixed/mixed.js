@@ -173,6 +173,7 @@ class YupMixed extends Base {
         "nullable",
         "isType",
         "label",
+        "const",
         "refValueFor"
       ]
     );
