@@ -248,6 +248,15 @@ class YupMixed extends Base {
     return this
   }
 
+  applyArr(fnName, arrValue) {
+    if (typeof fnName !== 'string') {
+      throw new TypeError(`[Mixed] apply must take a method name available on the validator instance as first argument`)
+    }
+    this.base = (arrValue && arrValue.length && this.base[fnName](arrValue)) || this.base;
+    return this
+  }
+
+
   addValueConstraint(propName, opts) {
     const constraint = this.constraintBuilder.addValueConstraint(
       propName,
@@ -333,7 +342,7 @@ class YupMixed extends Base {
     const resolvedValidatorSchemas = schemaValues.map(value => {
       return this.isObjectType(value) ? resolveValue(value) : value
     })
-    return this.mixed().oneOf(resolvedValidatorSchemas)
+    return this.applyArr('oneOf', resolvedValidatorSchemas)
   }  
 
   const() {
