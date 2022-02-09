@@ -310,12 +310,12 @@ class YupMixed extends Base {
       this.constraints.enum || this.constraints.oneOf || this.constraints.anyOf;
     if (this.isNothing(values)) return this;
     values = Array.isArray(values) ? values : [values];
+    const resolvedValues = this.resolveValues(values)
     // using alias
     const alias = ["oneOf", "enum", "anyOf"].find(key => {
       return this.constraints[key] !== undefined;
     });
-    // TODO: pass value as constraintValue not value
-    return this.addConstraint(alias, { values });
+    return this.addConstraint(alias, { values: resolvedValues });
   }
 
   notOneOf() {
@@ -323,8 +323,44 @@ class YupMixed extends Base {
     let values = notOneOf || (not && (not.enum || not.oneOf));
     if (this.isNothing(values)) return this;
     values = Array.isArray(values) ? values : [values];
-    // TODO: pass value as constraintValue not value
-    return this.addConstraint("notOneOf", { values });
+    const resolvedValues = this.resolveValues(values)
+    return this.addConstraint("notOneOf", { values: resolvedValues });
+  }
+
+  resolveValues(values) {
+    const schemaValues = values
+    const resolvedValidatorSchemas = schemaValues.map(value => {
+      return this.isObjectType(value) ? resolveValue(value) : value
+    })
+    return this.mixed().oneOf(resolvedValidatorSchemas)
+  }  
+
+  const() {
+    let value =this.constraints.const
+    if (this.isNothing(value)) return this;
+    // TODO: resolve const data ref if valid format
+    if (this.isDataRef(value)) {
+      const dataRefPath = this.normalizeDataRefPath(value)
+      value = yup.ref(dataRefPath)
+    }    
+    return this.addConstraint('const', { value });
+  }
+
+  // TODO: investigate yup.ref
+  normalizeDataRefPath(value) {
+    // remove first part before /
+    const parts = value.split('/').shift()
+    return parts.join('/')
+  }
+
+  isDataRef(value) {
+    return this.isPresent(value.$data)
+  }
+
+  resolveValue(value) {
+    const { createYupSchemaEntry } = this.config
+    const opts = { schema: this.schema, key: this.key, value, config: this.config }
+    return createYupSchemaEntry(opts)  
   }
 
   valErrMessage(msgName) {
