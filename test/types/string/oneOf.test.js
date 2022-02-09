@@ -26,3 +26,19 @@ describe("oneOf", () => {
     });
   });
 });
+
+
+describe("inner schemas with const", () => {
+  const entry = createStr({ oneOf: [{const: "male"}, {const: "female"}], key: "gender" });
+  const schema = createSchema(entry, "gender");
+
+  test("valid", () => {
+    const valid = schema.isValidSync({ gender: "male" });
+    expect(valid).toBeTruthy();
+  });
+
+  test("invalid", () => {
+    const valid = schema.isValidSync({ gender: "animal" });
+    expect(valid).toBeFalsy();
+  });
+});

@@ -348,6 +348,7 @@ class YupMixed extends Base {
 
   // TODO: investigate yup.ref
   normalizeDataRefPath(value) {
+    value = value.$data || value
     // remove first part before /
     const parts = value.split('/').shift()
     return parts.join('/')
