@@ -339,10 +339,9 @@ class YupMixed extends Base {
 
   resolveValues(values) {
     const schemaValues = values
-    const resolvedValidatorSchemas = schemaValues.map(value => {
+    return schemaValues.map(value => {
       return this.isObjectType(value) ? resolveValue(value) : value
     })
-    return this.applyArr('oneOf', resolvedValidatorSchemas)
   }  
 
   const() {
