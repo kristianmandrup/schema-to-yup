@@ -30,6 +30,8 @@ class YupMixed extends Base {
     this.schema = schema;
     this.properties = schema.properties || {};
     this.value = value;
+    this.title = value.title
+    this.description = value.description
     this.constraints = this.getConstraints();
     this.format = value.format || this.constraints.format;
     this.config = config || {};

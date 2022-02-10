@@ -240,6 +240,7 @@ Currently the following schema types are supported:
 - `strict`
 - `default`
 - `nullable`
+- `const`
 - `required`
 - `notRequired`
 - `oneOf` (`enum`, `anyOf`)
@@ -1173,6 +1174,23 @@ Internally the validator error messages are resolved via an instance of the `Err
     return this
   }
 ```
+
+Error handling
+
+```js
+class ErrorMessageHandler {
+  // ...
+  valErrMessage(msgName) {
+    const { constraints, description, title } = this;
+    const errMsg = this.errMessageFor(msgName);
+    return typeof errMsg === "function"
+      ? errMsg(constraints, { description, title })
+      : errMsg;
+  }
+}
+```
+
+Note that the error message function has `description` and `title` available.
 
 #### Use a custom error message handler
 
