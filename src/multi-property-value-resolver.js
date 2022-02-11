@@ -21,12 +21,20 @@ export class MultiPropertyValueResolver extends BasePropertyValueResolver {
 
   oneOf() {
     const schemaValues = this.value
-    const { createYupSchemaEntry } = this.config
-    const resolvedValidatorSchemas = schemaValues.map(value => {
-      const opts = { schema: this.schema, key: this.key, value, config: this.config }
-      return createYupSchemaEntry(opts)
-    })
+    const createEntry = this.createEntry.bind(this)
+    const resolvedValidatorSchemas = schemaValues.map(createEntry)
     return this.mixed().oneOf(resolvedValidatorSchemas)
+  }
+
+  createEntry(value) {
+    const { createYupSchemaEntry } = this.config
+    value = normalizedValue(value)
+    const opts = { schema: this.schema, key: this.key, value, config: this.config }
+    return createYupSchemaEntry(opts)
+  }
+
+  normalizedValue(value) {
+    return typeof value === 'string' ? {type: value}: value
   }
 
   mixed() {
