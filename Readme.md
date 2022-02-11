@@ -319,67 +319,9 @@ See the sample test case in `test/confirm-password.test.js`
 
 ## Multi-type constraints
 
-This library currently does not come with built-in support for multi valued (list/array) type constraints such as `['string', 'null']`
+A sample implementation to support multi type constraints has been implemented in `MultiPropertyValueResolver`.
 
-See [Issue 52](https://github.com/kristianmandrup/schema-to-yup/issues/52#issuecomment-561720235) for a discussion and current state.
-
-To support this, you can either add your own logic for the `toMultiType` function/method of `YupSchemaEntry` or pass a custom factory method `createMultiTypeValueResolver` on the `config` object.
-
-Sample code for multi type support (untested):
-
-```js
-export const createPropertyValueHandler = (opts, config) => {
-  return new PropertyValueResolver(opts, config);
-};
-
-export class MyMultiTypeValueResolver extends MultiTypeValueResolver {
-  constructor(opts, config) {
-    this.propertyHandler = createPropertyValueHandler(opts, config);
-  }
-
-  resolve() {
-    const { value, name } = this;
-    let constraintListValue = this.normalizeValue(value); // ['string', 'null']
-    const multiTypePropSchema = constraintListValue.reduce(
-      (accSchema, constraintValue) => {
-        return this.resolvePropertyValue(constraintValue, accSchema);
-      },
-      null
-    );
-
-    return yup.mixed().test({
-      name,
-      exclusive: true,
-      params: {},
-      message: "${path} does not conform to all constraints defined",
-      test: (val) => {
-        return multiTypePropSchema.validateSync(val);
-      },
-    });
-  }
-
-  resolvePropertyValue(constraintValue, accSchema) {
-    const opts = {
-      ...this.opts,
-      constraintValue,
-    };
-    return this.propertyHandler.resolve(opts, this.config);
-  }
-
-  // expand/normalize to list of objects each with a valid type entry
-  normalizeList(multiTypeList) {
-    return multiTypeList.reduce((acc, entry) => {
-      acc.push(normalizedEntry);
-      return acc;
-    }, []);
-  }
-
-  normalizeTypeEntry(entry) {
-    if (!this.isStringType(entry)) return entry;
-    return { type: entry };
-  }
-}
-```
+To improve support this, pass a custom factory method `createMultiTypeValueResolver` on the `config` object and build on or improve the current implementation.
 
 ## Custom builder init
 
@@ -1369,8 +1311,7 @@ For more complex contraints that:
 - require validation
 - optional transformation
 
-You can create a separate `Constraint` subclass, to offload and handle it all separately.
-Here is a sample `RangeConstraint` used by number.
+You can create a separate `Constraint` subclass, to offload and handle it all separately. Here is a sample `RangeConstraint` used by number.
 
 ```js
 class RangeConstraint extends NumericConstraint {
