@@ -347,6 +347,10 @@ export function buildYup(schema, config = {}) {
 ## Custom builder functions
 
 - `init`
+- `buildProperties`
+- `buildProp`
+- `setRequired`
+- `setPropEntry`
 
 ### Custom init
 
