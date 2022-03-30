@@ -29,7 +29,9 @@ export class YupBuilder extends Base {
     const type = this.getType(schema);
     const props = this.getProps(schema);
     this.type = type;
-    this.properties = props;
+    this.properties = {
+      ...props
+    };
     this.additionalProps = this.getAdditionalProperties(schema);
     this.required = this.getRequired(schema);
 
@@ -51,7 +53,8 @@ export class YupBuilder extends Base {
     }
 
     const name = this.getName(schema);
-    const properties = this.normalizeRequired(schema);
+    const buildProperties = (config.buildProperties || this.buildProperties).bind(this)
+    const properties = buildProperties(schema, this);
     const shapeConfig = this.propsToShape({ properties, name, config });
 
     this.shapeConfig = shapeConfig;
@@ -91,31 +94,44 @@ export class YupBuilder extends Base {
     return yup.object().shape(this.shapeConfig);
   }
 
-  normalizeRequired() {
-    const properties = {
-      ...this.properties
-    };
-    const required = [...this.required] || [];
-    // this.logInfo("normalizeRequired", {
-    //   properties,
-    //   required
-    // });
-    const propKeys = Object.keys(properties);
-    return propKeys.reduce((acc, key) => {
-      // this.logInfo("normalizeRequired", {
-      //   key
-      // });
-      const value = properties[key];
-      const isRequired = required.indexOf(key) >= 0;
-      if (isObjectType(value)) {
-        value.required = this.isRequired(value) || isRequired;
-      } else {
-        this.warn(`Bad value: ${value} must be an object`);
-      }
+  buildProperties() {
+    const propKeys = Object.keys(this.properties);
+    const buildProp = (this.config.buildProp || this.buildProp).bind(this)
+    return propKeys.reduce(buildProp, {});
+  }
 
-      acc[key] = value;
-      return acc;
-    }, {});
+  getRequiredPropsList() {
+    return Array.isArray(this.required) ? [...this.required] : []
+  }
+
+  buildProp(propObj, key) {
+    const value = this.properties[key];
+    const required = this.getRequiredPropsList();    
+    const setRequired = (this.config.setRequired || this.setRequired).bind(this)
+    // normalize required for prop
+    setRequired(value, key, required)  
+    // set schema property entry
+    const setPropEntry = (this.config.setPropEntry || this.setPropEntry).bind(this)
+    setPropEntry(propObj, key, value)
+    return propObj;
+  }
+
+  // normalize required for prop
+  setRequired(value, key, required) {    
+    const isRequired = required.indexOf(key) >= 0;
+    if (!isObjectType(value)) {
+      this.warn(`Bad property value: ${value} must be an object`);
+    }
+    value.required = this.isRequired(value) || isRequired;
+    return value
+  }
+
+  setPropEntry(propObj, key, value) {
+    // order so required errors will be first
+    propObj[key] = {
+      required: value.required,
+      ...value,
+    }
   }
 
   isRequired(value) {

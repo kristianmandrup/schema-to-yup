@@ -36,12 +36,13 @@ According to the JSON schema specs, you are free to add extra metadata to the fi
 
 You can use the building blocks of this library to support alternative validators other than Yup. See [Supporting alternative validators](#supporting-alternative-validators)
 
-## Customisation hooks
+## Customization hooks
 
-This library is built to be easy to customise or extend to suit individual developer needs.
-|Use any of the following customisation hooks to add custom features, circumvent missing functionality or bugs or extend any way you see fit. You can even use these hooks to support a different validator library, leveraging the generic schema validator builder infrastructure.
+This library is built to be easy to customize or extend to suit individual developer needs.
+|Use any of the following customization hooks to add custom features, circumvent missing functionality or bugs or extend any way you see fit. You can even use these hooks to support a different validator library, leveraging the generic schema validator builder infrastructure.
 
-- [Custom builder init](#custom-builder-init)
+- [Custom builder](#custom-builder)
+- [Custom builder functions](#custom-builder-functions)
 - [entry builders](#custom-entry-builders)
 - [type handlers](#custom-type-handlers)
 - [constraint handler functions](#custom-constraint-handler-functions)
@@ -91,7 +92,7 @@ const schema = {
       type: "string",
       format: "email",
     },
-    fooorbar: {
+    foobar: {
       type: "string",
       matches: "(foo|bar)",
     },
@@ -323,9 +324,33 @@ A sample implementation to support multi type constraints has been implemented i
 
 To improve support this, pass a custom factory method `createMultiTypeValueResolver` on the `config` object and build on or improve the current implementation.
 
-## Custom builder init
+## Custom builder
 
-You can supply a custom `init` function on the `config` object to do custom initialisation.The `init` function will be bound to the `YupBuilder` instance so that `this` returns the builder instance.
+To customize the builder to suit your needs, simply subclass the `YupBuilder` class and create your own factory function which instantiates your subclass.
+
+```js
+class MyCustomYupBuilder extends YupBuilder {
+  init(schema, config)
+    // my pre-init
+    super.init(schema, config)
+    // my post init
+  }
+
+  // my other overrides
+}
+
+export function buildYup(schema, config = {}) {
+  return new MyCustomYupBuilder(schema, {...config}).yupSchema;
+}
+```  
+
+## Custom builder functions
+
+- `init`
+
+### Custom init
+
+You can supply a custom `init` function on the `config` object to do custom initialization. The `init` function will be bound to the `YupBuilder` instance so that `this` returns the builder instance.
 
 ```js
 import * as yup from "yup";
@@ -336,6 +361,66 @@ const yupSchema = buildYup(jsonSchema, {
     console.log({properties: this.properties})
   },
 });
+```
+
+### Custom buildProperties
+
+You can override the built-in `buildProperties` method (see code below) by supplying a custom `buildProperties` function on the `config` object. 
+
+```js
+  buildProperties() {
+    const propKeys = Object.keys(this.properties);
+    const buildProp = (this.config.buildProp || this.buildProp).bind(this)
+    return propKeys.reduce(buildProp, {});
+  }
+```
+
+### Custom buildProp
+
+You can override the built-in `buildProp` method (see code below) by supplying a custom `buildProp` function on the `config` object. 
+
+```js
+buildProp(propObj, key) {
+    const value = this.properties[key];
+    const required = this.getRequiredPropsList();    
+    const setRequired = (this.config.setRequired || this.setRequired).bind(this)
+    // normalize required for prop
+    setRequired(value, key, required)  
+    // set schema property entry
+    const setPropEntry = (this.config.setPropEntry || this.setPropEntry).bind(this)
+    setPropEntry(propObj, key, value)
+    return propObj;
+  }
+```
+
+### Custom setRequired
+
+You can override the built-in `setRequired` method (see code below) by supplying a custom `setRequired` function on the `config` object. 
+
+```js
+  // normalize required for prop
+  setRequired(value, key, required) {    
+    const isRequired = required.indexOf(key) >= 0;
+    if (!isObjectType(value)) {
+      this.warn(`Bad property value: ${value} must be an object`);
+    }
+    value.required = this.isRequired(value) || isRequired;
+    return value
+  }
+```
+
+### Custom setPropEntry
+
+You can override the built-in `setPropEntry` method (see code below) by supplying a custom `setPropEntry` function on the `config` object. 
+
+```js
+  setPropEntry(propObj, key, value) {
+    // order so required errors will be first
+    propObj[key] = {
+      required: value.required,
+      ...value,
+    }
+  }
 ```
 
 ## Custom entry builders
@@ -360,7 +445,7 @@ Each takes an instance `yupSchemaEntryBuilder` of `YupSchemaEntry`, which primar
 
 ### Custom type handlers
 
-You can pass any custom typehandlers in a `typeHandlers` object as part of the `config` object passes. See `setTypeHandlers()` and `get typeHandlers()` in `entry.js` for how this works internally.
+You can pass any custom type handlers in a `typeHandlers` object as part of the `config` object passes. See `setTypeHandlers()` and `get typeHandlers()` in `entry.js` for how this works internally.
 
 ```js
 function myCustomStringHandler = (obj, config) => {
@@ -408,7 +493,7 @@ A simpler alternative is to add custom constraint functions to the handlers as d
 
 ### Custom constraint handler functions
 
-You can add custom custraint handler functions directly via the `config` object.
+You can add custom constraint handler functions directly via the `config` object.
 This can be used to override built in constraints or extend with your own.
 
 A custom handler to validate a string formatted as a valid `ip` address might look something like this (presuming such a method is available on `yup` string). You can also use this with [yup schema type extensions](https://github.com/jquense/yup#extending-schema-types).
@@ -495,7 +580,7 @@ const yupSchema = buildYup(jsonSchema, { mixedEnabled }
 
 ### Custom constraint builder
 
-This library supports using a custom constraint builder to add and build constraints. All factories are initialised in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
+This library supports using a custom constraint builder to add and build constraints. All factories are initialized in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
 
 ```js
 import { ConstraintBuilder } from "schema-to-yup";
@@ -628,7 +713,7 @@ You can access the `entryHandler` and from there the `builder` from within a typ
 
 So you can access a `validator` instance set in the builder via `this.entryHandler.validator` (note: should normally be a singleton instance)
 
-Then do futher customisations as needed.
+Then do further customizations as needed.
 
 ## Conditional logic
 
