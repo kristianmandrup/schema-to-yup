@@ -64,17 +64,19 @@ export class YupArray extends YupMixed {
     }
 
     try {
+      const value = $of
       const schemaConf = {
         key: this.key,
-        value: $of,
+        value,
         config: this.config
       };
-
+      this.log('array:of', {schemaConf})
       const schemaEntry = this.createYupSchemaEntry(schemaConf);
-
+      this.log('array:of', {schemaEntry})
       return this.addConstraint("of", {
         constraintValue: schemaEntry,
-        propValue: $of
+        propValue: value,
+        value
       });
     } catch (ex) {
       this.error("itemsOf: Error", ex);

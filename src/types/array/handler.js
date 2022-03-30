@@ -8,7 +8,7 @@ export class ArrayHandler extends Base {
 
   isArray(obj) {
     if (!this.config.isArray) {
-      this.error("ArrayHandler: mising isArray in config", this.config);
+      this.error("ArrayHandler: missing isArray in config", this.config);
     }
     return this.config.isArray(obj);
   }

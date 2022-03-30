@@ -7,7 +7,7 @@ const typeDefConf = {
   isArray: (obj) => obj.type === "array",
   isBoolean: (obj) => obj.type === "boolean",
   isInteger: (obj) => obj.type === "integer",
-  hasDateFormat: (obj) => ["date", "date-time"].includes(obj?.value?.format), // using nullish coalescing
+  hasDateFormat: (obj) => obj && ["date", "date-time"].find(t => t === obj.format),
   isDate: (obj) => obj.type === "string" && typeDefConf.hasDateFormat(obj),
   isNumber: (obj) => obj.type === "number" || typeDefConf.isInteger(obj),
   isObject: (obj) => obj.type === "object",
