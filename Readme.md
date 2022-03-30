@@ -64,7 +64,7 @@ This sample run is configured with detailed logging in the `config` object:
   logDetailed: [{
     propName: 'exclusiveMinimum',
     key: 'age'
-  }],
+  }]
 }
 ```
 
@@ -1102,9 +1102,27 @@ Logging can also be enabled simply by passing `logging:true`. In addition, detai
   }, {
     method: 'lessThan' // method that propName is resolved to
   }],
+  logTypes: ['array', 'number']
 ```
 
-## Localised error messages
+You can also use the `logTypes` setting to enable logging only for certain type handlers. Please mot that this currently only affects calls to `logTypeInfo`
+
+```js
+{
+  logging: true,
+  logTypes: ['array', 'number']
+```
+
+This type of logging is only enabled for the `array` type handler at present, but you can add this type of logging as needed when/if you create your own type handlers.
+
+```js
+  this.logTypeInfo('array:of', {schemaConf})
+  const schemaEntry = this.createYupSchemaEntry(schemaConf);
+  this.logTypeInfo('array:of', {schemaEntry})
+```
+
+
+## Localized error messages
 
 You can specify the locale to use in the `config` object.
 Internally the builder will use the following `yup` call: `yup.setLocale(config.locale)`

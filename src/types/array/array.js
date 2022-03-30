@@ -70,9 +70,9 @@ export class YupArray extends YupMixed {
         value,
         config: this.config
       };
-      this.log('array:of', {schemaConf})
+      this.logTypeInfo('array:of', {schemaConf})
       const schemaEntry = this.createYupSchemaEntry(schemaConf);
-      this.log('array:of', {schemaEntry})
+      this.logTypeInfo('array:of', {schemaEntry})
       return this.addConstraint("of", {
         constraintValue: schemaEntry,
         propValue: value,

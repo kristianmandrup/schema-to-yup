@@ -28,6 +28,16 @@ class Loggable {
     this.logInfo("WARNING: " + warnMsg, ...values);
   }
 
+  logTypeInfo(name, ...values) {
+    if (!this.enable.log) return;
+    if (!this.log) return
+    const matchTypeList = this.config.logTypes || []
+    if (!matchTypeList.length) return
+    const found = matchTypeList.find(matchType => this.type === matchType)
+    if (!found) return
+    logInfo(name, ...values)
+  }
+
   logInfo(name, ...values) {
     if (!this.enable.log) return;
     if (!this.log) return
