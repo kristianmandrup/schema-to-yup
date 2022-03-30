@@ -468,6 +468,24 @@ This can be used to support special cases:
 - extend to add additional type handlers, such as for Avro schema
 - add support for validators other than Yup
 
+#### Custom array type handler
+
+Currently this library has minimal support for the `array` type. To add better `array` type support, create a custom type handler for handling array types and use it as follows.
+
+```js
+const yupSchema = buildYup(jsonSchema, {
+  typeHandlers: {
+    array: myCustomArrayHandler
+  },
+});
+```
+
+Use the `array.test.js` file for testing improved array support. Currently many of the array tests are marked with `skip`.
+
+`$ npm test toYupArray`
+
+### Additional type handlers
+
 In order to pass a a type handler map that does not rely on any built in type handlers, pass in a `types` object
 
 ```js
