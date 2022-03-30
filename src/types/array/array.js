@@ -76,7 +76,7 @@ export class YupArray extends YupMixed {
       return this.addConstraint("of", {
         constraintValue: schemaEntry,
         propValue: value,
-        value
+        value: schemaEntry
       });
     } catch (ex) {
       this.error("itemsOf: Error", ex);

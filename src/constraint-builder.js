@@ -75,7 +75,7 @@ export class ConstraintBuilder extends TypeMatcher {
     let newBase;
     for (let name of constrainFnNames) {
       const fnName = this[name].bind(this)
-      const constrValue = this.getFirstValue([value, values])
+      const constrValue = this.getFirstValue([value, values, constraintValue])
       newBase = fnName(constrValue, constrOpts);
       if (newBase) break;
     }
