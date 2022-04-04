@@ -179,7 +179,7 @@ export class ConstraintBuilder extends TypeMatcher {
     return ["required", "email", "url", "format"];
   }
 
-  addValueConstraint(propName, { constraintName, errName } = {}) {
+  addTrueValueConstraint(propName, { constraintName, errName } = {}) {
     return this.addConstraint(propName, {
       constraintName,
       value: true,

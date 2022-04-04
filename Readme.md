@@ -1399,7 +1399,7 @@ For types with several of these, we should map through a list or map to add them
 
 ```js
   strict() {
-    return this.addValueConstraint("strict");
+    return this.addTrueValueConstraint("strict");
   }
 
   required() {
@@ -1417,15 +1417,15 @@ Can be rewritten to use conventions, iterating a map:
   addMappedConstraints() {
     Object.keys(this.constraintsMap).map(key => {
       const list = constraintsMap[key];
-      const fnName = key === 'value' ? 'addValueConstraint' : 'addConstraint'
+      const fnName = key === 'value' ? 'addTrueValueConstraint' : 'addConstraint'
       list.map(this.[fnName]);
     });
   }
 
   get constraintsMap() {
     return {
-      simple: ["required", "notRequired", "nullable"],
-      value: ["default", "strict"]
+      simple: ["default", "required", "notRequired", "nullable"],
+      trueValue: ["strict"]
     };
   }
 ```

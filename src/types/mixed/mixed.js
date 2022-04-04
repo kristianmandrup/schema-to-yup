@@ -137,7 +137,7 @@ class YupMixed extends Base {
     this.constraintBuilder = constraintBuilderFactoryFn(this, config);
 
     // rebind: ensure this always mapped correctly no matter context
-    this.rebind("addConstraint", "addValueConstraint");
+    this.rebind("addConstraint", "addTrueValueConstraint");
   }
 
   createConstraintBuilder(typeHandler, config = {}) {
@@ -259,8 +259,8 @@ class YupMixed extends Base {
   }
 
 
-  addValueConstraint(propName, opts) {
-    const constraint = this.constraintBuilder.addValueConstraint(
+  addTrueValueConstraint(propName, opts) {
+    const constraint = this.constraintBuilder.addTrueValueConstraint(
       propName,
       opts
     );
@@ -293,17 +293,18 @@ class YupMixed extends Base {
   addMappedConstraint(key) {
     const { constraintsMap } = this;
     const constraintNames = constraintsMap[key];
-    const fnName = key === "value" ? "addValueConstraint" : "addConstraint";
+    const fnName = key === "trueValue" ? "addTrueValueConstraint" : "addConstraint";
     const fn = this[fnName];
+    const value = this.constraints[key];
     constraintNames.map(constraintName => {
-      fn(constraintName);
-    });
+      fn(constraintName, { value });
+    });  
   }
 
   get constraintsMap() {
     return {
-      simple: ["required", "notRequired", "nullable"],
-      value: ["default", "strict"]
+      simple: ["default", "required", "notRequired", "nullable"],
+      trueValue: ["strict"]
     };
   }
 

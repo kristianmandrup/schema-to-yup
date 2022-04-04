@@ -202,7 +202,7 @@ export namespace types {
 
         addMappedConstraints(): any;
 
-        addValueConstraint(t: any, e: any): any;
+        addTrueValueConstraint(t: any, e: any): any;
 
         apply(t: any, ...args: any[]): any;
 
