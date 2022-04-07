@@ -343,7 +343,7 @@ class YupMixed extends Base {
   resolveValues(values) {
     const schemaValues = values
     return schemaValues.map(value => {
-      return this.isObjectType(value) ? resolveValue(value) : value
+      return this.isObjectType(value) ? this.resolveValue(value) : value
     })
   }  
 
