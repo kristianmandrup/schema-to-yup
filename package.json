@@ -29,8 +29,8 @@
     "@babel/core": "^7.16.5",
     "@babel/node": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
-    "jest": "^27.4.5",
-    "microbundle": "^0.14.2"
+    "jest": "^28.0.2",
+    "microbundle": "^0.15.0"
   },
   "keywords": [
     "yup",
