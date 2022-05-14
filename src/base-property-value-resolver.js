@@ -25,8 +25,10 @@ export class BasePropertyValueResolver extends Base {
   }
 
   error(msg, data) {
-    const { opts } = this;
-    data ? console.error(msg, data, ...opts) : console.error(msg, ...opts);
+    let { opts } = this;
+    opts = opts || {}
+    opts = data ? { data, ...opts } : ops
+    console.error(msg, ...opts)
     throw new PropertyValueResolverError(msg);
   }
 

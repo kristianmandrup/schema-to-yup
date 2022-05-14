@@ -371,14 +371,16 @@ class YupMixed extends Base {
   }
 
   resolveValue(value) {
-    const { createYupSchemaEntry } = this.config
+    const createYupSchemaEntry = this.config.createYupSchemaEntry // || this.entryHandler.createNew
     const opts = { schema: this.schema, key: this.key, value, config: this.config }
     return createYupSchemaEntry(opts)  
   }
 
   valErrMessage(msgName) {
-    return this.errorMessageHandler.valErrMessage(msgName);
-  }
+    const defaultErrorMessageFn = this.errorMessageHandler.valErrMessage.bind(this.errorMessageHandler)
+    const valErrMessageFn = this.config.valErrMessage || defaultErrorMessageFn
+    return valErrMessageFn(msgName, this);
+  }  
 
   createWhenConditionFor(when) {
     const opts = {

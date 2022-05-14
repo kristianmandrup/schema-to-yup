@@ -1,7 +1,7 @@
 const { types } = require("../../../src");
 const { toYupArray } = types;
 const { createYupSchemaEntry } = require("../../../src/create-entry");
-import schemaParserMaps from "../../src/types/schema-parser-maps";
+import schemaParserMaps from "../../../src/types/schema-parser-maps";
 
 const yup = require("yup");
 const defaultConfig = { ...schemaParserMaps, createYupSchemaEntry };

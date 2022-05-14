@@ -4,13 +4,26 @@ export class ErrorMessageHandler extends TypeMatcher {
   constructor(typeHandler, config = {}) {
     super(config);
     this.typeHandler = typeHandler;
+    this.init()
+  }
+    
+  init() {
+    const { typeHandler } = this
     this.constraints = typeHandler.constraints;
     this.errMessages = typeHandler.errMessages;
     this.key = typeHandler.key;
     this.type = typeHandler.type;
     this.description = typeHandler.description
     this.title = typeHandler.title
+    this.setErrMessage()  
   }
+
+  setErrMessage() {
+    const { typeHandler, errMessages } = this
+    if (!typeHandler.value.errMessage) return
+    errMessages[this.key] = typeHandler.value.errMessage
+  }
+  
 
   valErrMessage(msgName) {
     const { constraints, description, title } = this;

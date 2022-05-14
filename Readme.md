@@ -342,7 +342,7 @@ class MyCustomYupBuilder extends YupBuilder {
 export function buildYup(schema, config = {}) {
   return new MyCustomYupBuilder(schema, {...config}).yupSchema;
 }
-```  
+```
 
 ## Custom builder functions
 
@@ -369,7 +369,7 @@ const yupSchema = buildYup(jsonSchema, {
 
 ### Custom buildProperties
 
-You can override the built-in `buildProperties` method (see code below) by supplying a custom `buildProperties` function on the `config` object. 
+You can override the built-in `buildProperties` method (see code below) by supplying a custom `buildProperties` function on the `config` object.
 
 ```js
   buildProperties() {
@@ -381,15 +381,15 @@ You can override the built-in `buildProperties` method (see code below) by suppl
 
 ### Custom buildProp
 
-You can override the built-in `buildProp` method (see code below) by supplying a custom `buildProp` function on the `config` object. 
+You can override the built-in `buildProp` method (see code below) by supplying a custom `buildProp` function on the `config` object.
 
 ```js
 buildProp(propObj, key) {
     const value = this.properties[key];
-    const required = this.getRequiredPropsList();    
+    const required = this.getRequiredPropsList();
     const setRequired = (this.config.setRequired || this.setRequired).bind(this)
     // normalize required for prop
-    setRequired(value, key, required)  
+    setRequired(value, key, required)
     // set schema property entry
     const setPropEntry = (this.config.setPropEntry || this.setPropEntry).bind(this)
     setPropEntry(propObj, key, value)
@@ -399,11 +399,11 @@ buildProp(propObj, key) {
 
 ### Custom setRequired
 
-You can override the built-in `setRequired` method (see code below) by supplying a custom `setRequired` function on the `config` object. 
+You can override the built-in `setRequired` method (see code below) by supplying a custom `setRequired` function on the `config` object.
 
 ```js
   // normalize required for prop
-  setRequired(value, key, required) {    
+  setRequired(value, key, required) {
     const isRequired = required.indexOf(key) >= 0;
     if (!isObjectType(value)) {
       this.warn(`Bad property value: ${value} must be an object`);
@@ -415,7 +415,7 @@ You can override the built-in `setRequired` method (see code below) by supplying
 
 ### Custom setPropEntry
 
-You can override the built-in `setPropEntry` method (see code below) by supplying a custom `setPropEntry` function on the `config` object. 
+You can override the built-in `setPropEntry` method (see code below) by supplying a custom `setPropEntry` function on the `config` object.
 
 ```js
   setPropEntry(propObj, key, value) {
@@ -479,7 +479,7 @@ Currently this library has minimal support for the `array` type. To add better `
 ```js
 const yupSchema = buildYup(jsonSchema, {
   typeHandlers: {
-    array: myCustomArrayHandler
+    array: myCustomArrayHandler,
   },
 });
 ```
@@ -1116,11 +1116,10 @@ You can also use the `logTypes` setting to enable logging only for certain type 
 This type of logging is only enabled for the `array` type handler at present, but you can add this type of logging as needed when/if you create your own type handlers.
 
 ```js
-  this.logTypeInfo('array:of', {schemaConf})
-  const schemaEntry = this.createYupSchemaEntry(schemaConf);
-  this.logTypeInfo('array:of', {schemaEntry})
+this.logTypeInfo("array:of", { schemaConf });
+const schemaEntry = this.createYupSchemaEntry(schemaConf);
+this.logTypeInfo("array:of", { schemaEntry });
 ```
-
 
 ## Localized error messages
 
@@ -1229,6 +1228,25 @@ const { yupSchema } = builder;
 
 You can pass an `errMessages` object in the optional `config` object argument with key mappings for your custom validation error messages.
 
+You can also specify an `errMessage` entry on any of your schema entries:
+
+```ts
+"properties": {
+    "apple": {
+        "type": "string",
+        "required": true,
+        "errMessage": "Bad apple"
+    },
+    "orange": {
+        "type": "string",
+        "required": true,
+        "errMessage": "Bad orange"
+    }
+},
+```
+
+### Error message handling
+
 Internally the validator error messages are resolved via an instance of the `ErrorMessageHandler` calling the `valErrMessage` method.
 
 ```js
@@ -1261,7 +1279,22 @@ Note that the error message function has `description` and `title` available.
 
 #### Use a custom error message handler
 
-We recommend you subclass the existing `ErrorMessageHandler` as follow
+For simple cases, you can use the `config` object to pass your own custom `valErrMessage` function. In the example below we expand the default function to use `value.errors` if present on the entry type value object (similar to `errMessage` above).
+
+```js
+const config = {
+  valErrMessage: (msgName, typeHandler) => {
+    const { constraints, description, title, value } = typeHandler;
+    const customErrMsg = value.errors && value.errors[msgName];
+    const errMsg = customErrMsg || this.errMessageFor(msgName);
+    return typeof errMsg === "function"
+      ? errMsg(constraints, { description, title })
+      : errMsg;
+  },
+};
+```
+
+You can also subclass the existing `ErrorMessageHandler` as follows
 
 ```js
 import { ErrorMessageHandler } from "schema-to-yup";

@@ -35,6 +35,10 @@ class YupSchemaEntry extends Base {
     return this.type === "array" ? "multi" : "single";
   }
 
+  createNew(opts) {
+    return new YupSchemaEntry(opts).toEntry();
+  }
+
   init() {
     this.type = this.calcType;    
     this.kind = this.calcKind;
