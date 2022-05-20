@@ -40,6 +40,34 @@ describe("toYupDate", () => {
     expect(() => createDateNoKey({})).toThrow();
   });
 
+  describe("is date type", () => {
+    describe("schema opts", () => {
+      test("bad string - ignored?", () => {
+        expect(() => createDate({})).not.toThrow();
+      });
+    });
+
+    describe("validate", () => {
+      const opts = createDate({});
+      const schema = createSchema(opts);
+      // console.log({opts, schema: schema.fields.createdAt })
+
+      test("is date type", () => {
+        const valid = schema.isValidSync({
+          createdAt: new Date(Date.now() - oneDay)
+        });
+        expect(valid).toBeTruthy();
+      });
+
+      test("is not date type", () => {
+        const valid = schema.isValidSync({
+          createdAt: "abc123"
+        });
+        expect(valid).toBeFalsy();
+      });
+    });
+  })
+
   describe("maxDate", () => {
     describe("schema opts", () => {
       test("bad string - ignored?", () => {
@@ -52,8 +80,8 @@ describe("toYupDate", () => {
     });
 
     describe("validate", () => {
-      const arr = createDate({ maxDate: new Date() });
-      const schema = createSchema(arr);
+      const opts = createDate({ maxDate: new Date() });
+      const schema = createSchema(opts);
 
       test("less date", () => {
         const valid = schema.isValidSync({
@@ -87,8 +115,8 @@ describe("toYupDate", () => {
     });
 
     describe("validate", () => {
-      const arr = createDate({ minDate: new Date() });
-      const schema = createSchema(arr);
+      const opts = createDate({ minDate: new Date() });
+      const schema = createSchema(opts);
 
       test("less date", () => {
         const valid = schema.isValidSync({
