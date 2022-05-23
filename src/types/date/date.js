@@ -61,7 +61,7 @@ export class YupDate extends YupMixed {
       $minDate &&
       this.base.min(
         this.toDate($minDate),
-        this.valErrMessage("minDate") || this.valErrMessage("min")
+        this.validationErrorMessage("minDate") || this.validationErrorMessage("min")
       );
     this.base = newBase || this.base;
     return this;
@@ -80,7 +80,7 @@ export class YupDate extends YupMixed {
       $maxDate &&
       this.base.max(
         this.toDate($maxDate),
-        this.valErrMessage("maxDate") || this.valErrMessage("max")
+        this.validationErrorMessage("maxDate") || this.validationErrorMessage("max")
       );
     this.base = newBase || this.base;
     return this;

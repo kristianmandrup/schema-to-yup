@@ -376,10 +376,10 @@ class YupMixed extends Base {
     return createYupSchemaEntry(opts)  
   }
 
-  valErrMessage(msgName) {
-    const defaultErrorMessageFn = this.errorMessageHandler.valErrMessage.bind(this.errorMessageHandler)
-    const valErrMessageFn = this.config.valErrMessage || defaultErrorMessageFn
-    return valErrMessageFn(msgName, this);
+  validationErrorMessage(msgName) {
+    const defaultErrorMessageFn = this.errorMessageHandler.validationErrorMessage.bind(this.errorMessageHandler)
+    const validationErrorMessageFn = this.config.validationErrorMessage || defaultErrorMessageFn
+    return validationErrorMessageFn(msgName, this);
   }  
 
   createWhenConditionFor(when) {

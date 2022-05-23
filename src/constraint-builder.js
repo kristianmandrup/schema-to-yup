@@ -55,8 +55,8 @@ export class ConstraintBuilder extends TypeMatcher {
 
     const constraintFn = yup[yupConstraintMethodName].bind(yup);
 
-    const constraintErrMsg = this.valErrMessage(constraintName);
-    const errErrMsg = errName && this.valErrMessage(errName);
+    const constraintErrMsg = this.validationErrorMessage(constraintName);
+    const errErrMsg = errName && this.validationErrorMessage(errName);
 
     const errFn = constraintErrMsg || errErrMsg;
 
@@ -229,8 +229,8 @@ export class ConstraintBuilder extends TypeMatcher {
     found && this.logInfo(label, idObj, ...values)
   }
 
-  valErrMessage(msgName) {
-    return this.errorMessageHandler.valErrMessage(msgName);
+  validationErrorMessage(msgName) {
+    return this.errorMessageHandler.validationErrorMessage(msgName);
   }
 
   get aliasMap() {

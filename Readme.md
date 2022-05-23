@@ -1228,9 +1228,19 @@ const { yupSchema } = builder;
 
 You can pass an `errMessages` object in the optional `config` object argument with key mappings for your custom validation error messages.
 
-You can also specify an `errMessage` entry on any of your schema entries:
+```js
+const config = {
+  errMessages: {
+    apple: {
+      required: "Bad apple",
+    },
+  },
+};
+```
 
-```ts
+You can alternatively specify an `errMessage` entry on any of your schema entries:
+
+```js
 "properties": {
     "apple": {
         "type": "string",
@@ -1245,9 +1255,48 @@ You can also specify an `errMessage` entry on any of your schema entries:
 },
 ```
 
+For fine-tuned error messages specify an `errMessages` map object entry on any of your schema entries:
+
+```js
+"properties": {
+    "apple": {
+        "type": "string",
+        "required": true,
+        "min": 5,
+        "errMessages": {
+          "required": "Bad apple",
+          "min": "Apple name too short"
+        }
+    },
+    // ...
+}
+```
+
+You can set the specific keys to be used for error handling via `errMessageKey` and `errMessagesMapKey` on the config object
+
+```js
+const config = {
+  errMessagesMapKey: 'errMessageMap`
+}
+```
+
+Then use this custom key in your JSON
+
+```js
+    "apple": {
+        "type": "string",
+        "required": true,
+        "min": 5,
+        "errMessageMap": {
+          "required": "Bad apple",
+          "min": "Apple name too short"
+        }
+    },
+```
+
 ### Error message handling
 
-Internally the validator error messages are resolved via an instance of the `ErrorMessageHandler` calling the `valErrMessage` method.
+Internally the validator error messages are resolved via an instance of the `ErrorMessageHandler` calling the `validationErrorMessage` method.
 
 ```js
   notOneOf() {
@@ -1255,7 +1304,7 @@ Internally the validator error messages are resolved via an instance of the `Err
     const $oneOf = notOneOf || (not && (not.enum || not.oneOf))
     $oneOf && this
       .base
-      .notOneOf($oneOf, this.valErrMessage('notOneOf'))
+      .notOneOf($oneOf, this.validationErrorMessage('notOneOf'))
     return this
   }
 ```
@@ -1265,7 +1314,7 @@ Error handling
 ```js
 class ErrorMessageHandler {
   // ...
-  valErrMessage(msgName) {
+  validationErrorMessage(msgName) {
     const { constraints, description, title } = this;
     const errMsg = this.errMessageFor(msgName);
     return typeof errMsg === "function"
@@ -1279,11 +1328,11 @@ Note that the error message function has `description` and `title` available.
 
 #### Use a custom error message handler
 
-For simple cases, you can use the `config` object to pass your own custom `valErrMessage` function. In the example below we expand the default function to use `value.errors` if present on the entry type value object (similar to `errMessage` above).
+For simple cases, you can use the `config` object to pass your own custom `validationErrorMessage` function. In the example below we expand the default function to use `value.errors` if present on the entry type value object (similar to `errMessage` above).
 
 ```js
 const config = {
-  valErrMessage: (msgName, typeHandler) => {
+  validationErrorMessage: (msgName, typeHandler) => {
     const { constraints, description, title, value } = typeHandler;
     const customErrMsg = value.errors && value.errors[msgName];
     const errMsg = customErrMsg || this.errMessageFor(msgName);

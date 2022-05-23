@@ -61,7 +61,7 @@ export class YupObject extends YupMixed {
       $names &&
       this.base.noUnknown(
         $names,
-        this.valErrMessage("propertyNames") || this.valErrMessage("noUnknown")
+        this.validationErrorMessage("propertyNames") || this.validationErrorMessage("noUnknown")
       );
     this.base = newBase || this.base;
     return this;

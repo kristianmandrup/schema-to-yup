@@ -18,14 +18,31 @@ export class ErrorMessageHandler extends TypeMatcher {
     this.setErrMessage()  
   }
 
+  errMessageMap(value = {}) {
+    const key = this.errMessagesMapKey
+    return value[key] || this.errMessages 
+  }
+
+  get errMessageKey() {
+    return this.config.errMessageKey || 'errMessage'
+  }
+
+  get errMessagesMapKey() {
+    return this.config.errMessagesMapKey || 'errMessages'
+  }
+
   setErrMessage() {
-    const { typeHandler, errMessages } = this
-    if (!typeHandler.value.errMessage) return
-    errMessages[this.key] = typeHandler.value.errMessage
+    const { typeHandler } = this
+    const { value } = typeHandler
+    if (!value.errMessage) return
+    const valueKey = this.errMessageKey
+    const errMessageMap = this.errMessageMap(value)
+    errMessageMap[this.key] = value[valueKey] || errMessageMap[this.key]
+    return this
   }
   
 
-  valErrMessage(msgName) {
+  validationErrorMessage(msgName) {
     const { constraints, description, title } = this;
     const errMsg = this.errMessageFor(msgName);
     return typeof errMsg === "function" ? errMsg(constraints, { description, title}) : errMsg;

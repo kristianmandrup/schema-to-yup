@@ -100,7 +100,7 @@ export class YupString extends YupMixed {
   // todo: use NumericConstraint or RangeConstraint
   minLength() {
     const { minLength } = this.constraints;
-    const errMsg = this.valErrMessage("minLength") || this.valErrMessage("min");
+    const errMsg = this.validationErrorMessage("minLength") || this.validationErrorMessage("min");
     const newBase = minLength && this.base.min(minLength, errMsg);
     this.base = newBase || this.base;
     return this;
@@ -109,7 +109,7 @@ export class YupString extends YupMixed {
   // todo: use NumericConstraint or RangeConstraint
   maxLength() {
     const { maxLength } = this.constraints;
-    const errMsg = this.valErrMessage("maxLength") || this.valErrMessage("max");
+    const errMsg = this.validationErrorMessage("maxLength") || this.validationErrorMessage("max");
     const newBase = maxLength && this.base.max(maxLength, errMsg);
     this.base = newBase || this.base;
     return this;
@@ -122,9 +122,9 @@ export class YupString extends YupMixed {
     }
     const regex = new RegExp(pattern, flags);
     const errMsg =
-      this.valErrMessage("pattern") ||
-      this.valErrMessage("matches") ||
-      this.valErrMessage("regex");
+      this.validationErrorMessage("pattern") ||
+      this.validationErrorMessage("matches") ||
+      this.validationErrorMessage("regex");
 
     const newBase = regex && this.base.matches(regex, errMsg);
     this.base = newBase || this.base;
