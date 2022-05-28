@@ -401,7 +401,14 @@ class YupMixed extends Base {
     return this.isPresent(value.$data)
   }
 
+  isConst(value) {
+    return this.hasKey(value, 'const')
+  }
+
   resolveValue(value) {
+    // special case for const
+    if (this.isConst(value)) return value['const']
+
     const createYupSchemaEntry = this.config.createYupSchemaEntry // || this.entryHandler.createNew
     const opts = { schema: this.schema, key: this.key, value, config: this.config }
     return createYupSchemaEntry(opts)  

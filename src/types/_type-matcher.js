@@ -13,6 +13,11 @@ class TypeMatcher extends Loggable {
     return !this.isNothing(num);
   }
 
+  hasKey(value, key) {
+    if (!this.isObjectType(value)) return
+    return Object.keys(value).includes(key)
+  }
+
   toNumber(num) {
     return Number(num);
   }
