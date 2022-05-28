@@ -318,25 +318,56 @@ class YupMixed extends Base {
     ))
   }
 
-  oneOf() {
-    let values =
-      this.constraints.enum || this.constraints.oneOf || this.constraints.anyOf;
-    if (this.isNothing(values)) return this;
-    values = Array.isArray(values) ? values : [values];
-    const resolvedValues = this.resolveValues(values)
-    // using alias
-    const alias = ["oneOf", "enum", "anyOf"].find(key => {
+  normalizeValues(values) {
+    return Array.isArray(values) ? values : [values];  
+  }
+
+  get oneOfValues() {
+    return this.constraints.enum || this.constraints.oneOf || this.constraints.anyOf;
+  }
+
+  get oneOfAliases() {
+    return ["oneOf", "enum", "anyOf"]
+  }
+
+  get oneOfAlias() {
+    return this.oneOfAliases.find(key => {
       return this.constraints[key] !== undefined;
     });
+  }
+
+  oneOf() {
+    let values = this.oneOfValues
+    if (this.isNothing(values)) return this;
+    values = this.normalizeValues(values)
+    const resolvedValues = this.resolveValues(values)
+    // using alias
+    const alias = this.oneOfAlias
+    // log details
+    const idObj = { constraintName: alias, method: 'oneOf', key: this.key, type: this.type}
+    this.logDetails('type', idObj, values, resolvedValues)
+
     return this.addConstraint(alias, { values: resolvedValues });
   }
 
-  notOneOf() {
+  logDetailed(label, idObj, ...values) {
+    this.logDetails(label, idObj, ...values)
+  }
+
+  get notOneOfValues() {
     const { not, notOneOf } = this.constraints;
-    let values = notOneOf || (not && (not.enum || not.oneOf));
+    return notOneOf || (not && (not.enum || not.oneOf));
+  }
+
+  notOneOf() {
+    let values = this.oneOfValues
     if (this.isNothing(values)) return this;
-    values = Array.isArray(values) ? values : [values];
+    values = this.normalizeValues(values)
     const resolvedValues = this.resolveValues(values)
+    // log details
+    const idObj = { constraintName: 'notOneOf', method: 'notOneOf', key: this.key, type: this.type}
+    this.logDetails('type', idObj, values, resolvedValues)
+
     return this.addConstraint("notOneOf", { values: resolvedValues });
   }
 

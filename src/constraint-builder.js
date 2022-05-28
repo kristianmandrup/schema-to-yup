@@ -34,7 +34,7 @@ export class ConstraintBuilder extends TypeMatcher {
       
     constraintName = constraintName || propName;
     method = method || constraintName;
-    this.idObj = {propName, method, key: this.key}
+    this.idObj = {propName, method, constraintName, key: this.key}
 
     this.logDetailed("build", opts, { resolved: { constraintValue, constraintName}})
   
@@ -218,15 +218,7 @@ export class ConstraintBuilder extends TypeMatcher {
   // propName, method, key
   logDetailed(label, ...values) {
     const idObj = this.idObj 
-    const matchIdList = this.config.logDetailed || []
-    if (!matchIdList.length) return
-    const found = matchIdList.find(matchIds => {
-      if (matchIds.key && idObj.key !== matchIds.key) return false
-      if (matchIds.propName && idObj.propName !== matchIds.propName) return false
-      if (matchIds.method && idObj.method !== matchIds.method) return false
-      return true
-    })    
-    found && this.logInfo(label, idObj, ...values)
+    this.logDetails(label, idObj, ...values)
   }
 
   validationErrorMessage(msgName) {

@@ -38,6 +38,20 @@ class Loggable {
     logInfo(name, ...values)
   }
 
+  logDetails(label, idObj, ...values) {
+    const matchIdList = this.config.logDetailed || []
+    if (!matchIdList.length) return
+    const found = matchIdList.find(matchIds => {
+      if (matchIds.key && idObj.key !== matchIds.key) return false
+      if (matchIds.constraintName && idObj.constraintName !== matchIds.constraintName) return false      
+      if (matchIds.propName && idObj.propName !== matchIds.propName) return false
+      if (matchIds.method && idObj.method !== matchIds.method) return false
+      return true
+    })    
+    found && this.logInfo(label, idObj, ...values)
+  }
+
+
   logInfo(name, ...values) {
     if (!this.enable.log) return;
     if (!this.log) return

@@ -26,6 +26,13 @@ export class MultiPropertyValueResolver extends BasePropertyValueResolver {
     return this.mixed().oneOf(resolvedValidatorSchemas)
   }
 
+  notOneOf() {
+    const schemaValues = this.value
+    const createEntry = this.createEntry.bind(this)
+    const resolvedValidatorSchemas = schemaValues.map(createEntry)
+    return this.mixed().notOneOf(resolvedValidatorSchemas)
+  }
+
   createEntry(value) {
     const { createYupSchemaEntry } = this.config
     value = normalizedValue(value)
