@@ -116,7 +116,7 @@ export class YupString extends YupMixed {
   }
 
   pattern() {
-    const { pattern, flags } = this.constraints;
+    const { pattern, flags, excludeEmptyString } = this.constraints;
     if (!pattern) {
       return this;
     }
@@ -126,7 +126,7 @@ export class YupString extends YupMixed {
       this.validationErrorMessage("matches") ||
       this.validationErrorMessage("regex");
 
-    const newBase = regex && this.base.matches(regex, errMsg);
+    const newBase = regex && this.base.matches(regex, {message: errMsg, excludeEmptyString});
     this.base = newBase || this.base;
     return this;
   }
