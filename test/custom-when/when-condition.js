@@ -10,7 +10,6 @@ function isStringType(val) {
 
 class WhenCondition {
   constructor(opts = {}) {
-    console.log("is this working", opts);
     const { type, key, value, when, schema, properties, config } = opts;
     this.opts = opts;
     this.when = when;
@@ -112,7 +111,6 @@ class WhenCondition {
   }
 }
 const createWhenCondition = opts => {
-  console.log("asddas");
   return new WhenCondition(opts);
 };
 

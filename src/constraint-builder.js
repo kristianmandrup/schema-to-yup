@@ -1,9 +1,11 @@
+import { YupMixed } from "./types/mixed";
 import { TypeMatcher } from "./types/_type-matcher";
 
 export class ConstraintBuilder extends TypeMatcher {
   constructor(typeHandler, config = {}) {
     super(config);
     this.typeHandler = typeHandler
+    this.type = typeHandler.type
     this.builder = typeHandler.builder
     this.constraintsAdded = {};
     this.delegators.map(name => {
@@ -73,9 +75,10 @@ export class ConstraintBuilder extends TypeMatcher {
       "nonPresentConstraintValue"
     ];
     let newBase;
+    const type = this.type
     for (let name of constrainFnNames) {
       const fnName = this[name].bind(this)
-      const constrValue = this.getFirstValue([value, values, constraintValue])
+      const constrValue = this.getFirstValue([value, values, constraintValue], {constraintName, type})
       newBase = fnName(constrValue, constrOpts);
       if (newBase) break;
     }
@@ -91,9 +94,25 @@ export class ConstraintBuilder extends TypeMatcher {
     return false;
   }
 
-  getFirstValue(potentialValues) {
+  yupRefMap() {
+    return {
+      "string": ["min", "max"],
+      "number": ["min", "max"],
+    }
+  }
+
+  getFirstValue(potentialValues, opts = {}) {
+    const {constraintName, type} = opts
     const isDefined = this.isPresent.bind(this)
-    return potentialValues.filter(isDefined)[0]
+    const yupRefConstraints = this.yupRefMap[type]
+    const value = potentialValues.filter(isDefined)[0]
+    if (yupRefConstraints) {
+      const useYupRef = yupRefConstraints.includes(constraintName)
+      if (useYupRef && this.isStringType(value)) {
+        return Yup.ref(value)
+      }        
+    }    
+    return value
   }
 
   nonPresentConstraintValue(
