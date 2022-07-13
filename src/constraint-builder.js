@@ -96,8 +96,10 @@ export class ConstraintBuilder extends TypeMatcher {
 
   yupRefMap() {
     return {
-      "string": ["min", "max"],
-      "number": ["min", "max"],
+      "string": ["length", "min", "max"],
+      "number": ["min", "max", "lessThan", "moreThan"],
+      "date": ["min", "max"],
+      "array": ["length", "min", "max"],
     }
   }
 
