@@ -14,7 +14,7 @@ class DateConstraint extends Constraint {
   }
 
   isValidConstraint(date) {
-    return this.isDateLike(date);
+    return this.isDateLike(date) || this.typeHandler.isStringType(value);;
   }
 
   isDateLike(date) {

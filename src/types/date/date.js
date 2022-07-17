@@ -28,8 +28,9 @@ export class YupDate extends YupMixed {
     return this;
   }
 
+  // TODO: use Yup.ref if string and not a date format
   toDate(date) {
-    return new Date(date);
+    return this.isValidDateFormat(date) ? new Date(date) : date    
   }
 
   // Yup supports string | Date
@@ -40,7 +41,18 @@ export class YupDate extends YupMixed {
 
   isValidDate(date) {
     if (!this.isValidDateType(date)) return false;
-    return this.isStringType(date) ? Boolean(Date.parse(date)) : true;
+    // const parsedDate = Date.parse(date)
+    // const validDateFormat = Boolean(parsedDate)
+    return true// this.isStringType(date) ? validDateFormat : true;
+  }
+
+  isValidDateFormat(date) {
+    try {
+      const parsedDate = Date.parse(date)
+      return Boolean(parsedDate)
+    } catch (e) {
+      return false
+    }
   }
 
   // optionally transform millisecs to Date value?
