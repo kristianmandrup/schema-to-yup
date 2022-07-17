@@ -7,8 +7,8 @@ export class BasePropertyValueResolver extends Base {
     super(config);
     const { value, type, kind, name, key, schema, types } = opts;
     // this.logInfo('BasePropertyValueResolver', opts)
-    this.entryHandler = entryHandler || opts.entryHandler
-    this.builder = opts.builder
+    this.entryHandler = entryHandler || opts.entryHandler;
+    this.builder = opts.builder;
     this.opts = opts;
     this.kind = kind;
     this.value = value;
@@ -21,14 +21,14 @@ export class BasePropertyValueResolver extends Base {
   }
 
   get validator() {
-    return this.builder.validator
+    return this.builder.validator;
   }
 
   error(msg, data) {
     let { opts } = this;
-    opts = opts || {}
-    opts = data ? { data, ...opts } : ops
-    console.error(msg, ...opts)
+    opts = opts || {};
+    opts = data ? { data, ...opts } : opts;
+    console.error(msg, ...opts);
     throw new PropertyValueResolverError(msg);
   }
 
@@ -45,7 +45,8 @@ export class BasePropertyValueResolver extends Base {
       type,
       kind,
       config,
-      entryHandler
+      entryHandler,
     };
   }
 }
+
