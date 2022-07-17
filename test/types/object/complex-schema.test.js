@@ -36,7 +36,7 @@ describe("complex nested object schema", () => {
     });
   });
 
-  describe("invalid json", () => {
+  describe.skip("invalid json", () => {
     const obj = complexJson.invalid;
     const valid = yupSchema.isValidSync(obj);
     yupSchema.validate(obj).catch(err => console.log(err));

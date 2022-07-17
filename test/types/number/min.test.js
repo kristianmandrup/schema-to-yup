@@ -2,8 +2,8 @@ const { createNumEntry, createSchema } = require("./_helpers");
 
 describe("min", () => {
   describe("schema opts", () => {
-    test("bad string - throws", () => {
-      expect(() => createNumEntry({ min: "b" })).toThrow();
+    test("string - use Yup.ref", () => {
+      expect(() => createNumEntry({ min: "b" })).not.toThrow();
     });
 
     test("number string - transformed", () => {

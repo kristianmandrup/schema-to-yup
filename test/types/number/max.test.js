@@ -2,8 +2,8 @@ const { createNumEntry, createSchema } = require("./_helpers");
 
 describe("max", () => {
   describe("schema opts", () => {
-    test("bad string - ignored?", () => {
-      expect(() => createNumEntry({ max: "b" })).toThrow();
+    test("string - use Yup.ref", () => {
+      expect(() => createNumEntry({ max: "b" })).not.toThrow();
     });
 
     test("number string - transformed?", () => {

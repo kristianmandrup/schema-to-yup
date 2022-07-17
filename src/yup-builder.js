@@ -163,7 +163,9 @@ export class YupBuilder extends Base {
       }
       const yupSchemaEntry = this.propToYupSchemaEntry(argsObj);
       this.logInfo("propsToShape", { ...argsObj, yupSchemaEntry });
-      acc[key] = yupSchemaEntry;
+      if (yupSchemaEntry) {
+        acc[key] = yupSchemaEntry;
+      }
       return acc;
     }, {});
   }

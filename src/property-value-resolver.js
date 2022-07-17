@@ -57,6 +57,6 @@ export class PropertyValueResolver extends BasePropertyValueResolver {
 
   defaultType() {
     this.error("toEntry: unknown type", this.type);
-    return {}
+    return false
   }
 }
