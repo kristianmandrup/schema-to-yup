@@ -50,7 +50,6 @@ describe("toYupDate", () => {
     describe("validate", () => {
       const opts = createDate({});
       const schema = createSchema(opts);
-      // console.log({opts, schema: schema.fields.createdAt })
 
       test("is date type", () => {
         const valid = schema.isValidSync({

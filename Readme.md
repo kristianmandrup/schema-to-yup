@@ -251,6 +251,37 @@ Currently the following schema types are supported:
 - `isType`
 - `nullable` (`isNullable`)
 
+### Reference constraints
+
+Reference constraints within the schema can be defined as follows:
+
+```js
+schema = {
+  required: ["startDate", "endDate"],
+  type: "object",
+  properties: {
+    startDate: {
+      type: "number",
+    },
+    endDate: {
+      type: "number",
+      min: "startDate",
+    },
+  },
+};
+```
+
+Internally this will be resolved using `Yup.ref` as documented [here in the Yup readme](https://github.com/jquense/yup#refpath-string-options--contextprefix-string--ref).
+
+`ref` allows you to reference the value of a sibling (or sibling descendant) field to validate the current field.
+
+`Yup.ref` is supported in the Yup docs for the following:
+
+- string: [.length](https://github.com/jquense/yup#stringlengthlimit-number--ref-message-string--function-schema), [.min](https://github.com/jquense/yup#stringminlimit-number--ref-message-string--function-schema), [.max](https://github.com/jquense/yup#stringmaxlimit-number--ref-message-string--function-schema)
+- number: [.min](https://github.com/jquense/yup#numberminlimit-number--ref-message-string--function-schema), [.max](https://github.com/jquense/yup#numbermaxlimit-number--ref-message-string--function-schema), [.lessThan](https://github.com/jquense/yup#numberlessthanmax-number--ref-message-string--function-schema), [.moreThan](https://github.com/jquense/yup#numbermorethanmin-number--ref-message-string--function-schema)
+- date: [.min](https://github.com/jquense/yup#dateminlimit-date--string--ref-message-string--function-schema), [.max](https://github.com/jquense/yup#datemaxlimit-date--string--ref-message-string--function-schema)
+- array: [.length](https://github.com/jquense/yup#arraylengthlength-number--ref-message-string--function-this), [.min](https://github.com/jquense/yup#arrayminlimit-number--ref-message-string--function-this), [.max](https://github.com/jquense/yup#arraymaxlimit-number--ref-message-string--function-this)
+
 ### Array
 
 - `ensure`
@@ -298,8 +329,9 @@ No keys
 - `uppercase`
 - `trim`
 
-For pattern (RegExp) you can additionally provide a flags property, such as `flags: 'i'`.
-Will be converted to a regexp using `new RegExp(pattern, flags)`
+For pattern (RegExp) you can additionally provide a flags property, such as `flags: 'i'`. This will be converted to a `RegExp` using `new RegExp(pattern, flags)`
+
+For the `pattern` constraint you can also pass in `excludeEmptyString` to exclude empty string from being evaluated as a pattern constraints.
 
 ## Confirm password
 

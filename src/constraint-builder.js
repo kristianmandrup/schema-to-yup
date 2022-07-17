@@ -163,7 +163,6 @@ export class ConstraintBuilder extends TypeMatcher {
     }
 
     this.onConstraintAdded({ method: 'multiValueConstraint', name: constraintName, value: values });
-    // console.log(constraintFn, { constraintName, values });
     this.logInfo("multiValueConstraint: apply validator function", { constraintName, value: values })
 
     return this.callConstraintFn(constraintFn, constraintName, values, errFn);
@@ -171,10 +170,6 @@ export class ConstraintBuilder extends TypeMatcher {
 
   callConstraintFn(constraintFn, constraintName, values, errFn) {
     const isMulti = this.isMultiArgsCall(constraintName);
-    // console.log({ constraintName, isMulti });
-    // if (isMulti) {
-    //   console.log(constraintName, ...values);
-    // }
     return isMulti
       ? constraintFn(...values, errFn)
       : constraintFn(values, errFn);

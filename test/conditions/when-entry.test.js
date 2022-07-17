@@ -164,7 +164,6 @@ describe("WhenEntry", () => {
           }
         };
         const schemaEntry = whenEntry.whenEntryFor(whenObj, "then");
-        // console.log(schemaEntry);
         expectYupSchemaEntry(schemaEntry);
       });
     });

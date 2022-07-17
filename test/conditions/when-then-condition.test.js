@@ -82,7 +82,6 @@ describe("WhenCondition", () => {
         whenCondition.validateAndConfigure();
 
         // should be an object with keys 'is' and 'then' minimum
-        // console.log({ when: whenCondition.when });
         const newAcc = whenCondition.accumulate(acc, "name");
         expect(newAcc).not.toEqual({});
       });
@@ -170,7 +169,6 @@ describe("WhenCondition", () => {
         count: 10
       };
       const result = inst.validateSync(value);
-      // console.log({ result });
       expect(result).toEqual(value);
     });
   });

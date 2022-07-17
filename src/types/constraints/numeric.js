@@ -14,7 +14,7 @@ class NumericConstraint extends Constraint {
   }
 
   isValidConstraint(value) {
-    return this.typeHandler.isNumberLike(value);
+    return this.typeHandler.isNumberLike(value) || this.typeHandler.isStringType(value);
   }
 
   get explainConstraintValidMsg() {

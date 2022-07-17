@@ -48,7 +48,7 @@ class Constraint extends TypeMatcher {
 
   validateAndTransform(name) {
     const cv = this.constraints[name];
-    this.validate(cv);
+    this.validate(name, cv);
     return this.transform(cv);
   }
 
@@ -66,7 +66,7 @@ class Constraint extends TypeMatcher {
     );
   }
 
-  validate(cv) {
+  validate(name, cv) {
     if (this.isNothing(cv)) {
       return this;
     }
