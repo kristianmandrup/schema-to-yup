@@ -1,6 +1,5 @@
-import { YupMixed } from "./types/mixed";
 import { TypeMatcher } from "./types/_type-matcher";
-
+import * as Yup from 'yup'
 export class ConstraintBuilder extends TypeMatcher {
   constructor(typeHandler, config = {}) {
     super(config);

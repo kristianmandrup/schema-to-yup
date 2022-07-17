@@ -156,12 +156,13 @@ export class YupBuilder extends Base {
     const keys = Object.keys(properties);
     return keys.reduce((acc, key) => {
       const value = properties[key];
-      const yupSchemaEntry = this.propToYupSchemaEntry({
+      const argsObj = {
         name,
         key,
         value
-      });
-      this.logInfo("propsToShape", { key, yupSchemaEntry });
+      }
+      const yupSchemaEntry = this.propToYupSchemaEntry(argsObj);
+      this.logInfo("propsToShape", { ...argsObj, yupSchemaEntry });
       acc[key] = yupSchemaEntry;
       return acc;
     }, {});

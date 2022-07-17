@@ -9,7 +9,13 @@ export class DateHandler {
     return this.config.isDate(obj);
   }
 
+  isDateCompatible(obj) {
+    return this.config.isString(obj);
+  }
+
   handle(obj) {
-    return this.isDate(obj) && YupDate.create(obj).createSchemaEntry();
+    return YupDate.create(obj).createSchemaEntry();
+    // return this.isDate(obj) && YupDate.create(obj).createSchemaEntry();
+    // return this.isDateCompatible(obj) && YupDate.create(obj).createSchemaEntry();    
   }
 }

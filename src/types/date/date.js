@@ -1,4 +1,5 @@
 import { YupMixed } from "../mixed";
+import * as Yup from 'yup'
 
 export class YupDate extends YupMixed {
   constructor(obj) {
@@ -30,7 +31,8 @@ export class YupDate extends YupMixed {
 
   // TODO: use Yup.ref if string and not a date format
   toDate(date) {
-    return this.isValidDateFormat(date) ? new Date(date) : date    
+    const isDateRef = this.isStringType(date) && !this.isValidDateFormat(date)
+    return isDateRef ? Yup.ref(date) : new Date(date)    
   }
 
   // Yup supports string | Date
