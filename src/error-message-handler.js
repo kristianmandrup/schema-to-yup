@@ -4,48 +4,51 @@ export class ErrorMessageHandler extends TypeMatcher {
   constructor(typeHandler, config = {}) {
     super(config);
     this.typeHandler = typeHandler;
-    this.init()
+    this.init();
   }
-    
+
   init() {
-    const { typeHandler } = this
+    const { typeHandler } = this;
     this.constraints = typeHandler.constraints;
     this.errMessages = typeHandler.errMessages;
     this.key = typeHandler.key;
+    this.value = typeHandler.value; // raw type constraints
+    this.constraints = typeHandler.constraints; // type constraints (possibly filtered)
     this.type = typeHandler.type;
-    this.description = typeHandler.description
-    this.title = typeHandler.title
-    this.setErrMessage()  
+    this.description = typeHandler.description;
+    this.title = typeHandler.title;
+    this.setErrMessage();
   }
 
   errMessageMap(value = {}) {
-    const key = this.errMessagesMapKey
-    return value[key] || this.errMessages 
+    const key = this.errMessagesMapKey;
+    return value[key] || this.errMessages;
   }
 
   get errMessageKey() {
-    return this.config.errMessageKey || 'errMessage'
+    return this.config.errMessageKey || "errMessage";
   }
 
   get errMessagesMapKey() {
-    return this.config.errMessagesMapKey || 'errMessages'
+    return this.config.errMessagesMapKey || "errMessages";
   }
 
   setErrMessage() {
-    const { typeHandler } = this
-    const { value } = typeHandler
-    if (!value.errMessage) return
-    const valueKey = this.errMessageKey
-    const errMessageMap = this.errMessageMap(value)
-    errMessageMap[this.key] = value[valueKey] || errMessageMap[this.key]
-    return this
+    const { typeHandler } = this;
+    const { value } = typeHandler;
+    if (!value.errMessage) return;
+    const valueKey = this.errMessageKey;
+    const errMessageMap = this.errMessageMap(value);
+    errMessageMap[this.key] = value[valueKey] || errMessageMap[this.key];
+    return this;
   }
-  
 
   validationErrorMessage(msgName) {
     const { constraints, description, title } = this;
     const errMsg = this.errMessageFor(msgName);
-    return typeof errMsg === "function" ? errMsg(constraints, { description, title}) : errMsg;
+    return typeof errMsg === "function"
+      ? errMsg(constraints, { description, title })
+      : errMsg;
   }
 
   errMessageFor(msgName) {

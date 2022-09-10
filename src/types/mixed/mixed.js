@@ -15,7 +15,7 @@ import { ErrorMessageHandler } from "../../error-message-handler";
 class YupMixed extends Base {
   constructor(opts = {}) {
     super(opts.config);
-    this.init(opts)
+    this.init(opts);
   }
 
   init(opts) {
@@ -23,42 +23,47 @@ class YupMixed extends Base {
     config = config || {};
     schema = schema || {};
     this.validateOnCreate(key, value, opts);
-    this.opts = opts
-    this.entryHandler = entryHandler
-    this.validator = this.getValidator()
+    this.opts = opts;
+    this.entryHandler = entryHandler;
+    this.validator = this.getValidator();
     this.key = key;
     this.schema = schema;
     this.properties = schema.properties || {};
     this.value = value;
-    this.title = value.title
-    this.description = value.description
+    this.title = value.title;
+    this.description = value.description;
     this.constraints = this.getConstraints();
     this.format = value.format || this.constraints.format;
     this.config = config || {};
     this.type = this.baseType;
     this.mixedConfig = this.config.mixedEnabled || {};
-    this.typeConfig = this.config[this.type] || {};    
+    this.typeConfig = this.config[this.type] || {};
     this.errMessages = config.errMessages || {};
     this.configureTypeConfig();
     this.constraintsAdded = {};
-    this.base = this.getBase()
+    this.base = this.getBase();
   }
 
   get builder() {
-    return this.entryHandler && this.entryHandler.builder
+    return this.entryHandler && this.entryHandler.builder;
   }
 
   getBase() {
     return this.customBaseValidator || this.validatorInstance;
   }
-  
+
   get customBaseValidator() {
-    return this.config.validatorFor && this.config.validatorFor(this.type)
+    return this.config.validatorFor && this.config.validatorFor(this.type);
   }
 
   getValidator() {
-    return this.opts.validator || this.config.validator || (this.builder && this.builder.validator) || yup;
-  }  
+    return (
+      this.opts.validator ||
+      this.config.validator ||
+      (this.builder && this.builder.validator) ||
+      yup
+    );
+  }
 
   get baseType() {
     return "mixed";
@@ -93,12 +98,12 @@ class YupMixed extends Base {
 
   disabledMode(modeName) {
     const modeEntry = this.mode[modeName];
-    return !!this.disableFlags.find(disable => modeEntry === disable);
+    return !!this.disableFlags.find((disable) => modeEntry === disable);
   }
 
   enabledMode(modeName) {
     const modeEntry = this.mode[modeName];
-    return !!this.enableFlags.find(disable => modeEntry === disable);
+    return !!this.enableFlags.find((disable) => modeEntry === disable);
   }
 
   get shouldPreProcessValue() {
@@ -111,7 +116,7 @@ class YupMixed extends Base {
     if (!this.isRequired(value)) {
       return {
         ...value,
-        notRequired: true
+        notRequired: true,
       };
     }
     return value;
@@ -149,7 +154,7 @@ class YupMixed extends Base {
   }
 
   rebind(...methods) {
-    methods.map(name => {
+    methods.map((name) => {
       const method = this[name];
       this[name] = this.isFunctionType(method) ? method.bind(this) : method;
     });
@@ -176,7 +181,7 @@ class YupMixed extends Base {
         "isType",
         "label",
         "const",
-        "refValueFor"
+        "refValueFor",
       ]
     );
   }
@@ -206,7 +211,7 @@ class YupMixed extends Base {
   }
 
   convertEnabled() {
-    this.enabled.map(name => {
+    this.enabled.map((name) => {
       const convertFn = this.convertFnFor(name);
       if (convertFn) {
         convertFn(this);
@@ -215,7 +220,9 @@ class YupMixed extends Base {
   }
 
   convertFnFor(name) {
-    return this.customConvertFnFor(name, this) || this.builtInConvertFnFor(name);
+    return (
+      this.customConvertFnFor(name, this) || this.builtInConvertFnFor(name)
+    );
   }
 
   customConvertFnFor(name) {
@@ -243,21 +250,26 @@ class YupMixed extends Base {
   }
 
   apply(fnName, ...fnArgs) {
-    if (typeof fnName !== 'string') {
-      throw new TypeError(`[Mixed] apply must take a method name available on the validator instance as first argument`)
+    if (typeof fnName !== "string") {
+      throw new TypeError(
+        `[Mixed] apply must take a method name available on the validator instance as first argument`
+      );
     }
-    this.base = (fnArgs && fnArgs.length && this.base[fnName](...fnArgs)) || this.base;
-    return this
+    this.base =
+      (fnArgs && fnArgs.length && this.base[fnName](...fnArgs)) || this.base;
+    return this;
   }
 
   applyArr(fnName, arrValue) {
-    if (typeof fnName !== 'string') {
-      throw new TypeError(`[Mixed] apply must take a method name available on the validator instance as first argument`)
+    if (typeof fnName !== "string") {
+      throw new TypeError(
+        `[Mixed] apply must take a method name available on the validator instance as first argument`
+      );
     }
-    this.base = (arrValue && arrValue.length && this.base[fnName](arrValue)) || this.base;
-    return this
+    this.base =
+      (arrValue && arrValue.length && this.base[fnName](arrValue)) || this.base;
+    return this;
   }
-
 
   addTrueValueConstraint(propName, opts) {
     const constraint = this.constraintBuilder.addTrueValueConstraint(
@@ -273,7 +285,9 @@ class YupMixed extends Base {
 
   addConstraint(propName, opts) {
     if (!this.constraintBuilder) {
-      throw new Error(`[YupMixed] addConstraint: Missing constraintBuilder in ${this.constructor.name}`);
+      throw new Error(
+        `[YupMixed] addConstraint: Missing constraintBuilder in ${this.constructor.name}`
+      );
     }
     const constraint = this.constraintBuilder.addConstraint(propName, opts);
     if (constraint) {
@@ -293,65 +307,75 @@ class YupMixed extends Base {
   addMappedConstraint(key) {
     const { constraintsMap } = this;
     const constraintNames = constraintsMap[key];
-    const fnName = key === "trueValue" ? "addTrueValueConstraint" : "addConstraint";
+    const fnName =
+      key === "trueValue" ? "addTrueValueConstraint" : "addConstraint";
     const fn = this[fnName];
     const value = this.constraints[key];
-    constraintNames.map(constraintName => {
+    constraintNames.map((constraintName) => {
       fn(constraintName, { value });
-    });  
+    });
   }
 
   get constraintsMap() {
     return {
       simple: ["default", "required", "notRequired", "nullable"],
-      trueValue: ["strict"]
+      trueValue: ["strict"],
     };
   }
 
   refValueFor() {
-    let propRefName =
-      this.constraints.refValueFor
+    let propRefName = this.constraints.refValueFor;
     if (this.isNothing(propRefName)) return this;
-    this.logInfo("refValueFor", { propRefName })
-    return this.apply('when', (propRefName, (refValueFor, field) =>
-      refValueFor ? field.required().oneOf([yup.ref(propRefName)]) : field
-    ))
+    this.logInfo("refValueFor", { propRefName });
+    return this.apply(
+      "when",
+      (propRefName,
+      (refValueFor, field) =>
+        refValueFor ? field.required().oneOf([yup.ref(propRefName)]) : field)
+    );
   }
 
   normalizeValues(values) {
-    return Array.isArray(values) ? values : [values];  
+    return Array.isArray(values) ? values : [values];
   }
 
   get oneOfValues() {
-    return this.constraints.enum || this.constraints.oneOf || this.constraints.anyOf;
+    return (
+      this.constraints.enum || this.constraints.oneOf || this.constraints.anyOf
+    );
   }
 
   get oneOfAliases() {
-    return ["oneOf", "enum", "anyOf"]
+    return ["oneOf", "enum", "anyOf"];
   }
 
   get oneOfAlias() {
-    return this.oneOfAliases.find(key => {
+    return this.oneOfAliases.find((key) => {
       return this.constraints[key] !== undefined;
     });
   }
 
   oneOf() {
-    let values = this.oneOfValues
+    let values = this.oneOfValues;
     if (this.isNothing(values)) return this;
-    values = this.normalizeValues(values)
-    const resolvedValues = this.resolveValues(values)
+    values = this.normalizeValues(values);
+    const resolvedValues = this.resolveValues(values);
     // using alias
-    const alias = this.oneOfAlias
+    const alias = this.oneOfAlias;
     // log details
-    const idObj = { constraintName: alias, method: 'oneOf', key: this.key, type: this.type}
-    this.logDetails('type', idObj, values, resolvedValues)
+    const idObj = {
+      constraintName: alias,
+      method: "oneOf",
+      key: this.key,
+      type: this.type,
+    };
+    this.logDetails("type", idObj, values, resolvedValues);
 
     return this.addConstraint(alias, { values: resolvedValues });
   }
 
   logDetailed(label, idObj, ...values) {
-    this.logDetails(label, idObj, ...values)
+    this.logDetails(label, idObj, ...values);
   }
 
   get notOneOfValues() {
@@ -360,65 +384,79 @@ class YupMixed extends Base {
   }
 
   notOneOf() {
-    let values = this.oneOfValues
+    let values = this.oneOfValues;
     if (this.isNothing(values)) return this;
-    values = this.normalizeValues(values)
-    const resolvedValues = this.resolveValues(values)
+    values = this.normalizeValues(values);
+    const resolvedValues = this.resolveValues(values);
     // log details
-    const idObj = { constraintName: 'notOneOf', method: 'notOneOf', key: this.key, type: this.type}
-    this.logDetails('type', idObj, values, resolvedValues)
+    const idObj = {
+      constraintName: "notOneOf",
+      method: "notOneOf",
+      key: this.key,
+      type: this.type,
+    };
+    this.logDetails("type", idObj, values, resolvedValues);
 
     return this.addConstraint("notOneOf", { values: resolvedValues });
   }
 
   resolveValues(values) {
-    const schemaValues = values
-    return schemaValues.map(value => {
-      return this.isObjectType(value) ? this.resolveValue(value) : value
-    })
-  }  
+    const schemaValues = values;
+    return schemaValues.map((value) => {
+      return this.isObjectType(value) ? this.resolveValue(value) : value;
+    });
+  }
 
   const() {
-    let value =this.constraints.const
+    let value = this.constraints.const;
     if (this.isNothing(value)) return this;
     // TODO: resolve const data ref if valid format
     if (this.isDataRef(value)) {
-      const dataRefPath = this.normalizeDataRefPath(value)
-      value = yup.ref(dataRefPath)
-    }    
-    return this.addConstraint('const', { value });
+      const dataRefPath = this.normalizeDataRefPath(value);
+      value = yup.ref(dataRefPath);
+    }
+    return this.addConstraint("const", { value });
   }
 
   // TODO: investigate yup.ref
   normalizeDataRefPath(value) {
-    value = value.$data || value
+    value = value.$data || value;
     // remove first part before /
-    const parts = value.split('/').shift()
-    return parts.join('/')
+    const parts = value.split("/").shift();
+    return parts.join("/");
   }
 
   isDataRef(value) {
-    return this.isPresent(value.$data)
+    return this.isPresent(value.$data);
   }
 
   isConst(value) {
-    return this.hasKey(value, 'const')
+    return this.hasKey(value, "const");
   }
 
   resolveValue(value) {
     // special case for const
-    if (this.isConst(value)) return value['const']
+    if (this.isConst(value)) return value["const"];
 
-    const createYupSchemaEntry = this.config.createYupSchemaEntry // || this.entryHandler.createNew
-    const opts = { schema: this.schema, key: this.key, value, config: this.config }
-    return createYupSchemaEntry(opts)  
+    const createYupSchemaEntry = this.config.createYupSchemaEntry; // || this.entryHandler.createNew
+    const opts = {
+      schema: this.schema,
+      key: this.key,
+      value,
+      config: this.config,
+    };
+    return createYupSchemaEntry(opts);
   }
 
   validationErrorMessage(msgName) {
-    const defaultErrorMessageFn = this.errorMessageHandler.validationErrorMessage.bind(this.errorMessageHandler)
-    const validationErrorMessageFn = this.config.validationErrorMessage || defaultErrorMessageFn
+    const defaultErrorMessageFn =
+      this.errorMessageHandler.validationErrorMessage.bind(
+        this.errorMessageHandler
+      );
+    const validationErrorMessageFn =
+      this.config.validationErrorMessage || defaultErrorMessageFn;
     return validationErrorMessageFn(msgName, this);
-  }  
+  }
 
   createWhenConditionFor(when) {
     const opts = {
@@ -428,7 +466,7 @@ class YupMixed extends Base {
       schema: this.schema,
       properties: this.properties,
       config: this.config,
-      when
+      when,
     };
 
     const $createWhenCondition =
@@ -438,11 +476,11 @@ class YupMixed extends Base {
   }
 
   label() {
-    const value = this.value
-    const label = value.title || value.label
-    this.base = (label && this.base.label(label)) || this.base
-    return this
-  }  
+    const value = this.value;
+    const label = value.title || value.label;
+    this.base = (label && this.base.label(label)) || this.base;
+    return this;
+  }
 
   when() {
     const when = this.constraints.when;
