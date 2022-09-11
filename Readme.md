@@ -52,22 +52,16 @@
   - 19.2. [Extend Yup API to bridge other validators](#ExtendYupAPItobridgeothervalidators)
   - 19.3. [Subclassing](#Subclassing)
   - 19.4. [Error messages](#Errormessages)
-  - 19.5. [Error message handling](#Errormessagehandling)
-    - 19.5.1. [Use a custom error message handler](#Useacustomerrormessagehandler)
-  - 19.6. [Custom validation messages using select defaults](#Customvalidationmessagesusingselectdefaults)
+  - 19.5. [Custom error functions](#Customerrorfunctions)
 - 20. [Adding custom constraints](#Addingcustomconstraints)
 - 21. [Similar projects](#Similarprojects)
-- 22. [Testing](#Testing)
-- 23. [Development](#Development)
-- 24. [Ideas and suggestions](#Ideasandsuggestions)
-- 25. [Author](#Author)
-- 26. [License](#License)
+      <!-- vscode-markdown-toc-config
+      	numbering=true
+      	autoSave=true
+      	/vscode-markdown-toc-config -->
+      <!-- /vscode-markdown-toc -->
 
-<!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc --># Schema to Yup schema
+# Schema to Yup schema
 
 Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
@@ -1434,7 +1428,7 @@ Then use this custom key in your JSON
     },
 ```
 
-### Custom error functions
+### 19.5. <a name='Customerrorfunctions'></a>Custom error functions
 
 You can also add custom error functions at a granular level with access to `constraints`, `key` , `title`, `description`, `parentNode` and `typeHandler`
 
