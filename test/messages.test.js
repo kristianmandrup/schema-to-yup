@@ -7,21 +7,21 @@ test("yup inserts custom messages for required fields", () => {
     type: "object",
     required: ["username"],
     properties: {
-      username: { type: "string", matches: "foo" }
-    }
+      username: { type: "string", matches: "foo" },
+    },
   };
   const config = {
     errMessages: {
       username: {
         required: "User is required",
-        matches: "User must be foo"
-      }
-    }
+        matches: "User must be foo",
+      },
+    },
   };
   try {
     const yupSchema = buildYup(message, config);
     valid = yupSchema.validateSync({
-      foo: "dfds"
+      foo: "dfds",
     });
   } catch (e) {
     console.log(e.errors);
@@ -35,23 +35,51 @@ test("yup inserts custom messages for regex fields", () => {
     type: "object",
     required: ["amazon"],
     properties: {
-      amazon: { type: "string", pattern: /(foo|bar)/ }
-    }
+      amazon: { type: "string", pattern: /(foo|bar)/ },
+    },
   };
   const config = {
     errMessages: {
       amazon: {
-        pattern: "Pattern must be foo or bar"
-      }
-    }
+        pattern: "Pattern must be foo or bar",
+      },
+    },
   };
   try {
     const yupSchema = buildYup(message2, config);
     valid = yupSchema.validateSync({
-      amazon: "dfds"
+      amazon: "dfds",
     });
   } catch (e) {
     valid = e.errors[0];
   }
   expect(valid).toBe("Pattern must be foo or bar");
+});
+
+test("yup uses custom error message function", () => {
+  const message2 = {
+    title: "users",
+    type: "object",
+    required: ["amazon"],
+    properties: {
+      amazon: { type: "string", pattern: /(foo|bar)/, title: "amazonas" },
+    },
+  };
+  const config = {
+    errMessages: {
+      amazon: {
+        pattern: (constraints, { description, title }) =>
+          `Pattern must be ${constraints.pattern} for ${title}`,
+      },
+    },
+  };
+  try {
+    const yupSchema = buildYup(message2, config);
+    valid = yupSchema.validateSync({
+      amazon: "dfds",
+    });
+  } catch (e) {
+    valid = e.errors[0];
+  }
+  expect(valid).toBe("Pattern must be /(foo|bar)/ for amazonas");
 });

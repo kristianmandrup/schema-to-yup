@@ -44,10 +44,10 @@ export class ErrorMessageHandler extends TypeMatcher {
   }
 
   validationErrorMessage(msgName) {
-    const { constraints, description, title } = this;
+    const { constraints, key, description, title } = this;
     const errMsg = this.errMessageFor(msgName);
     return typeof errMsg === "function"
-      ? errMsg(constraints, { description, title })
+      ? errMsg(constraints, { key, title, description })
       : errMsg;
   }
 
