@@ -6,8 +6,8 @@ function isObject(type) {
   return type && type === "object";
 }
 
-export function buildYup(schema, config = {}) {
-  return new YupBuilder(schema, {...config}).yupSchema;
+export function buildYup(schema, config = {}, parentNode) {
+  return new YupBuilder(schema, { ...config }, parentNode).yupSchema;
 }
 
 function isObjectType(obj) {
@@ -15,31 +15,33 @@ function isObjectType(obj) {
 }
 
 export class YupBuilder extends Base {
-  constructor(schema, config = {}) {
+  constructor(schema, config = {}, parentNode) {
     super(config);
-    this.init(schema, config);
+    this.init(schema, config, parentNode);
   }
 
-  init(schema, config) {
+  init(schema, config, parentNode) {
     config.buildYup = buildYup;
     config.createYupSchemaEntry =
       config.createYupSchemaEntry || createYupSchemaEntry;
-    this.config = Object.assign(this.config, config);    
+    this.config = Object.assign(this.config, config);
     this.schema = schema;
     const type = this.getType(schema);
     const props = this.getProps(schema);
+    this.parentNode = parentNode;
     this.type = type;
     this.properties = {
-      ...props
+      ...props,
     };
     this.additionalProps = this.getAdditionalProperties(schema);
     this.required = this.getRequired(schema);
 
-    this.setLocale()
+    this.setLocale();
 
-    const customInitFn = typeof config.init === 'function' ? config.init : () => {}
-    const customInit = customInitFn.bind(this) 
-    customInit(schema, config)
+    const customInitFn =
+      typeof config.init === "function" ? config.init : () => {};
+    const customInit = customInitFn.bind(this);
+    customInit(schema, config);
 
     if (!isObject(type)) {
       this.error(`invalid schema: must be type: "object", was type: ${type}`);
@@ -53,7 +55,9 @@ export class YupBuilder extends Base {
     }
 
     const name = this.getName(schema);
-    const buildProperties = (config.buildProperties || this.buildProperties).bind(this)
+    const buildProperties = (
+      config.buildProperties || this.buildProperties
+    ).bind(this);
     const properties = buildProperties(schema, this);
     const shapeConfig = this.propsToShape({ properties, name, config });
 
@@ -62,7 +66,7 @@ export class YupBuilder extends Base {
   }
 
   get validator() {
-    return yup
+    return yup;
   }
 
   setLocale() {
@@ -96,34 +100,38 @@ export class YupBuilder extends Base {
 
   buildProperties() {
     const propKeys = Object.keys(this.properties);
-    const buildProp = (this.config.buildProp || this.buildProp).bind(this)
+    const buildProp = (this.config.buildProp || this.buildProp).bind(this);
     return propKeys.reduce(buildProp, {});
   }
 
   getRequiredPropsList() {
-    return Array.isArray(this.required) ? [...this.required] : []
+    return Array.isArray(this.required) ? [...this.required] : [];
   }
 
   buildProp(propObj, key) {
     const value = this.properties[key];
-    const required = this.getRequiredPropsList();    
-    const setRequired = (this.config.setRequired || this.setRequired).bind(this)
+    const required = this.getRequiredPropsList();
+    const setRequired = (this.config.setRequired || this.setRequired).bind(
+      this
+    );
     // normalize required for prop
-    setRequired(value, key, required)  
+    setRequired(value, key, required);
     // set schema property entry
-    const setPropEntry = (this.config.setPropEntry || this.setPropEntry).bind(this)
-    setPropEntry(propObj, key, value)
+    const setPropEntry = (this.config.setPropEntry || this.setPropEntry).bind(
+      this
+    );
+    setPropEntry(propObj, key, value);
     return propObj;
   }
 
   // normalize required for prop
-  setRequired(value, key, required) {    
+  setRequired(value, key, required) {
     const isRequired = required.indexOf(key) >= 0;
     if (!isObjectType(value)) {
       this.warn(`Bad property value: ${value} must be an object`);
     }
     value.required = this.isRequired(value) || isRequired;
-    return value
+    return value;
   }
 
   setPropEntry(propObj, key, value) {
@@ -131,7 +139,7 @@ export class YupBuilder extends Base {
     propObj[key] = {
       required: value.required,
       ...value,
-    }
+    };
   }
 
   isRequired(value) {
@@ -151,7 +159,7 @@ export class YupBuilder extends Base {
 
   objPropsToShape({ name }) {
     const properties = {
-      ...this.properties
+      ...this.properties,
     };
     const keys = Object.keys(properties);
     return keys.reduce((acc, key) => {
@@ -159,8 +167,8 @@ export class YupBuilder extends Base {
       const argsObj = {
         name,
         key,
-        value
-      }
+        value,
+      };
       const yupSchemaEntry = this.propToYupSchemaEntry(argsObj);
       this.logInfo("propsToShape", { ...argsObj, yupSchemaEntry });
       if (yupSchemaEntry) {
@@ -171,14 +179,16 @@ export class YupBuilder extends Base {
   }
 
   propToYupSchemaEntry({ name, key, value = {} }) {
-    return this.createYupSchemaEntry({
+    const schemaEntryObj = {
       schema: this.schema,
+      parentNode: this.parentNode,
       name,
       key,
       value,
       config: this.config,
-      builder: this
-    });
+      builder: this,
+    };
+    return this.createYupSchemaEntry(schemaEntryObj);
   }
 
   createYupSchemaEntry(opts = {}) {
@@ -186,6 +196,6 @@ export class YupBuilder extends Base {
   }
 
   onConstraintAdded(constraint) {
-    this.logInfo('Constraint Added', constraint)
+    this.logInfo("Constraint Added", constraint);
   }
 }

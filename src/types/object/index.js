@@ -1,7 +1,7 @@
-import { ObjectHandler } from "./handler";
+import { ObjectHandler, createObjectHandler } from "./handler";
 
 export function toYupObject(obj, config = {}) {
-  return obj && new ObjectHandler(config).handle(obj);
+  return obj && createObjectHandler(config).handle(obj);
 }
 
 export { ObjectHandler };

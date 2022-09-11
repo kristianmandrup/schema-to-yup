@@ -1434,6 +1434,38 @@ Then use this custom key in your JSON
     },
 ```
 
+### Custom error functions
+
+You can also add custom error functions at a granular level with access to `constraints`, `key` , `title` and `description`
+
+````js
+  const message2 = {
+    title: "users",
+    type: "object",
+    required: ["amazon"],
+    properties: {
+      amazon: { type: "string", pattern: /(foo|bar)/, title: "amazonas" },
+    },
+  };
+  const config = {
+    errMessages: {
+      amazon: {
+        pattern: (constraints, { key, title, description  }) =>
+          `Pattern must be ${constraints.pattern} for ${title}`,
+      },
+    },
+  };
+  try {
+    const yupSchema = buildYup(message2, config);
+    valid = yupSchema.validateSync({
+      amazon: "dfds",
+    });
+  } catch (e) {
+    valid = e.errors[0];
+  }
+  expect(valid).toBe("Pattern must be /(foo|bar)/ for amazonas");
+});
+
 ### 19.5. <a name='Errormessagehandling'></a>Error message handling
 
 Internally the validator error messages are resolved via an instance of the `ErrorMessageHandler` calling the `validationErrorMessage` method.
@@ -1447,7 +1479,7 @@ Internally the validator error messages are resolved via an instance of the `Err
       .notOneOf($oneOf, this.validationErrorMessage('notOneOf'))
     return this
   }
-```
+````
 
 Error handling
 

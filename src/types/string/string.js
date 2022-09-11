@@ -15,7 +15,6 @@ export class YupString extends YupMixed {
     return this.validator.string();
   }
 
-
   static create(obj) {
     return new YupString(obj);
   }
@@ -35,7 +34,7 @@ export class YupString extends YupMixed {
       "uppercase",
       "email",
       "url",
-      "genericFormat"
+      "genericFormat",
     ];
   }
 
@@ -67,13 +66,13 @@ export class YupString extends YupMixed {
       constraintValue: true,
       constraintName,
       method,
-      errName: method
+      errName: method,
     });
     return this;
   }
 
   constraintNameFor(...names) {
-    return names.find(name => this.constraints[name]);
+    return names.find((name) => this.constraints[name]);
   }
 
   get isEmail() {
@@ -88,7 +87,7 @@ export class YupString extends YupMixed {
       constraintValue: true,
       constraintName,
       method,
-      errName: method
+      errName: method,
     });
     return this;
   }
@@ -100,7 +99,9 @@ export class YupString extends YupMixed {
   // todo: use NumericConstraint or RangeConstraint
   minLength() {
     const { minLength } = this.constraints;
-    const errMsg = this.validationErrorMessage("minLength") || this.validationErrorMessage("min");
+    const errMsg =
+      this.validationErrorMessage("minLength") ||
+      this.validationErrorMessage("min");
     const newBase = minLength && this.base.min(minLength, errMsg);
     this.base = newBase || this.base;
     return this;
@@ -109,7 +110,9 @@ export class YupString extends YupMixed {
   // todo: use NumericConstraint or RangeConstraint
   maxLength() {
     const { maxLength } = this.constraints;
-    const errMsg = this.validationErrorMessage("maxLength") || this.validationErrorMessage("max");
+    const errMsg =
+      this.validationErrorMessage("maxLength") ||
+      this.validationErrorMessage("max");
     const newBase = maxLength && this.base.max(maxLength, errMsg);
     this.base = newBase || this.base;
     return this;
@@ -126,7 +129,9 @@ export class YupString extends YupMixed {
       this.validationErrorMessage("matches") ||
       this.validationErrorMessage("regex");
 
-    const newBase = regex && this.base.matches(regex, {message: errMsg, excludeEmptyString});
+    const newBase =
+      regex &&
+      this.base.matches(regex, { message: errMsg, excludeEmptyString });
     this.base = newBase || this.base;
     return this;
   }

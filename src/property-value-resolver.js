@@ -16,11 +16,19 @@ export class PropertyValueResolver extends BasePropertyValueResolver {
     const { opts, config, entryHandler } = this;
     const createMultiTypeResolverFn =
       config.createMultiTypeResolver || this.createMultiTypeResolver.bind(this);
-    this.multiTypeResolver = createMultiTypeResolverFn(opts, config, entryHandler);
+    this.multiTypeResolver = createMultiTypeResolverFn(
+      opts,
+      config,
+      entryHandler
+    );
     const createSingleTypeResolverFn =
       config.createSingleTypeResolver ||
       this.createSingleTypeResolver.bind(this);
-    this.singleTypeResolver = createSingleTypeResolverFn(opts, config, entryHandler);
+    this.singleTypeResolver = createSingleTypeResolverFn(
+      opts,
+      config,
+      entryHandler
+    );
   }
 
   createMultiTypeResolver() {
@@ -57,6 +65,6 @@ export class PropertyValueResolver extends BasePropertyValueResolver {
 
   defaultType() {
     this.error("toEntry: unknown type", this.type);
-    return false
+    return false;
   }
 }

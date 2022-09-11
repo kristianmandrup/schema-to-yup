@@ -5,7 +5,7 @@ import {
   toYupBoolean,
   toYupArray,
   toYupObject,
-  toYupDate
+  toYupDate,
 } from "./types";
 
 import { createPropertyValueResolver } from "./property-value-resolver";
@@ -15,19 +15,20 @@ class YupSchemaEntryError extends Error {}
 class YupSchemaEntry extends Base {
   constructor(opts) {
     super(opts.config);
-    const { schema, name, key, value, config, builder } = opts;
-    this.builder = builder
+    const { schema, name, key, value, config, builder, parentNode } = opts;
+    this.parentNode = parentNode;
+    this.builder = builder;
     this.opts = opts;
     this.schema = schema;
     this.key = key;
     this.value = value || {};
     this.config = config || {};
-    this.name = name;    
-    this.init()
+    this.name = name;
+    this.init();
   }
 
   get calcType() {
-    const { value } = this
+    const { value } = this;
     return Array.isArray(value) ? "array" : value.type;
   }
 
@@ -40,35 +41,36 @@ class YupSchemaEntry extends Base {
   }
 
   init() {
-    this.type = this.calcType;    
+    this.type = this.calcType;
     this.kind = this.calcKind;
     this.setTypeHandlers();
     this.setPropertyHandler();
   }
 
   get validator() {
-    return this.builder && this.builder.validator
+    return this.builder && this.builder.validator;
   }
 
   setPropertyHandler() {
-    const { config } = this
-    const opts = this.propertyHandlerOpts
+    const { config } = this;
+    const opts = this.propertyHandlerOpts;
     const createPropertyValueHandlerFn =
       config.createPropertyValueHandler || this.createPropertyValueHandler;
     this.propertyValueHandler = createPropertyValueHandlerFn(opts, config);
   }
 
   get propertyHandlerOpts() {
-    const { types, value, name, key, type, kind, schema } = this;
+    const { types, value, name, key, type, kind, schema, parentNode } = this;
     return {
       type,
+      parentNode,
       kind,
       types,
       value,
       name,
       key,
       schema,
-      entryHandler: this
+      entryHandler: this,
     };
   }
 
@@ -83,18 +85,18 @@ class YupSchemaEntry extends Base {
       boolean: toYupBoolean,
       array: toYupArray,
       object: toYupObject,
-      date: toYupDate
+      date: toYupDate,
     };
   }
 
   setTypeHandlers() {
-    this.types = this.config.types || this.typeHandlers
+    this.types = this.config.types || this.typeHandlers;
   }
 
   get typeHandlers() {
     return {
       ...this.defaultTypeHandlerMap,
-      ...(this.config.typeHandlers || {})
+      ...(this.config.typeHandlers || {}),
     };
   }
 

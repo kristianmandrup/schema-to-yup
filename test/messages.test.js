@@ -33,9 +33,14 @@ test("yup inserts custom messages for regex fields", () => {
   const message2 = {
     title: "users",
     type: "object",
-    required: ["amazon"],
     properties: {
-      amazon: { type: "string", pattern: /(foo|bar)/ },
+      place: {
+        type: "object",
+        required: ["amazon"],
+        properties: {
+          amazon: { type: "string", pattern: /(foo|bar)/ },
+        },
+      },
     },
   };
   const config = {
@@ -48,7 +53,7 @@ test("yup inserts custom messages for regex fields", () => {
   try {
     const yupSchema = buildYup(message2, config);
     valid = yupSchema.validateSync({
-      amazon: "dfds",
+      place: { amazon: "xyz" },
     });
   } catch (e) {
     valid = e.errors[0];
@@ -68,8 +73,9 @@ test("yup uses custom error message function", () => {
   const config = {
     errMessages: {
       amazon: {
-        pattern: (constraints, { description, title }) =>
-          `Pattern must be ${constraints.pattern} for ${title}`,
+        pattern: (constraints, { title, parentNode }) => {
+          return `Pattern must be ${constraints.pattern} for ${title}`;
+        },
       },
     },
   };
@@ -77,6 +83,40 @@ test("yup uses custom error message function", () => {
     const yupSchema = buildYup(message2, config);
     valid = yupSchema.validateSync({
       amazon: "dfds",
+    });
+  } catch (e) {
+    valid = e.errors[0];
+  }
+  expect(valid).toBe("Pattern must be /(foo|bar)/ for amazonas");
+});
+
+test("yup uses custom error message function", () => {
+  const message2 = {
+    title: "coffee",
+    type: "object",
+    properties: {
+      place: {
+        type: "object",
+        required: ["amazon"],
+        properties: {
+          amazon: { type: "string", pattern: /(foo|bar)/, title: "amazonas" },
+        },
+      },
+    },
+  };
+  const config = {
+    errMessages: {
+      amazon: {
+        pattern: (constraints, { title, parentNode }) => {
+          return `Pattern must be ${constraints.pattern} for ${title}`;
+        },
+      },
+    },
+  };
+  try {
+    const yupSchema = buildYup(message2, config);
+    valid = yupSchema.validateSync({
+      place: { amazon: "zyx" },
     });
   } catch (e) {
     valid = e.errors[0];

@@ -19,9 +19,10 @@ class YupMixed extends Base {
   }
 
   init(opts) {
-    let { schema, key, value, config, entryHandler } = opts;
+    let { schema, key, value, config, entryHandler, parentNode } = opts;
     config = config || {};
     schema = schema || {};
+    this.parentNode = parentNode || entryHandler.parentNode;
     this.validateOnCreate(key, value, opts);
     this.opts = opts;
     this.entryHandler = entryHandler;

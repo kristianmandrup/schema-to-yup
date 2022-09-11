@@ -39,8 +39,11 @@ export class YupObject extends YupMixed {
       if (!config.buildYup) {
         this.error("convert", "Missing buildYup function from config", config);
       }
-
-      const yupSchema = this.config.buildYup(schema, config);
+      const parentNode = {
+        key: this.key,
+        ...this.value,
+      };
+      const yupSchema = this.config.buildYup(schema, config, parentNode);
       this.base = yupSchema;
     }
     return this;
@@ -61,7 +64,8 @@ export class YupObject extends YupMixed {
       $names &&
       this.base.noUnknown(
         $names,
-        this.validationErrorMessage("propertyNames") || this.validationErrorMessage("noUnknown")
+        this.validationErrorMessage("propertyNames") ||
+          this.validationErrorMessage("noUnknown")
       );
     this.base = newBase || this.base;
     return this;
