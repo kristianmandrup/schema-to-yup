@@ -22,7 +22,7 @@ class YupMixed extends Base {
     let { schema, key, value, config, entryHandler, parentNode } = opts;
     config = config || {};
     schema = schema || {};
-    this.parentNode = parentNode || entryHandler.parentNode;
+    this.parentNode = parentNode || entryHandler?.parentNode;
     this.validateOnCreate(key, value, opts);
     this.opts = opts;
     this.entryHandler = entryHandler;
