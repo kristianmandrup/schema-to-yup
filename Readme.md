@@ -1436,7 +1436,7 @@ Then use this custom key in your JSON
 
 ### Custom error functions
 
-You can also add custom error functions at a granular level with access to `constraints`, `key` , `title` and `description`
+You can also add custom error functions at a granular level with access to `constraints`, `key` , `title`, `description`, `parentNode` and `typeHandler`
 
 ````js
   const message2 = {
@@ -1450,8 +1450,8 @@ You can also add custom error functions at a granular level with access to `cons
   const config = {
     errMessages: {
       amazon: {
-        pattern: (constraints, { key, title, description  }) =>
-          `Pattern must be ${constraints.pattern} for ${title}`,
+        pattern: (constraints, { title, parentNode  }) =>
+          `Pattern must be ${constraints.pattern} for ${title} of ${parentNode.title}`,
       },
     },
   };
