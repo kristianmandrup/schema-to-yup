@@ -181,7 +181,7 @@ export class YupBuilder extends Base {
   propToYupSchemaEntry({ name, key, value = {} }) {
     const schemaEntryObj = {
       schema: this.schema,
-      parentNode: this.parentNode,
+      parentNode: this.parentNode || this,
       name,
       key,
       value,
