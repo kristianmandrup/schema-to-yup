@@ -42,6 +42,7 @@ export class YupObject extends YupMixed {
       const parentNode = {
         key: this.key,
         ...this.value,
+        parentNode: this.parentNode,
       };
       const yupSchema = this.config.buildYup(schema, config, parentNode);
       this.base = yupSchema;

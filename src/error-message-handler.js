@@ -15,6 +15,7 @@ export class ErrorMessageHandler extends TypeMatcher {
     this.value = typeHandler.value; // raw type constraints
     this.constraints = typeHandler.constraints; // type constraints (possibly filtered)
     this.parentNode = typeHandler.parentNode;
+    this.keyPath = typeHandler.keyPath;
     this.type = typeHandler.type;
     this.description = typeHandler.description;
     this.title = typeHandler.title;
@@ -45,8 +46,15 @@ export class ErrorMessageHandler extends TypeMatcher {
   }
 
   validationErrorMessage(msgName) {
-    const { constraints, key, description, title, typeHandler, parentNode } =
-      this;
+    const {
+      constraints,
+      key,
+      description,
+      title,
+      typeHandler,
+      keyPath,
+      parentNode,
+    } = this;
     const errMsg = this.errMessageFor(msgName);
     return typeof errMsg === "function"
       ? errMsg(constraints, {
@@ -55,6 +63,7 @@ export class ErrorMessageHandler extends TypeMatcher {
           description,
           typeHandler,
           parentNode,
+          keyPath,
         })
       : errMsg;
   }

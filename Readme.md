@@ -1430,7 +1430,7 @@ Then use this custom key in your JSON
 
 ### 19.5. <a name='Customerrorfunctions'></a>Custom error functions
 
-You can also add custom error functions at a granular level with access to `constraints`, `key` , `title`, `description`, `parentNode` and `typeHandler`
+You can also add custom error functions at a granular level with access to `constraints`, `key` , `keyPath`, `title`, `description`, `parentNode` and `typeHandler`
 
 ````js
   const message2 = {

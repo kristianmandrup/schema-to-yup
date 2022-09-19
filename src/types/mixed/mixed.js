@@ -45,6 +45,25 @@ class YupMixed extends Base {
     this.base = this.getBase();
   }
 
+  get keyPath() {
+    this._keyPath = this._keyPath || this.calcKeyPath();
+    return this._keyPath;
+  }
+
+  calcKeyPath() {
+    let ctx = this;
+    let parentNode;
+    let keys = [];
+    while ((parentNode = ctx.parentNode)) {
+      if (!parentNode) {
+        break;
+      }
+      keys.push(parentNode.key);
+      ctx = ctx.parentNode;
+    }
+    return keys.join(".");
+  }
+
   get builder() {
     return this.entryHandler && this.entryHandler.builder;
   }
