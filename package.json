@@ -1,6 +1,6 @@
 {
   "name": "schema-to-yup",
-  "version": "1.11.15",
+  "version": "1.11.17",
   "publishConfig": {
     "access": "public"
   },
@@ -18,7 +18,7 @@
     "url": "https://github.com/kristianmandrup/schema-to-yup/issues",
     "email": "kmandrup@gmail.com"
   },
-  "typings": "schema-to-yup.d.ts",
+  "types": "types/index.d.ts",
   "dependencies": {
     "dashify": "^2.0.0",
     "uniq": "^1.0.1",

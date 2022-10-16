@@ -7,59 +7,59 @@
   - 1.4. [Custom/Alternative schemas](#CustomAlternativeschemas)
 - 2. [Custom/Alternative validators](#CustomAlternativevalidators)
 - 3. [Customization hooks](#Customizationhooks)
-- 4. [Build and Sample run](#BuildandSamplerun)
-- 5. [Quick start](#Quickstart)
-  - 5.1. [Refs](#Refs)
-  - 5.2. [Mode](#Mode)
-  - 5.3. [Shape](#Shape)
-- 6. [Types](#Types)
-  - 6.1. [Mixed (any type)](#Mixedanytype)
-  - 6.2. [Reference constraints](#Referenceconstraints)
-  - 6.3. [Array](#Array)
-  - 6.4. [Boolean](#Boolean)
-  - 6.5. [Date](#Date)
-  - 6.6. [Number](#Number)
-  - 6.7. [Object](#Object)
-  - 6.8. [String](#String)
-- 7. [Confirm password](#Confirmpassword)
-- 8. [Multi-type constraints](#Multi-typeconstraints)
-- 9. [Custom builder](#Custombuilder)
-- 10. [Custom builder functions](#Custombuilderfunctions)
-  - 10.1. [Custom init](#Custominit)
-  - 10.2. [Custom buildProperties](#CustombuildProperties)
-  - 10.3. [Custom buildProp](#CustombuildProp)
-  - 10.4. [Custom setRequired](#CustomsetRequired)
-  - 10.5. [Custom setPropEntry](#CustomsetPropEntry)
-- 11. [Custom entry builders](#Customentrybuilders)
-  - 11.1. [Custom type handlers](#Customtypehandlers)
-    - 11.1.1. [Custom array type handler](#Customarraytypehandler)
-  - 11.2. [Additional type handlers](#Additionaltypehandlers)
-  - 11.3. [Custom constraint handler functions](#Customconstrainthandlerfunctions)
-  - 11.4. [Custom constraint builder](#Customconstraintbuilder)
-- 12. [Supporting alternative validators](#Supportingalternativevalidators)
-- 13. [Conditional logic](#Conditionallogic)
-  - 13.1. [Customizing conditional logic](#Customizingconditionallogic)
-- 14. [Additional properties](#Additionalproperties)
-- 15. [Complex example](#Complexexample)
-  - 15.1. [Complex/Nested schemas](#ComplexNestedschemas)
-- 16. [Custom models](#Custommodels)
-  - 16.1. [GraphQL schema](#GraphQLschema-1)
-- 17. [Other/custom schema format support](#Othercustomschemaformatsupport)
-  - 17.1. [Custom logs and error handling](#Customlogsanderrorhandling)
-- 18. [Localized error messages](#Localizederrormessages)
-- 19. [Customization](#Customization)
-  - 19.1. [Customization example](#Customizationexample)
-  - 19.2. [Extend Yup API to bridge other validators](#ExtendYupAPItobridgeothervalidators)
-  - 19.3. [Subclassing](#Subclassing)
-  - 19.4. [Error messages](#Errormessages)
-  - 19.5. [Custom error functions](#Customerrorfunctions)
-- 20. [Adding custom constraints](#Addingcustomconstraints)
-- 21. [Similar projects](#Similarprojects)
-      <!-- vscode-markdown-toc-config
-      	numbering=true
-      	autoSave=true
-      	/vscode-markdown-toc-config -->
-      <!-- /vscode-markdown-toc -->
+- 4. [Typescript and Typings](#TypescriptandTypings)
+- 5. [Build and Sample run](#BuildandSamplerun)
+- 6. [Quick start](#Quickstart)
+  - 6.1. [Refs](#Refs)
+  - 6.2. [Mode](#Mode)
+  - 6.3. [Shape](#Shape)
+- 7. [Types](#Types)
+  - 7.1. [Mixed (any type)](#Mixedanytype)
+  - 7.2. [Reference constraints](#Referenceconstraints)
+  - 7.3. [Array](#Array)
+  - 7.4. [Boolean](#Boolean)
+  - 7.5. [Date](#Date)
+  - 7.6. [Number](#Number)
+  - 7.7. [Object](#Object)
+  - 7.8. [String](#String)
+- 8. [Confirm password](#Confirmpassword)
+- 9. [Multi-type constraints](#Multi-typeconstraints)
+- 10. [Custom builder](#Custombuilder)
+- 11. [Custom builder functions](#Custombuilderfunctions)
+  - 11.1. [Custom init](#Custominit)
+  - 11.2. [Custom buildProperties](#CustombuildProperties)
+  - 11.3. [Custom buildProp](#CustombuildProp)
+  - 11.4. [Custom setRequired](#CustomsetRequired)
+  - 11.5. [Custom setPropEntry](#CustomsetPropEntry)
+- 12. [Custom entry builders](#Customentrybuilders)
+  - 12.1. [Custom type handlers](#Customtypehandlers)
+    - 12.1.1. [Custom array type handler](#Customarraytypehandler)
+  - 12.2. [Additional type handlers](#Additionaltypehandlers)
+  - 12.3. [Custom constraint handler functions](#Customconstrainthandlerfunctions)
+  - 12.4. [Custom constraint builder](#Customconstraintbuilder)
+- 13. [Supporting alternative validators](#Supportingalternativevalidators)
+- 14. [Conditional logic](#Conditionallogic)
+  - 14.1. [Customizing conditional logic](#Customizingconditionallogic)
+- 15. [Additional properties](#Additionalproperties)
+- 16. [Complex example](#Complexexample)
+  - 16.1. [Complex/Nested schemas](#ComplexNestedschemas)
+- 17. [Custom models](#Custommodels)
+  - 17.1. [GraphQL schema](#GraphQLschema-1)
+- 18. [Other/custom schema format support](#Othercustomschemaformatsupport)
+  - 18.1. [Custom logs and error handling](#Customlogsanderrorhandling)
+- 19. [Localized error messages](#Localizederrormessages)
+- 20. [Customization](#Customization)
+  - 20.1. [Customization example](#Customizationexample)
+  - 20.2. [Extend Yup API to bridge other validators](#ExtendYupAPItobridgeothervalidators)
+  - 20.3. [Subclassing](#Subclassing)
+  - 20.4. [Error messages](#Errormessages)
+  - 20.5. [Custom error functions](#Customerrorfunctions)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc --><!-- vscode-markdown-toc -->
 
 # Schema to Yup schema
 
@@ -111,7 +111,17 @@ This library is built to be easy to customize or extend to suit individual devel
 - [constraint handler functions](#custom-constraint-handler-functions)
 - [constraint builder](#custom-constraint-builder)
 
-## 4. <a name='BuildandSamplerun'></a>Build and Sample run
+## 4. <a name='TypescriptandTypings'></a>Typescript and Typings
+
+Typings are available in the `types` folder
+
+Generate typings
+
+```bash
+npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types
+```
+
+## 5. <a name='BuildandSamplerun'></a>Build and Sample run
 
 `$ yarn run build`
 
@@ -131,7 +141,7 @@ This sample run is configured with detailed logging in the `config` object:
 }
 ```
 
-## 5. <a name='Quickstart'></a>Quick start
+## 6. <a name='Quickstart'></a>Quick start
 
 Install
 
@@ -214,7 +224,7 @@ const schema = yup.object().shape({
 
 Note the `"required": true` for the `age` property (not natively supported by JSON schema).
 
-### 5.1. <a name='Refs'></a>Refs
+### 6.1. <a name='Refs'></a>Refs
 
 Please note that this library does not currently resolve `$ref` (JSON Pointers) out of the box. You can use another library for that.
 
@@ -223,7 +233,7 @@ You could f.ex use [json-schema-ref-parser](https://www.npmjs.com/package/json-s
 - [schema-deref](https://www.npmjs.com/package/schema-deref)
 - [jsonref](https://www.npmjs.com/package/jsonref)
 
-### 5.2. <a name='Mode'></a>Mode
+### 6.2. <a name='Mode'></a>Mode
 
 By default, any property will be explicitly `notRequired` unless set to be required, either via `required: true` in the property constraint object or via the `required` list of properties of the `object` schema definition (of the property).
 
@@ -274,7 +284,7 @@ Validation error if not valid type:
 
 `$ npx babel-node sample-runs/modes/not-required-on.js`
 
-### 5.3. <a name='Shape'></a>Shape
+### 6.3. <a name='Shape'></a>Shape
 
 You can access the internal Yup shape, via `shapeConfig` on the yup schema returned by the `buildYup` schema builder function.
 This allows you to easily mix and match to suit more advanced requirements.
@@ -288,7 +298,7 @@ const schema = yup.object().shape({
 });
 ```
 
-## 6. <a name='Types'></a>Types
+## 7. <a name='Types'></a>Types
 
 Currently the following schema types are supported:
 
@@ -299,7 +309,7 @@ Currently the following schema types are supported:
 - `object`
 - `string`
 
-### 6.1. <a name='Mixedanytype'></a>Mixed (any type)
+### 7.1. <a name='Mixedanytype'></a>Mixed (any type)
 
 - `strict`
 - `default`
@@ -314,7 +324,7 @@ Currently the following schema types are supported:
 - `isType`
 - `nullable` (`isNullable`)
 
-### 6.2. <a name='Referenceconstraints'></a>Reference constraints
+### 7.2. <a name='Referenceconstraints'></a>Reference constraints
 
 Reference constraints within the schema can be defined as follows:
 
@@ -345,7 +355,7 @@ Internally this will be resolved using `Yup.ref` as documented [here in the Yup 
 - date: [.min](https://github.com/jquense/yup#dateminlimit-date--string--ref-message-string--function-schema), [.max](https://github.com/jquense/yup#datemaxlimit-date--string--ref-message-string--function-schema)
 - array: [.length](https://github.com/jquense/yup#arraylengthlength-number--ref-message-string--function-this), [.min](https://github.com/jquense/yup#arrayminlimit-number--ref-message-string--function-this), [.max](https://github.com/jquense/yup#arraymaxlimit-number--ref-message-string--function-this)
 
-### 6.3. <a name='Array'></a>Array
+### 7.3. <a name='Array'></a>Array
 
 - `ensure`
 - `compact`
@@ -354,16 +364,16 @@ Internally this will be resolved using `Yup.ref` as documented [here in the Yup 
 - `minItems` (`min`)
 - `itemsOf` (`of`) _NEW_
 
-### 6.4. <a name='Boolean'></a>Boolean
+### 7.4. <a name='Boolean'></a>Boolean
 
 No keys
 
-### 6.5. <a name='Date'></a>Date
+### 7.5. <a name='Date'></a>Date
 
 - `maxDate` (`max`)
 - `minDate` (`min`)
 
-### 6.6. <a name='Number'></a>Number
+### 7.6. <a name='Number'></a>Number
 
 - `integer`
 - `moreThan` (`exclusiveMinimum`)
@@ -375,13 +385,13 @@ No keys
 - `truncate`
 - `round`
 
-### 6.7. <a name='Object'></a>Object
+### 7.7. <a name='Object'></a>Object
 
 - `camelCase`
 - `constantCase`
 - `noUnknown` (`propertyNames`)
 
-### 6.8. <a name='String'></a>String
+### 7.8. <a name='String'></a>String
 
 - `minLength` (`min`)
 - `maxLength` (`max`)
@@ -396,7 +406,7 @@ For pattern (RegExp) you can additionally provide a flags property, such as `fla
 
 For the `pattern` constraint you can also pass in `excludeEmptyString` to exclude empty string from being evaluated as a pattern constraints.
 
-## 7. <a name='Confirmpassword'></a>Confirm password
+## 8. <a name='Confirmpassword'></a>Confirm password
 
 You can use the special `refValue` constraint for password confirmation scenarios.
 
@@ -413,13 +423,13 @@ You can use the special `refValue` constraint for password confirmation scenario
 
 See the sample test case in `test/confirm-password.test.js`
 
-## 8. <a name='Multi-typeconstraints'></a>Multi-type constraints
+## 9. <a name='Multi-typeconstraints'></a>Multi-type constraints
 
 A sample implementation to support multi type constraints has been implemented in `MultiPropertyValueResolver`.
 
 To improve support this, pass a custom factory method `createMultiTypeValueResolver` on the `config` object and build on or improve the current implementation.
 
-## 9. <a name='Custombuilder'></a>Custom builder
+## 10. <a name='Custombuilder'></a>Custom builder
 
 To customize the builder to suit your needs, simply subclass the `YupBuilder` class and create your own factory function which instantiates your subclass.
 
@@ -439,7 +449,7 @@ export function buildYup(schema, config = {}) {
 }
 ```
 
-## 10. <a name='Custombuilderfunctions'></a>Custom builder functions
+## 11. <a name='Custombuilderfunctions'></a>Custom builder functions
 
 - `init`
 - `buildProperties`
@@ -447,7 +457,7 @@ export function buildYup(schema, config = {}) {
 - `setRequired`
 - `setPropEntry`
 
-### 10.1. <a name='Custominit'></a>Custom init
+### 11.1. <a name='Custominit'></a>Custom init
 
 You can supply a custom `init` function on the `config` object to do custom initialization. The `init` function will be bound to the `YupBuilder` instance so that `this` returns the builder instance.
 
@@ -462,7 +472,7 @@ const yupSchema = buildYup(jsonSchema, {
 });
 ```
 
-### 10.2. <a name='CustombuildProperties'></a>Custom buildProperties
+### 11.2. <a name='CustombuildProperties'></a>Custom buildProperties
 
 You can override the built-in `buildProperties` method (see code below) by supplying a custom `buildProperties` function on the `config` object.
 
@@ -474,7 +484,7 @@ You can override the built-in `buildProperties` method (see code below) by suppl
   }
 ```
 
-### 10.3. <a name='CustombuildProp'></a>Custom buildProp
+### 11.3. <a name='CustombuildProp'></a>Custom buildProp
 
 You can override the built-in `buildProp` method (see code below) by supplying a custom `buildProp` function on the `config` object.
 
@@ -492,7 +502,7 @@ buildProp(propObj, key) {
   }
 ```
 
-### 10.4. <a name='CustomsetRequired'></a>Custom setRequired
+### 11.4. <a name='CustomsetRequired'></a>Custom setRequired
 
 You can override the built-in `setRequired` method (see code below) by supplying a custom `setRequired` function on the `config` object.
 
@@ -508,7 +518,7 @@ You can override the built-in `setRequired` method (see code below) by supplying
   }
 ```
 
-### 10.5. <a name='CustomsetPropEntry'></a>Custom setPropEntry
+### 11.5. <a name='CustomsetPropEntry'></a>Custom setPropEntry
 
 You can override the built-in `setPropEntry` method (see code below) by supplying a custom `setPropEntry` function on the `config` object.
 
@@ -522,7 +532,7 @@ You can override the built-in `setPropEntry` method (see code below) by supplyin
   }
 ```
 
-## 11. <a name='Customentrybuilders'></a>Custom entry builders
+## 12. <a name='Customentrybuilders'></a>Custom entry builders
 
 You can pass in custom functions for the following kinds of type entry values
 
@@ -542,7 +552,7 @@ Each takes an instance `yupSchemaEntryBuilder` of `YupSchemaEntry`, which primar
 }
 ```
 
-### 11.1. <a name='Customtypehandlers'></a>Custom type handlers
+### 12.1. <a name='Customtypehandlers'></a>Custom type handlers
 
 You can pass any custom type handlers in a `typeHandlers` object as part of the `config` object passes. See `setTypeHandlers()` and `get typeHandlers()` in `entry.js` for how this works internally.
 
@@ -606,7 +616,7 @@ You will need to at minimum implement a `validatorInstance` getter or property, 
   }
 ```
 
-#### 11.1.1. <a name='Customarraytypehandler'></a>Custom array type handler
+#### 12.1.1. <a name='Customarraytypehandler'></a>Custom array type handler
 
 Currently this library has minimal support for the `array` type. To add better `array` type support, create a custom type handler for handling array types and use it as follows.
 
@@ -622,7 +632,7 @@ Use the `array.test.js` file for testing improved array support. Currently many 
 
 `$ npm test toYupArray`
 
-### 11.2. <a name='Additionaltypehandlers'></a>Additional type handlers
+### 12.2. <a name='Additionaltypehandlers'></a>Additional type handlers
 
 In order to pass a a type handler map that does not rely on any built in type handlers, pass in a `types` object
 
@@ -647,7 +657,7 @@ To control which constraints are enabled (executed), simply edit the `typeEnable
 
 A simpler alternative is to add custom constraint functions to the handlers as described in the next section.
 
-### 11.3. <a name='Customconstrainthandlerfunctions'></a>Custom constraint handler functions
+### 12.3. <a name='Customconstrainthandlerfunctions'></a>Custom constraint handler functions
 
 You can add custom constraint handler functions directly via the `config` object.
 This can be used to override built in constraints or extend with your own.
@@ -734,7 +744,7 @@ const mixed = {
 const yupSchema = buildYup(jsonSchema, { mixedEnabled }
 ```
 
-### 11.4. <a name='Customconstraintbuilder'></a>Custom constraint builder
+### 12.4. <a name='Customconstraintbuilder'></a>Custom constraint builder
 
 This library supports using a custom constraint builder to add and build constraints. All factories are initialized in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
 
@@ -782,7 +792,7 @@ const config = {
 buildYup(jsonSchema, config);
 ```
 
-## 12. <a name='Supportingalternativevalidators'></a>Supporting alternative validators
+## 13. <a name='Supportingalternativevalidators'></a>Supporting alternative validators
 
 Supply a `validator` instance (or getter function) on the `config` object which returns an instance of the validator you wish to use.
 
@@ -871,7 +881,7 @@ So you can access a `validator` instance set in the builder via `this.entryHandl
 
 Then do further customizations as needed.
 
-## 13. <a name='Conditionallogic'></a>Conditional logic
+## 14. <a name='Conditionallogic'></a>Conditional logic
 
 Basic support for [when conditions](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) as requested and outlined in [this issue](https://github.com/kristianmandrup/schema-to-yup/issues/14) is now included.
 
@@ -931,7 +941,7 @@ Support for `if` `then` and `else` [conditional JSON schema constraints](https:/
 
 See also [json-schema-spec](https://github.com/json-schema-org/json-schema-spec/issues/180)
 
-### 13.1. <a name='Customizingconditionallogic'></a>Customizing conditional logic
+### 14.1. <a name='Customizingconditionallogic'></a>Customizing conditional logic
 
 You can now also override, extend or customize the `when` condition logic by passing in your own factory method for the config object entry `createWhenCondition`
 
@@ -951,7 +961,7 @@ The best and easiest way to do this is to extend the `WhenCondition` class which
 
 See the `src/conditions/legacy` folder for the legacy `1.9.0` logic that works but has limited functionality.
 
-## 14. <a name='Additionalproperties'></a>Additional properties
+## 15. <a name='Additionalproperties'></a>Additional properties
 
 Currently this library does not have built-in support for the `additionalProperties` feature of JSON schema as described [here](https://json-schema.org/understanding-json-schema/reference/object.html)
 
@@ -987,7 +997,7 @@ class YupBuilderWithSupportForAdditionalProperties extends YupBuilder {
 
 See the issue for ideas and hints on how to achieve support for this.
 
-## 15. <a name='Complexexample'></a>Complex example
+## 16. <a name='Complexexample'></a>Complex example
 
 Here a more complete example of the variations currently possible
 
@@ -1062,13 +1072,13 @@ Here a more complete example of the variations currently possible
 }
 ```
 
-### 15.1. <a name='ComplexNestedschemas'></a>Complex/Nested schemas
+### 16.1. <a name='ComplexNestedschemas'></a>Complex/Nested schemas
 
 Nested object schema properties are supported.
 
 See `test/types/object/complex-schema.test.js`
 
-## 16. <a name='Custommodels'></a>Custom models
+## 17. <a name='Custommodels'></a>Custom models
 
 This library now also supports non JSON schema models. See the `types/schema-parser-maps` mappings.
 
@@ -1094,7 +1104,7 @@ module.exports {
 
 This can be used to support any kind of schema, including JSN schema and GraphQL type definition schemas etc.
 
-### 16.1. <a name='GraphQLschema-1'></a>GraphQL schema
+### 17.1. <a name='GraphQLschema-1'></a>GraphQL schema
 
 To support another model, such as GraphQL schema (type definitions) via [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson)
 
@@ -1165,7 +1175,7 @@ Simply use `schemaType: "avro"` in the config object.
 const schema = buildYup(nameJsonSchema, { schemaType: "avro", log: true });
 ```
 
-## 17. <a name='Othercustomschemaformatsupport'></a>Other/custom schema format support
+## 18. <a name='Othercustomschemaformatsupport'></a>Other/custom schema format support
 
 You can supply a `config.schemaParserMap` object with parser entries for any specific schema formats you wish to support.
 
@@ -1200,7 +1210,7 @@ You can supply a custom `createSchemaParserBuilder` entry in the `config` object
 
 Feel free to make PRs to make more common schema models available!
 
-### 17.1. <a name='Customlogsanderrorhandling'></a>Custom logs and error handling
+### 18.1. <a name='Customlogsanderrorhandling'></a>Custom logs and error handling
 
 You can enable logging py passing a `log` option in the `config.enable` object. If set to `true`, it will by default assign the internal log function to `console.log`
 You can enable/disable warnings in a similar fashion with `enable.warn`
@@ -1255,21 +1265,21 @@ const schemaEntry = this.createYupSchemaEntry(schemaConf);
 this.logTypeInfo("array:of", { schemaEntry });
 ```
 
-## 18. <a name='Localizederrormessages'></a>Localized error messages
+## 19. <a name='Localizederrormessages'></a>Localized error messages
 
 You can specify the locale to use in the `config` object.
 Internally the builder will use the following `yup` call: `yup.setLocale(config.locale)`
 
 Thanks [@gabrielburich](https://github.com/gabrielburich)
 
-## 19. <a name='Customization'></a>Customization
+## 20. <a name='Customization'></a>Customization
 
 You can supply a `createYupSchemaEntry` function as an entry in the `config` object.
 This function will then be used to build each Yup Schema entry in the Yup Schema being built.
 
 Use the Yup Type classes such as `types.YupArray` to act as building blocks or create your own custom logic as you see fit.
 
-### 19.1. <a name='Customizationexample'></a>Customization example
+### 20.1. <a name='Customizationexample'></a>Customization example
 
 ```js
 const { YupSchemaEntry, buildYup, types } = require("schema-to-yup");
@@ -1297,7 +1307,7 @@ const yupSchema = buildYup(json, {
 });
 ```
 
-### 19.2. <a name='ExtendYupAPItobridgeothervalidators'></a>Extend Yup API to bridge other validators
+### 20.2. <a name='ExtendYupAPItobridgeothervalidators'></a>Extend Yup API to bridge other validators
 
 You can use `extendYupApi` to extend the Yup API with extra validation methods:
 
@@ -1342,7 +1352,7 @@ const valid = await yupSchema.isValid({
 
 Now the bridge includes tests and seems to work ;)
 
-### 19.3. <a name='Subclassing'></a>Subclassing
+### 20.3. <a name='Subclassing'></a>Subclassing
 
 You can sublass `YupBuilder` or any of the internal classes to create your own custom infrastructure to suit your particular needs, extend with extra features etc.
 
@@ -1358,7 +1368,7 @@ const { yupSchema } = builder;
 // ...
 ```
 
-### 19.4. <a name='Errormessages'></a>Error messages
+### 20.4. <a name='Errormessages'></a>Error messages
 
 You can pass an `errMessages` object in the optional `config` object argument with key mappings for your custom validation error messages.
 
@@ -1428,7 +1438,7 @@ Then use this custom key in your JSON
     },
 ```
 
-### 19.5. <a name='Customerrorfunctions'></a>Custom error functions
+### 20.5. <a name='Customerrorfunctions'></a>Custom error functions
 
 You can also add custom error functions at a granular level with access to `constraints`, `key` , `keyPath`, `title`, `description`, `parentNode` and `typeHandler`
 
