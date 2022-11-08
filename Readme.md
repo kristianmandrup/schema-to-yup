@@ -362,7 +362,7 @@ Internally this will be resolved using `Yup.ref` as documented [here in the Yup 
 - `items` (`of`)
 - `maxItems` (`max`)
 - `minItems` (`min`)
-- `itemsOf` (`of`) _NEW_
+- `itemsOf` (`of`)
 
 ### 7.4. <a name='Boolean'></a>Boolean
 
