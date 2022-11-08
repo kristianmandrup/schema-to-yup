@@ -22,9 +22,9 @@ const createArrNoKey = (value, config = defaultConfig) => {
   return toYupArray(obj, config);
 };
 
-const createSchema = list => {
+const createSchema = (list) => {
   return yup.object().shape({
-    list
+    list,
   });
 };
 
@@ -122,7 +122,7 @@ describe("toYupArray", () => {
 
   describe("itemsOf", () => {
     describe("schema opts", () => {
-      test.skip("type: number - ok", () => {
+      test("type: number - ok", () => {
         expect(() => createArr({ itemsOf: { type: "number" } })).not.toThrow();
         try {
           createArr({ itemsOf: { type: "number" } });
@@ -136,7 +136,7 @@ describe("toYupArray", () => {
       });
     });
 
-    describe.skip("manual simple validate", () => {
+    describe("manual simple validate", () => {
       const constraint = yup.number().min(2);
       const schema = yup.array().of(constraint);
 
@@ -150,11 +150,11 @@ describe("toYupArray", () => {
       });
     });
 
-    describe.skip("manual schema validate", () => {
+    describe("manual schema validate", () => {
       const constraint = yup.number().min(2);
 
       const schema = yup.object().shape({
-        list: yup.array().of(constraint)
+        list: yup.array().of(constraint),
       });
 
       test("valid", () => {
@@ -167,7 +167,7 @@ describe("toYupArray", () => {
       });
     });
 
-    describe.skip("validate", () => {
+    describe("validate", () => {
       const arr = createArr({ itemsOf: { type: "number", min: 2 } });
       const schema = createSchema(arr);
 
@@ -176,7 +176,7 @@ describe("toYupArray", () => {
         expect(valid).toBeTruthy();
       });
 
-      test.skip("invalid", () => {
+      test("invalid", () => {
         const valid = schema.isValidSync({ list: [1, "yb", {}] });
         expect(valid).toBeFalsy();
       });
