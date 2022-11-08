@@ -29,7 +29,7 @@ export class YupArray extends YupMixed {
   }
 
   get typeEnabled() {
-    return ["maxItems", "minItems", "ensureItems", "compact", "itemsOf"];
+    return ["itemsOf", "maxItems", "minItems", "ensureItems", "compact"];
   }
 
   ensureItems() {

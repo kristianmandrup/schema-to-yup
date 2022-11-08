@@ -1,4 +1,4 @@
-const { types } = require("../../../src");
+const { types, buildYup } = require("../../../src");
 const { toYupArray } = types;
 const { createYupSchemaEntry } = require("../../../src/create-entry");
 import schemaParserMaps from "../../../src/types/schema-parser-maps";
@@ -177,9 +177,31 @@ describe("toYupArray", () => {
       });
 
       test("invalid", () => {
-        const valid = schema.isValidSync({ list: [1, "yb", {}] });
+        const valid = schema.isValidSync({ list: [1, "yb"] });
         expect(valid).toBeFalsy();
       });
     });
+  });
+
+  describe("combined", () => {
+    describe("schema opts", () => {
+      test("type: number - ok", () => {
+        expect(() =>
+          createArr({ itemsOf: { type: "number" }, min: 1, max: 3 })
+        ).not.toThrow();
+      });
+    });
+
+    describe("schema opts", () => {
+      test("type: number - ok", () => {
+        const schema = createSchema(
+          createArr({ itemsOf: { type: "number" }, min: 1, max: 3 })
+        );
+        expect(schema.isValidSync([])).toBeFalsy();
+        expect(schema.isValidSync(["definetely not a number"])).toBeFalsy();
+        expect(schema.isValidSync([1, 2, 3, 4])).toBeFalsy();
+      });
+    });
+    buildYup
   });
 });
