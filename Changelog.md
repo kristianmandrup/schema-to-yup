@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.11.18
+
+Fixes `itemsOf` for array type.
+
 # 1.11.4
 
 Added new `refValue` field to allow validating via previous property value
