@@ -435,7 +435,7 @@ class YupMixed extends Base {
       const dataRefPath = this.normalizeDataRefPath(value);
       value = yup.ref(dataRefPath);
     }
-    return this.addConstraint("const", { value });
+    return this.addConstraint("oneOf", { values: [value] });
   }
 
   // TODO: investigate yup.ref
