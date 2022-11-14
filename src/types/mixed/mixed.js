@@ -497,8 +497,10 @@ class YupMixed extends Base {
 
   label() {
     const value = this.value;
-    const label = value.title || value.label;
-    this.base = (label && this.base.label(label)) || this.base;
+    const { title, label } = value;
+    const yupLabel = title || label;
+    this.logInfo("label", { title, label, yupLabel });
+    this.base = label ? this.base.label(yupLabel) : this.base;
     return this;
   }
 
