@@ -1549,9 +1549,9 @@ You could f.ex override `errMessageFor` as follows, using the `type`
 
   genericErrMessageFor(name) {
     const { errMessages, type } = this;
-    const genricErrMsgMap = errMessages['_generic_'];
+    const genericErrMsgMap = errMessages['_generic_'];
     const fullName = `${type}.${name}`
-    return genricErrMsgMap[fullName] || genricErrMsgMap[name];
+    return genericErrMsgMap[fullName] || genericErrMsgMap[name];
   }
 ```
 

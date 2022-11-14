@@ -1,6 +1,6 @@
 {
   "name": "schema-to-yup",
-  "version": "1.11.18",
+  "version": "1.11.19",
   "publishConfig": {
     "access": "public"
   },
