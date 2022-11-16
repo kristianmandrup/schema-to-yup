@@ -64,19 +64,19 @@ export class YupArray extends YupMixed {
     }
 
     try {
-      const value = $of
+      const value = $of;
       const schemaConf = {
         key: this.key,
         value,
-        config: this.config
+        config: this.config,
       };
-      this.logTypeInfo('array:of', {schemaConf})
+      this.logTypeInfo("array:of", { schemaConf });
       const schemaEntry = this.createYupSchemaEntry(schemaConf);
-      this.logTypeInfo('array:of', {schemaEntry})
+      this.logTypeInfo("array:of", { schemaEntry });
       return this.addConstraint("of", {
         constraintValue: schemaEntry,
         propValue: value,
-        value: schemaEntry
+        value: schemaEntry,
       });
     } catch (ex) {
       this.error("itemsOf: Error", ex);
@@ -93,7 +93,8 @@ export class YupArray extends YupMixed {
     if (!this.isValidSize($max)) {
       return this.handleInvalidSize("maxItems", $max);
     }
-    const newBase = $max && this.base.max($max);
+    const errMsg = this.validationErrorMessage("maxItems");
+    const newBase = $max && this.base.max($max, errMsg);
     this.base = newBase || this.base;
     return this;
   }
@@ -107,7 +108,8 @@ export class YupArray extends YupMixed {
     if (!this.isValidSize($min)) {
       return this.handleInvalidSize("minItems", $min);
     }
-    const newBase = $min && this.base.min($min);
+    const errMsg = this.validationErrorMessage("minItems");
+    const newBase = $min && this.base.min($min, errMsg);
     this.base = newBase || this.base;
     return this;
   }
