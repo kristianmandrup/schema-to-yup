@@ -38,7 +38,15 @@ class YupMixed extends Base {
     this.config = config || {};
     this.type = this.baseType;
     this.mixedConfig = this.config.mixedEnabled || {};
-    this.typeConfig = this.config[this.type] || {};
+
+    const typeConfig = this.config[this.type] || {};
+    const mixedConfig = this.config.mixed || {};
+
+    this.mixedConfig = mixedConfig;
+    this.typeConfig = {
+      ...mixedConfig,
+      ...typeConfig,
+    };
     this.errMessages = config.errMessages || {};
     this.configureTypeConfig();
     this.constraintsAdded = {};
@@ -392,6 +400,48 @@ class YupMixed extends Base {
     this.logDetails("type", idObj, values, resolvedValues);
 
     return this.addConstraint(alias, { values: resolvedValues });
+  }
+
+  oneOfConditional() {
+    let { config, parentNode, isObject, value, key } = this;
+    // optionally set custom errMsg
+    const oneOfConstraints = value;
+    this.base = this.base.test(
+      key,
+      // errMsg,
+      (value, context) => {
+        for (let constraint in oneOfConstraints) {
+          if (!isObject(constraint)) {
+            return value === constraint;
+          }
+          const yupSchema = config.buildYup(constraint, config, parentNode);
+          const result = yupSchema.validate();
+          if (result) return true;
+        }
+        return false;
+      }
+    );
+  }
+
+  notOneOfConditional() {
+    let { config, parentNode, isObject, value, key } = this;
+    // optionally set custom errMsg
+    const oneOfConstraints = value;
+    this.base = this.base.test(
+      key,
+      // errMsg,
+      (value, context) => {
+        for (let constraint in oneOfConstraints) {
+          if (!isObject(constraint)) {
+            return value !== constraint;
+          }
+          const yupSchema = config.buildYup(constraint, config, parentNode);
+          const result = yupSchema.validate();
+          if (result) return false;
+        }
+        return true;
+      }
+    );
   }
 
   logDetailed(label, idObj, ...values) {

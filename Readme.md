@@ -36,6 +36,7 @@
     - 12.1.1. [Custom array type handler](#Customarraytypehandler)
   - 12.2. [Additional type handlers](#Additionaltypehandlers)
   - 12.3. [Custom constraint handler functions](#Customconstrainthandlerfunctions)
+    - 12.3.1. [Advanced custom constraint example](#Advancedcustomconstraintexample)
   - 12.4. [Custom constraint builder](#Customconstraintbuilder)
 - 13. [Supporting alternative validators](#Supportingalternativevalidators)
 - 14. [Conditional logic](#Conditionallogic)
@@ -745,6 +746,59 @@ const mixed = {
 }
 
 const yupSchema = buildYup(jsonSchema, { mixedEnabled }
+```
+
+#### 12.3.1. <a name='Advancedcustomconstraintexample'></a>Advanced custom constraint example
+
+```js
+const oneOfConditional = (th) => {
+  let { config, parentNode, isObject, value, key } = th;
+  // optionally set custom errMsg
+  const oneOfConstraints = value;
+  th.base = th.base.test(
+    key,
+    // errMsg,
+    (value, context) => {
+      for (let constraint in oneOfConstraints) {
+        if (!isObject(constraint)) {
+          return value === constraint;
+        }
+        const yupSchema = config.buildYup(constraint, config, parentNode);
+        const result = yupSchema.validate();
+        if (result) return true;
+      }
+      return false;
+    }
+  );
+};
+
+const notOneOfConditional = (th) => {
+  let { config, parentNode, isObject, value, key } = th;
+  // optionally set custom errMsg
+  const oneOfConstraints = value;
+  th.base = th.base.test(
+    key,
+    // errMsg,
+    (value, context) => {
+      for (let constraint in oneOfConstraints) {
+        if (!isObject(constraint)) {
+          return value !== constraint;
+        }
+        const yupSchema = config.buildYup(constraint, config, parentNode);
+        const result = yupSchema.validate();
+        if (result) return false;
+      }
+      return true;
+    }
+  );
+};
+
+const mixed = {
+  convert: {
+    oneOf: oneOfConditional,
+    notOneOf: notOneOfConditional,
+  },
+};
 ```
 
 ### 12.4. <a name='Customconstraintbuilder'></a>Custom constraint builder
