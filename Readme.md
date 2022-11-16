@@ -286,12 +286,15 @@ Validation error if not valid type:
 
 ### 6.3. <a name='Shape'></a>Shape
 
-You can access the internal Yup shape, via `shapeConfig` on the yup schema returned by the `buildYup` schema builder function.
+You can access the internal Yup shape, via `shapeConfig` on the yup schema returned by the `buildYup` schema builder function. Alternatively simply call `propsToShape()` on the yup builder.
+
 This allows you to easily mix and match to suit more advanced requirements.
 
 ```js
 const { buildYup } = require("json-schema-to-yup");
 const { shapeConfig } = buildYup(json, config);
+// alternatively
+// const shape = buildYup(json, config).propsToShape()
 const schema = yup.object().shape({
   ...shapeConfig,
   ...customShapeConfig,
