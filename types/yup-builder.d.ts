@@ -1,4 +1,4 @@
-export function buildYup(schema: any, config: {}, parentNode: any): yup.ObjectSchema<{
+export function buildYup(schema: any, config?: {}, parentNode?: any): yup.ObjectSchema<{
     [x: string]: yup.AnySchema<any, any, any> | import("yup/lib/Reference").default<unknown> | import("yup/lib/Lazy").default<any, any>;
 }, import("yup/lib/object").AnyObject, import("yup/lib/object").TypeOfShape<{
     [x: string]: yup.AnySchema<any, any, any> | import("yup/lib/Reference").default<unknown> | import("yup/lib/Lazy").default<any, any>;
@@ -6,8 +6,8 @@ export function buildYup(schema: any, config: {}, parentNode: any): yup.ObjectSc
     [x: string]: yup.AnySchema<any, any, any> | import("yup/lib/Reference").default<unknown> | import("yup/lib/Lazy").default<any, any>;
 }>>;
 export class YupBuilder extends Base {
-    constructor(schema: any, config: {}, parentNode: any);
-    init(schema: any, config: any, parentNode: any): void;
+    constructor(schema: any, config?: {}, parentNode?: any);
+    init(schema: any, config: any, parentNode?: any): void;
     schema: any;
     parentNode: any;
     type: any;
@@ -39,8 +39,8 @@ export class YupBuilder extends Base {
     propsToShape(opts?: {}): {};
     objPropsShape: {};
     addPropsShape: any;
-    additionalPropsToShape(opts: any, shape: any): any;
-    objPropsToShape({ name }: {
+    additionalPropsToShape(shape: any, opts?: {}): any;
+    objPropsToShape({ name }?: {
         name: any;
     }): {};
     propToYupSchemaEntry({ name, key, value }: {

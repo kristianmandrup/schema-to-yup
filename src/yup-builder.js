@@ -6,7 +6,7 @@ function isObject(type) {
   return type && type === "object";
 }
 
-export function buildYup(schema, config = {}, parentNode) {
+export function buildYup(schema, config = {}, parentNode = undefined) {
   return new YupBuilder(schema, { ...config }, parentNode).yupSchema;
 }
 
@@ -15,12 +15,12 @@ function isObjectType(obj) {
 }
 
 export class YupBuilder extends Base {
-  constructor(schema, config = {}, parentNode) {
+  constructor(schema, config = {}, parentNode = undefined) {
     super(config);
     this.init(schema, config, parentNode);
   }
 
-  init(schema, config, parentNode) {
+  init(schema, config, parentNode = undefined) {
     config.buildYup = buildYup;
     config.createYupSchemaEntry =
       config.createYupSchemaEntry || createYupSchemaEntry;
@@ -59,8 +59,8 @@ export class YupBuilder extends Base {
       config.buildProperties || this.buildProperties
     ).bind(this);
     const properties = buildProperties(schema, this);
-    const shapeConfig = this.propsToShape({ properties, name, config });
 
+    const shapeConfig = this.propsToShape({ properties, name, config });
     this.shapeConfig = shapeConfig;
     this.validSchema = true;
   }
@@ -149,15 +149,15 @@ export class YupBuilder extends Base {
   propsToShape(opts = {}) {
     const shape = this.objPropsToShape(opts);
     this.objPropsShape = shape;
-    this.addPropsShape = this.additionalPropsToShape(opts, shape);
+    this.addPropsShape = this.additionalPropsToShape(shape, opts);
     return shape;
   }
 
-  additionalPropsToShape(opts, shape) {
+  additionalPropsToShape(shape, opts = {}) {
     return shape;
   }
 
-  objPropsToShape({ name }) {
+  objPropsToShape({ name } = {}) {
     const properties = {
       ...this.properties,
     };
