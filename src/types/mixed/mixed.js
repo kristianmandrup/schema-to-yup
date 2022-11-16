@@ -267,7 +267,22 @@ class YupMixed extends Base {
   }
 
   createSchemaEntry() {
-    return this.convert().base;
+    this.preConvert();
+    this.convert();
+    this.postConvert();
+    return this.base;
+  }
+
+  preConvert() {
+    const { preConvert } = this.config;
+    const $preConvert = preConvert && preConvert.bind(this);
+    $preConvert && $preConvert(this);
+  }
+
+  postConvert() {
+    const { postConvert } = this.config;
+    const $postConvert = postConvert && postConvert.bind(this);
+    $postConvert && $postConvert(this);
   }
 
   convert() {
