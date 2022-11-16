@@ -57,6 +57,8 @@ export class YupMixed extends Base {
     builtInConvertFnFor(name: any): any;
     getConstraints(): any;
     createSchemaEntry(): any;
+    preConvert(): void;
+    postConvert(): void;
     convert(): YupMixed;
     apply(fnName: any, ...fnArgs: any[]): YupMixed;
     applyArr(fnName: any, arrValue: any): YupMixed;
@@ -74,6 +76,8 @@ export class YupMixed extends Base {
     get oneOfAliases(): string[];
     get oneOfAlias(): string;
     oneOf(): YupMixed;
+    oneOfConditional(): void;
+    notOneOfConditional(): void;
     logDetailed(label: any, idObj: any, ...values: any[]): void;
     get notOneOfValues(): any;
     notOneOf(): YupMixed;

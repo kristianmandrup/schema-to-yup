@@ -1,10 +1,4 @@
-export function buildYup(schema: any, config?: {}, parentNode?: any): yup.ObjectSchema<{
-    [x: string]: yup.AnySchema<any, any, any> | import("yup/lib/Reference").default<unknown> | import("yup/lib/Lazy").default<any, any>;
-}, import("yup/lib/object").AnyObject, import("yup/lib/object").TypeOfShape<{
-    [x: string]: yup.AnySchema<any, any, any> | import("yup/lib/Reference").default<unknown> | import("yup/lib/Lazy").default<any, any>;
-}>, import("yup/lib/object").AssertsShape<{
-    [x: string]: yup.AnySchema<any, any, any> | import("yup/lib/Reference").default<unknown> | import("yup/lib/Lazy").default<any, any>;
-}>>;
+export function buildYup(schema: any, config?: {}, parentNode?: any): yup.ObjectSchema<any, import("yup/lib/object").AnyObject, import("yup/lib/object").TypeOfShape<any>, import("yup/lib/object").AssertsShape<any>>;
 export class YupBuilder extends Base {
     constructor(schema: any, config?: {}, parentNode?: any);
     init(schema: any, config: any, parentNode?: any): void;
@@ -14,7 +8,7 @@ export class YupBuilder extends Base {
     properties: any;
     additionalProps: any;
     required: any;
-    shapeConfig: {};
+    shapeConfig: any;
     validSchema: boolean;
     get validator(): typeof yup;
     setLocale(): void;
@@ -23,26 +17,21 @@ export class YupBuilder extends Base {
     getProps(obj: any): any;
     getType(obj: any): any;
     getName(obj: any): any;
-    get yupSchema(): yup.ObjectSchema<{
-        [x: string]: yup.AnySchema<any, any, any> | import("yup/lib/Reference").default<unknown> | import("yup/lib/Lazy").default<any, any>;
-    }, import("yup/lib/object").AnyObject, import("yup/lib/object").TypeOfShape<{
-        [x: string]: yup.AnySchema<any, any, any> | import("yup/lib/Reference").default<unknown> | import("yup/lib/Lazy").default<any, any>;
-    }>, import("yup/lib/object").AssertsShape<{
-        [x: string]: yup.AnySchema<any, any, any> | import("yup/lib/Reference").default<unknown> | import("yup/lib/Lazy").default<any, any>;
-    }>>;
+    get yupSchema(): yup.ObjectSchema<any, import("yup/lib/object").AnyObject, import("yup/lib/object").TypeOfShape<any>, import("yup/lib/object").AssertsShape<any>>;
     buildProperties(): {};
     getRequiredPropsList(): any[];
     buildProp(propObj: any, key: any): any;
     setRequired(value: any, key: any, required: any): any;
     setPropEntry(propObj: any, key: any, value: any): void;
     isRequired(value: any): any;
-    propsToShape(opts?: {}): {};
-    objPropsShape: {};
+    propsToShape(opts?: {}): any;
+    objPropsShape: any;
     addPropsShape: any;
     additionalPropsToShape(shape: any, opts?: {}): any;
     objPropsToShape({ name }?: {
         name: any;
-    }): {};
+    }): any;
+    reducePropToShape(acc: any, key: any, prop: any): any;
     propToYupSchemaEntry({ name, key, value }: {
         name: any;
         key: any;

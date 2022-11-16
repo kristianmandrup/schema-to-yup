@@ -1,0 +1,54 @@
+export class TypeHandlerConfig {
+    enabled: any[];
+    extends: any[];
+    convert: {};
+}
+export class YupBuilderConfig extends TypeHandlerConfig {
+    boolean: TypeHandlerConfig;
+    string: TypeHandlerConfig;
+    number: TypeHandlerConfig;
+    object: TypeHandlerConfig;
+    array: TypeHandlerConfig;
+    date: TypeHandlerConfig;
+    mixed: TypeHandlerConfig;
+    createCustomConstraintBuilder: (typeHandler: any, config: any) => void;
+    createErrorMessageHandler: (typeHandler: any, config: any) => void;
+    validationErrorMessage: (msgName: any, typeHandler: any) => void;
+    createWhenCondition: (opts: any) => void;
+    isBoolean: (obj: any) => boolean;
+    isDate: (obj: any) => boolean;
+    isString: (obj: any) => boolean;
+    isNumber: (obj: any) => boolean;
+    isObject: (obj: any) => boolean;
+    format: boolean;
+    schemaParserMap: {};
+    messages: {};
+    mode: {};
+    mixedEnabled: {};
+    locale: string;
+    schemaType: string;
+    logging: boolean;
+    logTypes: any[];
+    logDetailed: any[];
+    warnOnInvalid: boolean;
+    buildProp: any;
+    types: {};
+    typeHandlers: {};
+    multiArgsValidatorMethods: {};
+    errMessageKey: string;
+    errMessagesMapKey: string;
+    createPropertyValueHandler: (opts: any, config: any) => void;
+    buildProperties: (obj: any) => void;
+    getProps: (obj: any) => void;
+    getType: (obj: any) => void;
+    getName: (obj: any) => void;
+    isRequired: (value: any) => void;
+    setRequired: (value: any, key: any, required: any) => void;
+    setPropEntry: (propObj: any, key: any, value: any) => void;
+    getConstraints: (value: any) => void;
+    buildYup: (schema: any, config: any, parentNode: any) => void;
+    toMultiType: (multiPropertyValueResolver: any) => void;
+    toSingleType: (singlePropertyValueResolver: any) => void;
+    init: (schema: any, config: any) => void;
+    createYupSchemaEntry: (opts: any) => void;
+}

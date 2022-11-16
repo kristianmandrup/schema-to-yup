@@ -123,6 +123,8 @@ Generate typings
 npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types
 ```
 
+You can use the `YupBuilderConfig` and `TypeHandlerConfig` types and classes to facilitate building up the `config` object to pass to the `YupBuilder`.
+
 ## 5. <a name='BuildandSamplerun'></a>Build and Sample run
 
 `$ yarn run build`
@@ -753,7 +755,7 @@ const yupSchema = buildYup(jsonSchema, { mixedEnabled }
 
 ```js
 const oneOfConditional = (th) => {
-  let { config, parentNode, isObject, value, key } = th;
+  let { config, parentNode, isObjectType, value, key } = th;
   // optionally set custom errMsg
   const oneOfConstraints = value;
   th.base = th.base.test(
@@ -761,7 +763,7 @@ const oneOfConditional = (th) => {
     // errMsg,
     (value, context) => {
       for (let constraint in oneOfConstraints) {
-        if (!isObject(constraint)) {
+        if (!isObjectType(constraint)) {
           return value === constraint;
         }
         const yupSchema = config.buildYup(constraint, config, parentNode);
