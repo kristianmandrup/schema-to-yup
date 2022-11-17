@@ -123,7 +123,7 @@ Generate typings
 npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types
 ```
 
-You can use the `YupBuilderConfig` and `TypeHandlerConfig` types and classes to facilitate building up the `config` object to pass to the `YupBuilder`.
+You can use the `YupBuilderConfig` and `TypeHandlerConfig` type interfaces to facilitate building up the `config` object to pass to the `YupBuilder`.
 
 ## 5. <a name='BuildandSamplerun'></a>Build and Sample run
 
