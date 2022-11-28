@@ -40,11 +40,28 @@ describe("Login form schema using refValue for confirmPassword property", () => 
       // for error messages...
       errMessages: {
         confirmPassword: {
-          required: "confirm password field must have the same value as password"
+          refValueFor: "confirm password field must have the same value as password",
+          required: "this field is required"
         }
       }
     };
     schema = buildYup(loginSchema, config);
+  })
+
+    it('is invalid if blank and displays correct message', async () => {
+    try {
+      schema.validateSync({ username: "jimmy", "password": "xyz123", "confirmPassword": "" });
+    } catch (e) {
+      expect(e.errors[0]).toBe('this field is required');
+    }
+  })
+
+  it('is invalid if if confirmPassword does not match password', async () => {
+    try {
+      schema.validateSync({ username: "jimmy", "password": "xyz123", "confirmPassword": "xyz1234" });
+    } catch (e) {
+      expect(e.errors[0]).toBe('confirm password field must have the same value as password');
+    }
   })
 
   it('is invalid with invalid data', async () => {

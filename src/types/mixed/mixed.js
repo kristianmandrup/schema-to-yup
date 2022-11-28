@@ -371,11 +371,16 @@ class YupMixed extends Base {
     if (this.isNothing(propRefName)) return this;
     this.logInfo("refValueFor", { propRefName });
     return this.apply(
-      "when",
-      (propRefName,
-      (refValueFor, field) =>
-        refValueFor ? field.required().oneOf([yup.ref(propRefName)]) : field)
-    );
+        "when",
+        (propRefName,
+            (refValueFor, field) => {
+              const errorText = this.errMessages[this.key].refValueFor
+              if (errorText) {
+                return refValueFor ? field.required().oneOf([yup.ref(propRefName)], errorText) : field
+              }
+              return refValueFor ? field.required().oneOf([yup.ref(propRefName)]) : field
+            })
+    )
   }
 
   normalizeValues(values) {
