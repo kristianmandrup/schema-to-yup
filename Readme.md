@@ -446,8 +446,11 @@ The yup builder lets you supply a `dependenciesMap` on the `config` object where
 ```js
 const config = {
   dependenciesMap: {
-    root: ["a", "b", "c"],
-    b: ["a", "z"],
+    root: [
+      ["a", "b", "c"],
+      ["b", "c", "d"],
+    ],
+    b: [["a", "z"]],
   },
 };
 ```
