@@ -434,7 +434,24 @@ See the sample test case in `test/confirm-password.test.js`
 
 A sample implementation to support multi type constraints has been implemented in `MultiPropertyValueResolver`.
 
-To improve support this, pass a custom factory method `createMultiTypeValueResolver` on the `config` object and build on or improve the current implementation.
+To improve or customize support for this, you can pass a custom factory method `createMultiTypeValueResolver` on the `config` object and build on or improve the current implementation.
+
+## Avoiding cyclical dependencies
+
+The Yup validator may cause cyclical dependency error. This can be mitigated by supplying a deendencies array as decribed in this [Yup issue](https://github.com/jquense/yup/issues/176#issuecomment-369925782)
+
+The yup builder lets you supply a `dependenciesMap` on the `config` object where the key for each entry is the key of an object or `root` for the root schema object.
+
+It is currently implemented as follows in the `YupBuilder`
+
+```js
+  createDependenciesArray() {
+    const key = this.key || "root";
+    const dependenciesMap = this.config.dependenciesMap || {};
+    const dependencies = dependenciesMap[key] || [];
+    return dependencies;
+  }
+```
 
 ## 10. <a name='Custombuilder'></a>Custom builder
 

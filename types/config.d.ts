@@ -22,6 +22,7 @@ export interface YupBuilderConfig extends TypeHandlerConfig {
   isNumber?: (obj: any) => boolean;
   isObject?: (obj: any) => boolean;
   format?: boolean;
+  dependenciesMap?: object;
   schemaParserMap?: object;
   messages?: object;
   mode?: object;

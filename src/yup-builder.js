@@ -28,13 +28,15 @@ export class YupBuilder extends Base {
     this.schema = schema;
     const type = this.getType(schema);
     const props = this.getProps(schema);
-    this.parentNode = parentNode;
+    this.parentNode = parentNode || {};
+    this.key = this.parentNode.key;
     this.type = type;
     this.properties = {
       ...props,
     };
     this.additionalProps = this.getAdditionalProperties(schema);
     this.required = this.getRequired(schema);
+    this.dependenciesArray = this.createDependenciesArray() || [];
 
     this.setLocale();
 
@@ -63,6 +65,13 @@ export class YupBuilder extends Base {
     const shapeConfig = this.propsToShape({ properties, name, config });
     this.shapeConfig = shapeConfig;
     this.validSchema = true;
+  }
+
+  createDependenciesArray() {
+    const key = this.key || "root";
+    const dependenciesMap = this.config.dependenciesMap || {};
+    const dependencies = dependenciesMap[key] || [];
+    return dependencies;
   }
 
   get validator() {
@@ -95,7 +104,7 @@ export class YupBuilder extends Base {
   }
 
   get yupSchema() {
-    return yup.object().shape(this.shapeConfig);
+    return yup.object().shape(this.shapeConfig, this.dependenciesArray);
   }
 
   buildProperties() {
