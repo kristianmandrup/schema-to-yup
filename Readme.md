@@ -1,3 +1,7 @@
+# Schema to Yup schema
+
+Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
+
 <!-- vscode-markdown-toc -->
 
 - 1. [Schemas](#Schemas)
@@ -62,11 +66,7 @@
 	numbering=true
 	autoSave=true
 	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc --><!-- vscode-markdown-toc -->
-
-# Schema to Yup schema
-
-Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
+<!-- /vscode-markdown-toc -->
 
 ## 1. <a name='Schemas'></a>Schemas
 
@@ -442,6 +442,15 @@ To improve or customize support for this, you can pass a custom factory method `
 The Yup validator may cause cyclical dependency error. This can be mitigated by supplying a deendencies array as decribed in this [Yup issue](https://github.com/jquense/yup/issues/176#issuecomment-369925782)
 
 The yup builder lets you supply a `dependenciesMap` on the `config` object where the key for each entry is the key of an object or `root` for the root schema object.
+
+```js
+const config = {
+  dependenciesMap: {
+    root: ["a", "b", "c"],
+    b: ["a", "z"],
+  },
+};
+```
 
 It is currently implemented as follows in the `YupBuilder`
 
