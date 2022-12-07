@@ -600,9 +600,8 @@ class YupMixed extends Base {
   }
 
   nullable() {
-    const { nullable, isNullable } = this.constraints;
-    const value = nullable || isNullable;
-    this.addConstraint("nullable", { value, errName: "nullable" });
+    const nullable = this.value.nullable === true;
+    this.base = (nullable && this.base.nullable()) || this.base;
     return this;
   }
 
