@@ -1,50 +1,42 @@
 # Advanced config
 
-<!-- vscode-markdown-toc -->
+### GraphQL schema
 
-- 1. [Confirm password](#Confirmpassword)
-- 2. [Multi-type constraints](#Multi-typeconstraints)
-- 3. [Avoiding cyclical dependencies](#Avoidingcyclicaldependencies)
-- 4. [Custom builder](#Custombuilder)
-- 5. [Custom builder functions](#Custombuilderfunctions)
-  - 5.1. [Custom init](#Custominit)
-  - 5.2. [Custom buildProperties](#CustombuildProperties)
-  - 5.3. [Custom buildProp](#CustombuildProp)
-  - 5.4. [Custom setRequired](#CustomsetRequired)
-  - 5.5. [Custom setPropEntry](#CustomsetPropEntry)
-- 6. [Custom entry builders](#Customentrybuilders)
-  - 6.1. [Custom type handlers](#Customtypehandlers)
-    - 6.1.1. [Custom array type handler](#Customarraytypehandler)
-  - 6.2. [Additional type handlers](#Additionaltypehandlers)
-  - 6.3. [Custom constraint handler functions](#Customconstrainthandlerfunctions)
-    - 6.3.1. [Advanced custom constraint example](#Advancedcustomconstraintexample)
-  - 6.4. [Custom pipeline steps](#Custompipelinesteps)
-  - 6.5. [Custom constraint builder](#Customconstraintbuilder)
-- 7. [Supporting alternative validators](#Supportingalternativevalidators)
-- 8. [Conditional logic](#Conditionallogic)
-  - 8.1. [Customizing conditional logic](#Customizingconditionallogic)
-- 9. [Additional properties](#Additionalproperties)
-- 10. [Complex example](#Complexexample)
-  - 10.1. [Complex/Nested schemas](#ComplexNestedschemas)
-- 11. [Custom models](#Custommodels)
-  - 11.1. [GraphQL schema](#GraphQLschema)
-- 12. [Other/custom schema format support](#Othercustomschemaformatsupport)
-  - 12.1. [Custom logs and error handling](#Customlogsanderrorhandling)
-- 13. [Localized error messages](#Localizederrormessages)
-- 14. [Customization](#Customization)
-  - 14.1. [Customization example](#Customizationexample)
-  - 14.2. [Extend Yup API to bridge other validators](#ExtendYupAPItobridgeothervalidators)
-  - 14.3. [Subclassing](#Subclassing)
-  - 14.4. [Error messages](#Errormessages)
-  - 14.5. [Custom error functions](#Customerrorfunctions)
+GraphQL type definition exports using [graphSchemaToJson](https://github.com/kristianmandrup/graphSchemaToJson) (see [GraphQL schema](#graphql-schema)).
 
-<!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
+### Avro schema
 
-## 1. <a name='Confirmpassword'></a>Confirm password
+Recently basic [Avro](https://avro.apache.org/docs/current/spec.html) schema support has been added as well.
+
+### <a name='CustomAlternativeschemas'></a>Custom/Alternative schemas
+
+You can easily add support for your own custom schema formats.
+
+We also supports some extra convenience schema properties that make it more "smooth" to define validation requirements declaratively (see below).
+
+According to the JSON schema specs, you are free to add extra metadata to the field schema definitions beyond those supported "natively".
+
+## <a name='CustomAlternativevalidators'></a>Custom/Alternative validators
+
+You can supply your own pre-configured global Yup instance to be used as a base.
+
+You can also use the building blocks of this library to support alternative validators other than Yup.
+
+See [Supporting alternative validators](#supporting-alternative-validators)
+
+## <a name='Customizationhooks'></a>Customization hooks
+
+This library is built to be easy to customize or extend to suit individual developer needs.
+|Use any of the following customization hooks to add custom features, circumvent missing functionality or bugs or extend any way you see fit. You can even use these hooks to support a different validator library, leveraging the generic schema validator builder infrastructure.
+
+- [Custom builder](#custom-builder)
+- [Custom builder functions](#custom-builder-functions)
+- [entry builders](#custom-entry-builders)
+- [type handlers](#custom-type-handlers)
+- [constraint handler functions](#custom-constraint-handler-functions)
+- [constraint builder](#custom-constraint-builder)
+
+## <a name='Confirmpassword'></a>Confirm password
 
 You can use the special `refValue` constraint for password confirmation scenarios.
 
@@ -61,13 +53,13 @@ You can use the special `refValue` constraint for password confirmation scenario
 
 See the sample test case in `test/confirm-password.test.js`
 
-## 2. <a name='Multi-typeconstraints'></a>Multi-type constraints
+## <a name='Multi-typeconstraints'></a>Multi-type constraints
 
 A sample implementation to support multi type constraints has been implemented in `MultiPropertyValueResolver`.
 
 To improve or customize support for this, you can pass a custom factory method `createMultiTypeValueResolver` on the `config` object and build on or improve the current implementation.
 
-## 3. <a name='Avoidingcyclicaldependencies'></a>Avoiding cyclical dependencies
+## <a name='Avoidingcyclicaldependencies'></a>Avoiding cyclical dependencies
 
 The Yup validator may cause cyclical dependency error. This can be mitigated by supplying a deendencies array as decribed in this [Yup issue](https://github.com/jquense/yup/issues/176#issuecomment-369925782)
 
@@ -96,7 +88,7 @@ It is currently implemented as follows in the `YupBuilder`
   }
 ```
 
-## 4. <a name='Custombuilder'></a>Custom builder
+## <a name='Custombuilder'></a>Custom builder
 
 To customize the builder to suit your needs, simply subclass the `YupBuilder` class and create your own factory function which instantiates your subclass.
 
@@ -116,7 +108,7 @@ export function buildYup(schema, config = {}) {
 }
 ```
 
-## 5. <a name='Custombuilderfunctions'></a>Custom builder functions
+## <a name='Custombuilderfunctions'></a>Custom builder functions
 
 - `init`
 - `buildProperties`
@@ -124,7 +116,7 @@ export function buildYup(schema, config = {}) {
 - `setRequired`
 - `setPropEntry`
 
-### 5.1. <a name='Custominit'></a>Custom init
+### <a name='Custominit'></a>Custom init
 
 You can supply a custom `init` function on the `config` object to do custom initialization. The `init` function will be bound to the `YupBuilder` instance so that `this` returns the builder instance.
 
@@ -139,7 +131,7 @@ const yupSchema = buildYup(jsonSchema, {
 });
 ```
 
-### 5.2. <a name='CustombuildProperties'></a>Custom buildProperties
+### <a name='CustombuildProperties'></a>Custom buildProperties
 
 You can override the built-in `buildProperties` method (see code below) by supplying a custom `buildProperties` function on the `config` object.
 
@@ -151,7 +143,7 @@ You can override the built-in `buildProperties` method (see code below) by suppl
   }
 ```
 
-### 5.3. <a name='CustombuildProp'></a>Custom buildProp
+### <a name='CustombuildProp'></a>Custom buildProp
 
 You can override the built-in `buildProp` method (see code below) by supplying a custom `buildProp` function on the `config` object.
 
@@ -169,7 +161,7 @@ buildProp(propObj, key) {
   }
 ```
 
-### 5.4. <a name='CustomsetRequired'></a>Custom setRequired
+### <a name='CustomsetRequired'></a>Custom setRequired
 
 You can override the built-in `setRequired` method (see code below) by supplying a custom `setRequired` function on the `config` object.
 
@@ -185,7 +177,7 @@ You can override the built-in `setRequired` method (see code below) by supplying
   }
 ```
 
-### 5.5. <a name='CustomsetPropEntry'></a>Custom setPropEntry
+### <a name='CustomsetPropEntry'></a>Custom setPropEntry
 
 You can override the built-in `setPropEntry` method (see code below) by supplying a custom `setPropEntry` function on the `config` object.
 
@@ -199,7 +191,7 @@ You can override the built-in `setPropEntry` method (see code below) by supplyin
   }
 ```
 
-## 6. <a name='Customentrybuilders'></a>Custom entry builders
+## <a name='Customentrybuilders'></a>Custom entry builders
 
 You can pass in custom functions for the following kinds of type entry values
 
@@ -219,7 +211,7 @@ Each takes an instance `yupSchemaEntryBuilder` of `YupSchemaEntry`, which primar
 }
 ```
 
-### 6.1. <a name='Customtypehandlers'></a>Custom type handlers
+### <a name='Customtypehandlers'></a>Custom type handlers
 
 You can pass any custom type handlers in a `typeHandlers` object as part of the `config` object passes. See `setTypeHandlers()` and `get typeHandlers()` in `entry.js` for how this works internally.
 
@@ -283,7 +275,7 @@ You will need to at minimum implement a `validatorInstance` getter or property, 
   }
 ```
 
-#### 6.1.1. <a name='Customarraytypehandler'></a>Custom array type handler
+#### <a name='Customarraytypehandler'></a>Custom array type handler
 
 Currently this library has minimal support for the `array` type. To add better `array` type support, create a custom type handler for handling array types and use it as follows.
 
@@ -299,7 +291,7 @@ Use the `array.test.js` file for testing improved array support. Currently many 
 
 `$ npm test toYupArray`
 
-### 6.2. <a name='Additionaltypehandlers'></a>Additional type handlers
+### <a name='Additionaltypehandlers'></a>Additional type handlers
 
 In order to pass a a type handler map that does not rely on any built in type handlers, pass in a `types` object
 
@@ -324,7 +316,7 @@ To control which constraints are enabled (executed), simply edit the `typeEnable
 
 A simpler alternative is to add custom constraint functions to the handlers as described in the next section.
 
-### 6.3. <a name='Customconstrainthandlerfunctions'></a>Custom constraint handler functions
+### <a name='Customconstrainthandlerfunctions'></a>Custom constraint handler functions
 
 You can add custom constraint handler functions directly via the `config` object.
 This can be used to override built in constraints or extend with your own.
@@ -411,7 +403,7 @@ const mixed = {
 const yupSchema = buildYup(jsonSchema, { mixedEnabled }
 ```
 
-#### 6.3.1. <a name='Advancedcustomconstraintexample'></a>Advanced custom constraint example
+#### <a name='Advancedcustomconstraintexample'></a>Advanced custom constraint example
 
 ```js
 const oneOfConditional = (th) => {
@@ -464,7 +456,7 @@ const mixed = {
 };
 ```
 
-### 6.4. <a name='Custompipelinesteps'></a>Custom pipeline steps
+### <a name='Custompipelinesteps'></a>Custom pipeline steps
 
 The conversion pipeline supports pre and post processing to allow for custom functionality, such as preparing or overriding the built-in convert or circumvent bugs.
 
@@ -487,7 +479,7 @@ const config = {
 };
 ```
 
-### 6.5. <a name='Customconstraintbuilder'></a>Custom constraint builder
+### <a name='Customconstraintbuilder'></a>Custom constraint builder
 
 This library supports using a custom constraint builder to add and build constraints. All factories are initialized in `initHelpers` and executed as the first step of `convert` (see `mixed.js`)
 
@@ -535,7 +527,7 @@ const config = {
 buildYup(jsonSchema, config);
 ```
 
-## 7. <a name='Supportingalternativevalidators'></a>Supporting alternative validators
+## <a name='Supportingalternativevalidators'></a>Supporting alternative validators
 
 Supply a `validator` instance (or getter function) on the `config` object which returns an instance of the validator you wish to use.
 
@@ -624,7 +616,7 @@ So you can access a `validator` instance set in the builder via `this.entryHandl
 
 Then do further customizations as needed.
 
-## 8. <a name='Conditionallogic'></a>Conditional logic
+## <a name='Conditionallogic'></a>Conditional logic
 
 Basic support for [when conditions](https://github.com/jquense/yup#mixedwhenkeys-string--arraystring-builder-object--value-schema-schema-schema) as requested and outlined in [this issue](https://github.com/kristianmandrup/schema-to-yup/issues/14) is now included.
 
@@ -704,7 +696,7 @@ The best and easiest way to do this is to extend the `WhenCondition` class which
 
 See the `src/conditions/legacy` folder for the legacy `1.9.0` logic that works but has limited functionality.
 
-## 9. <a name='Additionalproperties'></a>Additional properties
+## <a name='Additionalproperties'></a>Additional properties
 
 Currently this library does not have built-in support for the `additionalProperties` feature of JSON schema as described [here](https://json-schema.org/understanding-json-schema/reference/object.html)
 
@@ -740,7 +732,7 @@ class YupBuilderWithSupportForAdditionalProperties extends YupBuilder {
 
 See the issue for ideas and hints on how to achieve support for this.
 
-## 10. <a name='Complexexample'></a>Complex example
+## <a name='Complexexample'></a>Complex example
 
 Here a more complete example of the variations currently possible
 
