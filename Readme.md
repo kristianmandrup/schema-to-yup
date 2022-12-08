@@ -100,7 +100,11 @@ According to the JSON schema specs, you are free to add extra metadata to the fi
 
 ## 2. <a name='CustomAlternativevalidators'></a>Custom/Alternative validators
 
-You can use the building blocks of this library to support alternative validators other than Yup. See [Supporting alternative validators](#supporting-alternative-validators)
+You can supply your own pre-configured global Yup instance to be used as a base.
+
+You can also use the building blocks of this library to support alternative validators other than Yup.
+
+See [Supporting alternative validators](#supporting-alternative-validators)
 
 ## 3. <a name='Customizationhooks'></a>Customization hooks
 
