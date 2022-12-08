@@ -75,7 +75,7 @@ export class YupBuilder extends Base {
   }
 
   get validator() {
-    return yup;
+    return this.config.validator || yup;
   }
 
   setLocale() {

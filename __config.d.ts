@@ -24,6 +24,7 @@ export interface YupBuilderConfig extends TypeHandlerConfig {
   format?: boolean;
   dependenciesMap?: object;
   schemaParserMap?: object;
+  validator?: object;
   messages?: object;
   mode?: object;
   mixedEnabled?: object;
