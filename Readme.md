@@ -233,7 +233,7 @@ Currently the following schema types are supported:
 - `notRequired`
 - `oneOf` (`enum`, `anyOf`)
 - `notOneOf`
-- `refValue` for confirm password scenario
+- `refValueFor` for confirm password scenario
 - `when`
 - `isType`
 - `nullable` (`isNullable`)
