@@ -48,7 +48,7 @@ export class PropertyValueResolver extends BasePropertyValueResolver {
   toMultiType() {
     const resolve =
       this.config.toMultiType ||
-      this.singleTypeResolver.resolve.bind(this.singleTypeResolver);
+      this.multiTypeResolver.resolve.bind(this.multiTypeResolver);
     return resolve(this);
   }
 
