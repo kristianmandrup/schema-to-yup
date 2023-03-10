@@ -355,7 +355,3 @@ Please feel free to come with ideas and suggestions on how to further improve th
 ## <a name='Author'></a>Author
 
 2018 Kristian Mandrup (CTO@Tecla5)
-
-## 14. <a name='License'></a>License
-
-MIT
