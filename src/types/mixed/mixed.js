@@ -321,7 +321,7 @@ class YupMixed extends Base {
     );
     if (constraint) {
       const { base } = constraint;
-      this.base = base;
+      this.base = base || constraint;
     }
     return this;
   }
