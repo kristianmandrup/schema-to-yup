@@ -169,3 +169,65 @@ test("yup validates invalid url to return false", () => {
   });
   expect(valid).toBe(false);
 });
+
+describe("nullable", () => {
+
+  const schemaNullable = {
+    title: "users",
+    type: "object",
+    required: ["id"],
+    properties: {
+      username: { type: "string", nullable: true },
+      id: { type: "string", minLength: 2, maxLength: 4 }
+    }
+  };
+  
+  const schemaNotNullable = {
+    title: "users",
+    type: "object",
+    required: ["id"],
+    properties: {
+      username: { type: "string", nullable: false },
+      id: { type: "string", minLength: 2, maxLength: 4 }
+    }
+  };
+
+  test("yup validates nullable username to return true", () => {
+    const yupSchema = buildYup(schemaNullable);
+    const valid = yupSchema.isValidSync({
+      username: null,
+      id: "abc",
+    });
+    expect(valid).toBe(true);
+  });
+  
+  test("yup validates nullable username with not nullable schema to return false", () => {
+    const yupSchema = buildYup(schemaNotNullable);
+    const valid = yupSchema.isValidSync({
+      username: null,
+      id: "abc",
+    });
+    expect(valid).toBe(false);
+  });
+
+
+  test("yup validates no username to return true", () => {
+    const yupSchema = buildYup(schemaNullable);
+    const valid = yupSchema.isValidSync({
+      id: "abc",
+    });
+    expect(valid).toBe(true);
+  });
+  
+  test("yup validates username with chars to return true", () => {
+    const yupSchema = buildYup(schemaNullable);
+    const valid = yupSchema.isValidSync({
+      username: "a",
+      id: "abc",
+    });
+    expect(valid).toBe(true);
+  });
+  
+
+})
+
