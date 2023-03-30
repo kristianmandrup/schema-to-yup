@@ -27,6 +27,7 @@ export class YupString extends YupMixed {
   get typeEnabled() {
     return [
       "normalize",
+      "trim",
       "minLength",
       "maxLength",
       "pattern",
