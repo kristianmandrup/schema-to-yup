@@ -1,22 +1,72 @@
 const { buildYup } = require("../src");
 
-const invalidjson = {
+const schema = {
   title: "users",
   type: "object",
-  required: ["username", "first_name", "last_name", "id_number"],
+  required: ["id"],
   properties: {
-    username: { type: "string", required: true },
-    first_name: { type: "string", required: true },
-    last_name: { type: "string", required: true },
-    id_number: { type: "string", minLength: 12, maxLength: 13, required: true }
+    username: { type: "string" },
+    id: { type: "string", minLength: 2, maxLength: 4, required: true }
   }
 };
-test("yup validates invalid json to return false", () => {
-  const yupSchema = buildYup(invalidjson);
+
+const config = {
+  explNotRequired: { 
+      mode: {
+        notRequired: true, // default setting
+      }
+  },  
+  explRequired: { 
+    mode: {
+      notRequired: false, // default setting
+    }
+  },  
+}
+
+test("yup validates invalid username and missing id to return false", () => {
+  const yupSchema = buildYup(schema);
   const valid = yupSchema.isValidSync({
     username: 123,
     foo: "bar",
     erm: ["this", "that"]
+  });
+  expect(valid).toBe(false);
+});
+
+test("yup validates only id present and valid to return true", () => {
+  const yupSchema = buildYup(schema);
+  const valid = yupSchema.isValidSync({
+    username: "a",
+    id: "abc",
+  });
+  expect(valid).toBe(true);
+});
+
+
+test("yup validates only id present and valid and props default mode for required to return true", () => {
+  const yupSchema = buildYup(schema);
+  // console.info('mode: default', yupSchema.fields.username)
+  const valid = yupSchema.isValidSync({
+    id: "abc",
+  });
+  expect(valid).toBe(true);
+});
+
+
+test("yup validates only id present and valid and props expl not required to return true", () => {
+  const yupSchema = buildYup(schema, config.explNotRequired);
+  // console.info('mode: not required', yupSchema.fields.username)
+  const valid = yupSchema.isValidSync({
+    id: "abc",
+  });
+  expect(valid).toBe(true);
+});
+
+test("yup validates only id present and valid and props expl required to return false", () => {
+  const yupSchema = buildYup(schema, config.explRequired);
+  // console.info('mode: required', yupSchema.fields.username)
+  const valid = yupSchema.isValidSync({
+    id: "abc",
   });
   expect(valid).toBe(false);
 });
