@@ -129,19 +129,28 @@ class YupMixed extends Base {
     return !!this.disableFlags.find((disable) => modeEntry === disable);
   }
 
+  modeIsSet(modeName) {
+    return this.mode[modeName] !== undefined;
+  }
+
+  modeIsNotSet(modeName) {
+    return this.mode[modeName] === undefined;
+  }
+
   enabledMode(modeName) {
     const modeEntry = this.mode[modeName];
     return !!this.enableFlags.find((disable) => modeEntry === disable);
   }
 
   get shouldPreProcessValue() {
-    return !this.disabledMode("notRequired");
+    const notRequired = this.enabledMode("notRequired") || this.modeIsNotSet("notRequired");
+    return notRequired
   }
 
   preProcessedConstraintValue(value) {
     if (!this.shouldPreProcessValue) return value;
-
-    if (!this.isRequired(value)) {
+    const isExplRequired = this.isRequired(value)
+    if (!isExplRequired) {
       return {
         ...value,
         notRequired: true,
