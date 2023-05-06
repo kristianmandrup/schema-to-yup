@@ -10,7 +10,7 @@ export class ErrorMessageHandler extends TypeMatcher {
   init() {
     const { typeHandler } = this;
     this.constraints = typeHandler.constraints;
-    this.errMessages = typeHandler.errMessages
+    this.errMessages = typeHandler.errMessages;
     this.key = typeHandler.key;
     this.value = typeHandler.value; // raw type constraints
     this.constraints = typeHandler.constraints; // type constraints (possibly filtered)
