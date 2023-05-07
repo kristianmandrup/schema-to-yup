@@ -38,11 +38,10 @@ export class ErrorMessageHandler extends TypeMatcher {
   setErrMessage() {
     const { typeHandler } = this;
     const { value } = typeHandler;
-    if (!value.errMessage) return;
+    if (!value.errMessage && !value.errMessages) return;
     const valueKey = this.errMessageKey;
-    const errMessageMap = this.errMessageMap(value);
-    errMessageMap[this.key] = value[valueKey] || errMessageMap[this.key];
-    return this;
+    this.errMessages = value[valueKey] || {[this.key]: this.errMessageMap(value)};
+    return;
   }
 
   validationErrorMessage(msgName) {
