@@ -40,7 +40,7 @@ export class ErrorMessageHandler extends TypeMatcher {
     const { value } = typeHandler;
     if (!value.errMessage && !value.errMessages) return;
     const valueKey = this.errMessageKey;
-    this.errMessages = { [this.key]: this.errMessageMap(value)};
+    this.errMessages = value[valueKey] || {[this.key]: this.errMessageMap(value)};
     return;
   }
 
