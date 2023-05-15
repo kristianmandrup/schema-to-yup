@@ -111,6 +111,11 @@ export class YupBuilder extends Base {
     return Object.keys(this.properties);
   }
 
+  propKeysFor(key) {
+    const keyPropsObj = keyValue(key);
+    return Object.keys(keyPropsObj);
+  }
+
   buildProperties() {
     const propKeys = this.propKeys;
     const buildProp = (this.config.buildProp || this.buildProp).bind(this);
