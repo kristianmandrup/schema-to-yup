@@ -107,8 +107,12 @@ export class YupBuilder extends Base {
     return yup.object().shape(this.shapeConfig, this.dependenciesArray);
   }
 
+  get propKeys() {
+    return Object.keys(this.properties);
+  }
+
   buildProperties() {
-    const propKeys = Object.keys(this.properties);
+    const propKeys = this.propKeys;
     const buildProp = (this.config.buildProp || this.buildProp).bind(this);
     return propKeys.reduce(buildProp, {});
   }
@@ -117,8 +121,12 @@ export class YupBuilder extends Base {
     return Array.isArray(this.required) ? [...this.required] : [];
   }
 
+  keyValue(key) {
+    return this.properties[key]
+  }
+
   buildProp(propObj, key) {
-    const value = this.properties[key];
+    const value = this.keyValue(key);
     const required = this.getRequiredPropsList();
     const setRequired = (this.config.setRequired || this.setRequired).bind(
       this
