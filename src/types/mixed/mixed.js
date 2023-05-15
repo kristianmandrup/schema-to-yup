@@ -219,6 +219,7 @@ class YupMixed extends Base {
         "label",
         "const",
         "refValueFor",
+        "typeError",
       ]
     );
   }
@@ -373,6 +374,16 @@ class YupMixed extends Base {
       simple: ["default", "required", "notRequired", "nullable"],
       trueValue: ["strict"],
     };
+  }
+
+  typeError() {
+    let propTypeError = this.constraints.typeError;
+    if (this.isNothing(propTypeError)) return this;
+    this.logInfo("typeError", { propTypeError });
+    return this.apply(
+      "typeError",
+      propTypeError
+    )
   }
 
   refValueFor() {

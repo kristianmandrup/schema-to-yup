@@ -234,6 +234,7 @@ Currently the following schema types are supported:
 - `oneOf` (`enum`, `anyOf`)
 - `notOneOf`
 - `refValueFor` for confirm password scenario
+- `typeError` custom type error message
 - `when`
 - `isType`
 - `nullable` (`isNullable`)
