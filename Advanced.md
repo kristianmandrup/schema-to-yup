@@ -1482,3 +1482,36 @@ The following constraint classes are available for use:
 Currently only `YupNumber` has been (partly) refactored to take advantage of this new infrastructure. Please help refactor the rest!
 
 `YupNumber` also has the most unit test coverage, used to test the current infrastructure!
+
+## Typings
+
+Typings are available in the `types` folder
+
+Generate typings
+
+```bash
+npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types
+```
+
+## Development
+
+### Build and Sample run
+
+`$ yarn run build`
+
+Sample runs (uses built file in `dist`)
+
+`node sample-runs/person-schema.mjs`
+
+This sample run is configured with detailed logging in the `config` object:
+
+```js
+{
+  logging: true,
+  logDetailed: [{
+    propName: 'exclusiveMinimum',
+    key: 'age'
+  }]
+}
+```
+

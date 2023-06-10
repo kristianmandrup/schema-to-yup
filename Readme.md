@@ -3,18 +3,7 @@
 Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
 See [Advanced config](./Advanced.md) for all the more advanced configuration options available to customize this builder to support any of your requirements.
-
-## <a name='Schemas'></a>Schemas
-
-- JSON
-- GraphQL
-- Avro
-- Custom
-
 ### <a name='JSONschema'></a>JSON schema
-
-- [AJV: JSON Schema keywords](https://ajv.js.org/keywords.html)
-- [Learn JsonSchema](https://cswr.github.io/JsonSchema/)
 
 The builder currently supports the most commonly used [JSON Schema layout](https://json-schema.org/)
 
@@ -22,35 +11,7 @@ To support other schemas see [Advanced config](./Advanced.md)
 
 ## <a name='TypescriptandTypings'></a>Typescript and Typings
 
-Typings are available in the `types` folder
-
-Generate typings
-
-```bash
-npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types
-```
-
 You can use the `YupBuilderConfig` and `TypeHandlerConfig` type interfaces to facilitate building up the `config` object to pass to the `YupBuilder`.
-
-## <a name='BuildandSamplerun'></a>Build and Sample run
-
-`$ yarn run build`
-
-Sample runs (uses built file in `dist`)
-
-`node sample-runs/person-schema.mjs`
-
-This sample run is configured with detailed logging in the `config` object:
-
-```js
-{
-  logging: true,
-  logDetailed: [{
-    propName: 'exclusiveMinimum',
-    key: 'age'
-  }]
-}
-```
 
 ## <a name='Quickstart'></a>Quick start
 
@@ -58,7 +19,7 @@ Install
 
 `npm install schema-to-yup -S` or `yarn add schema-to-yup`
 
-Use
+Create a JSON schema to validate against
 
 ```js
 const schema = {
@@ -96,7 +57,11 @@ const schema = {
   },
   required: ["name", "email"],
 };
+```
 
+Create a `config` object to configure details of your validation
+
+```ts
 const config = {
   // for error messages...
   errMessages: {
@@ -109,9 +74,18 @@ const config = {
     },
   },
 };
+```
 
+Create the yup schema using the builder method `buildYup`
+
+```ts
 const { buildYup } = require("schema-to-yup");
 const yupSchema = buildYup(schema, config);
+```
+
+Use the yup schema methods such as `isValid` to validate
+
+```ts
 // console.dir(schema)
 const valid = await yupSchema.isValid({
   name: "jimmy",
@@ -124,16 +98,15 @@ console.log({
 // => {valid: true}
 ```
 
-This would generate the following Yup validation schema:
+The above example would generate the following sort of Yup validation schema:
 
 ```js
 const schema = yup.object().shape({
   name: yup.string().required(),
   age: yup.number().required().positive(),
+  // ...
 });
 ```
-
-Note the `"required": true` for the `age` property (not natively supported by JSON schema).
 
 ### <a name='Refs'></a>Refs
 
