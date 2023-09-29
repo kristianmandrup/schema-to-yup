@@ -123,3 +123,31 @@ test("yup uses custom error message function", () => {
   }
   expect(valid).toBe("Pattern must be /(foo|bar)/ for amazonas");
 });
+
+test("yup uses custom error message for `typeError`", () => {
+  const schema = {
+    title: "users",
+    type: "object",
+    required: ["someNumber"],
+    properties: {
+      someNumber: { type: "number" },
+    },
+  };
+  const invalidTypeMessage = "type is invalid";
+
+  const config = {
+    someNumber: {
+      required: "is required",
+      typeError: invalidTypeMessage,
+    },
+  };
+  try {
+    const yupSchema = buildYup(schema, config);
+    valid = yupSchema.validateSync({
+      someNumber: "asda",
+    });
+  } catch (e) {
+    valid = e.errors[0];
+  }
+  expect(valid).toBe(invalidTypeMessage);
+});
