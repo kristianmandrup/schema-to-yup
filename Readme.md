@@ -3,6 +3,7 @@
 Build a Yup schema from a JSON Schema, GraphQL schema (type definition) or any other similar type/class and field/properties model or schema :)
 
 See [Advanced config](./Advanced.md) for all the more advanced configuration options available to customize this builder to support any of your requirements.
+
 ### <a name='JSONschema'></a>JSON schema
 
 The builder currently supports the most commonly used [JSON Schema layout](https://json-schema.org/)
@@ -207,7 +208,7 @@ Currently the following schema types are supported:
 - `oneOf` (`enum`, `anyOf`)
 - `notOneOf`
 - `refValueFor` for confirm password scenario
-- `typeError` custom type error message
+- `typeError` custom type error message (in config)
 - `when`
 - `isType`
 - `nullable` (`isNullable`)

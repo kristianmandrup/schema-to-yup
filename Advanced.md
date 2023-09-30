@@ -1000,6 +1000,24 @@ const schemaEntry = this.createYupSchemaEntry(schemaConf);
 this.logTypeInfo("array:of", { schemaEntry });
 ```
 
+You can also define custom Yup `typeError`s in the config object (see [ticket #146](https://github.com/kristianmandrup/schema-to-yup/issues/146#issuecomment-1740510484)).
+Currently there is basic support for supplying a custom `typeError` error entry per key.
+
+```json
+{
+  "errors": {
+    "summary": {
+      "typeError": "Summary must be a number",
+      "required": "This field cannot be empty"
+    },
+    "description": {
+      "required": "This field cannot be empty",
+      "minLength": "Summary must be at leas 5 characters"
+    }
+  }
+}
+```
+
 ## 13. <a name='Localizederrormessages'></a>Localized error messages
 
 You can specify the locale to use in the `config` object.
@@ -1514,4 +1532,3 @@ This sample run is configured with detailed logging in the `config` object:
   }]
 }
 ```
-

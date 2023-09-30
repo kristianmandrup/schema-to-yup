@@ -377,12 +377,13 @@ class YupMixed extends Base {
     };
   }
 
-  get configEntry() {
-    return this.config[this.key] || {};
+  get configErrorEntry() {
+    if (!this.config.errors) return {};
+    return this.config.errors[this.key] || {};
   }
 
   typeError() {
-    let configTypeError = this.configEntry.typeError;
+    let configTypeError = this.configErrorEntry.typeError;
     if (this.isNothing(configTypeError)) return this;
     this.logInfo("typeError", { configTypeError });
     return this.apply("typeError", configTypeError);
