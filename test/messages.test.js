@@ -125,6 +125,7 @@ test("yup uses custom error message function", () => {
 });
 
 test("yup uses custom error message for `typeError`", () => {
+  const invalidTypeMessage = "type is invalid";
   const schema = {
     title: "users",
     type: "object",
@@ -132,26 +133,28 @@ test("yup uses custom error message for `typeError`", () => {
     properties: {
       someNumber: { type: "number" },
       someNotNan: { type: "integer" },
-      someString: { type: "string" },
+      someString: {
+        type: "string",
+        errMessages: {
+          typeError: invalidTypeMessage,
+        },
+      },
     },
   };
-  const invalidTypeMessage = "type is invalid";
 
   const config = {
     errMessages: {
       someNumber: {
+        typeError: invalidTypeMessage,
+      },
+      someNotNan: {
         typeError: () => {
           return invalidTypeMessage;
         },
       },
-      someNotNan: {
-        typeError: invalidTypeMessage,
-      },
-      someString: {
-        typeError: invalidTypeMessage,
-      },
     },
   };
+
   try {
     const yupSchema = buildYup(schema, config);
     valid = yupSchema.validateSync(
