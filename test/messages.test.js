@@ -131,23 +131,41 @@ test("yup uses custom error message for `typeError`", () => {
     required: ["someNumber"],
     properties: {
       someNumber: { type: "number" },
+      someNotNan: { type: "integer" },
+      someString: { type: "string" },
     },
   };
   const invalidTypeMessage = "type is invalid";
 
   const config = {
-    someNumber: {
-      required: "is required",
-      typeError: invalidTypeMessage,
+    errMessages: {
+      someNumber: {
+        typeError: () => {
+          return invalidTypeMessage;
+        },
+      },
+      someNotNan: {
+        typeError: invalidTypeMessage,
+      },
+      someString: {
+        typeError: invalidTypeMessage,
+      },
     },
   };
   try {
     const yupSchema = buildYup(schema, config);
-    valid = yupSchema.validateSync({
-      someNumber: "asda",
-    });
+    valid = yupSchema.validateSync(
+      {
+        someNumber: "asda",
+        someNotNan: "1.2.31",
+        someString: {},
+      },
+      { abortEarly: false }
+    );
   } catch (e) {
-    valid = e.errors[0];
+    valid = e.errors;
   }
-  expect(valid).toBe(invalidTypeMessage);
+  expect(valid[0]).toBe(invalidTypeMessage);
+  expect(valid[1]).toBe(invalidTypeMessage);
+  expect(valid[2]).toBe(invalidTypeMessage);
 });
