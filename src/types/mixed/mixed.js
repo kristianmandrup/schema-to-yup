@@ -216,6 +216,7 @@ class YupMixed extends Base {
         "notOneOf",
         "when",
         "nullable",
+        "notNullable",
         "isType",
         "label",
         "const",
@@ -617,8 +618,16 @@ class YupMixed extends Base {
     return this;
   }
 
+  // see https://github.com/jquense/yup/issues/500#issuecomment-486748844
+  notNullable() {
+    const notNullable =
+      this.value.nullable === false || this.value.null === false;
+    this.base = (notNullable && this.base.nonNullable()) || this.base;
+    return this;
+  }
+
   nullable() {
-    const nullable = this.value.nullable === true;
+    const nullable = this.value.nullable === true || this.value.null === true;
     this.base = (nullable && this.base.nullable()) || this.base;
     return this;
   }

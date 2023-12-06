@@ -1,41 +1,46 @@
 const { toYupNumber, toYupNumberSchemaEntry, yup } = require("./_imports");
 
-const isInteger = fieldDef =>
+const isInteger = (fieldDef) =>
   fieldDef && (fieldDef.type === "int" || fieldDef.type === "integer");
 
-const isNumber = fieldDef =>
+const isNumber = (fieldDef) =>
   fieldDef && (fieldDef.type === "number" || isInteger(fieldDef));
 
 const config = { isNumber, isInteger };
 
-const createNum = value => {
+const createNum = (value) => {
   const obj = { value, config, key: "value", type: "number" };
   return toYupNumber(obj, config);
 };
 
-const createEntry = fieldDef => {
+const createEntry = (fieldDef) => {
   const obj = fieldDef instanceof Object ? { ...fieldDef, config } : fieldDef;
   return toYupNumberSchemaEntry(obj, config);
 };
 
-const createNumEntry = value => {
+const createNumEntry = (value) => {
   const obj = { value, config, key: "value", type: "number" };
   return toYupNumberSchemaEntry(obj, config);
 };
 
-const createIntEntry = value => {
-  const obj = { value, config, key: "value", type: "int" };
+const createIntEntry = (value, opts = {}) => {
+  const obj = { value, config, key: "value", type: "int", ...opts };
   return toYupNumberSchemaEntry(obj, config);
 };
 
-const createNumNoKeyEntry = value => {
+const createIntegerEntry = (value, opts = {}) => {
+  const obj = { value, config, key: "value", type: "integer", ...opts };
+  return toYupNumberSchemaEntry(obj, config);
+};
+
+const createNumNoKeyEntry = (value) => {
   const obj = { value, config, type: "number" };
   return toYupNumberSchemaEntry(obj, config);
 };
 
-const createSchema = value => {
+const createSchema = (value) => {
   return yup.object().shape({
-    value
+    value,
   });
 };
 
@@ -44,9 +49,11 @@ module.exports = {
   createEntry,
   createNumEntry,
   createIntEntry,
+  createIntegerEntry,
+  createIntegerMinEntry,
   createNumNoKeyEntry,
   createSchema,
   isInteger,
   isNumber,
-  config
+  config,
 };

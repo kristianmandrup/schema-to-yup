@@ -1,19 +1,28 @@
 import { TypeMatcher } from "./types/_type-matcher";
-import * as Yup from 'yup'
+import * as Yup from "yup";
 export class ConstraintBuilder extends TypeMatcher {
   constructor(typeHandler, config = {}) {
     super(config);
-    this.typeHandler = typeHandler
-    this.type = typeHandler.type
-    this.builder = typeHandler.builder
+    this.typeHandler = typeHandler;
+    this.type = typeHandler.type;
+    this.builder = typeHandler.builder;
     this.constraintsAdded = {};
-    this.delegators.map(name => {
+    this.delegators.map((name) => {
       this[name] = typeHandler[name];
     });
   }
 
   get delegators() {
-    return ["errMessages", "base", "key", "type", "constraints", "errorMessageHandler", "logInfo", "warn"];
+    return [
+      "errMessages",
+      "base",
+      "key",
+      "type",
+      "constraints",
+      "errorMessageHandler",
+      "logInfo",
+      "warn",
+    ];
   }
 
   build(propName, opts = {}) {
@@ -25,20 +34,26 @@ export class ConstraintBuilder extends TypeMatcher {
       yup,
       value,
       values,
-      errName
+      errName,
     } = opts;
-    yup = yup || this.base; 
+    yup = yup || this.base;
 
-    // find the first value that is present (must not be undefined or null)   
-    const potentialValues = [constraintValue, propValue, this.constraints[propName]];
-    constraintValue = this.getFirstValue(potentialValues)
-      
+    // find the first value that is present (must not be undefined or null)
+    const potentialValues = [
+      constraintValue,
+      propValue,
+      this.constraints[propName],
+    ];
+    constraintValue = this.getFirstValue(potentialValues);
+
     constraintName = constraintName || propName;
     method = method || constraintName;
-    this.idObj = {propName, method, constraintName, key: this.key}
+    this.idObj = { propName, method, constraintName, key: this.key };
 
-    this.logDetailed("build", opts, { resolved: { constraintValue, constraintName}})
-  
+    this.logDetailed("build", opts, {
+      resolved: { constraintValue, constraintName },
+    });
+
     // this.logInfo("build", { opts, constraintValue })
 
     if (this.isNothing(constraintValue)) {
@@ -65,19 +80,22 @@ export class ConstraintBuilder extends TypeMatcher {
       constraintName,
       yup,
       constraintFn,
-      errFn
+      errFn,
     };
 
     const constrainFnNames = [
       "multiValueConstraint",
       "presentConstraintValue",
-      "nonPresentConstraintValue"
+      "nonPresentConstraintValue",
     ];
     let newBase;
-    const type = this.type
+    const type = this.type;
     for (let name of constrainFnNames) {
-      const fnName = this[name].bind(this)
-      const constrValue = this.getFirstValue([value, values, constraintValue], {constraintName, type})
+      const fnName = this[name].bind(this);
+      const constrValue = this.getFirstValue([value, values, constraintValue], {
+        constraintName,
+        type,
+      });
       newBase = fnName(constrValue, constrOpts);
       if (newBase) break;
     }
@@ -95,25 +113,25 @@ export class ConstraintBuilder extends TypeMatcher {
 
   yupRefMap() {
     return {
-      "string": ["length", "min", "max"],
-      "number": ["min", "max", "lessThan", "moreThan"],
-      "date": ["min", "max"],
-      "array": ["length", "min", "max"],
-    }
+      string: ["length", "min", "max"],
+      number: ["min", "max", "lessThan", "moreThan"],
+      date: ["min", "max"],
+      array: ["length", "min", "max"],
+    };
   }
 
   getFirstValue(potentialValues, opts = {}) {
-    const {constraintName, type} = opts
-    const isDefined = this.isPresent.bind(this)
-    const yupRefConstraints = this.yupRefMap[type]
-    const value = potentialValues.filter(isDefined)[0]
+    const { constraintName, type } = opts;
+    const isDefined = this.isPresent.bind(this);
+    const yupRefConstraints = this.yupRefMap[type];
+    const value = potentialValues.filter(isDefined)[0];
     if (yupRefConstraints) {
-      const useYupRef = yupRefConstraints.includes(constraintName)
+      const useYupRef = yupRefConstraints.includes(constraintName);
       if (useYupRef && this.isStringType(value)) {
-        return Yup.ref(value)
-      }        
-    }    
-    return value
+        return Yup.ref(value);
+      }
+    }
+    return value;
   }
 
   nonPresentConstraintValue(
@@ -121,9 +139,12 @@ export class ConstraintBuilder extends TypeMatcher {
     { constraintName, constraintFn, errFn }
   ) {
     if (this.isPresent(constraintValue)) return;
-    this.logInfo("nonPresentConstraintValue", { constraintValue })
+    this.logInfo("nonPresentConstraintValue", { constraintValue });
 
-    this.onConstraintAdded({ method: 'nonPresentConstraintValue', name: constraintName });
+    this.onConstraintAdded({
+      method: "nonPresentConstraintValue",
+      name: constraintName,
+    });
 
     const newBase = constraintFn(errFn);
     return newBase;
@@ -134,19 +155,29 @@ export class ConstraintBuilder extends TypeMatcher {
     { constraintName, constraintFn, errFn }
   ) {
     if (!this.isPresent(constraintValue)) {
-      this.logInfo("presentConstraintValue: value not present", { constraintName, constraintValue })
+      this.logInfo("presentConstraintValue: value not present", {
+        constraintName,
+        constraintValue,
+      });
       return;
     }
-    this.logInfo("presentConstraintValue", { constraintName, constraintValue })
+    this.logInfo("presentConstraintValue", { constraintName, constraintValue });
 
-    this.onConstraintAdded({ method: 'presentConstraintValue', name: constraintName, value: constraintValue });
+    this.onConstraintAdded({
+      method: "presentConstraintValue",
+      name: constraintName,
+      value: constraintValue,
+    });
 
     if (this.isNoValueConstraint(constraintName)) {
-      this.logInfo("isNoValueConstraint", { constraintName })
+      this.logInfo("isNoValueConstraint", { constraintName });
       let specialNewBase = constraintFn(errFn);
       return specialNewBase;
     }
-    this.logInfo("presentConstraintValue: apply validator function", { constraintName, constraintValue })
+    this.logInfo("presentConstraintValue: apply validator function", {
+      constraintName,
+      constraintValue,
+    });
     const newBase = constraintFn(constraintValue, errFn);
     return newBase;
   }
@@ -154,15 +185,22 @@ export class ConstraintBuilder extends TypeMatcher {
   multiValueConstraint(values, { constraintFn, constraintName, errFn }) {
     if (!this.isPresent(values)) return;
 
-    this.logInfo("multiValueConstraint", { constraintName, values })    
+    this.logInfo("multiValueConstraint", { constraintName, values });
     // call yup constraint function with multiple arguments
     if (!Array.isArray(values)) {
       this.warn("buildConstraint: values option must be an array of arguments");
       return;
     }
 
-    this.onConstraintAdded({ method: 'multiValueConstraint', name: constraintName, value: values });
-    this.logInfo("multiValueConstraint: apply validator function", { constraintName, value: values })
+    this.onConstraintAdded({
+      method: "multiValueConstraint",
+      name: constraintName,
+      value: values,
+    });
+    this.logInfo("multiValueConstraint: apply validator function", {
+      constraintName,
+      value: values,
+    });
 
     return this.callConstraintFn(constraintFn, constraintName, values, errFn);
   }
@@ -181,7 +219,7 @@ export class ConstraintBuilder extends TypeMatcher {
   get multiArgsValidatorMethods() {
     return (
       this.config.multiArgsValidatorMethods || {
-        when: true
+        when: true,
       }
     );
   }
@@ -198,7 +236,7 @@ export class ConstraintBuilder extends TypeMatcher {
     return this.addConstraint(propName, {
       constraintName,
       value: true,
-      errName
+      errName,
     });
   }
 
@@ -206,8 +244,6 @@ export class ConstraintBuilder extends TypeMatcher {
     const constraint = this.build(propName, opts);
     if (constraint) {
       this.typeHandler.base = constraint;
-      // const { _whitelist } = constraint;
-      // const list = _whitelist && _whitelist.list;
       return constraint;
     }
     return false;
@@ -216,24 +252,24 @@ export class ConstraintBuilder extends TypeMatcher {
   onConstraintAdded({ method, name, value }) {
     this.constraintsAdded[name] = value;
     if (!this.builder) {
-      this.logInfo('no builder set to notify in ConstraintBuilder')
-      return
+      this.logInfo("no builder set to notify in ConstraintBuilder");
+      return;
     }
-    this.builder.onConstraintAdded({ type: this.type, method, name, value })
+    this.builder.onConstraintAdded({ type: this.type, method, name, value });
     return this.typeHandler;
   }
 
   get constraintsMap() {
     return {
       simple: ["required", "notRequired", "nullable"],
-      value: ["default", "strict"]
+      value: ["default", "strict"],
     };
   }
 
   // propName, method, key
   logDetailed(label, ...values) {
-    const idObj = this.idObj 
-    this.logDetails(label, idObj, ...values)
+    const idObj = this.idObj;
+    this.logDetails(label, idObj, ...values);
   }
 
   validationErrorMessage(msgName) {
@@ -244,7 +280,7 @@ export class ConstraintBuilder extends TypeMatcher {
     return {
       oneOf: "oneOf",
       enum: "oneOf",
-      anyOf: "oneOf"
+      anyOf: "oneOf",
       // ...
     };
   }

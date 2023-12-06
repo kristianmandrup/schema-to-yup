@@ -757,7 +757,7 @@ Here a more complete example of the variations currently possible
       "max": 130,
       "default": 32,
       "required": false,
-      "nullable": true
+      "null": true
     },
     "birthday": {
       "type": "date",

@@ -2,8 +2,9 @@ const {
   createEntry,
   createNumEntry,
   createIntEntry,
+  createIntegerEntry,
   createNumNoKey,
-  isNumber
+  isNumber,
 } = require("./_helpers");
 
 describe("isNumber", () => {
@@ -33,7 +34,7 @@ describe("toYupNumber", () => {
     expect(createEntry(1)).toBeFalsy();
   });
 
-  test("entryay - %", () => {
+  test("entry - %", () => {
     expect(createEntry([1])).toBeFalsy();
   });
 
@@ -43,6 +44,42 @@ describe("toYupNumber", () => {
 
   test("int object - ok", () => {
     expect(createIntEntry({})).toBeTruthy();
+  });
+
+  test("integer object - ok", () => {
+    expect(createIntegerEntry({})).toBeTruthy();
+  });
+
+  test("integer min object - ok", () => {
+    expect(createIntegerEntry({})).toBeTruthy();
+  });
+
+  describe("min integer - validate", () => {
+    describe("min: 2", () => {
+      const entry = createIntEntry({ min: 2 });
+      const schema = createSchema(entry);
+
+      test("not int: invalid", () => {
+        const valid = schema.isValidSync({
+          value: 0.5,
+        });
+        expect(valid).toBeFalsy();
+      });
+
+      test("less: invalid", () => {
+        const valid = schema.isValidSync({
+          value: 0,
+        });
+        expect(valid).toBeFalsy();
+      });
+
+      test("more: invalid", () => {
+        const valid = schema.isValidSync({
+          value: 3,
+        });
+        expect(valid).toBeTruthy();
+      });
+    });
   });
 
   test("number object - ok", () => {
