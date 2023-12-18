@@ -1,4 +1,5 @@
 const { toYupNumber, toYupNumberSchemaEntry, yup } = require("./_imports");
+const { buildYup } = require("../../../src");
 
 const isInteger = (fieldDef) =>
   fieldDef && (fieldDef.type === "int" || fieldDef.type === "integer");
@@ -50,10 +51,10 @@ module.exports = {
   createNumEntry,
   createIntEntry,
   createIntegerEntry,
-  createIntegerMinEntry,
   createNumNoKeyEntry,
   createSchema,
   isInteger,
   isNumber,
   config,
+  buildYup,
 };
