@@ -321,7 +321,7 @@ Uses [jest](jestjs.io/) for unit testing.
 
 ## <a name='Development'></a>Development
 
-A new version is under development at [schema-to-yup-mono](https://github.com/kristianmandrup/schema-to-yup-mono) which is this code ported to a lerna monorepo with a cleaner, mode modular structyure. More work needs to be done in terms of TDD and unit testing. Ideally this repo should be ported to [Nx](https://nx.dev/)
+A new version is under development at [schema-to-yup-mono](https://github.com/kristianmandrup/schema-to-yup-mono) which is this code ported to a lerna monorepo with a cleaner, mode modular structure. More work needs to be done in terms of TDD and unit testing. Ideally this repo should be ported to [Nx](https://nx.dev/)
 
 ## <a name='Ideasandsuggestions'></a>Ideas and suggestions
 
