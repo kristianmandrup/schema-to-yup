@@ -50,10 +50,8 @@ module.exports = {
   createNumEntry,
   createIntEntry,
   createIntegerEntry,
-  createIntegerMinEntry,
   createNumNoKeyEntry,
   createSchema,
   isInteger,
   isNumber,
-  config,
 };

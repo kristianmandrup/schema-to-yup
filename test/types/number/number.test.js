@@ -1,8 +1,6 @@
 const {
   createEntry,
   createNumEntry,
-  createIntEntry,
-  createIntegerEntry,
   createNumNoKey,
   isNumber,
 } = require("./_helpers");

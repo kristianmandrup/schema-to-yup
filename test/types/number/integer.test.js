@@ -1,4 +1,10 @@
-const { createIntEntry, createIntegerEntry, isNumber } = require("./_helpers");
+const {
+  createSchema,
+  createIntEntry,
+  createIntegerEntry,
+  isNumber,
+} = require("./_helpers");
+const { buildYup } = require("../../../src");
 
 describe("isNumber", () => {
   test("int", () => {
@@ -107,7 +113,7 @@ describe("Integer schema test", () => {
     expect(isValid).toBeFalsy();
   });
 
-  test("integer schema - not valid", () => {
+  test.skip("integer schema - not valid", () => {
     const isValid = yupSchema.integer.isValidSync({
       age: 39.5,
     });

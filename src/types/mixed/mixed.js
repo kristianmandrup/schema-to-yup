@@ -345,6 +345,7 @@ class YupMixed extends Base {
       );
     }
     const constraint = this.constraintBuilder.addConstraint(propName, opts);
+    console.log("constraint", { propName, constraint });
     if (constraint) {
       this.base = constraint;
     }

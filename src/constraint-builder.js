@@ -56,15 +56,16 @@ export class ConstraintBuilder extends TypeMatcher {
 
     // this.logInfo("build", { opts, constraintValue })
 
-    if (this.isNothing(constraintValue)) {
-      this.warn("no prop value", { constraintValue });
-      return false;
-    }
+    // if (this.isNothing(constraintValue)) {
+    //   this.warn("no prop value", { constraintValue });
+    //   return false;
+    // }
 
+    // needs to be reworked for Yup 1.0
     const yupConstraintMethodName = this.aliasMap[method] || method;
-
     if (!yup[yupConstraintMethodName]) {
       const msg = `Yup has no such API method: ${yupConstraintMethodName}`;
+      console.log(msg);
       this.warn(msg);
       return false;
     }
@@ -96,8 +97,12 @@ export class ConstraintBuilder extends TypeMatcher {
         constraintName,
         type,
       });
+
       newBase = fnName(constrValue, constrOpts);
-      if (newBase) break;
+      if (newBase) {
+        console.log("created for", constraintName);
+        break;
+      }
     }
 
     if (newBase) {
@@ -242,6 +247,7 @@ export class ConstraintBuilder extends TypeMatcher {
 
   addConstraint(propName, opts) {
     const constraint = this.build(propName, opts);
+    console.log({ constraint });
     if (constraint) {
       this.typeHandler.base = constraint;
       return constraint;

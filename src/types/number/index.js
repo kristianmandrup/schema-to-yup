@@ -50,6 +50,7 @@ class YupNumber extends YupMixed {
     return YupNumber.create(obj).createSchemaEntry();
   }
 
+  // missing round and truncate
   get typeEnabled() {
     return ["range", "posNeg", "integer"];
   }
@@ -61,8 +62,10 @@ class YupNumber extends YupMixed {
 
   range() {
     this.rangeConstraint.add();
+    return this;
   }
 
+  // use base.truncate() ?
   truncate() {
     return this.addConstraint("truncate");
   }
@@ -73,30 +76,45 @@ class YupNumber extends YupMixed {
       return this;
     }
     const $round = this.isStringType(round) ? round : "round";
-    round && this.base.round($round);
+    this.base = this.base.round($round);
     return this;
   }
 
   posNeg() {
     this.positive();
     this.negative();
+    return this;
   }
 
   integer() {
-    this.isInteger && this.addConstraint("integer");
+    console.log("try add integer constraint");
+    if (!this.isInteger) {
+      console.log("not an integer type", this.type);
+      return;
+    }
+    if (!this.base.integer) {
+      console.error("invalid base object", this.base);
+    }
+    this.base = this.base.integer();
     return this;
   }
 
   get isInteger() {
-    return this.config.isInteger(this.type);
+    return this.config.isInteger(this.value);
   }
 
   positive() {
-    return this.addConstraint("positive");
+    if (!this.isPositive) return this;
+    //return this.addConstraint("positive");
+    this.base = this.base.positive();
+    return this;
   }
 
   negative() {
-    return this.addConstraint("negative");
+    if (!this.isNegative) return this;
+    // return this.addConstraint("negative");
+    this.base = this.base.negative();
+    return this;
   }
 
   get isNegative() {
@@ -126,5 +144,5 @@ export {
   createNumberGuard,
   NumberGuard,
   RangeConstraint,
-  createRangeConstraint
+  createRangeConstraint,
 };
