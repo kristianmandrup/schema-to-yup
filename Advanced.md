@@ -31,10 +31,10 @@ This library is built to be easy to customize or extend to suit individual devel
 
 - [Custom builder](#custom-builder)
 - [Custom builder functions](#custom-builder-functions)
-- [entry builders](#custom-entry-builders)
-- [type handlers](#custom-type-handlers)
-- [constraint handler functions](#custom-constraint-handler-functions)
-- [constraint builder](#custom-constraint-builder)
+- [Custom entry builders](#custom-entry-builders)
+- [Custom type handlers](#custom-type-handlers)
+- [Custom constraint handler functions](#custom-constraint-handler-functions)
+- [Custom constraint builder](#custom-constraint-builder)
 
 ## <a name='Confirmpassword'></a>Confirm password
 

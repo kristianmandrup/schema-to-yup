@@ -6,6 +6,7 @@ import {
   toYupArray,
   toYupObject,
   toYupDate,
+  toYupNull,
 } from "./types";
 
 import { createPropertyValueResolver } from "./property-value-resolver";
@@ -80,6 +81,7 @@ class YupSchemaEntry extends Base {
 
   get defaultTypeHandlerMap() {
     return {
+      null: toYupNull,
       string: toYupString,
       number: toYupNumberSchemaEntry,
       boolean: toYupBoolean,

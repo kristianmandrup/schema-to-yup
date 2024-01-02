@@ -1,4 +1,10 @@
-const { createIntEntry, createIntegerEntry, isNumber } = require("./_helpers");
+const {
+  createIntEntry,
+  createIntegerEntry,
+  isNumber,
+  createSchema,
+  buildYup,
+} = require("./_helpers");
 
 describe("isNumber", () => {
   test("int", () => {

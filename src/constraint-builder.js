@@ -62,9 +62,12 @@ export class ConstraintBuilder extends TypeMatcher {
     }
 
     const yupConstraintMethodName = this.aliasMap[method] || method;
+    const checkIfValidYupMethod = (
+      this.config.checkIfValidYupMethod || this.checkIfValidYupMethod
+    ).bind(this);
 
-    if (!yup[yupConstraintMethodName]) {
-      const msg = `Yup has no such API method: ${yupConstraintMethodName}`;
+    if (!checkIfValidYupMethod(yupConstraintMethodName, this)) {
+      const msg = `Current base has no such API method: ${yupConstraintMethodName}`;
       this.warn(msg);
       return false;
     }
@@ -109,6 +112,10 @@ export class ConstraintBuilder extends TypeMatcher {
 
     this.warn("buildConstraint: missing value or values options");
     return false;
+  }
+
+  checkIfValidYupMethod(methodName) {
+    return !this.base[methodName];
   }
 
   yupRefMap() {
