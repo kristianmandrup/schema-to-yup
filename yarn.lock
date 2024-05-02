@@ -1963,8 +1963,8 @@ duplexer@^0.1.2:
   resolved "https://registry.npmjs.org/duplexer/-/duplexer-0.1.2.tgz"
 
 ejs@^3.1.6:
-  version "3.1.7"
-  resolved "https://registry.npmjs.org/ejs/-/ejs-3.1.7.tgz"
+  version "3.1.10"
+  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.10.tgz#69ab8358b14e896f80cc39e62087b88500c3ac3b"
   dependencies:
     jake "^10.8.5"
 
