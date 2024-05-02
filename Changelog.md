@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.19
+
+Add optional `checkIfValidYupMethod` to `config` object to let user control this check if needed.
+
 # 1.11.18
 
 Fixes `itemsOf` for array type.
